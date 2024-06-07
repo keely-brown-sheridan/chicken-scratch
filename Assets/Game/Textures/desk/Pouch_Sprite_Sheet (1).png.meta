@@ -1,0 +1,645 @@
+fileFormatVersion: 2
+guid: 5987ace26f5905243a5029541265a0d4
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 713
+        width: 626
+        height: 1325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e317817a2f3abe64ea0062e322b956c6
+      internalID: -701521600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_1
+      rect:
+        serializedVersion: 2
+        x: 1750
+        y: 2042
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37aa2c872b0f40f4e8ab5bcf138d5a63
+      internalID: 854122578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_3
+      rect:
+        serializedVersion: 2
+        x: 1996
+        y: 2038
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eff2142429c8eeb4ca38e3fd93f5c5dd
+      internalID: -598810479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_4
+      rect:
+        serializedVersion: 2
+        x: 2954
+        y: 2042
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d75d3d2b803efb468343553d8d0be10
+      internalID: 1820330237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_5
+      rect:
+        serializedVersion: 2
+        x: 3816
+        y: 2014
+        width: 50
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 848d90525b67d3748a134fd7293e7987
+      internalID: 1291531791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_6
+      rect:
+        serializedVersion: 2
+        x: 1744
+        y: 2034
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b58c0a996ff5d3428707c1d05770424
+      internalID: 1376184584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_7
+      rect:
+        serializedVersion: 2
+        x: 1730
+        y: 2024
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe36e7a08173125499b7ee8c90e4f727
+      internalID: 837473319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_8
+      rect:
+        serializedVersion: 2
+        x: 1722
+        y: 2018
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 555941735023d2b4c8a5f505379ceddf
+      internalID: -2060475685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_9
+      rect:
+        serializedVersion: 2
+        x: 1507
+        y: 1249
+        width: 87
+        height: 766
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 748e693a8a6de3b45a28c0bd9be72bf0
+      internalID: 2061837875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_10
+      rect:
+        serializedVersion: 2
+        x: 1643
+        y: 1249
+        width: 93
+        height: 766
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd70f60e7609cad429478f3c70f9a91a
+      internalID: 1477257662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_11
+      rect:
+        serializedVersion: 2
+        x: 1933
+        y: 1745
+        width: 107
+        height: 271
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26fbe8100cfbde640960fe2d800f3d47
+      internalID: 181404658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_12
+      rect:
+        serializedVersion: 2
+        x: 3872
+        y: 1996
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16706e51516450c4ea81dc85c890e0aa
+      internalID: -216065358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_13
+      rect:
+        serializedVersion: 2
+        x: 3890
+        y: 1998
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cde370b75d0e4e443a7a7bdaf299cd34
+      internalID: -638597919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_14
+      rect:
+        serializedVersion: 2
+        x: 3902
+        y: 1974
+        width: 20
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc4795b02a1df8f49afb0807a0e004cf
+      internalID: -287666626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_15
+      rect:
+        serializedVersion: 2
+        x: 1776
+        y: 1235
+        width: 125
+        height: 733
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb6965d11250e574abef4ee00d0ec5d3
+      internalID: -600364864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_16
+      rect:
+        serializedVersion: 2
+        x: 3920
+        y: 1962
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: feeb2fafdcd9e08419cae19cd5e7efe8
+      internalID: 1583111046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_23
+      rect:
+        serializedVersion: 2
+        x: 2146
+        y: 1388
+        width: 246
+        height: 558
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e24af16834ce624190ec02b225da23b
+      internalID: -18702692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_27
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 734
+        width: 646
+        height: 866
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 712e90708b9644c459a5285bd272d495
+      internalID: -1425876393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_35
+      rect:
+        serializedVersion: 2
+        x: 1449
+        y: 703
+        width: 434
+        height: 492
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2581e9228a2610f4fa33f8fb1f5c0222
+      internalID: 1972970176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_36
+      rect:
+        serializedVersion: 2
+        x: 1896
+        y: 968
+        width: 381
+        height: 213
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dccc9dc89171dd749b997b36f417c0c6
+      internalID: 124164666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_37
+      rect:
+        serializedVersion: 2
+        x: 2342
+        y: 968
+        width: 383
+        height: 213
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5eb2dcd53e24684419ccce51043e31a5
+      internalID: -811120881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_38
+      rect:
+        serializedVersion: 2
+        x: 2789
+        y: 1013
+        width: 323
+        height: 142
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd0353ccba231e247a9d39b437fc9ee5
+      internalID: -905434598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pouch_Sprite_Sheet (1)_2
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 1698
+        width: 530
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96092392fc9f34d4f8d7fd64683eae54
+      internalID: 1318779711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Pouch_Sprite_Sheet (1)_11: 181404658
+      Pouch_Sprite_Sheet (1)_16: 1583111046
+      Pouch_Sprite_Sheet (1)_0: -701521600
+      Pouch_Sprite_Sheet (1)_30: 1496091708
+      Pouch_Sprite_Sheet (1)_32: 1092779863
+      Pouch_Sprite_Sheet (1)_7: 837473319
+      Pouch_Sprite_Sheet (1)_19: 1662063125
+      Pouch_Sprite_Sheet (1)_12: -216065358
+      Pouch_Sprite_Sheet (1)_15: -600364864
+      Pouch_Sprite_Sheet (1)_25: 434654489
+      Pouch_Sprite_Sheet (1)_4: 1820330237
+      Pouch_Sprite_Sheet (1)_24: 1458313848
+      Pouch_Sprite_Sheet (1)_3: -598810479
+      Pouch_Sprite_Sheet (1)_26: 142858149
+      Pouch_Sprite_Sheet (1)_1: 854122578
+      Pouch_Sprite_Sheet (1)_33: -304696769
+      Pouch_Sprite_Sheet (1)_13: -638597919
+      Pouch_Sprite_Sheet (1)_6: 1376184584
+      Pouch_Sprite_Sheet (1)_10: 1477257662
+      Pouch_Sprite_Sheet (1)_34: -1899072099
+      Pouch_Sprite_Sheet (1)_9: 2061837875
+      Pouch_Sprite_Sheet (1)_20: 737672595
+      Pouch_Sprite_Sheet (1)_36: 124164666
+      Pouch_Sprite_Sheet (1)_2: 1318779711
+      Pouch_Sprite_Sheet (1)_21: 2054124353
+      Pouch_Sprite_Sheet (1)_28: 559424340
+      Pouch_Sprite_Sheet (1)_27: -1425876393
+      Pouch_Sprite_Sheet (1)_37: -811120881
+      Pouch_Sprite_Sheet (1)_17: -349899044
+      Pouch_Sprite_Sheet (1)_14: -287666626
+      Pouch_Sprite_Sheet (1)_18: 44830027
+      Pouch_Sprite_Sheet (1)_23: -18702692
+      Pouch_Sprite_Sheet (1)_35: 1972970176
+      Pouch_Sprite_Sheet (1)_8: -2060475685
+      Pouch_Sprite_Sheet (1)_29: 1034266978
+      Pouch_Sprite_Sheet (1)_5: 1291531791
+      Pouch_Sprite_Sheet (1)_38: -905434598
+      Pouch_Sprite_Sheet (1)_22: 883601628
+      Pouch_Sprite_Sheet (1)_31: 1372633418
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,372 @@
+fileFormatVersion: 2
+guid: 44e3fe4171459724b97af2c4478b1dcb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1645916957418907915
+    second: ac_birds_spritesheet2_red
+  - first:
+      213: -7456448292687326949
+    second: ac_birds_spritesheet2_blue
+  - first:
+      213: 1883719474505725102
+    second: ac_birds_spritesheet2_black
+  - first:
+      213: -2004607900828995391
+    second: ac_birds_spritesheet2_green
+  - first:
+      213: -116160886813616597
+    second: ac_birds_spritesheet2_purple
+  - first:
+      213: -6356699318009124283
+    second: ac_birds_spritesheet2_brown
+  - first:
+      213: 2070142108310052499
+    second: ac_birds_spritesheet2_orange
+  - first:
+      213: 1420672615396535598
+    second: ac_birds_spritesheet2_grey
+  - first:
+      213: -5647900712834960258
+    second: ac_birds_spritesheet2_8
+  - first:
+      213: -8668385667421925172
+    second: ac_birds_spritesheet2_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_red
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b09eeb890c877d610800000000000000
+      internalID: 1645916957418907915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_blue
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b11dd44a8cf558890800000000000000
+      internalID: -7456448292687326949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_black
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea43666b1e0542a10800000000000000
+      internalID: 1883719474505725102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_green
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c0752d2cb33e24e0800000000000000
+      internalID: -2004607900828995391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_purple
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b261ea4f940536ef0800000000000000
+      internalID: -116160886813616597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_brown
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54a291646a778c7a0800000000000000
+      internalID: -6356699318009124283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_orange
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39e1668874f9abc10800000000000000
+      internalID: 2070142108310052499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_grey
+      rect:
+        serializedVersion: 2
+        x: 1050
+        y: 507
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2de5d6773e37b310800000000000000
+      internalID: 1420672615396535598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_8
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 169
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e74fbccb930ae91b0800000000000000
+      internalID: -5647900712834960258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ac_birds_spritesheet2_9
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 0
+        width: 150.5
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc09a3d9925b3b780800000000000000
+      internalID: -8668385667421925172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      ac_birds_spritesheet2_blue: -7456448292687326949
+      ac_birds_spritesheet2_black: 1883719474505725102
+      ac_birds_spritesheet2_purple: -116160886813616597
+      ac_birds_spritesheet2_brown: -6356699318009124283
+      ac_birds_spritesheet2_8: -5647900712834960258
+      ac_birds_spritesheet2_9: -8668385667421925172
+      ac_birds_spritesheet2_red: 1645916957418907915
+      ac_birds_spritesheet2_grey: 1420672615396535598
+      ac_birds_spritesheet2_green: -2004607900828995391
+      ac_birds_spritesheet2_orange: 2070142108310052499
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

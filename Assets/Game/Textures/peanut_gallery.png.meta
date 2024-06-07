@@ -1,0 +1,537 @@
+fileFormatVersion: 2
+guid: 8492f4382acb57e4ea8877c1f4fc9eec
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3340706696747776042
+    second: peanut_gallery_0
+  - first:
+      213: 9025003749611210038
+    second: pg_blue-head
+  - first:
+      213: -2936309933120538374
+    second: pg_purple-head
+  - first:
+      213: 7744989995447477363
+    second: pg_red-head
+  - first:
+      213: -5816167665232122541
+    second: pg_black-head
+  - first:
+      213: -281454648762576908
+    second: pg_green-head
+  - first:
+      213: 4328445629073041931
+    second: pg_grey-head
+  - first:
+      213: -6452005122686257320
+    second: pg_orange-head
+  - first:
+      213: -3586350206947884982
+    second: pg_brown-head
+  - first:
+      213: 5819708446280283877
+    second: pg_blue-chair
+  - first:
+      213: 1453302851047793403
+    second: pg_purple-chair
+  - first:
+      213: 2949517712339522559
+    second: pg_red-chair
+  - first:
+      213: 1143851638641898188
+    second: pg_black-chair
+  - first:
+      213: -8725882161804525431
+    second: pg_green-chair
+  - first:
+      213: -4292483627696235135
+    second: pg_grey-chair
+  - first:
+      213: 6899141334146605574
+    second: pg_orange-chair
+  - first:
+      213: 6120505061334395912
+    second: pg_brown-chair
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: pg_blue-head
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 220
+        width: 119
+        height: 95
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 635052008114f3d70800000000000000
+      internalID: 9025003749611210038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_purple-head
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 166
+        width: 114
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af836ed4ca12047d0800000000000000
+      internalID: -2936309933120538374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_red-head
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 214
+        width: 78
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 374e99bbd5bbb7b60800000000000000
+      internalID: 7744989995447477363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_black-head
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 143
+        width: 117
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35de9b7e252d84fa0800000000000000
+      internalID: -5816167665232122541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_green-head
+      rect:
+        serializedVersion: 2
+        x: 621
+        y: 143
+        width: 115
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ffcf18fc72181cf0800000000000000
+      internalID: -281454648762576908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_grey-head
+      rect:
+        serializedVersion: 2
+        x: 764
+        y: 134
+        width: 99
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0aad76dd5ab11c30800000000000000
+      internalID: 4328445629073041931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_orange-head
+      rect:
+        serializedVersion: 2
+        x: 907
+        y: 119
+        width: 98
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 857f84d668fd576a0800000000000000
+      internalID: -6452005122686257320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_brown-head
+      rect:
+        serializedVersion: 2
+        x: 1021
+        y: 121
+        width: 143
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4009b2fc79ba3ec0800000000000000
+      internalID: -3586350206947884982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_blue-chair
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 0
+        width: 127
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e670ec6ff1c3c050800000000000000
+      internalID: 5819708446280283877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_purple-chair
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 0
+        width: 126
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf224cb3e3b2b2410800000000000000
+      internalID: 1453302851047793403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_red-chair
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 0
+        width: 127
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff358be6bbacee820800000000000000
+      internalID: 2949517712339522559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_black-chair
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 0
+        width: 126
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc2bff44107cfdf00800000000000000
+      internalID: 1143851638641898188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_green-chair
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 0
+        width: 126
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98049b1d76077e680800000000000000
+      internalID: -8725882161804525431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_grey-chair
+      rect:
+        serializedVersion: 2
+        x: 747
+        y: 0
+        width: 127
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18d5cf612e80e64c0800000000000000
+      internalID: -4292483627696235135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_orange-chair
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 0
+        width: 126
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 602e50d7d7caebf50800000000000000
+      internalID: 6899141334146605574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pg_brown-chair
+      rect:
+        serializedVersion: 2
+        x: 1034
+        y: 0
+        width: 127
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80c21daece660f450800000000000000
+      internalID: 6120505061334395912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      pg_orange-head: -6452005122686257320
+      pg_grey-head: 4328445629073041931
+      pg_black-head: -5816167665232122541
+      pg_red-head: 7744989995447477363
+      pg_black-chair: 1143851638641898188
+      pg_purple-chair: 1453302851047793403
+      pg_grey-chair: -4292483627696235135
+      pg_green-chair: -8725882161804525431
+      pg_brown-chair: 6120505061334395912
+      pg_blue-head: 9025003749611210038
+      pg_green-head: -281454648762576908
+      pg_purple-head: -2936309933120538374
+      pg_blue-chair: 5819708446280283877
+      pg_orange-chair: 6899141334146605574
+      pg_red-chair: 2949517712339522559
+      pg_brown-head: -3586350206947884982
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

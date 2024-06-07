@@ -1,0 +1,1531 @@
+fileFormatVersion: 2
+guid: 5c458994689b5724eb310690d025265d
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_0
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 989
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0a932dc0fb813b4bab5eb8b16bd27f2
+      internalID: -723848950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_1
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 989
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f28fd8424130ee341b44597539487aea
+      internalID: 1839562465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_2
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 967
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3702880882cccbb42b91dea500810460
+      internalID: -1153596467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_3
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 946
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61353aebffd8363448ca3fe5d55e8a07
+      internalID: 2093996936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_4
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 946
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77e461e1be7045e4b8aa10da0b3fa890
+      internalID: 1577828191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_5
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 967
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb0926745bac581488c502b89b1ce1df
+      internalID: -1023972297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_6
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 967
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9262e47a6dbcd0f478fc5fafb8a73ac4
+      internalID: 94755947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_7
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 947
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74f0dfff011fc1847a4367a9274e01ca
+      internalID: -157138438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_8
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 947
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffd844e18894d774a904178aa9b1a2e2
+      internalID: 1134730875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_9
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 967
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43b4f575ab702af45a4152744a993244
+      internalID: -2068899357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_10
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 935
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61fa71f254f20e24db497ee0f9690cbc
+      internalID: 574319781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_11
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 935
+        width: 4
+        height: 3
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84ddeab4f3c947f448a4d299bcd8da3a
+      internalID: 611782312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_12
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 934
+        width: 7
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25aa9763fdd5c8445b6f5eb23fd631ad
+      internalID: 21498759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_13
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 768
+        width: 142
+        height: 177
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f1ed0235c533e44a9d6ed5f134f7890
+      internalID: -1281190512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_14
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 765
+        width: 143
+        height: 182
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6948b8872a676ed4a941fcfcaddbf2d0
+      internalID: 141892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_15
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 842
+        width: 143
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c7fcdabb6780e143a85811100af33e2
+      internalID: 516087913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_16
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 927
+        width: 6
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 133ca82675e3576489b2d6a706d63a67
+      internalID: 1625926802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_17
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 713
+        width: 38
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 452f1aa6ce41acc41b4bac6a584e7248
+      internalID: 1626662112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_18
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 711
+        width: 41
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 718d5e36877e59248af9697ede4e1a87
+      internalID: 271382142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_19
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 720
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3333113bb80e1664e8f6e79c6d878bda
+      internalID: 409362220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_20
+      rect:
+        serializedVersion: 2
+        x: 518
+        y: 721
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a564a5254864944b923b8921a462e31
+      internalID: 1110778274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_21
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 722
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ddd0673c071e7ee459a7aa1130ba0b39
+      internalID: -718346333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_22
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 712
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ded59391d0b1944db5536ad9a3c6ed7
+      internalID: 1071625776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_23
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 712
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9abe31c6c1a2b043ac7b87ea4297159
+      internalID: 1734179533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_24
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 710
+        width: 31
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcb4c9f417040b54298f95f9b0bcbb43
+      internalID: 326418217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_25
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 710
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab16f35eb42b3c74d9baf0fd8d8dcb36
+      internalID: -1722976192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_26
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 711
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4979f36790cd924495a61e81a98b53d
+      internalID: -832173717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_27
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 666
+        width: 12
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54b68164a7ef3174b88f65a8760e3729
+      internalID: -1570581821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_28
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 660
+        width: 13
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3aeb99b6d3d1529448a5663079b98cba
+      internalID: -493956055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_29
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 663
+        width: 20
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b12e0cc0fe3ce94fa38897613ebb652
+      internalID: 336655383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_30
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 664
+        width: 37
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efc041f3015825e41923693ca98a9f68
+      internalID: -1272939207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_31
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 664
+        width: 21
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee57ef114277e9544ba6eff1002c65d3
+      internalID: -2053978586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_32
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 663
+        width: 21
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22a8161170bdfad4b9c192cf36a021dd
+      internalID: 688380409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_33
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 661
+        width: 49
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fcca70b91404704aa00ebb5a6011d9c
+      internalID: -324959689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_34
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 663
+        width: 55
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11188fbbedf675442b08490bc7231375
+      internalID: 946703469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_35
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 638
+        width: 11
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0860c8a1e151e9f4cbbaa182dc31552f
+      internalID: -623532353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_36
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 640
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e18c00d260cd0d64d9c2cd84f49d6640
+      internalID: 985602486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_37
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 639
+        width: 21
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e2a6d37579c6b14ea2218c36084a0c8
+      internalID: -754303051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_38
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 599
+        width: 36
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7da64753f8a0dd4cbdb6021420aa4e4
+      internalID: 895132450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_39
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 642
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cca4637ce85dcf64cae1d7ad41f586d9
+      internalID: 1768928346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_40
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 599
+        width: 12
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0005823907b1aa147be0cc466d24988f
+      internalID: 1976194573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_41
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 594
+        width: 12
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ddcd5b170df871943be4ca92c530d991
+      internalID: 585882738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_42
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 596
+        width: 20
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 508b203fad8af6143a4891def1036476
+      internalID: -681476013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_44
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 487
+        width: 73
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40cf79f7c0880a24c816aebef84af5c8
+      internalID: 11621323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_45
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 481
+        width: 65
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eff61aea582a032418152d99a4611876
+      internalID: 1431410948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_46
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 467
+        width: 60
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bda9dcebf30d61a408662bb98b812c9a
+      internalID: -872045672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_47
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 475
+        width: 90
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 253bdf827ecbcca4bbbb3824897bb1a7
+      internalID: -965991246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_48
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 396
+        width: 79
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65f7694005d62e1459231448e08a3032
+      internalID: -77458871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_49
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 392
+        width: 73
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12af50d5b2aa0914c949b51166ab7bed
+      internalID: 1467008972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_50
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 391
+        width: 48
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4d1b4b1d5cc5474391f7079b0d37d82
+      internalID: -460776018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_51
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 392
+        width: 77
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a38843ce737725746a87134d0d0de6f9
+      internalID: 1878046635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_52
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 601
+        width: 12
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56e70e20b7c9c3345a42513e1730ec2f
+      internalID: 1921934522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_53
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 599
+        width: 13
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 366b69c3d37e3e6449e5628a236d0ced
+      internalID: 1306266780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_54
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 600
+        width: 20
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06eeae3e4d1c3d24c91143c08fd893a0
+      internalID: 1309155616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_43
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 722
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25270fef3b8222e40bc3498e95e90225
+      internalID: -450807896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_55
+      rect:
+        serializedVersion: 2
+        x: 538
+        y: 720
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdd45b5d03bffd34fa57ff7ba1f4741d
+      internalID: -245449838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_56
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 925
+        width: 7
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 952d5a741366ae64c85e17464500caae
+      internalID: -1592274596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_57
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 926
+        width: 5
+        height: 3
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6b528aadc1436c42bb7f518fc00459f
+      internalID: -538448174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_58
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 950
+        width: 3
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa2fff93b6ea5514e9e0533b90220cf1
+      internalID: 622441638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_59
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 950
+        width: 3
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5f2c8f680da5d941a750297fb8dac47
+      internalID: -1485040408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_60
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 279
+        width: 46
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39f69c7fdb058404883729106537a3c3
+      internalID: -1810609516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_61
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 279
+        width: 86
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0ef88d480629e7419925d273cecb92b
+      internalID: -366219441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_62
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 279
+        width: 80
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a21deac5dbe5b5b4abd64fb38f29dfcc
+      internalID: 1890061421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChickenScratchAssets_Page1_63
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 279
+        width: 68
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fc6122a4cb1ee6428115b63c68b03bd
+      internalID: -165879785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      ChickenScratchAssets_Page1_29: 336655383
+      ChickenScratchAssets_Page1_44: 11621323
+      ChickenScratchAssets_Page1_17: 1626662112
+      ChickenScratchAssets_Page1_12: 21498759
+      ChickenScratchAssets_Page1_39: 1768928346
+      ChickenScratchAssets_Page1_62: 1890061421
+      ChickenScratchAssets_Page1_55: -245449838
+      ChickenScratchAssets_Page1_58: 622441638
+      ChickenScratchAssets_Page1_51: 1878046635
+      ChickenScratchAssets_Page1_6: 94755947
+      ChickenScratchAssets_Page1_37: -754303051
+      ChickenScratchAssets_Page1_24: 326418217
+      ChickenScratchAssets_Page1_42: -681476013
+      ChickenScratchAssets_Page1_56: -1592274596
+      ChickenScratchAssets_Page1_8: 1134730875
+      ChickenScratchAssets_Page1_23: 1734179533
+      ChickenScratchAssets_Page1_43: -450807896
+      ChickenScratchAssets_Page1_27: -1570581821
+      ChickenScratchAssets_Page1_18: 271382142
+      ChickenScratchAssets_Page1_4: 1577828191
+      ChickenScratchAssets_Page1_0: -723848950
+      ChickenScratchAssets_Page1_28: -493956055
+      ChickenScratchAssets_Page1_2: -1153596467
+      ChickenScratchAssets_Page1_52: 1921934522
+      ChickenScratchAssets_Page1_10: 574319781
+      ChickenScratchAssets_Page1_57: -538448174
+      ChickenScratchAssets_Page1_32: 688380409
+      ChickenScratchAssets_Page1_7: -157138438
+      ChickenScratchAssets_Page1_38: 895132450
+      ChickenScratchAssets_Page1_41: 585882738
+      ChickenScratchAssets_Page1_34: 946703469
+      ChickenScratchAssets_Page1_49: 1467008972
+      ChickenScratchAssets_Page1_46: -872045672
+      ChickenScratchAssets_Page1_50: -460776018
+      ChickenScratchAssets_Page1_3: 2093996936
+      ChickenScratchAssets_Page1_5: -1023972297
+      ChickenScratchAssets_Page1_47: -965991246
+      ChickenScratchAssets_Page1_59: -1485040408
+      ChickenScratchAssets_Page1_1: 1839562465
+      ChickenScratchAssets_Page1_15: 516087913
+      ChickenScratchAssets_Page1_16: 1625926802
+      ChickenScratchAssets_Page1_11: 611782312
+      ChickenScratchAssets_Page1_20: 1110778274
+      ChickenScratchAssets_Page1_21: -718346333
+      ChickenScratchAssets_Page1_19: 409362220
+      ChickenScratchAssets_Page1_13: -1281190512
+      ChickenScratchAssets_Page1_25: -1722976192
+      ChickenScratchAssets_Page1_53: 1306266780
+      ChickenScratchAssets_Page1_63: -165879785
+      ChickenScratchAssets_Page1_14: 141892
+      ChickenScratchAssets_Page1_26: -832173717
+      ChickenScratchAssets_Page1_33: -324959689
+      ChickenScratchAssets_Page1_48: -77458871
+      ChickenScratchAssets_Page1_35: -623532353
+      ChickenScratchAssets_Page1_45: 1431410948
+      ChickenScratchAssets_Page1_9: -2068899357
+      ChickenScratchAssets_Page1_30: -1272939207
+      ChickenScratchAssets_Page1_31: -2053978586
+      ChickenScratchAssets_Page1_36: 985602486
+      ChickenScratchAssets_Page1_60: -1810609516
+      ChickenScratchAssets_Page1_54: 1309155616
+      ChickenScratchAssets_Page1_61: -366219441
+      ChickenScratchAssets_Page1_22: 1071625776
+      ChickenScratchAssets_Page1_40: 1976194573
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,871 @@
+fileFormatVersion: 2
+guid: 7d9e9c052c77709478502bcf1eae6e3a
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Scanner-spritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 39
+        width: 1455
+        height: 2004
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b59a746a3fc8a04da803fbdf3d22176
+      internalID: 1565495252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 1559
+        y: 1469
+        width: 766
+        height: 477
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 026ddb6d38c488044ae91c8d5df3adf7
+      internalID: -1243170606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 1535
+        y: 812
+        width: 350
+        height: 278
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ad41318f04aa5d4ea4db55645efb9fb
+      internalID: -1636873175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 2466
+        y: 1646
+        width: 294
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7655bfe66897aa64d8f35a6838d343f8
+      internalID: 687974023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_4
+      rect:
+        serializedVersion: 2
+        x: 2801
+        y: 1648
+        width: 293
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd18487f674d7ad4a8e79c982f623e2c
+      internalID: 677516833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_5
+      rect:
+        serializedVersion: 2
+        x: 3123
+        y: 1647
+        width: 294
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb243da0147114e4ba487073ad35e123
+      internalID: 1828918912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_6
+      rect:
+        serializedVersion: 2
+        x: 3442
+        y: 1646
+        width: 293
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a29b216f54d3af649a9835270b580b98
+      internalID: 1226416986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_7
+      rect:
+        serializedVersion: 2
+        x: 3442
+        y: 1337
+        width: 294
+        height: 293
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcb13a0abe700b44a8eb9e3471ae5fb6
+      internalID: 1686622929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_8
+      rect:
+        serializedVersion: 2
+        x: 3123
+        y: 1336
+        width: 294
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32a61dda64bbfae4ca64c36f7a8de6d5
+      internalID: -232050294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_9
+      rect:
+        serializedVersion: 2
+        x: 2796
+        y: 1338
+        width: 296
+        height: 294
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a298bc467ac00d744b48e8f0b6b459c7
+      internalID: -29743974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_10
+      rect:
+        serializedVersion: 2
+        x: 2468
+        y: 1341
+        width: 295
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c679419beb7fc554b94b8461ef2d4471
+      internalID: 179313459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_11
+      rect:
+        serializedVersion: 2
+        x: 2468
+        y: 1014
+        width: 293
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c5cf5e2e47e88a4fb18d4a82263af4a
+      internalID: -1575605074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_12
+      rect:
+        serializedVersion: 2
+        x: 2802
+        y: 1016
+        width: 295
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 656967bf0083e204e8447a5bea195777
+      internalID: 219972102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_13
+      rect:
+        serializedVersion: 2
+        x: 3124
+        y: 1015
+        width: 295
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7f024d28e336ab4f89b77263b3da687
+      internalID: 684549031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_14
+      rect:
+        serializedVersion: 2
+        x: 3442
+        y: 1013
+        width: 296
+        height: 293
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76f3445e822ca47429056fde7c458764
+      internalID: 1593079654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_15
+      rect:
+        serializedVersion: 2
+        x: 2469
+        y: 707
+        width: 297
+        height: 294
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1c57a4ed71186a40b5cc2d86fb47e63
+      internalID: -692506174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_16
+      rect:
+        serializedVersion: 2
+        x: 2798
+        y: 705
+        width: 295
+        height: 294
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11a01f19e0445cd45b71fc38a281b50c
+      internalID: 1163935280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_17
+      rect:
+        serializedVersion: 2
+        x: 3124
+        y: 705
+        width: 296
+        height: 290
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d243b572f7338f4aaeb96c664a29ae2
+      internalID: -1713324458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_18
+      rect:
+        serializedVersion: 2
+        x: 3443
+        y: 705
+        width: 294
+        height: 293
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b239efd5d8c79b4bba9f6e8fea51018
+      internalID: -557318794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_19
+      rect:
+        serializedVersion: 2
+        x: 2468
+        y: 400
+        width: 294
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b79f53e16bc2809429347b5ce29344e3
+      internalID: -2084016235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_20
+      rect:
+        serializedVersion: 2
+        x: 2802
+        y: 402
+        width: 295
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b31a4cd1b3e58824696392837eddf4d1
+      internalID: -1140406627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_21
+      rect:
+        serializedVersion: 2
+        x: 3124
+        y: 400
+        width: 296
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 077aa9943c81e6f41aacb6d0f7ade944
+      internalID: -1761665279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_22
+      rect:
+        serializedVersion: 2
+        x: 3443
+        y: 400
+        width: 294
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 854932daf630df3418050aafacb69ad1
+      internalID: -544762648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_23
+      rect:
+        serializedVersion: 2
+        x: 2471
+        y: 95
+        width: 293
+        height: 293
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d77a1000ed0c71b43a9a1983fbd74006
+      internalID: -360034137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_24
+      rect:
+        serializedVersion: 2
+        x: 2798
+        y: 93
+        width: 295
+        height: 293
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c97092ab391430a4fb2a824946295e43
+      internalID: 1806101176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_25
+      rect:
+        serializedVersion: 2
+        x: 3123
+        y: 90
+        width: 296
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6704625c4f4f44469716e739e31c235
+      internalID: 2007752797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_26
+      rect:
+        serializedVersion: 2
+        x: 3444
+        y: 91
+        width: 293
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 787fc5bbae9022641b3c88d4855e5b65
+      internalID: -90916604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_27
+      rect:
+        serializedVersion: 2
+        x: 1531
+        y: 211
+        width: 349
+        height: 278
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d5e2ff1257888142b125737df765a1e
+      internalID: -1989334420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_28
+      rect:
+        serializedVersion: 2
+        x: 1532
+        y: 518
+        width: 350
+        height: 278
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21a1d1a4d8d12104981315f9dd41a6f1
+      internalID: -1339185321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_29
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 518
+        width: 350
+        height: 280
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aec96617058875245843ef40ff0cf816
+      internalID: 424653628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_30
+      rect:
+        serializedVersion: 2
+        x: 1901
+        y: 211
+        width: 348
+        height: 281
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fe7d2188b653fd49bc0c0a6dd20c284
+      internalID: 109340043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_31
+      rect:
+        serializedVersion: 2
+        x: 1529
+        y: 44
+        width: 768
+        height: 156
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4946aa9e5b158a24fb70e6f3c53f3c44
+      internalID: -255076090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_32
+      rect:
+        serializedVersion: 2
+        x: 1539
+        y: 1177
+        width: 819
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d767e4f9b3394b4aaa77fb609936cf8
+      internalID: -71904406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Scanner-spritesheet_33
+      rect:
+        serializedVersion: 2
+        x: 1576
+        y: 1339
+        width: 66
+        height: 95
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 8, y: 0, z: 11, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 300da35964efc47448a11bdfe43bb1cb
+      internalID: 729892251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Scanner-spritesheet_2: -1636873175
+      Scanner-spritesheet_29: 424653628
+      Scanner-spritesheet_11: -1575605074
+      Scanner-spritesheet_10: 179313459
+      Scanner-spritesheet_8: -232050294
+      Scanner-spritesheet_18: -557318794
+      Scanner-spritesheet_0: 1565495252
+      Scanner-spritesheet_9: -29743974
+      Scanner-spritesheet_21: -1761665279
+      Scanner-spritesheet_33: 729892251
+      Scanner-spritesheet_30: 109340043
+      Scanner-spritesheet_28: -1339185321
+      Scanner-spritesheet_12: 219972102
+      Scanner-spritesheet_20: -1140406627
+      Scanner-spritesheet_24: 1806101176
+      Scanner-spritesheet_27: -1989334420
+      Scanner-spritesheet_23: -360034137
+      Scanner-spritesheet_1: -1243170606
+      Scanner-spritesheet_3: 687974023
+      Scanner-spritesheet_4: 677516833
+      Scanner-spritesheet_13: 684549031
+      Scanner-spritesheet_14: 1593079654
+      Scanner-spritesheet_19: -2084016235
+      Scanner-spritesheet_5: 1828918912
+      Scanner-spritesheet_25: 2007752797
+      Scanner-spritesheet_22: -544762648
+      Scanner-spritesheet_6: 1226416986
+      Scanner-spritesheet_31: -255076090
+      Scanner-spritesheet_32: -71904406
+      Scanner-spritesheet_17: -1713324458
+      Scanner-spritesheet_26: -90916604
+      Scanner-spritesheet_16: 1163935280
+      Scanner-spritesheet_15: -692506174
+      Scanner-spritesheet_7: 1686622929
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

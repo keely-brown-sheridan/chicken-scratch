@@ -1,0 +1,509 @@
+fileFormatVersion: 2
+guid: b2c849985b4d4e247a49efa4addf68a9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5122319393583635694
+    second: accolades_cards_black
+  - first:
+      213: 1412125056039154998
+    second: accolades_cards_brown
+  - first:
+      213: 5330753521005302752
+    second: accolades_cards_purple
+  - first:
+      213: 3115043267606999762
+    second: accolades_cards_orange
+  - first:
+      213: 1715281597481009938
+    second: accolades_cards_grey
+  - first:
+      213: -3356778663964750199
+    second: accolades_cards_green
+  - first:
+      213: -765735501251178858
+    second: accolades_cards_red
+  - first:
+      213: 7276195692466984117
+    second: accolades_cards_blue
+  - first:
+      213: 8848343525180537870
+    second: accolades_cards_red
+  - first:
+      213: 6636905440949888668
+    second: accolades_cards_green
+  - first:
+      213: -7957094488256795562
+    second: accolades_cards_grey
+  - first:
+      213: 2776222783806382758
+    second: accolades_cards_orange
+  - first:
+      213: 5107698101165058332
+    second: accolades_cards_purple
+  - first:
+      213: 7585737709753695344
+    second: accolades_cards_brown
+  - first:
+      213: 2262348828642558473
+    second: accolades_cards_black
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: accolades_cards_0
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 1062
+        width: 178
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2136a5796add9e8b0800000000000000
+      internalID: -5122319393583635694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_1
+      rect:
+        serializedVersion: 2
+        x: 1001
+        y: 1029
+        width: 132
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63574a7b140e89310800000000000000
+      internalID: 1412125056039154998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_2
+      rect:
+        serializedVersion: 2
+        x: 1808
+        y: 871
+        width: 29
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e31fa47514aaf940800000000000000
+      internalID: 5330753521005302752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_3
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 430
+        width: 25
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d2ffa1095bda3b20800000000000000
+      internalID: 3115043267606999762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_4
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 163
+        width: 28
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 213ce936687edc710800000000000000
+      internalID: 1715281597481009938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_5
+      rect:
+        serializedVersion: 2
+        x: 1823
+        y: 398
+        width: 8
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98e45c017935a61d0800000000000000
+      internalID: -3356778663964750199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_6
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 62
+        width: 63
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69e84006e9f8f55f0800000000000000
+      internalID: -765735501251178858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_blue
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 44
+        width: 529
+        height: 314
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b4d8bd6e6d3af460800000000000000
+      internalID: 7276195692466984117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_red
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 37
+        width: 540
+        height: 320
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0c730d3e81abca70800000000000000
+      internalID: 5767125276716903691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_green
+      rect:
+        serializedVersion: 2
+        x: 1225
+        y: 378
+        width: 541
+        height: 300
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c96ecafa5560b1c50800000000000000
+      internalID: 6199350620352970442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_grey
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 369
+        width: 536
+        height: 312
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65c2c3fa8b8b29190800000000000000
+      internalID: -5394421364310474294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_orange
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 374
+        width: 539
+        height: 318
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a2202ea9ef178620800000000000000
+      internalID: 2780859800835837311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_purple
+      rect:
+        serializedVersion: 2
+        x: 1233
+        y: 702
+        width: 529
+        height: 320
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1961eb7c5032e640800000000000000
+      internalID: 3614506657672429505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_brown
+      rect:
+        serializedVersion: 2
+        x: 669
+        y: 707
+        width: 547
+        height: 315
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07c772d8144f54960800000000000000
+      internalID: 4353534354446729205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_cards_black
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 702
+        width: 541
+        height: 322
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 902c241f54a756f10800000000000000
+      internalID: 4222307659910335451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      accolades_cards_orange: 2780859800835837311
+      accolades_cards_brown: 4353534354446729205
+      accolades_cards_0: -5122319393583635694
+      accolades_cards_blue: 7276195692466984117
+      accolades_cards_2: 5330753521005302752
+      accolades_cards_4: 1715281597481009938
+      accolades_cards_3: 3115043267606999762
+      accolades_cards_purple: 3614506657672429505
+      accolades_cards_grey: -5394421364310474294
+      accolades_cards_green: 6199350620352970442
+      accolades_cards_1: 1412125056039154998
+      accolades_cards_red: 5767125276716903691
+      accolades_cards_black: 4222307659910335451
+      accolades_cards_6: -765735501251178858
+      accolades_cards_5: -3356778663964750199
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

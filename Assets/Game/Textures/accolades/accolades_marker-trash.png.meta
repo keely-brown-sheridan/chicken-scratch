@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 726a2205fa5a5a34aaf89dd19c5a26a6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 9187478610230712629
+    second: accolades_marker-trash_intro
+  - first:
+      213: 417667441633324430
+    second: accolades_marker-trash_bad
+  - first:
+      213: -8488528638066776368
+    second: accolades_marker-trash_good
+  - first:
+      213: -448384302463518483
+    second: accolades_marker-trash_check1
+  - first:
+      213: 5695273957043507072
+    second: accolades_marker-trash_check2
+  - first:
+      213: 3198998497770128854
+    second: accolades_marker-trash_check3
+  - first:
+      213: 7967085669452308102
+    second: accolades_marker-trash_check4
+  - first:
+      213: -3284541071762253308
+    second: accolades_marker-trash_ex1
+  - first:
+      213: 7063716039437809208
+    second: accolades_marker-trash_ex2
+  - first:
+      213: 7680909121960197940
+    second: accolades_marker-trash_ex3
+  - first:
+      213: -3660357191057823217
+    second: accolades_marker-trash_ex4
+  - first:
+      213: -1604061196861283227
+    second: accolades_marker-trash_graph1
+  - first:
+      213: -7867045496160809049
+    second: accolades_marker-trash_graph2
+  - first:
+      213: -246602946268646044
+    second: accolades_marker-trash_research
+  - first:
+      213: 3530039709688384955
+    second: accolades_marker-trash_message
+  - first:
+      213: 1656043391560177532
+    second: accolades_marker-trash_game
+  - first:
+      213: 6508357621265012222
+    second: accolades_marker-trash_complaint
+  - first:
+      213: -929105824701617746
+    second: accolades_marker-trash_todd
+  - first:
+      213: -7676565373769470366
+    second: accolades_marker-trash_SYNERGY
+  - first:
+      213: -7606867877688847227
+    second: accolades_marker-trash_symbol
+  - first:
+      213: -2132741694667135793
+    second: accolades_marker-trash_hope
+  - first:
+      213: -7323408686912135264
+    second: accolades_marker-trash_graph3
+  - first:
+      213: 3877451268484262507
+    second: accolades_marker-trash_graph4
+  - first:
+      213: 6398682521247710036
+    second: accolades_marker-trash_art
+  - first:
+      213: 2595229755277763072
+    second: accolades_marker-trash_dontsue
+  - first:
+      213: -7025202683414899943
+    second: accolades_marker-trash_research
+  - first:
+      213: 417667441633324430
+    second: accolades_marker-trash_complaint
+  - first:
+      213: 417667441633324430
+    second: accolades_marker-trash_ex4
+  - first:
+      213: -8488528638066776368
+    second: accolades_marker-trash_message
+  - first:
+      213: 5444881992643336425
+    second: accolades_marker-trash_game
+  - first:
+      213: -3527638467077950072
+    second: accolades_marker-trash_graph2
+  - first:
+      213: -3527638467077950072
+    second: accolades_marker-compl
+  - first:
+      213: -448384302463518483
+    second: accolades_marker-trash_graph
+  - first:
+      213: 1809563313092186641
+    second: accolades_marker-trash_check3
+  - first:
+      213: 1809563313092186641
+    second: accolades_marker-res
+  - first:
+      213: 5695273957043507072
+    second: accolades_marker-trash_check4
+  - first:
+      213: 5695273957043507072
+    second: accolades_marker-check3
+  - first:
+      213: 3198998497770128854
+    second: accolades_marker-trash_check2
+  - first:
+      213: -7730404020884972269
+    second: accolades_marker-trash_check
+  - first:
+      213: 6493251559757362132
+    second: accolades_marker-trash_ex1
+  - first:
+      213: 6493251559757362132
+    second: accolades_marker-trash_check4
+  - first:
+      213: 7967085669452308102
+    second: accolades_marker-trash_ex2
+  - first:
+      213: 7967085669452308102
+    second: accolades_marker-trash_check2
+  - first:
+      213: -3284541071762253308
+    second: accolades_marker-trash_ex3
+  - first:
+      213: -3284541071762253308
+    second: accolades_marker-good
+  - first:
+      213: 7063716039437809208
+    second: accolades_marker-trash_ex4
+  - first:
+      213: -7025202683414899943
+    second: accolades_marker-trash_ex4
+  - first:
+      213: -7140216714228465974
+    second: accolades_marker-compl
+  - first:
+      213: -8488528638066776368
+    second: accolades_marker-game
+  - first:
+      213: 5444881992643336425
+    second: accolades_marker-res
+  - first:
+      213: -7140216714228465974
+    second: accolades_marker-msg
+  - first:
+      213: -448384302463518483
+    second: accolades_marker-graph
+  - first:
+      213: -5168436233543207764
+    second: accolades_marker-trash_graph2
+  - first:
+      213: -5168436233543207764
+    second: accolades_marker-graph2
+  - first:
+      213: 3198998497770128854
+    second: accolades_marker-trash_check
+  - first:
+      213: 3198998497770128854
+    second: accolades_marker-trash_check
+  - first:
+      213: 8745878874798088488
+    second: accolades_marker-trash_check2
+  - first:
+      213: -1606751486317522232
+    second: accolades_marker-trash_check3
+  - first:
+      213: -7730404020884972269
+    second: accolades_marker-trash_check
+  - first:
+      213: -964717376687280911
+    second: accolades_marker-trash_ex2
+  - first:
+      213: 8745878874798088488
+    second: accolades_marker-trash_check2
+  - first:
+      213: 3340442831555675605
+    second: accolades_marker-bad
+  - first:
+      213: -4194424914554287587
+    second: accolades_marker-intro
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: accolades_marker-trash_0
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 365
+        width: 9
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5391d406e1b708f70800000000000000
+      internalID: 9187478610230712629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_14
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 97
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbdcffab9683df030800000000000000
+      internalID: 3530039709688384955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_15
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 79
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c77d396c0b27bf610800000000000000
+      internalID: 1656043391560177532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_todd
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 91
+        width: 178
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea9e9efcc272b13f0800000000000000
+      internalID: -929105824701617746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_17
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 132
+        width: 4
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26e2869f67c577590800000000000000
+      internalID: -6736736680718186982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_symbol
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 3
+        width: 37
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 584d609d7f9fe6690800000000000000
+      internalID: -7606867877688847227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_hope
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 7
+        width: 128
+        height: 99
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc463bb7abaf662e0800000000000000
+      internalID: -2132741694667135793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_graph3
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 224
+        width: 197
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0af979fa9960e5a90800000000000000
+      internalID: -7323408686912135264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_graph4
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 317
+        width: 122
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6a64e392697fc530800000000000000
+      internalID: 3877451268484262507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_art
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 221
+        width: 150
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45b7875f9dfacc850800000000000000
+      internalID: 6398682521247710036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_dontsue
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 328
+        width: 136
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 002ead956bb140420800000000000000
+      internalID: 2595229755277763072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_ex4
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 239
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9131feb6167718e90800000000000000
+      internalID: -3660357191057823217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_complaint
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 0
+        width: 99
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8decc4435adbc500800000000000000
+      internalID: 6508357621265012222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-msg
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 0
+        width: 157
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acefa199abad8ec90800000000000000
+      internalID: -7140216714228465974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-game
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 79
+        width: 58
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d6ac468d20b23a80800000000000000
+      internalID: -8488528638066776368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-res
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 5
+        width: 108
+        height: 113
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 112507bee3cdc1910800000000000000
+      internalID: 1809563313092186641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-graph
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 133
+        width: 116
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de8fcc04ad407c9f0800000000000000
+      internalID: -448384302463518483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-graph2
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 134
+        width: 109
+        height: 95
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca4366f01a60648b0800000000000000
+      internalID: -5168436233543207764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_check3
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 228
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08f8c143d7da90f40800000000000000
+      internalID: 3198998497770128854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_check4
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 228
+        width: 33
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d3b69014e9ac1a50800000000000000
+      internalID: 7967085669452308102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_check
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 254
+        width: 34
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d5c8984f20256c20800000000000000
+      internalID: -7730404020884972269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_check2
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 256
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 821eeecbf7a9f5970800000000000000
+      internalID: 5695273957043507072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_ex
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 258
+        width: 24
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c296bf390ca3b9e0800000000000000
+      internalID: -8797375499681277448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_ex3
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 236
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31d56ec108618b490800000000000000
+      internalID: 7680909121960197940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-trash_ex2
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 259
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fc68ed38a2ac92f0800000000000000
+      internalID: 7063716039437809208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-good
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 289
+        width: 232
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40a1e672c47fa62d0800000000000000
+      internalID: -3284541071762253308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-bad
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 323
+        width: 296
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d5406f8e03ab5e20800000000000000
+      internalID: 3340442831555675605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: accolades_marker-intro
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 355
+        width: 294
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1a81f263c86ac5c0800000000000000
+      internalID: -4194424914554287587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      accolades_marker-game: -8488528638066776368
+      accolades_marker-res: 1809563313092186641
+      accolades_marker-trash_graph4: 3877451268484262507
+      accolades_marker-graph: -448384302463518483
+      accolades_marker-good: -3284541071762253308
+      accolades_marker-trash_15: 1656043391560177532
+      accolades_marker-trash_art: 6398682521247710036
+      accolades_marker-trash_graph3: -7323408686912135264
+      accolades_marker-trash_check: -7730404020884972269
+      accolades_marker-trash_0: 9187478610230712629
+      accolades_marker-bad: 3340442831555675605
+      accolades_marker-graph2: -5168436233543207764
+      accolades_marker-msg: -7140216714228465974
+      accolades_marker-trash_check2: 5695273957043507072
+      accolades_marker-trash_ex: -8797375499681277448
+      accolades_marker-trash_ex3: 7680909121960197940
+      accolades_marker-trash_check3: 3198998497770128854
+      accolades_marker-trash_dontsue: 2595229755277763072
+      accolades_marker-trash_14: 3530039709688384955
+      accolades_marker-trash_symbol: -7606867877688847227
+      accolades_marker-intro: -4194424914554287587
+      accolades_marker-trash_ex4: -3660357191057823217
+      accolades_marker-trash_hope: -2132741694667135793
+      accolades_marker-trash_17: -6736736680718186982
+      accolades_marker-trash_todd: -929105824701617746
+      accolades_marker-trash_complaint: 6508357621265012222
+      accolades_marker-trash_ex2: 7063716039437809208
+      accolades_marker-trash_check4: 7967085669452308102
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
