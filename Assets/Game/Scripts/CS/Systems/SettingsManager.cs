@@ -1,4 +1,5 @@
 using Mirror;
+using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,12 +11,12 @@ namespace ChickenScratch
     public class SettingsManager : Singleton<SettingsManager>
     {
         public ColourManager.BirdName birdName;
-        public Dictionary<ColourManager.BirdName, string> playerNameMap = new Dictionary<ColourManager.BirdName, string>();
-        public Dictionary<ColourManager.BirdName, NetworkConnectionToClient> birdConnectionMap = new Dictionary<ColourManager.BirdName, NetworkConnectionToClient>();
+        
         public bool isHost => NetworkServer.connections.Count > 0;
         public bool isHostInLobby = false;
         public bool disconnected = false;
         public bool playerQuit = false;
+        public bool waitingForPlayers = false;
         public enum SceneTransitionState
         {
             disconnected, return_to_lobby_room, return_to_room_listings, invalid
@@ -44,44 +45,28 @@ namespace ChickenScratch
         private Dictionary<string, string> stringSettings;
         private bool isInitialized = false;
 
-        public List<EndgameResult> resultPossibilities = new List<EndgameResult>();
+        public List<ResultData> resultPossibilities = new List<ResultData>();
+
+        [SerializeField]
+        private List<TaskSpriteData> taskSprites;
+
+        public Color prefixBGColour, prefixFontColour;
+        public Color nounBGColour, nounFontColour;
+
+        private Dictionary<ColourManager.BirdName, string> playerNameMap = new Dictionary<ColourManager.BirdName, string>();
+        private Dictionary<ColourManager.BirdName, NetworkConnectionToClient> birdConnectionMap = new Dictionary<ColourManager.BirdName, NetworkConnectionToClient>();
+        private Dictionary<CaseChoiceData.TaskSprite, TaskSpriteData> taskSpriteDataMap = new Dictionary<CaseChoiceData.TaskSprite, TaskSpriteData>();
+
+        private Dictionary<NetworkConnectionToClient, string> lobbyConnectionUsernameMap = new Dictionary<NetworkConnectionToClient, string>();
+        private Dictionary<NetworkConnectionToClient, ColourManager.BirdName> lobbyConnectionBirdMap = new Dictionary<NetworkConnectionToClient, ColourManager.BirdName>();
+
+        public CSteamID currentRoomID;
 
         [System.Serializable]
-        public class EndgameResult
+        public class TaskSpriteData
         {
-            public Color goalTextColour = Color.black;
-            public Color sheetColour = new Color(0.5f, 0.5f, 0.0f);
-            public Color resultTextColour = Color.black;
-            public Color slideProgressBGColour;
-            public Color slideProgressFillColour;
-            public Material lineMaterial = null;
-            public string resultName = "";
-            public string shortFormIdentifier = "";
-            public Sprite bossFaceReaction = null;
-            public FinalEndgameResultManager.State finalFaceState;
-            public string bossMessage = "";
-            public string sfxToPlay = "";
-            public List<GameModeRequiredPointThreshold> requiredPointThresholds;
-            public WorkingGoalsManager.GoalType goal;
-
-            public float getRequiredPointThreshold(string gameModeName)
-            {
-                foreach (GameModeRequiredPointThreshold requiredPointThreshold in requiredPointThresholds)
-                {
-                    if (gameModeName == requiredPointThreshold.gameModeName)
-                    {
-                        return requiredPointThreshold.requiredPointThreshold;
-                    }
-                }
-                return -1;
-            }
-
-            [System.Serializable]
-            public class GameModeRequiredPointThreshold
-            {
-                public string gameModeName = "";
-                public float requiredPointThreshold = -1;
-            }
+            public CaseChoiceData.TaskSprite taskSprite;
+            public Sprite sprite;
         }
 
         private void Awake()
@@ -141,6 +126,10 @@ namespace ChickenScratch
                     stringSettings.Add(settingName, "");
                 }
 
+            }
+            foreach(TaskSpriteData taskSprite in taskSprites)
+            {
+                taskSpriteDataMap.Add(taskSprite.taskSprite, taskSprite);
             }
             isInitialized = true;
         }
@@ -270,7 +259,7 @@ namespace ChickenScratch
             {
                 stringChars[i] = chars[random.Next(chars.Length)];
             }
-
+            
             _roomCode = new String(stringChars);
 
         }
@@ -278,6 +267,186 @@ namespace ChickenScratch
         public void SetRoomCode(string inRoomCode)
         {
             _roomCode = inRoomCode;
+        }
+
+        public int GetPlayerNameCount()
+        {
+            return playerNameMap.Count;
+        }
+
+        public void AssignBirdToPlayer(ColourManager.BirdName bird, string playerName)
+        {
+            if(!playerNameMap.ContainsKey(bird))
+            {
+                playerNameMap.Add(bird, playerName);
+            }
+        }
+
+        public void DeassignBirdToPlayer(ColourManager.BirdName bird)
+        {
+            if(playerNameMap.ContainsKey(bird))
+            {
+                playerNameMap.Remove(bird);
+            }
+        }
+
+        public bool IsBirdSelected(ColourManager.BirdName bird)
+        {
+            return playerNameMap.ContainsKey(bird);
+        }
+
+        public void ClearPlayerNameMap()
+        {
+            playerNameMap.Clear();
+        }
+
+        public string GetPlayerName(ColourManager.BirdName birdName)
+        {
+            if(playerNameMap.ContainsKey(birdName))
+            {
+                return playerNameMap[birdName];
+            }
+            return "";
+        }
+
+        public void AssignBirdToConnection(ColourManager.BirdName bird, NetworkConnectionToClient connection)
+        {
+            if(!birdConnectionMap.ContainsKey(bird))
+            {
+                birdConnectionMap.Add(bird, connection);
+            }
+        }
+
+        public NetworkConnectionToClient GetConnection(ColourManager.BirdName bird)
+        {
+            if(birdConnectionMap.ContainsKey(bird))
+            {
+                return birdConnectionMap[bird];
+            }
+            Debug.LogError("Could not find connection for bird["+bird.ToString()+"] in connections["+birdConnectionMap.Count.ToString()+"].");
+            return null;
+        }
+
+        public List<ColourManager.BirdName> GetAllActiveBirds()
+        {
+            return playerNameMap.Keys.ToList();
+        }
+
+        public ColourManager.BirdName GetDisconnectedPlayerBird(NetworkConnectionToClient connection)
+        {
+            foreach(KeyValuePair<ColourManager.BirdName, NetworkConnectionToClient> birdConnection in birdConnectionMap)
+            {
+                if(birdConnection.Value == connection)
+                {
+                    return birdConnection.Key;
+                }
+            }
+            return ColourManager.BirdName.none;
+        }
+
+        public void ServerBroadcastPlayerNames()
+        {
+            GameManager.Instance.gameDataHandler.RpcPlayerInitializationWrapper(SettingsManager.Instance.playerNameMap);
+        }
+
+        public Sprite GetTaskSprite(CaseChoiceData.TaskSprite inTaskSpriteType)
+        {
+            if(taskSpriteDataMap.ContainsKey(inTaskSpriteType))
+            {
+                return taskSpriteDataMap[inTaskSpriteType].sprite;
+            }
+            return null;
+        }
+
+        public void DisconnectFromLobby()
+        {
+            if(currentRoomID != CSteamID.Nil)
+            {
+                SteamMatchmaking.LeaveLobby(currentRoomID);
+                currentRoomID = CSteamID.Nil;
+            }
+            lobbyConnectionBirdMap.Clear();
+            lobbyConnectionUsernameMap.Clear();
+        }
+
+        public void SetBirdForPlayerID(NetworkConnectionToClient playerID, ColourManager.BirdName bird)
+        {
+            if (!lobbyConnectionBirdMap.ContainsKey(playerID))
+            {
+                lobbyConnectionBirdMap.Add(playerID, bird);
+            }
+            else
+            {
+                lobbyConnectionBirdMap[playerID] = bird;
+            }
+        }
+
+        public void ServerRefreshBirds()
+        {
+            List<PlayerListingNetData> playerListingData = new List<PlayerListingNetData>();
+            foreach (KeyValuePair<NetworkConnectionToClient, ColourManager.BirdName> connectedPlayer in SettingsManager.Instance.lobbyConnectionBirdMap)
+            {
+                PlayerListingNetData data = new PlayerListingNetData();
+                data.playerName = lobbyConnectionUsernameMap.ContainsKey(connectedPlayer.Key) ? lobbyConnectionUsernameMap[connectedPlayer.Key] : "";
+                data.selectedBird = lobbyConnectionBirdMap.ContainsKey(connectedPlayer.Key) ? lobbyConnectionBirdMap[connectedPlayer.Key] : ColourManager.BirdName.none;
+                playerListingData.Add(data);
+            }
+
+            LobbyNetwork.Instance.lobbyDataHandler.RpcSetPlayerListings(playerListingData);
+        }
+
+        public void AddConnection(NetworkConnectionToClient connection)
+        {
+            if (!lobbyConnectionUsernameMap.ContainsKey(connection))
+            {
+                lobbyConnectionUsernameMap.Add(connection, "");
+            }
+            if (!lobbyConnectionBirdMap.ContainsKey(connection))
+            {
+                lobbyConnectionBirdMap.Add(connection, ColourManager.BirdName.none);
+            }
+        }
+
+        public void SetConnectionSteamName(string steamName, NetworkConnectionToClient connection)
+        {
+            if (lobbyConnectionUsernameMap.ContainsKey(connection))
+            {
+                lobbyConnectionUsernameMap[connection] = steamName;
+            }
+            ServerRefreshBirds();
+        }
+
+        public void RemoveConnection(NetworkConnectionToClient connection)
+        {
+            if (lobbyConnectionBirdMap.ContainsKey(connection))
+            {
+                lobbyConnectionBirdMap.Remove(connection);
+            }
+            if (lobbyConnectionUsernameMap.ContainsKey(connection))
+            {
+                lobbyConnectionUsernameMap.Remove(connection);
+            }
+        }
+
+        public string CreatePromptText(string prefixText, string nounText)
+        {
+            string prefixHexcode = ColorUtility.ToHtmlStringRGB(prefixFontColour);
+            string nounHexcode = ColorUtility.ToHtmlStringRGB(nounFontColour);
+            string fullPrefixValue = "<color=#"+ prefixHexcode + ">" + prefixText + "</color>";
+            string fullNounValue = "<color=#"+nounHexcode+">" + nounText + "</color>";
+            return fullPrefixValue + " " + fullNounValue;
+        }
+
+        public string CreatePrefixText(string prefixText)
+        {
+            string hexcode = ColorUtility.ToHtmlStringRGB(prefixFontColour);
+            return "<color=#" + hexcode + ">" + prefixText + "</color>";
+        }
+
+        public string CreateNounText(string nounText)
+        {
+            string hexcode = ColorUtility.ToHtmlStringRGB(nounFontColour);
+            return "<color=#" + hexcode + ">" + nounText + "</color>";
         }
     }
 }

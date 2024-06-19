@@ -110,9 +110,9 @@ namespace ChickenScratch
             
             List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
 
-            foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name) * GameManager.Instance.playerFlowManager.playerNameMap.Count);
+                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
                 goals.Add(new WorkingGoalsManager.Goal(result.goal, requiredPoints, result.resultName));
             }
 
@@ -130,8 +130,8 @@ namespace ChickenScratch
                 }
             }
 
-            SettingsManager.EndgameResult matchingResult = null;
-            foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+            ResultData matchingResult = null;
+            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
                 if (result.resultName == highestGoal.name)
                 {

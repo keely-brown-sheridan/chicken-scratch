@@ -15,7 +15,8 @@ namespace ChickenScratch
     {
         public Dictionary<int, DrawingData> drawings = new Dictionary<int, DrawingData>();
         public Dictionary<int, PlayerTextInputData> prompts = new Dictionary<int, PlayerTextInputData>();
-        
+        public GuessData guessData = new GuessData();
+
         public Dictionary<int, BirdName> playerOrder = new Dictionary<int, BirdName>();
         public int currentRound
         {
@@ -30,19 +31,18 @@ namespace ChickenScratch
         }
         private int _currentRound = 1;
         public Dictionary<int, List<string>> possibleWordsMap = new Dictionary<int, List<string>>();
-        public Dictionary<int, CaseWordData> correctWordsMap = new Dictionary<int, CaseWordData>();
-
-        public Dictionary<int, string> guessesMap = new Dictionary<int, string>();
+        public Dictionary<int, string> correctWordIdentifierMap = new Dictionary<int, string>();
         public string correctPrompt = "";
         public int pointsForBonus;
         public int pointsPerCorrectWord;
         public float currentScoreModifier;
         public int penalty;
         public float currentTaskDuration;
+        public List<TaskData.TaskModifier> currentTaskModifiers;
         public bool active => identifier != -1;
         public int identifier = -1;
-
-        public BirdName guesser = BirdName.none;
+        public string caseTypeName = "";
+        public Color caseTypeColour = Color.white;
 
         public enum CaseModifier
         {
@@ -83,12 +83,12 @@ namespace ChickenScratch
                 }
                 else
                 {
-                    GameManager.Instance.gameDataHandler.TargetChainPrompt(SettingsManager.Instance.birdConnectionMap[clientName], identifier, prompt.Key, prompt.Value.author, prompt.Value.text, prompt.Value.timeTaken);
+                    GameManager.Instance.gameDataHandler.TargetChainPrompt(SettingsManager.Instance.GetConnection(clientName), identifier, prompt.Key, prompt.Value.author, prompt.Value.text, prompt.Value.timeTaken);
                 }
             }
         }
 
-        public void SetWordsFromChoice(CaseChoiceData choice)
+        public void SetWordsFromChoice(CaseChoiceNetData choice)
         {
             possibleWordsMap = new Dictionary<int, List<string>>();
             int iterator = 1;
@@ -98,9 +98,9 @@ namespace ChickenScratch
                 iterator++;
             }
             iterator = 1;
-            foreach(CaseWordData correctWord in choice.correctWordsMap)
+            foreach(string correctWordIdentifier in choice.correctWordIdentifiersMap)
             {
-                correctWordsMap.Add(iterator, correctWord);
+                correctWordIdentifierMap.Add(iterator, correctWordIdentifier);
                 iterator++;
             }
             correctPrompt = choice.correctPrompt;
@@ -116,6 +116,7 @@ namespace ChickenScratch
             {
                 case TaskData.TaskType.base_drawing:
                 case TaskData.TaskType.prompt_drawing:
+                case TaskData.TaskType.compile_drawing:
                     return CaseState.drawing;
                 case TaskData.TaskType.copy_drawing:
                     return CaseState.copy_drawing;
@@ -131,17 +132,12 @@ namespace ChickenScratch
 
         public string GetFullGuess()
         {
-            string fullGuess = "";
-            foreach(KeyValuePair<int,string> guessWord in guessesMap)
-            {
-                fullGuess += guessWord.Value + " ";
-            }
-            return fullGuess;
+            return guessData.prefix + " " + guessData.noun;
         }
 
         public bool IsComplete()
         {
-            return guessesMap.Count > 0;
+            return guessData.prefix != "" || guessData.noun != "";
         }
     }
 }

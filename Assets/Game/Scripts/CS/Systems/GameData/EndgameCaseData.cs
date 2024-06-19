@@ -10,12 +10,14 @@ namespace ChickenScratch
         public int identifier;
         public Dictionary<int, EndgameTaskData> taskDataMap = new Dictionary<int, EndgameTaskData>();
         public string correctPrompt;
-        public Dictionary<int, string> guessesMap = new Dictionary<int, string>();
-        public Dictionary<int, CaseWordData> correctWordsMap = new Dictionary<int, CaseWordData>();
+        public GuessData guessData = new GuessData();
+        public Dictionary<int, string> correctWordIdentifierMap = new Dictionary<int, string>();
         public float scoreModifier;
         public int pointsForBonus;
         public int pointsPerCorrectWord;
         public int penalty;
+        public string caseTypeName = "";
+        public Color caseTypeColour = Color.white;
 
 
 
@@ -28,27 +30,56 @@ namespace ChickenScratch
         {
             identifier = inChainData.identifier;
             correctPrompt = inChainData.correctPrompt;
-            correctWordsMap = inChainData.correctWordsMap;
-            guessesMap = inChainData.guessesMap;
+            correctWordIdentifierMap = inChainData.correctWordIdentifierMap;
+            guessData = inChainData.guessData;
             scoreModifier = inChainData.currentScoreModifier;
             pointsForBonus = inChainData.pointsForBonus;
             pointsPerCorrectWord = inChainData.pointsPerCorrectWord;
             penalty = inChainData.penalty;
+            caseTypeName = inChainData.caseTypeName;
+            caseTypeColour = inChainData.caseTypeColour;
 
             foreach(TaskData gameTask in inChainData.taskQueue)
             {
                 int taskRound = taskDataMap.Count + 1;
-                EndgameTaskData endgameTaskData = new EndgameTaskData(gameTask, taskRound, inChainData.playerOrder[taskRound]);
+                float timeModifierDecrement = inChainData.taskQueue[taskRound - 1].timeModifierDecrement;
+                EndgameTaskData endgameTaskData = new EndgameTaskData(gameTask, taskRound, inChainData.playerOrder[taskRound], timeModifierDecrement);
                 switch(gameTask.taskType)
                 {
                     case TaskData.TaskType.prompt_drawing:
                     case TaskData.TaskType.base_drawing:
                     case TaskData.TaskType.copy_drawing:
                     case TaskData.TaskType.add_drawing:
-                        endgameTaskData.drawingData = inChainData.drawings[taskRound];
+                    case TaskData.TaskType.compile_drawing:
+                        if (!inChainData.drawings.ContainsKey(taskRound))
+                        {
+                            endgameTaskData.isComplete = false;
+                            continue;
+                        }
+                        else
+                        {
+                            endgameTaskData.drawingData = inChainData.drawings[taskRound];
+                        }
+                        
                         break;
                     case TaskData.TaskType.prompting:
-                        endgameTaskData.promptData = inChainData.prompts[taskRound];
+                        if(!inChainData.prompts.ContainsKey(taskRound))
+                        {
+                            endgameTaskData.isComplete = false;
+                            continue;
+                        }
+                        else
+                        {
+                            endgameTaskData.promptData = inChainData.prompts[taskRound];
+                        }
+                        
+                        break;
+                    case TaskData.TaskType.base_guessing:
+                        if(inChainData.guessData == null || !inChainData.IsComplete())
+                        {
+                            endgameTaskData.isComplete = false;
+                            continue;
+                        }
                         break;
                 }
                 taskDataMap.Add(taskRound, endgameTaskData);
@@ -65,20 +96,18 @@ namespace ChickenScratch
                 taskDataMap.Add(netData.taskDataKeys[i], netData.taskDataValues[i]);
             }
             correctPrompt = netData.correctPrompt;
-            guessesMap = new Dictionary<int, string>();
-            for (int i = 0; i < netData.guessesKeys.Count; i++)
-            {
-                guessesMap.Add(netData.guessesKeys[i], netData.guessesValues[i]);
-            }
-            correctWordsMap = new Dictionary<int, CaseWordData>();
+            guessData = netData.guessData;
+            correctWordIdentifierMap = new Dictionary<int, string>();
             for (int i = 0; i < netData.correctWordsKeys.Count; i++)
             {
-                correctWordsMap.Add(netData.correctWordsKeys[i], netData.correctWordsValues[i]);
+                correctWordIdentifierMap.Add(netData.correctWordsKeys[i], netData.correctWordsValues[i]);
             }
             scoreModifier = netData.scoreModifier;
             pointsForBonus = netData.pointsForBonus;
             pointsPerCorrectWord = netData.pointsPerCorrectWord;
             penalty = netData.penalty;
+            caseTypeName = netData.caseTypeName;
+            caseTypeColour = netData.caseTypeColour;
         }
 
         public void IncreaseRating(int round, ColourManager.BirdName target)
@@ -91,13 +120,30 @@ namespace ChickenScratch
             taskDataMap[round].ratingData.target = target;
         }
 
+        public int GetBasePoints()
+        {
+            int totalPoints = 0;
+            foreach (KeyValuePair<int, string> correctWordIdentifier in correctWordIdentifierMap)
+            {
+                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
+                if ((correctWordIdentifier.Key == 1 && correctWord.value == guessData.prefix) ||
+                    (correctWordIdentifier.Key == 2 && correctWord.value == guessData.noun))
+                {
+                    totalPoints += pointsPerCorrectWord;
+                }
+            }
+            return totalPoints;
+        }
+
         public int GetTotalPoints()
         {
             int totalPoints = 0;
             bool allCorrect = true;
-            foreach(KeyValuePair<int,CaseWordData> correctWord in correctWordsMap)
+            foreach(KeyValuePair<int,string> correctWordIdentifier in correctWordIdentifierMap)
             {
-                if(guessesMap.ContainsKey(correctWord.Key) && guessesMap[correctWord.Key] == correctWord.Value.value)
+                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
+                if((correctWordIdentifier.Key == 1 && correctWord.value == guessData.prefix) ||
+                    (correctWordIdentifier.Key == 2 && correctWord.value == guessData.noun))
                 {
                     totalPoints += pointsPerCorrectWord;
                 }
@@ -110,14 +156,15 @@ namespace ChickenScratch
             {
                 totalPoints += pointsForBonus;
             }
-            return totalPoints;
+            return (int)(totalPoints * scoreModifier);
         }
 
         public bool WasCorrect()
         {
-            foreach (KeyValuePair<int, CaseWordData> correctWord in correctWordsMap)
+            foreach (KeyValuePair<int, string> correctWordIdentifier in correctWordIdentifierMap)
             {
-                bool wordIsCorrect = guessesMap.ContainsKey(correctWord.Key) && guessesMap[correctWord.Key] == correctWord.Value.value;
+                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
+                bool wordIsCorrect = (correctWordIdentifier.Key == 1 && correctWord.value == guessData.prefix) || (correctWordIdentifier.Key == 2 && correctWord.value == guessData.noun);
                 if(!wordIsCorrect)
                 {
                     return false;
@@ -129,9 +176,10 @@ namespace ChickenScratch
         public int GetDifficulty()
         {
             int totalDifficulty = 0;
-            foreach (KeyValuePair<int, CaseWordData> correctWord in correctWordsMap)
-            {
-                totalDifficulty += correctWord.Value.difficulty;
+            foreach (KeyValuePair<int, string> correctWordIdentifier in correctWordIdentifierMap)
+            {   
+                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
+                totalDifficulty += correctWord.difficulty;
             }
             return totalDifficulty;
         }

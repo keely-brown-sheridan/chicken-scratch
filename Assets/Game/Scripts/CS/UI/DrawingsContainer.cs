@@ -60,7 +60,6 @@ namespace ChickenScratch
                     Debug.LogError("Drawing holder does not contain round[" + drawingData.round.ToString() + "] for case[" + drawingData.caseID.ToString() + "].");
                     return;
                 }
-                Debug.LogError("Showing drawing for case["+drawingData.caseID.ToString()+"] on round["+drawingData.round.ToString()+"].");
                 Vector3 drawingScale = new Vector3(scalingFactor, scalingFactor, 1f);
                 GameManager.Instance.playerFlowManager.createDrawingVisuals(drawingData, drawingHolderMap[drawingData.caseID][drawingData.round].gameObject.transform, transform.position, drawingScale, scalingFactor);
                 drawingHolderMap[drawingData.caseID][drawingData.round].gameObject.SetActive(true);

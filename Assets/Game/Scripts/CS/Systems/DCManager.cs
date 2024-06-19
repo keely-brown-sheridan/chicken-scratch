@@ -39,13 +39,13 @@ namespace ChickenScratch
             switch (currentGameScene)
             {
                 case GameScene.lobby:
-                    MenuLobbyButtons.Instance.LobbyPageObject.SetActive(false);
+                    MenuLobbyButtons.Instance.OpenRoomsPage();
                     LobbyNetwork.Instance.LeaveRoom();
                     Debug.LogError("Disconnected from room.");
                     break;
                 case GameScene.game:
                 case GameScene.theater:
-                    GameNetwork.Instance.Disconnected_ReturnToLobby();
+                    handleHostDisconnection();
                     break;
             }
 
@@ -98,13 +98,10 @@ namespace ChickenScratch
                     if (SettingsManager.Instance.isHost)
                     {
                         GameManager.Instance.gameFlowManager.disconnectedPlayers.Add(disconnectedPlayer);
-                        if (SettingsManager.Instance.playerNameMap.ContainsKey(disconnectedPlayer))
-                        {
-                            SettingsManager.Instance.playerNameMap.Remove(disconnectedPlayer);
-
-                        }
+                        SettingsManager.Instance.DeassignBirdToPlayer(disconnectedPlayer);
                         GameManager.Instance.gameFlowManager.clearPlayerTransitionConditions(disconnectedPlayer);
-                        if (SettingsManager.Instance.playerNameMap.Count == 1)
+
+                        if (SettingsManager.Instance.GetPlayerNameCount() == 1)
                         {
                             DCPrompt.SetActive(true);
                             GameManager.Instance.playerFlowManager.active = false;

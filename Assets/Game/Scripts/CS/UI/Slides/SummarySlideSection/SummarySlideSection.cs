@@ -13,9 +13,6 @@ namespace ChickenScratch
         private SlideTypeData.SlideType _slideType;
 
         [SerializeField]
-        protected GoldStarDetectionArea goldStarDetectionArea;
-
-        [SerializeField]
         protected Image authorImage;
 
         [SerializeField]

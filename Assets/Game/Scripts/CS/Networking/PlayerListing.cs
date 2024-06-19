@@ -33,7 +33,7 @@ namespace ChickenScratch
             PlayerName.text = name;
 
             hostIndicatorObject.SetActive(isHost);
-            //kickButtonObject.SetActive(PhotonNetwork.IsMasterClient && photonPlayer.NickName != PhotonNetwork.NickName);
+            kickButtonObject.SetActive(SettingsManager.Instance.isHost && playerID != SettingsManager.Instance.playerID);
         }
 
         public void ChangePlayerBird(ColourManager.BirdName inBirdName)

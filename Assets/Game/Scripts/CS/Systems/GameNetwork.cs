@@ -1,4 +1,5 @@
 ﻿
+using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static ChickenScratch.ColourManager;
@@ -48,78 +49,29 @@ namespace ChickenScratch
             {
                 GameManager.Instance.gameDataHandler.RpcHostJoiningLobby();
             }
-
-            SceneManager.LoadScene(0);
+            SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_lobby_room;
             Cursor.visible = true;
+            SceneManager.LoadScene(0);
+            
         }
 
         public void Disconnected_ReturnToLobby()
         {
             if (SettingsManager.Instance.isHost)
             {
-                GameManager.Instance.gameDataHandler.RpcHostJoiningLobby();
+                SettingsManager.Instance.waitingForPlayers = true;
+                SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_lobby_room;
+                NetworkManager.singleton.ServerChangeScene("MainMenu");
             }
-            SettingsManager.Instance.disconnected = true;
-            SceneManager.LoadScene(0);
-            Cursor.visible = true;
         }
 
         public void Disconnected_ReturnToRooms()
         {
             SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_room_listings;
-            SettingsManager.Instance.playerQuit = true;
-            SceneManager.LoadScene(0);
+            SettingsManager.Instance.disconnected = true;
             Cursor.visible = true;
+            SceneManager.LoadScene(0);
+            
         }
-
-
-
-
-
-        public abstract class NetworkMessage
-        {
-            public enum SendType
-            {
-                broadcast, to_player, to_server
-            }
-
-            public string[] messageSegments;
-
-            public NetworkMessage(string[] inMessageSegments)
-            {
-                messageSegments = inMessageSegments;
-            }
-
-            public void printMessageSegments()
-            {
-                string messageToPrint = "";
-                foreach (string messageSegment in messageSegments)
-                {
-                    messageToPrint += messageSegment + ",";
-                }
-
-                Debug.LogError(messageToPrint);
-            }
-
-            public bool validateSegmentCount(int expectedCount, string messageName)
-            {
-                if (messageSegments.Length != expectedCount)
-                {
-                    Debug.LogError("Invalid number of segments in message[" + messageSegments.Length + "] for " + messageName + " message.");
-                    printMessageSegments();
-                    return false;
-                }
-                return true;
-            }
-
-            public abstract bool resolve();
-        }
-
-
-
-
-
-
-
     }
 }

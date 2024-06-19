@@ -44,8 +44,9 @@ namespace ChickenScratch
         public void Initialize()
         {
             lastWordGroupUpdateTime = DateTime.MinValue;
-            mainWordGroupContainer.ClearWordGroupDisplayItems();
+            reviewWordGroupContainer.ClearWordGroups();
             mainWordGroupContainer.SetEditButtonActiveState(isHost);
+            wordGroups.Clear();
             if (isHost)
             {
                 //Load all of the base word groups
@@ -59,18 +60,21 @@ namespace ChickenScratch
                 }
                 foreach (KeyValuePair<string, WordGroupData> nounGroup in wordManager.AllNouns)
                 {
-
                     wordGroups.Add(nounGroup.Value);
                     reviewWordGroupContainer.CreateLockedWordGroup(nounGroup.Key, nounGroup.Value.wordType, nounGroup.Value.words, this, isHost);
                 }
 
                 //Load the player created word groups
-                string newWordGroupJSON = File.ReadAllText(Application.persistentDataPath + "\\new-word-groups.json");
-                List<WordGroupData> newWordGroups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WordGroupData>>(newWordGroupJSON);
-                foreach (WordGroupData wordGroupData in newWordGroups)
+                string newWordsPath = Application.persistentDataPath + "\\new-word-groups.json";
+                if(File.Exists(newWordsPath))
                 {
-                    wordGroups.Add(wordGroupData);
-                    reviewWordGroupContainer.CreateWordGroup(wordGroupData.name, wordGroupData.wordType, wordGroupData.words, this, isHost);
+                    string newWordGroupJSON = File.ReadAllText(newWordsPath);
+                    List<WordGroupData> newWordGroups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WordGroupData>>(newWordGroupJSON);
+                    foreach (WordGroupData wordGroupData in newWordGroups)
+                    {
+                        wordGroups.Add(wordGroupData);
+                        reviewWordGroupContainer.CreateWordGroup(wordGroupData.name, wordGroupData.wordType, wordGroupData.words, this, isHost);
+                    }
                 }
 
                 UpdateWordGroupList();
@@ -197,17 +201,6 @@ namespace ChickenScratch
             //Update the main word groups list
             UpdateWordGroupList();
 
-            //Send messages to the other players about what word groups there are and are active
-            LobbyNetwork.Instance.lobbyDataHandler.RpcUpdateWordGroups(wordGroups);
-            SettingsManager.Instance.wordGroupNames.Clear();
-            foreach (WordGroupData wordGroupData in wordGroups)
-            {
-                if (wordGroupData.isOn && toggledCategoryNamesMap.ContainsKey(wordGroupData.name))
-                {
-                    SettingsManager.Instance.wordGroupNames.Add(wordGroupData.name);
-                }
-            }
-
             reviewWordGroupContainer.gameObject.SetActive(false);
             mainWordGroupContainer.gameObject.SetActive(true);
         }
@@ -218,17 +211,21 @@ namespace ChickenScratch
             mainWordGroupContainer.ClearWordGroupDisplayItems();
             foreach(WordGroupData wordGroup in wordGroups)
             {
-                mainWordGroupContainer.CreateWordGroupDisplayItem(wordGroup.name, wordGroup.words, this);
+                if(wordGroup.isOn)
+                {
+                    mainWordGroupContainer.CreateWordGroupDisplayItem(wordGroup.name, wordGroup.wordType, wordGroup.words, this);
+                }
             }
-            
         }
        
 
         private void UpdateWordGroupList()
         {
+            SettingsManager.Instance.wordGroupNames.Clear();
+
             int numberOfPrefixGroups = 0;
             int numberOfNounGroups = 0;
-            mainWordGroupContainer.ClearWordGroupDisplayItems();
+
             foreach (WordGroupData wordGroup in wordGroups)
             {
                 if (!toggledCategoryNamesMap.ContainsKey(wordGroup.name))
@@ -242,6 +239,10 @@ namespace ChickenScratch
 
                 if (wordGroup.isOn)
                 {
+                    if(toggledCategoryNamesMap.ContainsKey(wordGroup.name))
+                    {
+                        SettingsManager.Instance.wordGroupNames.Add(wordGroup.name);
+                    }
                     if (wordGroup.wordType == WordGroupData.WordType.prefixes)
                     {
                         numberOfPrefixGroups++;
@@ -250,13 +251,12 @@ namespace ChickenScratch
                     {
                         numberOfNounGroups++;
                     }
-                    mainWordGroupContainer.CreateWordGroupDisplayItem(wordGroup.name, wordGroup.words, this);
                 }
-
-
-
             }
             lobbyNotReadyManager.enoughWordGroupsAreSelected = (numberOfPrefixGroups >= 3 && numberOfNounGroups >= 3);
+            //Send message to players about what word groups there are and are active
+            LobbyNetwork.Instance.lobbyDataHandler.RpcUpdateWordGroups(wordGroups);
+            
         }
 
         public void DeleteWordGroup(string groupName)

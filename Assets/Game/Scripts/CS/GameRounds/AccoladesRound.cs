@@ -39,6 +39,9 @@ namespace ChickenScratch
         [SerializeField]
         private Image eotmRightBirdArm;
 
+        [SerializeField]
+        private float cardPlacementWaitVariance;
+
         private Dictionary<CameraDock.CameraState, CameraDock> cameraDockMap;
         private Dictionary<int, GameObject> successTokenMap, failTokenMap;
         private float timeSoFar = 0.0f, cameraStateTime = 0.0f;
@@ -48,6 +51,28 @@ namespace ChickenScratch
         private bool hasEOTMRisen = false;
 
         public AccoladesStatManager playerStatsManager;
+
+        private void Start()
+        {
+            //Test();
+            
+        }
+
+        private void Test()
+        {
+            EndgameCaseData testCase = new EndgameCaseData();
+            //create task queue
+            EndgameTaskData testTask = new EndgameTaskData();
+            testTask.taskType = TaskData.TaskType.base_guessing;
+            testTask.ratingData = new PlayerRatingData() { likeCount = 1, target = BirdName.red };
+            testTask.assignedPlayer = BirdName.red;
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.red, "beebodeebo");
+            testCase.taskDataMap.Add(1, testTask);
+            testCase.correctWordIdentifierMap = new Dictionary<int, string>() { { 1, "prefixes-DRAGGING" },{ 2, "nouns-AARDVARK" } };
+
+            GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Add(1, testCase);
+            StartRound();
+        }
 
         public override void StartRound()
         {
@@ -139,10 +164,11 @@ namespace ChickenScratch
             else
             {
                 //Transition
-                accoladesObjectRect.anchoredPosition = Vector3.Lerp(currentCameraDock.position, nextCameraDock.position, cameraStateTime * currentCameraDock.transitionMoveSpeed);
-                accoladesObjectRect.localScale = Vector3.Lerp(currentCameraDock.zoom, nextCameraDock.zoom, cameraStateTime * currentCameraDock.transitionZoomSpeed);
+                float transitionRatio = cameraStateTime / currentCameraDock.transitionDuration;
+                accoladesObjectRect.anchoredPosition = Vector3.Lerp(currentCameraDock.position, nextCameraDock.position, transitionRatio);
+                accoladesObjectRect.localScale = Vector3.Lerp(currentCameraDock.zoom, nextCameraDock.zoom, transitionRatio);
 
-                if (cameraStateTime * currentCameraDock.transitionMoveSpeed > 1)
+                if (transitionRatio > 1)
                 {
                     cameraStateTime = 0.0f;
                     currentCameraState = currentCameraDock.nextState;
@@ -260,9 +286,9 @@ namespace ChickenScratch
 
             List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
             
-            foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name) * GameManager.Instance.playerFlowManager.playerNameMap.Count);
+                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
                 goals.Add(new WorkingGoalsManager.Goal(result.goal, requiredPoints, result.resultName));
             }
             
@@ -270,7 +296,13 @@ namespace ChickenScratch
             foreach (KeyValuePair<int, EndgameCaseData> caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap)
             {
                 int points = caseData.Value.GetTotalPoints();
-                casePoints.Add(new WorkingGoalsManager.PlayerPoints(caseData.Value.GetGuesser(), points, caseData.Value));
+                BirdName guesser = caseData.Value.GetGuesser();
+
+                if(guesser == BirdName.none)
+                {
+                    continue;
+                }
+                casePoints.Add(new WorkingGoalsManager.PlayerPoints(guesser, points, caseData.Value));
             }
 
             workingGoalsManager.initializeWorkingGoals(goals, casePoints);
@@ -319,8 +351,7 @@ namespace ChickenScratch
         public Vector3 position;
         public Vector3 zoom;
 
-        public float transitionMoveSpeed;
-        public float transitionZoomSpeed;
+        public float transitionDuration;
 
         public float restingTime;
         public bool restingFinished = false;

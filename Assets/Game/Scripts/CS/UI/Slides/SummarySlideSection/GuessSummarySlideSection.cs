@@ -7,6 +7,9 @@ namespace ChickenScratch
     public class GuessSummarySlideSection : SummarySlideSection
     {
         [SerializeField]
+        private GoldStarDetectionArea goldStarDetectionArea;
+
+        [SerializeField]
         private TMPro.TMP_Text prefixText;
 
         [SerializeField]
@@ -15,25 +18,28 @@ namespace ChickenScratch
         [SerializeField]
         private Color correctColour, incorrectColour;
 
-        public void Initialize(ColourManager.BirdName guesser, Dictionary<int,string> guessesMap, Dictionary<int,CaseWordData> correctWordsMap)
+        [SerializeField]
+        private SlideTimeModifierDecrementVisual slideTimeModifierDecrementVisual;
+
+        public void Initialize(GuessData guessData, Dictionary<int,string> correctWordIdentifiersMap, int round, int caseID, float timeModifierDecrement)
         {
-            Bird authorBird = ColourManager.Instance.birdMap[guesser];
+            Bird authorBird = ColourManager.Instance.birdMap[guessData.author];
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
+            authorNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);
 
             bool isWordCorrect;
-            if (guessesMap.ContainsKey(1))
-            {
-                prefixText.text = guessesMap[1];
-                isWordCorrect = guessesMap[1] == correctWordsMap[1].value;
-                prefixText.color = isWordCorrect ? correctColour : incorrectColour;
-            }
-            if (guessesMap.ContainsKey(2))
-            {
-                nounText.text = guessesMap[2];
-                isWordCorrect = guessesMap[2] == correctWordsMap[2].value;
-                nounText.color = isWordCorrect ? correctColour : incorrectColour;
-            }
+            prefixText.text = guessData.prefix;
+            CaseWordData correctPrefix = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[1]);
+            isWordCorrect = guessData.prefix == correctPrefix.value;
+            prefixText.color = isWordCorrect ? correctColour : incorrectColour;
+            nounText.text = guessData.noun;
+            CaseWordData correctNoun = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[2]);
+            isWordCorrect = guessData.noun == correctNoun.value;
+            nounText.color = isWordCorrect ? correctColour : incorrectColour;
+
+            goldStarDetectionArea.Initialize(guessData.author, round, caseID);
+            slideTimeModifierDecrementVisual.Initialize(timeModifierDecrement);
         }
     }
 }

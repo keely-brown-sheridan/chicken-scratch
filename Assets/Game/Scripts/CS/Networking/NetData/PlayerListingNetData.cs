@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mirror;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,6 @@ namespace ChickenScratch
     public class PlayerListingNetData
     {
         public ColourManager.BirdName selectedBird = ColourManager.BirdName.none;
-        public string playerID;
         public string playerName;
     }
 }

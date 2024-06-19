@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Steamworks;
+using Mirror;
 
 namespace ChickenScratch
 {
@@ -22,17 +23,10 @@ namespace ChickenScratch
 
         public CSteamID lobbyID;
 
-        public void SteamPlayerJoinedRoom(CSteamID lobbyID, CSteamID playerID, string nickName)
-        {
-            this.lobbyID = lobbyID;
-            PlayerJoinedRoom(playerID.m_SteamID.ToString(), nickName);
-        }
-
         public void PlayerJoinedRoom(string playerID, string nickName, ColourManager.BirdName selectedBird = ColourManager.BirdName.none)
         {
             PlayerLeftRoom(playerID, nickName);
 
-            Debug.Log("Instantiating a player listing for player[" + nickName + "]");
             GameObject playerListingObj = GameObject.Instantiate(PlayerListingPrefab);
             playerListingObj.transform.SetParent(transform, false);
 
@@ -55,9 +49,8 @@ namespace ChickenScratch
 
             if (index != -1)
             {
-                if (PlayerListings[index].gameObject)
+                if (PlayerListings[index] != null && PlayerListings[index].gameObject)
                 {
-                    Debug.Log("Destroying player listing.");
                     GameObject.Destroy(PlayerListings[index].gameObject);
                 }
 
@@ -71,13 +64,12 @@ namespace ChickenScratch
             {
                 if (PlayerListings[i] != null && PlayerListings[i].gameObject != null)
                 {
-                    Debug.Log("Destroying player listing.");
                     Destroy(PlayerListings[i].gameObject);
                 }
             }
             foreach (PlayerListingNetData playerListing in playerListingData)
             {
-                PlayerJoinedRoom(playerListing.playerID.ToString(), playerListing.playerName, playerListing.selectedBird);
+                PlayerJoinedRoom(playerListing.playerName, playerListing.playerName, playerListing.selectedBird);
             }
         }
 

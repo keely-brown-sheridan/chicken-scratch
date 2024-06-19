@@ -60,7 +60,7 @@ namespace ChickenScratch
         private void UpdatedReadyCondition()
         {
             string message = "";
-            if (lobbyIsReady)
+            if (lobbyIsReady || !SettingsManager.Instance.isHost)
             {
                 notReadyContainerObject.SetActive(false);
 

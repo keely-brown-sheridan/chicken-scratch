@@ -62,7 +62,7 @@ namespace ChickenScratch
         {
             //Set game goals
             List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
-            foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
                 WorkingGoalsManager.Goal goal = new WorkingGoalsManager.Goal(WorkingGoalsManager.GoalType.endgame_result_state, (int)result.getRequiredPointThreshold("standard"), result.resultName);
                 goals.Add(goal);
@@ -139,10 +139,10 @@ namespace ChickenScratch
             bool pointsArePlayerDependent = SettingsManager.Instance.gameMode.caseDeliveryMode == GameModeData.CaseDeliveryMode.queue;
             float currentGoalHeightOffset;
             //Get the matching working goal from the provided goals
-            List<SettingsManager.EndgameResult> endgameGoals = new List<SettingsManager.EndgameResult>();
+            List<ResultData> endgameGoals = new List<ResultData>();
             foreach (WorkingGoalsManager.Goal goal in goals)
             {
-                foreach (SettingsManager.EndgameResult endgameGoal in SettingsManager.Instance.resultPossibilities)
+                foreach (ResultData endgameGoal in SettingsManager.Instance.resultPossibilities)
                 {
                     if (endgameGoal.resultName == goal.name)
                     {

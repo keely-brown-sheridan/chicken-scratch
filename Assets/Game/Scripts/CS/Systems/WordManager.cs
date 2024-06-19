@@ -9,12 +9,6 @@ namespace ChickenScratch
 {
     public class WordManager
     {
-
-        public enum WordType
-        {
-            noun, descriptor, invalid
-        }
-
         private List<string> allPrefixCategories = new List<string>();
         private List<string> allNounCategories = new List<string>();
         public Dictionary<string, WordGroupData> AllNouns => allNouns;
@@ -34,14 +28,13 @@ namespace ChickenScratch
             allNouns.Clear();
             nounQueue.Clear();
             //Load in the potential prompts
-            string prefixGroupJSON = File.ReadAllText(Application.persistentDataPath + "\\prefix-groups.json");
-            string nounGroupJSON = File.ReadAllText(Application.persistentDataPath + "\\nouns-groups.json");
-            List<WordGroupData> nounWordGroups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WordGroupData>>(nounGroupJSON);
-            List<WordGroupData> prefixWordGroups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WordGroupData>>(prefixGroupJSON);
+            List<WordGroupData> nounWordGroups = GameDataManager.Instance.GetWordGroups(WordGroupData.WordType.nouns);
+            List<WordGroupData> prefixWordGroups = GameDataManager.Instance.GetWordGroups(WordGroupData.WordType.prefixes);
 
             foreach (WordGroupData prefixWordGroup in prefixWordGroups)
             {
                 prefixWordGroup.isBaseWordGroup = true;
+                prefixWordGroup.isOn = true;
                 prefixQueue.AddRange(prefixWordGroup.words);
                 allPrefixes.Add(prefixWordGroup.name, prefixWordGroup);
                 if (SettingsManager.Instance.wordGroupNames.Contains(prefixWordGroup.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
@@ -53,6 +46,7 @@ namespace ChickenScratch
             foreach (WordGroupData nounWordGroup in nounWordGroups)
             {
                 nounWordGroup.isBaseWordGroup = true;
+                nounWordGroup.isOn = true;
                 nounQueue.AddRange(nounWordGroup.words);
                 allNouns.Add(nounWordGroup.name, nounWordGroup);
                 if (SettingsManager.Instance.wordGroupNames.Contains(nounWordGroup.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
@@ -68,29 +62,41 @@ namespace ChickenScratch
 
         public void LoadCustomWords()
         {
-            string newWordGroupJSON = File.ReadAllText(Application.persistentDataPath + "\\new-word-groups.json");
-            List<WordGroupData> newWordGroups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WordGroupData>>(newWordGroupJSON);
-            foreach (WordGroupData wordGroupData in newWordGroups)
+            
+            string newWordsFilePath = Application.persistentDataPath + "\\new-word-groups.json";
+            if (File.Exists(newWordsFilePath))
             {
-                wordGroupData.isBaseWordGroup = false;
-                if (wordGroupData.wordType == WordGroupData.WordType.prefixes)
+                List<CaseWordData> customWords = new List<CaseWordData>();
+                string newWordGroupJSON = File.ReadAllText(newWordsFilePath);
+                List<WordGroupData> newWordGroups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WordGroupData>>(newWordGroupJSON);
+                foreach (WordGroupData wordGroupData in newWordGroups)
                 {
-                    prefixQueue.AddRange(wordGroupData.words);
-                    allPrefixes.Add(wordGroupData.name, wordGroupData);
-                    if (SettingsManager.Instance.wordGroupNames.Contains(wordGroupData.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
+                    wordGroupData.isBaseWordGroup = false;
+                    if (wordGroupData.wordType == WordGroupData.WordType.prefixes)
                     {
-                        allPrefixCategories.Add(wordGroupData.name);
+                        prefixQueue.AddRange(wordGroupData.words);
+                        allPrefixes.Add(wordGroupData.name, wordGroupData);
+                        if (SettingsManager.Instance.wordGroupNames.Contains(wordGroupData.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
+                        {
+                            allPrefixCategories.Add(wordGroupData.name);
+                        }
+                    }
+                    else if (wordGroupData.wordType == WordGroupData.WordType.nouns)
+                    {
+                        nounQueue.AddRange(wordGroupData.words);
+                        allNouns.Add(wordGroupData.name, wordGroupData);
+                        if (SettingsManager.Instance.wordGroupNames.Contains(wordGroupData.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
+                        {
+                            allNounCategories.Add(wordGroupData.name);
+                        }
+                    }
+                    foreach(WordData wordData in wordGroupData.words)
+                    {
+                        CaseWordData caseWordData = new CaseWordData() { category = wordGroupData.name, difficulty = wordData.difficulty, value = wordData.text, wordType = wordGroupData.wordType, identifier = wordGroupData.wordType.ToString() + "-" + wordData.category+ "-" + wordData.text };
+                        customWords.Add(caseWordData);
                     }
                 }
-                else if (wordGroupData.wordType == WordGroupData.WordType.nouns)
-                {
-                    nounQueue.AddRange(wordGroupData.words);
-                    allNouns.Add(wordGroupData.name, wordGroupData);
-                    if (SettingsManager.Instance.wordGroupNames.Contains(wordGroupData.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
-                    {
-                        allNounCategories.Add(wordGroupData.name);
-                    }
-                }
+                GameManager.Instance.gameDataHandler.RpcSendWords(customWords);
             }
         }
 
@@ -116,27 +122,28 @@ namespace ChickenScratch
             }
         }
 
-        public void PopulateStandardCaseWords(ChainData caseData, List<CaseWordTemplateData> startingWords)
+        public void PopulateStandardCaseWords(ChainData caseData, List<string> startingWordIdentifiers)
         {
             Dictionary<int, List<string>> possibleWordsMap = new Dictionary<int, List<string>>();
-            Dictionary<int, CaseWordData> correctWordsMap = new Dictionary<int, CaseWordData>();
+            Dictionary<int, string> correctWordsMap = new Dictionary<int, string>();
 
-            string correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, startingWords);
+            string correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, startingWordIdentifiers);
 
             caseData.possibleWordsMap = possibleWordsMap;
-            caseData.correctWordsMap = correctWordsMap;
+            caseData.correctWordIdentifierMap = correctWordsMap;
             caseData.correctPrompt = correctPrompt;
         }
 
-        public void PopulateChoiceWords(CaseChoiceData choice)
+        public CaseChoiceNetData PopulateChoiceWords(CaseChoiceData choice)
         {
+            CaseChoiceNetData caseChoiceNetData = new CaseChoiceNetData();
             Dictionary<int, List<string>> possibleWordsMap = new Dictionary<int, List<string>>();
-            Dictionary<int, CaseWordData> correctWordsMap = new Dictionary<int, CaseWordData>();
+            Dictionary<int, string> correctWordsMap = new Dictionary<int, string>();
 
-            choice.correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, choice.startingWords);
+            caseChoiceNetData.correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, choice.startingWordIdentifiers);
 
             List<List<string>> possibleWords = new List<List<string>>();
-            List<CaseWordData> correctWords = new List<CaseWordData>();
+            List<string> correctWords = new List<string>();
             //Order the keys
             List<int> orderedKeys = possibleWordsMap.Keys.ToList();
             orderedKeys.Sort();
@@ -151,15 +158,18 @@ namespace ChickenScratch
             {
                 correctWords.Add(correctWordsMap[key]);
             }
-            choice.possibleWordsMap = possibleWords;
-            choice.correctWordsMap = correctWords;
-
+            caseChoiceNetData.possibleWordsMap = possibleWords;
+            caseChoiceNetData.correctWordIdentifiersMap = correctWords;
+            caseChoiceNetData.caseChoiceIdentifier = choice.identifier;
+            return caseChoiceNetData;
         }
 
-        private string PopulateWordMaps(ref Dictionary<int,List<string>> possibleWordsMap, ref Dictionary<int,CaseWordData> correctWordsMap, List<CaseWordTemplateData> caseWords)
+        private string PopulateWordMaps(ref Dictionary<int,List<string>> possibleWordsMap, ref Dictionary<int,string> correctWordIdentifiersMap, List<string> caseWordIdentifiers)
         {
             usedPrefixes.Clear();
             usedNouns.Clear();
+
+            List<CaseWordTemplateData> caseWords = GameDataManager.Instance.GetWordTemplates(caseWordIdentifiers);
             string category;
             WordGroupData prefixGroupData;
             WordGroupData nounGroupData;
@@ -194,9 +204,9 @@ namespace ChickenScratch
                             iterator++;
                         }
 
-                        correctWordsMap.Add(currentWordIndex, new CaseWordData("", startingWord, -1));
+                        correctWordIdentifiersMap.Add(currentWordIndex, "");
 
-                        while (correctWordsMap[currentWordIndex].value == "")
+                        while (correctWordIdentifiersMap[currentWordIndex] == "")
                         {
                             if (prefixGroupData.wordCount <= iterator)
                             {
@@ -209,8 +219,7 @@ namespace ChickenScratch
                             {
                                 usedPrefixes.Add(currentWord.text);
                                 totalDifficulty += currentWord.difficulty;
-                                correctWordsMap[currentWordIndex].value = currentWord.text;
-                                correctWordsMap[currentWordIndex].difficulty = currentWord.difficulty;
+                                correctWordIdentifiersMap[currentWordIndex] = ("prefixes-" + category + "-" + currentWord.text);
                                 possibleWordsMap[currentWordIndex].Add(currentWord.text);
                             }
 
@@ -247,9 +256,9 @@ namespace ChickenScratch
                             iterator++;
                         }
 
-                        correctWordsMap.Add(currentWordIndex, new CaseWordData("", startingWord, -1));
+                        correctWordIdentifiersMap.Add(currentWordIndex, "");
 
-                        while (correctWordsMap[currentWordIndex].value == "")
+                        while (correctWordIdentifiersMap[currentWordIndex] == "")
                         {
                             currentWord = nounGroupData.GetWord(iterator);
                             bool isLastWord = caseWords[caseWords.Count - 1] == startingWord;
@@ -259,8 +268,7 @@ namespace ChickenScratch
                             {
                                 usedNouns.Add(currentWord.text);
                                 totalDifficulty += currentWord.difficulty;
-                                correctWordsMap[currentWordIndex].value = currentWord.text;
-                                correctWordsMap[currentWordIndex].difficulty = currentWord.difficulty;
+                                correctWordIdentifiersMap[currentWordIndex] = ("nouns-" + category + "-" + currentWord.text);
                                 possibleWordsMap[currentWordIndex].Add(currentWord.text);
                             }
 
@@ -282,7 +290,9 @@ namespace ChickenScratch
                 currentWordIndex++;
             }
             //Remove the last added white space from the correct prompt
-            correctPrompt = correctWordsMap[1].value + " " + correctWordsMap[2].value;
+            CaseWordData correctPrefix = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[1]);
+            CaseWordData correctNoun = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[2]);
+            correctPrompt = correctPrefix.value + " " + correctNoun.value;
             
 
             return correctPrompt;

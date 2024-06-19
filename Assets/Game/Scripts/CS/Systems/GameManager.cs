@@ -10,7 +10,7 @@ namespace ChickenScratch
         {
             lobby, game, theater
         }
-
+        public string versionNumber = "0.01";
         public GameScene currentGameScene;
         public Color workerColour, traitorColour;
         public GameObject linePrefab;

@@ -67,7 +67,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: e00995507c2406448b4c8429136104dd, type: 3}
+    m_Font: {fileID: 12800000, guid: 76328043cb75d29478317f990084f153, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -147,7 +147,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: e00995507c2406448b4c8429136104dd, type: 3}
+    m_Font: {fileID: 12800000, guid: 76328043cb75d29478317f990084f153, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -360,6 +360,8 @@ MonoBehaviour:
   RoomNameText: {fileID: 6112902224870703280}
   AttendeeCountText: {fileID: 4954835120627415795}
   roomName: 
+  roomID:
+    m_SteamID: 0
 --- !u!1 &3629673981681211340
 GameObject:
   m_ObjectHideFlags: 0

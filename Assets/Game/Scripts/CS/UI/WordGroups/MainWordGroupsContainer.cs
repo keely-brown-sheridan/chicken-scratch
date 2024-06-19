@@ -37,11 +37,11 @@ namespace ChickenScratch
             }
         }
 
-        public void CreateWordGroupDisplayItem(string inGroupName, List<WordData> inWords, WordGroupsController inWordGroupsController)
+        public void CreateWordGroupDisplayItem(string inGroupName, WordGroupData.WordType inWordType, List<WordData> inWords, WordGroupsController inWordGroupsController)
         {
             GameObject wordGroupDisplayObject = Instantiate(wordGroupDisplayItemPrefab, contentObject.transform);
             WordGroupDisplayItem wordGroupDisplayItem = wordGroupDisplayObject.GetComponent<WordGroupDisplayItem>();
-            wordGroupDisplayItem.Initialize(inGroupName, inWords, inWordGroupsController);
+            wordGroupDisplayItem.Initialize(inGroupName, inWordType, inWords, inWordGroupsController);
         }
     }
 }

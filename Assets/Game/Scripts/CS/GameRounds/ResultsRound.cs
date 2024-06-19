@@ -16,12 +16,13 @@ namespace ChickenScratch
 
         public List<ResultVoteRow> allResultVoteRows;
         public Transform emailButtonContainer;
-        public GameObject currentOpenEmail;
+
+        
         public WorkersOutcomeContents workerWinWindow, workerWinWindow2;
         public SummaryEmailContents gameSummaryWindow;
         public FileSummaryEmailContents fileSummaryWindow;
-        public List<BirdTag> emailWindows;
-        public GameObject workerWinButtonPrefab, gameSummaryButtonPrefab, folderSummaryButtonPrefab;
+
+
         public GameObject containerObject;
         public EndGameState endgameState = EndGameState.incomplete;
         public Image lastSelectedButtonImage;
@@ -29,8 +30,11 @@ namespace ChickenScratch
 
         public Color selectedEmailButtonColour, unselectedEmailButtonColour;
 
-        public Transform fileSummaryEmailsHolder;
-        public GameObject fileSummaryEmailPrefab;
+        [SerializeField]
+        private Transform emailHolderTransform;
+
+        [SerializeField]
+        private GameObject caseFileEmailPrefab;
 
         [SerializeField]
         private GameObject playerStatRolePrefab;
@@ -41,13 +45,16 @@ namespace ChickenScratch
         private Button lobbyButton;
 
         [SerializeField]
-        private UnityEngine.UI.Text returnToLobbyText;
+        private Text returnToLobbyText;
         [SerializeField]
         private GameObject quitPromptObject;
         [SerializeField]
         private GameObject hostHasReturnedToLobbyPromptObject;
 
-
+        [SerializeField]
+        private GameObject workerWinButtonPrefab, gameSummaryButtonPrefab, caseFileEmailButtonPrefab;
+        
+        private GameObject currentOpenEmail;
 
         private void Start()
         {
@@ -59,7 +66,7 @@ namespace ChickenScratch
         public override void StartRound()
         {
             base.StartRound();
-            initializeResultsRound();
+            ShowResults();
 
             if (SettingsManager.Instance.isHost)
             {
@@ -71,13 +78,6 @@ namespace ChickenScratch
             {
                 initializeCaseEmailContents(caseData);
             }
-            fileSummaryWindow.enableFirstCase();
-        }
-
-        private void initializeResultsRound()
-        {
-            //Update endgame sheet
-            ShowResults();
         }
 
         public void SetPlayerStatRoles(Dictionary<BirdName, AccoladesStatManager.StatRole> statRoleMap)
@@ -110,24 +110,18 @@ namespace ChickenScratch
                 lastSelectedButtonImage = tempButton.unreadImage;
             }
 
-            temp = Instantiate(folderSummaryButtonPrefab, emailButtonContainer);
-            tempButton = temp.GetComponent<EmailButton>();
-            if (tempButton)
-            {
-                tempButton.window = fileSummaryWindow.gameObject;
-            }
             string outcomeTextValue = "";
             Color outcomeTextColour = Color.black;
             int totalPoints = 0;
-            SettingsManager.EndgameResult highestResult = null;
+            ResultData highestResult = null;
             foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
                 totalPoints += caseData.GetTotalPoints();
             }
 
-            foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                int requiredPointThreshold = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name) * GameManager.Instance.playerFlowManager.playerNameMap.Count);
+                int requiredPointThreshold = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
                 if (highestResult == null && result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name) == 0)
                 {
                     highestResult = result;
@@ -149,18 +143,18 @@ namespace ChickenScratch
             gameSummaryWindow.setSummaryContents();
         }
 
-        public void initializeCaseEmailContents(EndgameCaseData caseData)
+        public GameObject initializeCaseEmailContents(EndgameCaseData caseData)
         {
-            if (!fileSummaryWindow.isInitialized)
-            {
-                fileSummaryWindow.initialize();
-            }
+            GameObject caseEmailContentsObject = Instantiate(caseFileEmailPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity, emailHolderTransform);
+            caseEmailContentsObject.transform.localPosition = Vector3.zero;
+            CaseEmail caseEmail = caseEmailContentsObject.GetComponent<CaseEmail>();
 
-            GameObject emailContentsObject = Instantiate(fileSummaryEmailPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity, fileSummaryEmailsHolder);
-            emailContentsObject.transform.localPosition = Vector3.zero;
-            CaseEmail emailContents = emailContentsObject.GetComponent<CaseEmail>();
-            fileSummaryWindow.addCase(emailContentsObject, caseData.identifier);
-            emailContents.initialize(caseData);
+            GameObject caseEmailButtonObject = Instantiate(caseFileEmailButtonPrefab, emailButtonContainer);
+            EmailButton caseEmailButton = caseEmailButtonObject.GetComponent<EmailButton>();
+            caseEmailButton.window = caseEmailContentsObject;
+            caseEmailButton.text.text = caseData.correctPrompt;
+            caseEmail.initialize(caseData);
+            return caseEmailContentsObject;
         }
 
         public void HostHasReturnedToLobby()
@@ -186,6 +180,22 @@ namespace ChickenScratch
         {
             AudioManager.Instance.PlaySoundVariant("sfx_ui_int_cancel_back");
             hostHasReturnedToLobbyPromptObject.SetActive(false);
+        }
+
+        public void OpenEmail(GameObject emailObject, Image unreadImage)
+        {
+            if (currentOpenEmail)
+            {
+                currentOpenEmail.SetActive(false);
+            }
+            currentOpenEmail = emailObject;
+            currentOpenEmail.SetActive(true);
+            if (lastSelectedButtonImage)
+            {
+                lastSelectedButtonImage.color = unselectedEmailButtonColour;
+            }
+            unreadImage.color = selectedEmailButtonColour;
+            lastSelectedButtonImage = unreadImage;
         }
     }
 }

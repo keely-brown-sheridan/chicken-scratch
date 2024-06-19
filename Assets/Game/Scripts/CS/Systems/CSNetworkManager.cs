@@ -1,10 +1,12 @@
 using ChickenScratch;
 using Mirror;
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static ChickenScratch.ColourManager;
 
 public class CSNetworkManager : NetworkManager
 {
@@ -25,7 +27,6 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnStartHost()
     {
-        Debug.Log("OnStartHost was called.");
         if (SceneManager.GetActiveScene().name == "Game")
         {
             currentState = NetworkState.ingame;
@@ -40,7 +41,6 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnStartClient()
     {
-        Debug.Log("OnStartClient was called.");
         if (SceneManager.GetActiveScene().name == "Game")
         {
             currentState = NetworkState.ingame;
@@ -55,18 +55,15 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnStopHost()
     {
-        Debug.Log("OnStopHost was called.");
         currentState = NetworkState.disconnected;
         base.OnStopHost();
     }
 
     public override void OnClientConnect()
     {
-        Debug.Log("OnClientConnect was called.");
         switch(currentState)
         {
             case NetworkState.lobby:
-                LobbyNetwork.Instance.OnJoinedLobby();
                 break;
             case NetworkState.ingame:
                 break;
@@ -75,18 +72,30 @@ public class CSNetworkManager : NetworkManager
         base.OnClientConnect();
     }
 
+
     public override void OnClientDisconnect()
     {
-        Debug.LogError("OnClientDisconnect was called. DCManager?[" + (dcManager == null).ToString() + "]");
         base.OnClientDisconnect();
-        currentState = NetworkState.disconnected;
+        switch(currentState)
+        {
+            case NetworkState.lobby:
+                break;
+            case NetworkState.ingame:
+                currentState = NetworkState.disconnected;
+                SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_room_listings;
+                SettingsManager.Instance.playerQuit = true;
+                Cursor.visible = true;
+                SceneManager.LoadScene(0);
+                break;
+        }
+        
+
     }
 
     public override void OnStopClient()
     {
         //intentionalDisconnection = true;
-        Debug.LogError("OnStopClient was called.");
-        
+        SettingsManager.Instance.DisconnectFromLobby();
         if (dcManager == null)
         {
             dcManager = FindObjectOfType<DCManager>();
@@ -111,10 +120,14 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
-        Debug.Log("OnServerConnect was called.");
         switch(currentState)
         {
             case NetworkState.lobby:
+                SettingsManager.Instance.AddConnection(conn);
+                if(conn.connectionId == NetworkConnection.LocalConnectionId)
+                {
+                    SettingsManager.Instance.SetConnectionSteamName(Steamworks.SteamFriends.GetPersonaName(), conn);
+                }
                 MenuLobbyButtons.Instance.UpdatePlayerCount();
                 break;
         }
@@ -124,27 +137,70 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        Debug.Log("OnServerAddPlayer was called.");
         base.OnServerAddPlayer(conn);
         switch(currentState)
         {
             case NetworkState.lobby:
+                
+
+                if(SettingsManager.Instance.waitingForPlayers)
+                {
+                    List<BirdName> allPlayers = SettingsManager.Instance.GetAllActiveBirds();
+                    foreach (BirdName player in allPlayers)
+                    {
+                        SettingsManager.Instance.SetBirdForPlayerID(SettingsManager.Instance.GetConnection(player), player);
+                    }
+
+                    LobbyNetwork.Instance.lobbyDataHandler.TargetReturnToLobby(conn);
+                    LobbyNetwork.Instance.loadedPlayers++;
+                    if(LobbyNetwork.Instance.loadedPlayers == NetworkServer.connections.Count)
+                    {
+                        //Load the lobby page
+                        LobbyNetwork.Instance.lobbyDataHandler.RpcCloseLobbyLoadingPage();
+
+                        SettingsManager.Instance.ServerRefreshBirds();
+                        SettingsManager.Instance.waitingForPlayers = false;
+                    }
+                }
+                else
+                {
+                    LobbyNetwork.Instance.lobbyDataHandler.TargetOpenLobby(conn);
+                }
+                LobbyNetwork.Instance.lobbyDataHandler.TargetRequestSteamID(conn);
                 LobbyNetwork.Instance.lobbyDataHandler.TargetSetPlayerID(conn, conn.connectionId.ToString());
-                LobbyNetwork.Instance.ServerUpdatePlayerListings();
                 break;
         }
 
     }
 
+    public override void OnServerReady(NetworkConnectionToClient conn)
+    {
+        switch(currentState)
+        {
+            case NetworkState.lobby:
+                
+                break;
+            case NetworkState.ingame:
+                if (!GameManager.Instance.gameFlowManager.connectedPlayers.Contains(conn))
+                {
+                    GameManager.Instance.gameFlowManager.connectedPlayers.Add(conn);
+                }
+                break;
+        }
+
+        
+        base.OnServerReady(conn);
+    }
+
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        Debug.Log("OnServerDisconnect was called.");
         
         switch (currentState)
         {
             case NetworkState.lobby:
+                SettingsManager.Instance.RemoveConnection(conn);
                 MenuLobbyButtons.Instance.UpdatePlayerCount();
-                LobbyNetwork.Instance.ServerUpdatePlayerListings();
+                SettingsManager.Instance.ServerRefreshBirds();
                 break;
             case NetworkState.ingame:
                 if (dcManager == null)
@@ -153,11 +209,12 @@ public class CSNetworkManager : NetworkManager
                 }
                 if (dcManager)
                 {
-                    if(SettingsManager.Instance.birdConnectionMap.Any(bc => bc.Value == conn))
+                    BirdName disconnectedPlayer = SettingsManager.Instance.GetDisconnectedPlayerBird(conn);
+                    if(disconnectedPlayer != BirdName.none)
                     {
-                        KeyValuePair<ColourManager.BirdName, NetworkConnectionToClient> playerConnection = SettingsManager.Instance.birdConnectionMap.Single(bc => bc.Value == conn);
-                        GameManager.Instance.gameDataHandler.RpcSendDisconnectionNotification(playerConnection.Key);
+                        GameManager.Instance.gameDataHandler.RpcSendDisconnectionNotification(disconnectedPlayer);
                     }
+                    
                 }
                 break;
         }

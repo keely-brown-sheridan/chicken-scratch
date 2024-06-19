@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using static ChickenScratch.TaskData;
 
 namespace ChickenScratch
@@ -19,9 +20,14 @@ namespace ChickenScratch
         [SerializeField]
         private DrawingController drawingBoard;
 
-        public void Initialize(DrawingData drawingData)
+        private TaskModifier drawingBoxModifier;
+
+        public void Initialize(DrawingData drawingData, TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
         {
+            drawingBoxModifier = inDrawingBoxModifier;
             copyingContainer.Show(drawingData, drawingScalingFactor, drawingOffset);
+            timeCompleteAction = inTimeCompleteAction;
+            RegisterToTimer(inTimeCompleteAction);
         }
 
         public override void Show(Color inFolderColour, float taskTime, float currentModifier, float modifierDecrement)
@@ -29,7 +35,7 @@ namespace ChickenScratch
             base.Show(inFolderColour, taskTime, currentModifier, modifierDecrement);
             drawingBoard.initialize();
             drawingBoard.gameObject.SetActive(true);
-            drawingBoard.open();
+            drawingBoard.open(drawingBoxModifier);
         }
 
         public override void Hide()

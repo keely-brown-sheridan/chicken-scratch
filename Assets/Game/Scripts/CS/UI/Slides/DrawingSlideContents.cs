@@ -7,6 +7,9 @@ namespace ChickenScratch
     public class DrawingSlideContents : SlideContents
     {
         [SerializeField]
+        private GoldStarDetectionArea goldStarDetectionArea;
+
+        [SerializeField]
         private TMP_Text originalPromptReminderText;
 
         [SerializeField]
@@ -24,6 +27,12 @@ namespace ChickenScratch
         [SerializeField]
         private float drawingSize;
 
+        [SerializeField]
+        private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
+
+        [SerializeField]
+        private SlideTimeModifierDecrementVisual slideTimeModifierDecrementVisual;
+
         private float duration;
         private float timeActive = 0f;
 
@@ -31,7 +40,7 @@ namespace ChickenScratch
         {
             if (active)
             {
-                timeActive += Time.deltaTime;
+                timeActive += Time.deltaTime * GameManager.Instance.playerFlowManager.slidesRound.slideSpeed;
                 if (timeActive > duration)
                 {
                     isComplete = true;
@@ -39,7 +48,7 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(DrawingData drawingData, string correctPrompt, float inDuration)
+        public void Initialize(DrawingData drawingData, string prefix, string noun, int round, int caseID, float inDuration, float timeModifierDecrement)
         {
             duration = inDuration;
             timeActive = 0f;
@@ -49,8 +58,13 @@ namespace ChickenScratch
             Bird authorBird = ColourManager.Instance.birdMap[drawingData.author];
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
+            authorNameText.text = SettingsManager.Instance.GetPlayerName(drawingData.author);
+            goldStarDetectionArea.Initialize(drawingData.author, round, caseID);
 
-            originalPromptReminderText.text = correctPrompt;
+            originalPromptReminderText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
+            EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
+            caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
+            slideTimeModifierDecrementVisual.Initialize(timeModifierDecrement);
         }
     }
 }

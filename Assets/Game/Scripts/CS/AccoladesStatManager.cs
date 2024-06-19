@@ -42,7 +42,7 @@ namespace ChickenScratch
             playerStatsMap[player].usedTutorial = inUsedTutorial;
             playerStatsMap[player].totalDistanceMoved = inTotalDistanceMoved;
 
-            if (playerStatsMap.Count == SettingsManager.Instance.playerNameMap.Count)
+            if (playerStatsMap.Count == SettingsManager.Instance.GetPlayerNameCount())
             {
                 sendStatsToClients();
             }
@@ -103,6 +103,7 @@ namespace ChickenScratch
                         case TaskData.TaskType.base_drawing:
                         case TaskData.TaskType.copy_drawing:
                         case TaskData.TaskType.add_drawing:
+                        case TaskData.TaskType.compile_drawing:
                             if (!timeTakenMap.ContainsKey(currentTask.drawingData.author))
                             {
                                 timeTakenMap.Add(currentTask.drawingData.author, 0.0f);
@@ -141,8 +142,11 @@ namespace ChickenScratch
                             break;
                         case TaskData.TaskType.prompting:
                             if (currentTask.promptData.author == BirdName.none) continue;
-                            bool nounIsCorrect = currentTask.promptData.text.Contains(currentCase.correctWordsMap[1].value);
-                            bool prefixIsCorrect = currentTask.promptData.text.Contains(currentCase.correctWordsMap[2].value);
+
+                            CaseWordData correctPrefix = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[1]);
+                            CaseWordData correctNoun = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[2]);
+                            bool nounIsCorrect = currentTask.promptData.text.Contains(correctPrefix.value);
+                            bool prefixIsCorrect = currentTask.promptData.text.Contains(correctNoun.value);
                             if (nounIsCorrect && prefixIsCorrect && !fullWordSnipers.Contains(currentTask.promptData.author))
                             {
                                 fullWordSnipers.Add(currentTask.promptData.author);
@@ -287,8 +291,9 @@ namespace ChickenScratch
                     mostStarsGiven = playerStat.Value.numberOfLikesGiven;
                     mostStarsGiver = playerStat.Key;
                 }
-                if (playerStat.Value.numberOfPlayersLiked == SettingsManager.Instance.playerNameMap.Count - 1 &&
-                    SettingsManager.Instance.playerNameMap.Count > 2)
+                int playerCount = SettingsManager.Instance.GetPlayerNameCount();
+                if (playerStat.Value.numberOfPlayersLiked == playerCount - 1 &&
+                    playerCount > 2)
                 {
                     starSpreaders.Add(playerStat.Key);
                 }
@@ -383,7 +388,8 @@ namespace ChickenScratch
             }
             //Add relevant stat roles to every player
             Dictionary<BirdName, List<StatRole>> allRolesMap = new Dictionary<BirdName, List<StatRole>>();
-            foreach (BirdName player in SettingsManager.Instance.playerNameMap.Keys)
+            List<BirdName> allActiveBirds = SettingsManager.Instance.GetAllActiveBirds();
+            foreach (BirdName player in allActiveBirds)
             {
                 allRolesMap.Add(player, new List<StatRole>());
                 allRolesMap[player].Add(statRoleMap[StatRole.StatRoleType.safeguard_1]);
@@ -508,7 +514,7 @@ namespace ChickenScratch
                 allRolesMap[nonLiker].Add(statRoleMap[StatRole.StatRoleType.liked_nothing]);
             }
 
-            foreach (BirdName player in SettingsManager.Instance.playerNameMap.Keys)
+            foreach (BirdName player in allActiveBirds)
             {
                 allRolesMap[player] = allRolesMap[player].OrderBy(a => Guid.NewGuid()).ToList();
             }

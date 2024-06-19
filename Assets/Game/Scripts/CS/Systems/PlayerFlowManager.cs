@@ -22,8 +22,6 @@ namespace ChickenScratch
         public float currentTimeInRound;
         public GameFlowManager.GamePhase currentPhaseName;
         public bool active = true;
-        public int numberOfCabinetRounds;
-
         public Transform drawingsContainer;
         public Dictionary<BirdName, string> playerNameMap = new Dictionary<BirdName, string>();
 
@@ -49,9 +47,9 @@ namespace ChickenScratch
 
         private void Start()
         {
-            if (!SettingsManager.Instance.isHost && NetworkClient.isConnected)
+            if (NetworkClient.isConnected)
             {
-                GameManager.Instance.gameDataHandler.CmdPlayerLoadedGame(SettingsManager.Instance.birdName);
+                NetworkClient.Ready();
             }
 
             if (!isInitialized)
@@ -81,7 +79,8 @@ namespace ChickenScratch
             if (SettingsManager.Instance.gameMode.name != "Theater")
             {
                 int iterator = 0;
-                foreach (BirdName playerBird in SettingsManager.Instance.playerNameMap.Keys)
+                List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
+                foreach (BirdName playerBird in allPlayerBirds)
                 {
                     if (drawingRound.cabinetDrawerMap[iterator + 1].currentPlayer == BirdName.none)
                     {
@@ -146,10 +145,6 @@ namespace ChickenScratch
                     loadingCircleObject.SetActive(true);
                     hasRunOutOfTime = true;
                     timeRemainingText.text = "00:00";
-                    if (SettingsManager.Instance.isHost)
-                    {
-                        OnOutOfTime();
-                    }
                 }
 
                 return;
@@ -157,7 +152,7 @@ namespace ChickenScratch
 
             timeRemainingText.text = string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
         }
-        private void OnOutOfTime()
+        public void OnOutOfTime()
         {
             if (currentPhaseName == GameFlowManager.GamePhase.drawing)
             {
@@ -168,7 +163,7 @@ namespace ChickenScratch
                     if (!selectedCase.Value.IsComplete())
                     {
                         //Queue the player who has the case to force submit
-                        int currentRound = drawingRound.currentRoundMap.ContainsKey(selectedCase.Key) ? drawingRound.currentRoundMap[selectedCase.Key] : -1;
+                        int currentRound = drawingRound.currentRound;
                         if (currentRound == -1)
                         {
                             Debug.LogError("ERROR[OnOutOfTime]: Could not isolate currentRound for case["+selectedCase.Key.ToString()+"]");
@@ -185,10 +180,15 @@ namespace ChickenScratch
                         }
                     }
                 }
+                //Add transition conditions for each of these players
+
                 foreach(BirdName playerToSubmit in playersToForceSubmit)
                 {
-                    GameManager.Instance.gameDataHandler.TargetForceSubmit(SettingsManager.Instance.birdConnectionMap[playerToSubmit]);
+                    Debug.LogError("Forcing player["+playerToSubmit.ToString()+"] to submit.");
+                    GameManager.Instance.gameFlowManager.addTransitionCondition("force_submit:" + playerToSubmit.ToString());
+                    GameManager.Instance.gameDataHandler.TargetForceSubmit(SettingsManager.Instance.GetConnection(playerToSubmit));
                 }
+                drawingRound.hasRequestedCaseDetails = true;
             }
         }
 
@@ -341,11 +341,10 @@ namespace ChickenScratch
             drawingContainer.transform.localScale = scale;
         }
 
-        public void addGuessPrompt(BirdName inBirdName, Dictionary<int, string> wordGuesses, int caseID)
+        public void addGuessPrompt(GuessData inGuessData, int caseID, float timeTaken)
         {
             ChainData chain = drawingRound.caseMap[caseID];
-            chain.guessesMap = wordGuesses;
-            chain.guesser = inBirdName;
+            chain.guessData = inGuessData;
 
             if (SettingsManager.Instance.isHost)
             {
@@ -366,7 +365,7 @@ namespace ChickenScratch
         {
             string mergingFolder = "Screenshots\\temp\\" + GameManager.Instance.gameID + "\\Merging\\" + caseIndex.ToString();
             string savingFolder = "Screenshots\\";
-            string promptName = drawingRound.caseMap[caseIndex].correctWordsMap[1].value + "_" + drawingRound.caseMap[caseIndex].correctWordsMap[2].value;
+            //string promptName = drawingRound.caseMap[caseIndex].correctWordsMap[1].value + "_" + drawingRound.caseMap[caseIndex].correctWordsMap[2].value;
             string finalPath = "";
             //Pull in the images as Texture2D data then feed them in to the GifConverter
             // List<Texture2D> loadedTextures = new List<Texture2D>();
@@ -385,7 +384,7 @@ namespace ChickenScratch
             //gifConverter.SaveGIF(loadedTextures, savingFolder + "\\" + promptName + ".gif");
             try
             {
-                finalPath = screenshotter.MergeImages(mergingFolder, promptName + ".png", savingFolder);
+                //finalPath = screenshotter.MergeImages(mergingFolder, promptName + ".png", savingFolder);
             }
             catch (Exception e)
             {
@@ -400,7 +399,7 @@ namespace ChickenScratch
         {
             string mergingFolder = "Screenshots\\temp\\" + GameManager.Instance.gameID + "\\Merging";
             string savingFolder = Application.persistentDataPath + "\\Screenshots\\";
-            string promptName = drawingRound.caseMap[caseIndex].correctWordsMap[1] + "_" + drawingRound.caseMap[caseIndex].correctWordsMap[2];
+            //string promptName = drawingRound.caseMap[caseIndex].correctWordsMap[1] + "_" + drawingRound.caseMap[caseIndex].correctWordsMap[2];
 
             //Pull in the images as Texture2D data then feed them in to the GifConverter
             List<Texture2D> loadedTextures = new List<Texture2D>();
@@ -424,7 +423,7 @@ namespace ChickenScratch
                 }
             }
 
-            gifConverter.SaveGIF(loadedTextures, savingFolder + "\\" + promptName + ".gif");
+            //gifConverter.SaveGIF(loadedTextures, savingFolder + "\\" + promptName + ".gif");
         }
     }
 }

@@ -142,7 +142,6 @@ namespace ChickenScratch
                 GameManager.Instance.playerFlowManager.drawingRound.UpdateToNewFolderState();
                 GameManager.Instance.playerFlowManager.drawingRound.onPlayerStartTask.Invoke();
 
-                Debug.LogError("Drawer is not ready anymore because it is being selected.");
                 ready = false;
             }
             else

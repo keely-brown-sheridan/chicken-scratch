@@ -9,12 +9,14 @@ namespace ChickenScratch
 
         [SerializeField]
         private TMPro.TMP_Text likeCountText;
+        [SerializeField]
+        private GameObject likesHolderObject;
 
         public void SetRating(int likes)
         {
             if (likes > 0)
             {
-                likeCountText.gameObject.SetActive(true);
+                likesHolderObject.gameObject.SetActive(true);
                 likeCountText.text = "x" + likes.ToString();
             }
         }

@@ -15,18 +15,21 @@ namespace ChickenScratch
         public DrawingData drawingData;
         public PlayerTextInputData promptData;
         public ColourManager.BirdName assignedPlayer;
+        public float timeModifierDecrement;
+        public bool isComplete = false;
 
         public EndgameTaskData()
         {
 
         }
 
-        public EndgameTaskData(TaskData taskData, int inRound, ColourManager.BirdName inPlayer)
+        public EndgameTaskData(TaskData taskData, int inRound, ColourManager.BirdName inPlayer, float inTimeModifierDecrement)
         {
             taskType = taskData.taskType;
             assignedPlayer = inPlayer;
             ratingData = new PlayerRatingData();
             round = inRound;
+            timeModifierDecrement = inTimeModifierDecrement;
         }
 
 

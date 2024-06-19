@@ -23,6 +23,7 @@ namespace ChickenScratch
 
         private bool isActive = false;
         private bool isStampActive = false;
+        protected UnityAction timeCompleteAction;
 
         void Update()
         {
@@ -54,6 +55,7 @@ namespace ChickenScratch
 
             formAnimator.SetBool("Slide", true);
             caseModifierVisual.Initialize(timeForTask, currentModifierValue, modifierDecrement);
+            
         }
 
         public virtual void Hide()
@@ -62,6 +64,10 @@ namespace ChickenScratch
             formAnimator.SetBool("Slide", false);
             isActive = false;
             isStampActive = false;
+            if(timeCompleteAction != null)
+            {
+                DeregisterFromTimer(timeCompleteAction);
+            }
         }
 
         public abstract bool HasStarted();

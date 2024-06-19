@@ -20,11 +20,17 @@ namespace ChickenScratch
 
         [SerializeField]
         private TMPro.TMP_Text originalPromptText;
+
+        [SerializeField]
+        private TMPro.TMP_Text baseScoreText, finalScoreModifierText, finalScoreText;
         [SerializeField]
         private float horizontalSectionDistance, verticalSectionDistance;
 
         [SerializeField]
         private int maxColumnsPerRow;
+
+        [SerializeField]
+        private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
 
         private Dictionary<SlideTypeData.SlideType, GameObject> summarySectionPrefabMap = new Dictionary<SlideTypeData.SlideType, GameObject>();
 
@@ -57,7 +63,7 @@ namespace ChickenScratch
         {
             if (active)
             {
-                timeActive += Time.deltaTime;
+                timeActive += Time.deltaTime * GameManager.Instance.playerFlowManager.slidesRound.slideSpeed;
                 if (timeActive > duration)
                 {
                     isComplete = true;
@@ -65,7 +71,7 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(string originalPrompt, float inDuration)
+        public void Initialize(string prefix, string noun, int caseID, float inDuration, float finalScore)
         {
             duration = inDuration;
             timeActive = 0f;
@@ -75,36 +81,40 @@ namespace ChickenScratch
                 SummarySlideSection summarySlideSection = summarySectionPrefab.GetComponent<SummarySlideSection>();
                 summarySectionPrefabMap.Add(summarySlideSection.slideType, summarySectionPrefab);
             }
-            originalPromptText.text = originalPrompt;
+            
+            originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
+            EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
+            caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
+            finalScoreText.text = "Points Earned: " + finalScore.ToString();
         }
 
-        public void AddDrawing(DrawingData drawingData, Transform summarySlidetransform)
+        public void AddDrawing(DrawingData drawingData, int round, int caseID, Transform summarySlidetransform, float timeModifierDecrement)
         {
             Vector3 spawnPosition = GetSpawnPosition();
             GameObject drawingSummarySlideSectionObject = Instantiate(summarySectionPrefabMap[SlideTypeData.SlideType.drawing], spawnPosition, Quaternion.identity, summarySectionsHolder);
             DrawingSummarySlideSection drawingSummarySlideSection = drawingSummarySlideSectionObject.GetComponent<DrawingSummarySlideSection>();
-            drawingSummarySlideSection.Initialize(drawingData, summarySlidetransform);
+            drawingSummarySlideSection.Initialize(drawingData, summarySlidetransform, round, caseID, timeModifierDecrement);
             drawingSummarySlideSection.positionWhereItShouldBeIfUnityWasntShit = spawnPosition;
             summarySections.Add(drawingSummarySlideSection);
         }
 
-        public void AddPrompt(PlayerTextInputData promptData)
+        public void AddPrompt(PlayerTextInputData promptData, int round, int caseID, float timeModifierDecrement)
         {
             Vector3 spawnPosition = GetSpawnPosition();
             GameObject promptSummarySlideSectionObject = Instantiate(summarySectionPrefabMap[SlideTypeData.SlideType.prompt], spawnPosition, Quaternion.identity, summarySectionsHolder);
             PromptSummarySlideSection promptSummarySlideSection = promptSummarySlideSectionObject.GetComponent<PromptSummarySlideSection>();
-            promptSummarySlideSection.Initialize(promptData);
+            promptSummarySlideSection.Initialize(promptData, round, caseID, timeModifierDecrement);
             promptSummarySlideSection.positionWhereItShouldBeIfUnityWasntShit = spawnPosition;
             summarySections.Add(promptSummarySlideSection);
         }
 
-        public void AddGuess(ColourManager.BirdName guesser, Dictionary<int,string> guessesMap, Dictionary<int,CaseWordData> correctWordsMap)
+        public void AddGuess(GuessData guessData, Dictionary<int,string> correctWordIdentifiersMap, int round, int caseID, float timeModifierDecrement)
         {
             Vector3 spawnPosition = GetSpawnPosition();
             GameObject guessSummarySlideSectionObject = Instantiate(summarySectionPrefabMap[SlideTypeData.SlideType.guess], spawnPosition, Quaternion.identity, summarySectionsHolder);
-            Debug.LogError("Spawned guess summary slide object position: " + guessSummarySlideSectionObject.transform.position.ToString());
             GuessSummarySlideSection guessSummarySlideSection = guessSummarySlideSectionObject.GetComponent<GuessSummarySlideSection>();
-            guessSummarySlideSection.Initialize(guesser, guessesMap, correctWordsMap);
+
+            guessSummarySlideSection.Initialize(guessData, correctWordIdentifiersMap, round, caseID, timeModifierDecrement);
             guessSummarySlideSection.positionWhereItShouldBeIfUnityWasntShit = spawnPosition;
             summarySections.Add(guessSummarySlideSection);
         }
@@ -112,7 +122,6 @@ namespace ChickenScratch
         private Vector3 GetSpawnPosition()
         {
             Vector3 spawnPosition = sectionReferencePositionTransform.position + Vector3.right * horizontalSectionDistance * currentColumn - Vector3.up * verticalSectionDistance * currentRow;
-            Debug.LogError("Spawn position: " + spawnPosition.ToString());
             currentColumn++;
             if(currentColumn >= maxColumnsPerRow)
             {

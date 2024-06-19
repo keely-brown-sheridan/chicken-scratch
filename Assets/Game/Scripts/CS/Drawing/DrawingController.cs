@@ -7,6 +7,10 @@ namespace ChickenScratch
 {
     public class DrawingController : MonoBehaviour
     {
+        [SerializeField]
+        private GameObject baseDrawingBox;
+        [SerializeField]
+        private List<DrawingBoxType> drawingBoxes;
 
         public LayerMask drawingLayer;
         public GameObject drawingObjectPrefab;
@@ -33,6 +37,7 @@ namespace ChickenScratch
         private List<BirdTag> taggedObjects;
         [SerializeField]
         private Transform drawingOriginTransform;
+        private Dictionary<TaskData.TaskModifier, GameObject> drawingBoxMap = new Dictionary<TaskData.TaskModifier, GameObject>();
         private void Start()
         {
             if (!isInitialized)
@@ -96,11 +101,23 @@ namespace ChickenScratch
 
         }
 
-        public void open()
+        public void open(TaskData.TaskModifier modifier)
         {
             if (currentDrawingToolType == DrawingToolType.eraser)
             {
                 setMarkerAsToolWithoutSound();
+            }
+            foreach(DrawingBoxType drawingBox in drawingBoxes)
+            {
+                drawingBox.gameObject.SetActive(false);
+            }
+            if (drawingBoxMap.ContainsKey(modifier))
+            {
+                drawingBoxMap[modifier].SetActive(true);
+            }
+            else
+            {
+                baseDrawingBox.SetActive(true);
             }
         }
 
@@ -318,6 +335,10 @@ namespace ChickenScratch
                         birdTag.gameObject.SetActive(true);
                     }
                 }
+                foreach(DrawingBoxType drawingBox in drawingBoxes)
+                {
+                    drawingBoxMap.Add(drawingBox.modifier, drawingBox.gameObject);
+                }
                 drawingToolMap.Add(pencilTool.type, pencilTool);
                 drawingToolMap.Add(colourMarkerTool.type, colourMarkerTool);
                 drawingToolMap.Add(lightMarkerTool.type, lightMarkerTool);
@@ -329,6 +350,7 @@ namespace ChickenScratch
                 colourMarkerTool.turnOnGlow();
                 colourMarkerTool.useWithoutSound();
                 sizeSlider.SetValueWithoutNotify(colourMarkerTool.currentSizeRatio);
+
                 isInitialized = true;
             }
         }

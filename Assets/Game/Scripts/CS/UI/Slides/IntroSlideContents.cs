@@ -6,6 +6,8 @@ namespace ChickenScratch
     {
         [SerializeField]
         private TMPro.TMP_Text originalPromptText;
+        [SerializeField]
+        private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
 
         private float duration;
         private float timeActive = 0f;
@@ -13,7 +15,7 @@ namespace ChickenScratch
         {
             if(active)
             {
-                timeActive += Time.deltaTime;
+                timeActive += Time.deltaTime * GameManager.Instance.playerFlowManager.slidesRound.slideSpeed;
                 if(timeActive > duration)
                 {
                     isComplete = true;
@@ -21,11 +23,13 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(string originalPrompt, float inDuration)
+        public void Initialize(string prefix, string noun, int caseID,  float inDuration)
         {
             duration = inDuration;
             timeActive = 0f;
-            originalPromptText.text = originalPrompt;
+            originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
+            EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
+            caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
         }
     }
 }

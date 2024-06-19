@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 namespace ChickenScratch
 {
@@ -14,14 +13,15 @@ namespace ChickenScratch
         public List<int> taskDataKeys = new List<int>();
         public List<EndgameTaskData> taskDataValues = new List<EndgameTaskData>();
         public string correctPrompt;
-        public List<int> guessesKeys = new List<int>();
-        public List<string> guessesValues = new List<string>();
+        public GuessData guessData;
         public List<int> correctWordsKeys = new List<int>();
-        public List<CaseWordData> correctWordsValues = new List<CaseWordData>();
+        public List<string> correctWordsValues = new List<string>();
         public float scoreModifier;
         public int pointsForBonus;
         public int pointsPerCorrectWord;
         public int penalty;
+        public string caseTypeName;
+        public Color caseTypeColour;
         public EndgameCaseNetData()
         {
 
@@ -32,14 +32,15 @@ namespace ChickenScratch
             taskDataKeys = inCaseData.taskDataMap.Keys.ToList();
             taskDataValues = inCaseData.taskDataMap.Values.ToList();
             correctPrompt = inCaseData.correctPrompt;
-            guessesKeys = inCaseData.guessesMap.Keys.ToList();
-            guessesValues = inCaseData.guessesMap.Values.ToList();
-            correctWordsKeys = inCaseData.correctWordsMap.Keys.ToList();
-            correctWordsValues = inCaseData.correctWordsMap.Values.ToList();
+            guessData = inCaseData.guessData;
+            correctWordsKeys = inCaseData.correctWordIdentifierMap.Keys.ToList();
+            correctWordsValues = inCaseData.correctWordIdentifierMap.Values.ToList();
             scoreModifier = inCaseData.scoreModifier;
             pointsForBonus = inCaseData.pointsForBonus;
             pointsPerCorrectWord = inCaseData.pointsPerCorrectWord;
             penalty = inCaseData.penalty;
+            caseTypeName = inCaseData.caseTypeName;
+            caseTypeColour = inCaseData.caseTypeColour;
         }
     }
 }

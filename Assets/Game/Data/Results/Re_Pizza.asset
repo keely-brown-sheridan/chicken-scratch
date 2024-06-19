@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e9facf5b1ad6743a946c7409f26fe3, type: 3}
+  m_Name: Re_Pizza
+  m_EditorClassIdentifier: 
+  goalTextColour: {r: 0.21568628, g: 0.54509807, b: 0.5764706, a: 1}
+  sheetColour: {r: 0.63529414, g: 0.9882353, b: 1, a: 1}
+  resultTextColour: {r: 0.21568628, g: 0.54509807, b: 0.5764706, a: 1}
+  slideProgressBGColour: {r: 0.21568628, g: 0.54509807, b: 0.5764706, a: 1}
+  slideProgressFillColour: {r: 0.63529414, g: 0.9882353, b: 1, a: 1}
+  lineMaterial: {fileID: 2100000, guid: 113a14930de453247a91ea34a9bae5ae, type: 2}
+  resultName: Pizza Party!
+  shortFormIdentifier: Pizza
+  bossFaceReaction: {fileID: 21300000, guid: e744f0305cc71b2419117087b5a292cc, type: 3}
+  finalFaceState: 5
+  bossMessage: Holy canoli have a pizza you legend!
+  sfxToPlay: Celebration
+  requiredPointThresholds:
+  - gameModeName: Standard4
+    requiredPointThresholdPerPlayer: 20
+  - gameModeName: Deadline
+    requiredPointThresholdPerPlayer: 20
+  goal: 3

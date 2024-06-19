@@ -2,6 +2,7 @@ using ChickenScratch;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AddingCaseFolder : CaseFolder
 {
@@ -17,12 +18,17 @@ public class AddingCaseFolder : CaseFolder
     [SerializeField]
     private TMPro.TMP_Text promptText;
 
-    public void Initialize(DrawingData drawingData, string prompt)
+    private TaskData.TaskModifier drawingBoxModifier;
+
+    public void Initialize(DrawingData drawingData, string prompt, TaskData.TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
     {
+        drawingBoxModifier = inDrawingBoxModifier;
         //Add the drawing lines from the drawing data to the drawingBoard
         drawingBoard.AddDrawingLines(drawingData);
 
         promptText.text = prompt;
+        timeCompleteAction = inTimeCompleteAction;
+        RegisterToTimer(inTimeCompleteAction);
     }
 
     public override void Show(Color inFolderColour, float taskTime, float currentModifier, float modifierDecrement)
@@ -30,7 +36,7 @@ public class AddingCaseFolder : CaseFolder
         base.Show(inFolderColour, taskTime, currentModifier, modifierDecrement);
         drawingBoard.initialize();
         drawingBoard.gameObject.SetActive(true);
-        drawingBoard.open();
+        drawingBoard.open(drawingBoxModifier);
     }
 
     public override void Hide()

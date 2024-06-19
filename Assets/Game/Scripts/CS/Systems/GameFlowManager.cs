@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mirror;
+using Newtonsoft.Json;
 using Steamworks;
 using System;
 using System.Collections;
@@ -25,7 +26,8 @@ namespace ChickenScratch
         {
             worker, botcher, invalid
         }
-        public List<BirdName> connectedPlayers = new List<BirdName>();
+        public List<NetworkConnectionToClient> connectedPlayers = new List<NetworkConnectionToClient>();
+        public List<BirdName> connectedBirds = new List<BirdName>();
 
         public float loadingTimeLimit;
         public GameObject linePrefab;
@@ -46,7 +48,6 @@ namespace ChickenScratch
         public Dictionary<BirdName, List<Tuple<ChainData, int, int, BirdName>>> queuedChains = new Dictionary<BirdName, List<Tuple<ChainData, int, int, BirdName>>>();
         public List<BirdName> activeBirdNames = new List<BirdName>();
 
-        public int numberOfPlayers;
         public float timeRemainingInPhase;
         public bool active;
         public float armUpdateFrequency = 0.5f;
@@ -68,6 +69,7 @@ namespace ChickenScratch
         public WordManager wordManager = new WordManager();
 
         private int totalCompletedCases = 0;
+        private bool hasRequestedBirdClaim = false;
 
         // Start is called before the first frame update
         void Start()
@@ -89,6 +91,7 @@ namespace ChickenScratch
                 return;
             }
             timeRemainingInPhase -= Time.deltaTime;
+            
 
             if (timeRemainingInPhase <= 0)
             {
@@ -102,25 +105,34 @@ namespace ChickenScratch
 
         private void Initialize()
         {
-            bool notAllPlayersHaveConnected = GameManager.Instance.gameFlowManager.connectedPlayers.Count != SettingsManager.Instance.playerNameMap.Count;
-            if (notAllPlayersHaveConnected)
+            int playerCount = SettingsManager.Instance.GetPlayerNameCount();
+            bool notAllPlayersHaveConnected = connectedPlayers.Count != playerCount;//allPlayersHaveReadied up
+            if(notAllPlayersHaveConnected)
             {
                 return;
             }
-            if (!connectedPlayers.Contains(SettingsManager.Instance.birdName))
+            if(!hasRequestedBirdClaim)
             {
-                connectedPlayers.Add(SettingsManager.Instance.birdName);
+                GameManager.Instance.gameDataHandler.RpcRequestConnectionAcknowledgment();
+                hasRequestedBirdClaim = true;
             }
+            bool notAllPlayersHaveClaimedBirds = connectedBirds.Count != playerCount;
+            if (notAllPlayersHaveClaimedBirds)
+            {
+                return;
+            }
+
             if (!playerFlowManager)
             {
                 playerFlowManager = GameManager.Instance.playerFlowManager;
             }
 
-            playerFlowManager.serverIsReady = true;
             GameManager.Instance.gameDataHandler.RpcServerIsReady();
-
+            GameManager.Instance.gameDataHandler.RpcUpdateNumberOfCases((int)(SettingsManager.Instance.gameMode.casesPerPlayer * connectedPlayers.Count));
+            GameManager.Instance.gameFlowManager.SetCabinetOwnership();
             InitializeGame();
 
+            
             timeRemainingInPhase = loadingTimeLimit;
             active = true;
             isInitialized = true;
@@ -133,21 +145,23 @@ namespace ChickenScratch
             wordManager.DisableInactiveCategories(SettingsManager.Instance.wordGroupNames);
 
             //Initialize the players
-            foreach (KeyValuePair<BirdName, string> player in SettingsManager.Instance.playerNameMap)
-            {
-                activeBirdNames.Add(player.Key);
-                gamePlayers.Add(player.Key, new global::ChickenScratch.PlayerData() { birdName = player.Key, playerName = player.Value, playerRole = PlayerRole.worker });
-                playerFlowManager.playerNameMap.Add(player.Key, player.Value);
-            }
+            List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
 
-            numberOfPlayers = gamePlayers.Count;
+            foreach (BirdName playerBird in allPlayerBirds)
+            {
+                string playerName = SettingsManager.Instance.GetPlayerName(playerBird);
+                activeBirdNames.Add(playerBird);
+                gamePlayers.Add(playerBird, new global::ChickenScratch.PlayerData() { birdName = playerBird, playerName = playerName, playerRole = PlayerRole.worker });
+                playerFlowManager.playerNameMap.Add(playerBird, playerName);
+            }
+            GameManager.Instance.gameDataHandler.RPCUpdatePlayerNameMapWrapper(playerFlowManager.playerNameMap);
 
             //Assign cabinets to each player
             int iterator = 1;
             foreach(KeyValuePair<BirdName,PlayerData> player in gamePlayers)
             {
                 playerCabinetMap.Add(player.Key, iterator);
-                GameManager.Instance.gameDataHandler.TargetAssignCabinetToPlayer(SettingsManager.Instance.birdConnectionMap[player.Key], iterator);
+                GameManager.Instance.gameDataHandler.TargetAssignCabinetToPlayer(SettingsManager.Instance.GetConnection(player.Key), iterator);
                 iterator++;
                
             }
@@ -167,13 +181,8 @@ namespace ChickenScratch
 
         private void InitializeQueueMode()
         {
-            Debug.Log("Setting the number of cabinet rounds. Gameplayers[" + gamePlayers.Count.ToString() + "]");
-            playerFlowManager.numberOfCabinetRounds = (gamePlayers.Count % 2) == 0 ? gamePlayers.Count - 1 : gamePlayers.Count - 2;
-            if (playerFlowManager.numberOfCabinetRounds > 5)
-            {
-                playerFlowManager.numberOfCabinetRounds = 5;
-            }
-            GameManager.Instance.gameDataHandler.RpcPlayerInitializationWrapper(playerFlowManager.numberOfCabinetRounds, SettingsManager.Instance.playerNameMap);
+            SettingsManager.Instance.ServerBroadcastPlayerNames();
+           
 
             InitializeChains();
 
@@ -193,7 +202,6 @@ namespace ChickenScratch
                 }
 
                 currentPlayer = chain.playerOrder[1];
-                GameManager.Instance.playerFlowManager.drawingRound.UpdateCaseRound(chain.identifier, 1);
                 AddCaseToQueue(currentPlayer, chain, chain.identifier, 1, currentPlayer);
 
                 switch (SettingsManager.Instance.gameMode.wordDistributionMode)
@@ -214,17 +222,17 @@ namespace ChickenScratch
             if (currentPlayer == SettingsManager.Instance.birdName)
             {
                 playerFlowManager.drawingRound.playerCabinetIndex = cabinetIndex;
-                playerFlowManager.drawingRound.SetInitialPrompt(currentChain.identifier, currentChain.correctPrompt, false);
+                playerFlowManager.drawingRound.SetInitialPrompt(currentChain.identifier, currentChain.correctPrompt);
             }
             else
             {
                 GameManager.Instance.gameFlowManager.addTransitionCondition("initial_cabinet_prompt_receipt:" + currentPlayer);
-                GameManager.Instance.gameDataHandler.TargetAssignCabinetToPlayer(SettingsManager.Instance.birdConnectionMap[currentPlayer], cabinetIndex);
-                GameManager.Instance.gameDataHandler.TargetInitialCabinetPromptContents(SettingsManager.Instance.birdConnectionMap[currentPlayer], currentChain.identifier, currentChain.correctPrompt, true);
+                GameManager.Instance.gameDataHandler.TargetAssignCabinetToPlayer(SettingsManager.Instance.GetConnection(currentPlayer), cabinetIndex);
+                GameManager.Instance.gameDataHandler.TargetInitialCabinetPromptContents(SettingsManager.Instance.GetConnection(currentPlayer), currentChain.identifier, currentChain.correctPrompt, true);
             }
 
             //Send possible words
-            GameManager.Instance.gameDataHandler.TargetPossibleWordsWrapper(SettingsManager.Instance.birdConnectionMap[currentChain.guesser], currentChain.identifier, currentChain.possibleWordsMap);
+            GameManager.Instance.gameDataHandler.TargetPossibleWordsWrapper(SettingsManager.Instance.GetConnection(currentChain.guessData.author), currentChain.identifier, currentChain.possibleWordsMap);
             
         }
 
@@ -245,11 +253,10 @@ namespace ChickenScratch
         public void IncreaseNumberOfCompletedCases()
         {
             totalCompletedCases++;
-            if(totalCompletedCases >= SettingsManager.Instance.gameMode.numberOfCases)
+            if(totalCompletedCases >= SettingsManager.Instance.gameMode.casesPerPlayer * connectedPlayers.Count)
             {
-                Debug.LogError("Total completed cases["+totalCompletedCases.ToString()+"] numberOfCases in game[" + SettingsManager.Instance.gameMode.numberOfCases.ToString()+ "]");
                 //Drawing round is over, moving on to the next round
-                //timeRemainingInPhase = 0f;
+                timeRemainingInPhase = 0f;
             }
         }
 
@@ -260,39 +267,41 @@ namespace ChickenScratch
                 queuedChains.Add(birdName, new List<Tuple<ChainData, int, int, BirdName>>());
             }
 
-
             Tuple<ChainData, int, int, BirdName> caseGrouping = Tuple.Create(caseData, caseID, round, lastAuthor);
             queuedChains[birdName].Add(caseGrouping);
 
             updateQueuedFolderVisuals(birdName);
         }
 
-        public int CreateCaseFromChoice(BirdName startingPlayer, CaseChoiceData choice)
+        public int CreateCaseFromChoice(BirdName startingPlayer, CaseChoiceNetData choiceNetData)
         {
             //Pick the case that matches the choice
-            CaseTemplateData selectedCase = new CaseTemplateData(choice);
+            CaseChoiceData choiceData = GameDataManager.Instance.GetCaseChoice(choiceNetData.caseChoiceIdentifier);
+            CaseTemplateData selectedCase = new CaseTemplateData(choiceData);
 
             PlayerTextInputData tempPromptData = new PlayerTextInputData()
             {
                 author = BirdName.none
             };
             ChainData newChain = new ChainData();
+            newChain.pointsForBonus = choiceData.bonusPoints;
+            newChain.pointsPerCorrectWord = choiceData.pointsPerCorrectWord;
             newChain.identifier = currentLowestUnusedCaseNumber;
             currentLowestUnusedCaseNumber++;
             newChain.taskQueue = selectedCase.queuedTasks;
+            newChain.caseTypeColour = selectedCase.caseTypeColour;
+            newChain.caseTypeName = selectedCase.caseTypeName;
             newChain.currentRound = 1;
-            GameManager.Instance.playerFlowManager.drawingRound.UpdateCaseRound(newChain.identifier, newChain.currentRound);
-
             //May need to add case modifiers here
 
             //Set the player order
             newChain.playerOrder.Add(1, startingPlayer);
-            List<BirdName> randomizedPlayers = GameManager.Instance.gameFlowManager.connectedPlayers.OrderBy(cp => Guid.NewGuid()).ToList();
+            List<BirdName> randomizedPlayers = GameManager.Instance.gameFlowManager.connectedBirds.OrderBy(cp => Guid.NewGuid()).ToList();
 
             //Randomize the player list and then add players until the number of tasks has been filled
             for (int j = 0; j < randomizedPlayers.Count; j++)
             {
-                if (choice.numberOfTasks < newChain.playerOrder.Count)
+                if (choiceData.numberOfTasks < newChain.playerOrder.Count)
                 {
                     break;
                 }
@@ -303,10 +312,10 @@ namespace ChickenScratch
                 
             }
 
-            newChain.guesser = newChain.playerOrder[choice.numberOfTasks];
+            newChain.guessData.author = newChain.playerOrder[choiceData.numberOfTasks];
 
             //set correct prompt, correctWordsMap, possibleWordsMap and the first prompt text value
-            newChain.SetWordsFromChoice(choice);
+            newChain.SetWordsFromChoice(choiceNetData);
             tempPromptData.text = newChain.correctPrompt;
             newChain.prompts.Add(1, tempPromptData);
             newChain.currentScoreModifier = selectedCase.startingScoreModifier;
@@ -325,14 +334,24 @@ namespace ChickenScratch
             ChainData caseData = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
             
             caseData.currentRound++;
-            GameManager.Instance.playerFlowManager.drawingRound.UpdateCaseRound(caseID, caseData.currentRound);
+            
+            if (caseData.taskQueue.Count <= caseData.currentRound-1)
+            {
+                Debug.LogError("ERROR: Could not queued the next task["+caseData.currentRound.ToString()+"]. TaskQueue["+caseData.taskQueue.Count.ToString()+"] doesn't contain that task."); 
+            }
             if(!caseData.playerOrder.ContainsKey(caseData.currentRound))
             {
                 return;
             }
+            
             BirdName nextBird = caseData.playerOrder[caseData.currentRound];
-
-            AddCaseToQueue(nextBird, caseData, caseID, caseData.currentRound, caseData.playerOrder[caseData.currentRound - 1]);
+            
+            BirdName lastBird = caseData.playerOrder[caseData.currentRound - 1];
+            if(lastBird == BirdName.none)
+            {
+                Debug.LogError("Attempting to send task to next player but the last player is none.");
+            }
+            AddCaseToQueue(nextBird, caseData, caseID, caseData.currentRound, lastBird);
             //If there's only one case queued then we need to open the cabinet drawer
             if (queuedChains.ContainsKey(nextBird) && queuedChains[nextBird].Count == 1)
             {
@@ -359,7 +378,6 @@ namespace ChickenScratch
         {
             PlayerTextInputData tempPromptData;
             ChainData newChain;
-            BirdName currentPlayer;
             List<BirdName> playerColours = gamePlayers.Keys.ToList();
             for (int i = 0; i < gamePlayers.Count; i++)
             {
@@ -382,23 +400,13 @@ namespace ChickenScratch
                 newChain.identifier = currentLowestUnusedCaseNumber;
                 currentLowestUnusedCaseNumber++;
 
-                //Set the player order
-                for (int j = 0; j < playerFlowManager.numberOfCabinetRounds + 1; j++)
-                {
-                    currentPlayer = i + j >= playerColours.Count ? playerColours[i + j - playerColours.Count] : playerColours[i + j];
-                    newChain.playerOrder.Add(j + 1, currentPlayer);
-                }
-
-                newChain.guesser = newChain.playerOrder[playerFlowManager.numberOfCabinetRounds + 1];
-
-                //Put the new chain into the corresponding cabinet
                 int cabinetID = playerCabinetMap[newChain.playerOrder[1]];
                 GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[cabinetID].currentChainData = newChain;
 
                 switch (SettingsManager.Instance.gameMode.wordDistributionMode)
                 {
                     case GameModeData.WordDistributionMode.random:
-                        wordManager.PopulateStandardCaseWords(newChain, selectedCase.startingWords);
+                        wordManager.PopulateStandardCaseWords(newChain, selectedCase.startingWordIdentifiers);
                         newChain.correctPrompt = correctPrompt;
                         tempPromptData.text = correctPrompt;
                         newChain.prompts.Add(1, tempPromptData);
@@ -419,45 +427,44 @@ namespace ChickenScratch
             playerCabinetMap.Remove(disconnectingPlayer);
 
             activeBirdNames.Remove(disconnectingPlayer);
-            numberOfPlayers = gamePlayers.Count;
 
-            playerFlowManager.numberOfCabinetRounds = (gamePlayers.Count % 2) == 0 ? gamePlayers.Count - 1 : gamePlayers.Count - 2;
-            playerFlowManager.numberOfCabinetRounds = Mathf.Clamp(playerFlowManager.numberOfCabinetRounds, 3, 5);
+            //playerFlowManager.numberOfCabinetRounds = (gamePlayers.Count % 2) == 0 ? gamePlayers.Count - 1 : gamePlayers.Count - 2;
+            //playerFlowManager.numberOfCabinetRounds = Mathf.Clamp(playerFlowManager.numberOfCabinetRounds, 3, 5);
 
             //Iterate through the remaining cases and redetermine the player order
             List<BirdName> playerColours = gamePlayers.Keys.ToList();
             BirdName currentPlayer;
 
-            for (int i = 0; i < gamePlayers.Count; i++)
-            {
-                if (GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(playerColours[i]))
-                {
-                    continue;
-                }
-                //Find the cabinet with the matching starting player
-                int matchingCabinetIndex = playerCabinetMap[playerColours[i]];
-                CabinetDrawer matchingCabinet = GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[matchingCabinetIndex];
-                ChainData matchingChain = matchingCabinet.currentChainData;
-                matchingChain.playerOrder.Clear();
+            //for (int i = 0; i < gamePlayers.Count; i++)
+            //{
+            //    if (GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(playerColours[i]))
+            //    {
+            //        continue;
+            //    }
+            //    //Find the cabinet with the matching starting player
+            //    int matchingCabinetIndex = playerCabinetMap[playerColours[i]];
+            //    CabinetDrawer matchingCabinet = GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[matchingCabinetIndex];
+            //    ChainData matchingChain = matchingCabinet.currentChainData;
+            //    matchingChain.playerOrder.Clear();
 
-                //Set the player order
-                for (int j = 0; j < playerFlowManager.numberOfCabinetRounds + 1; j++)
-                {
-                    currentPlayer = i + j >= playerColours.Count ? playerColours[i + j - playerColours.Count] : playerColours[i + j];
-                    matchingChain.playerOrder.Add(j + 1, currentPlayer);
-                }
-                matchingChain.guesser = matchingChain.playerOrder[playerFlowManager.numberOfCabinetRounds + 1];
+            //    //Set the player order
+            //    for (int j = 0; j < playerFlowManager.numberOfCabinetRounds + 1; j++)
+            //    {
+            //        currentPlayer = i + j >= playerColours.Count ? playerColours[i + j - playerColours.Count] : playerColours[i + j];
+            //        matchingChain.playerOrder.Add(j + 1, currentPlayer);
+            //    }
+            //    matchingChain.guessData.author = matchingChain.playerOrder[playerFlowManager.numberOfCabinetRounds + 1];
 
-                //Send possible words
-                GameManager.Instance.gameDataHandler.TargetPossibleWordsWrapper(SettingsManager.Instance.birdConnectionMap[matchingChain.guesser], matchingChain.identifier, matchingChain.possibleWordsMap);
-            }
+            //    //Send possible words
+            //    GameManager.Instance.gameDataHandler.TargetPossibleWordsWrapper(SettingsManager.Instance.birdConnectionMap[matchingChain.guessData.author], matchingChain.identifier, matchingChain.possibleWordsMap);
+            //}
         }
 
         public void populateEmptyCasesForDisconnect(BirdName disconnectingPlayer)
         {
             foreach (KeyValuePair<int, ChainData> caseData in playerFlowManager.drawingRound.caseMap)
             {
-                if (caseData.Value.guesser == disconnectingPlayer)
+                if (caseData.Value.guessData.author == disconnectingPlayer)
                 {
                     //We don't need to do anything for the guessing round with the disconnecting player,
                     //the logic for handling it already works fine
@@ -537,13 +544,22 @@ namespace ChickenScratch
 
                     break;
                 case GamePhase.drawing:
-                    if (!playerFlowManager.drawingRound.hasSentCaseDetails)
+                    if(!playerFlowManager.drawingRound.hasRequestedCaseDetails)
                     {
+                        playerFlowManager.OnOutOfTime();
+                        return;
+                    }
+                    else if (!playerFlowManager.drawingRound.hasSentCaseDetails)
+                    {
+                        if (!isRoundOver())
+                        {
+                            return;
+                        }
                         foreach (BirdName bird in gamePlayers.Keys)
                         {
                             if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
                             {
-                                activeTransitionConditions.Add("endgame_data_loaded:" + bird);
+                                addTransitionCondition("endgame_data_loaded:" + bird);
                             }
                         }
                         GameManager.Instance.playerFlowManager.slidesRound.GenerateEndgameData();
@@ -557,13 +573,13 @@ namespace ChickenScratch
                             UpdatePhase();
                             return;
                         }
-                        Debug.LogError("Round is over! Moving on now..");
+                        
                         foreach (BirdName bird in gamePlayers.Keys)
                         {
                             if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
                             {
-                                activeTransitionConditions.Add("ratings_loaded:" + bird);
-                                activeTransitionConditions.Add("stats_loaded:" + bird);
+                                addTransitionCondition("ratings_loaded:" + bird);
+                                addTransitionCondition("stats_loaded:" + bird);
                             }
                         }
 
@@ -582,8 +598,8 @@ namespace ChickenScratch
                     {
                         if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
                         {
-                            activeTransitionConditions.Add("ratings_loaded:" + bird);
-                            activeTransitionConditions.Add("stats_loaded:" + bird);
+                            addTransitionCondition("ratings_loaded:" + bird);
+                            addTransitionCondition("stats_loaded:" + bird);
                         }
                     }
                     bossRushSlidesTutorialSequence.gameObject.SetActive(false);
@@ -615,8 +631,6 @@ namespace ChickenScratch
                     }
                     else
                     {
-                        //Get rid of this return once we've got slides working
-                        return;
                         currentGamePhase = GamePhase.accolades;
                     }
                     break;
@@ -647,7 +661,7 @@ namespace ChickenScratch
                 Debug.LogError("Condition["+condition+"] already found in list of active conditions, could not add.");
                 return;
             }
-            Debug.LogError("Adding["+ condition + "] to transition conditions.");
+            //Debug.LogError("Adding["+ condition + "] to transition conditions.");
             activeTransitionConditions.Add(condition);
         }
 
@@ -659,7 +673,7 @@ namespace ChickenScratch
                 return;
             }
             activeTransitionConditions.Remove(condition);
-            Debug.LogError("Resolving transition condition[" + condition + "]. There are still " + activeTransitionConditions.Count + " active conditions.");
+            //Debug.LogError("Resolving transition condition[" + condition + "]. There are still " + activeTransitionConditions.Count + " active conditions.");
 
             if (isRoundOver())
             {
@@ -697,8 +711,10 @@ namespace ChickenScratch
         {
             foreach (ChainData currentCase in GameManager.Instance.playerFlowManager.drawingRound.caseMap.Values)
             {
-                int prefixDifficulty = currentCase.correctWordsMap.ContainsKey(1) ? currentCase.correctWordsMap[1].difficulty : 0;
-                int nounDifficulty = currentCase.correctWordsMap.ContainsKey(2) ? currentCase.correctWordsMap[2].difficulty : 0;
+                CaseWordData correctPrefix = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[1]);
+                CaseWordData correctNoun = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[2]);
+                int prefixDifficulty = correctPrefix != null ? correctPrefix.difficulty : 0;
+                int nounDifficulty = correctNoun != null ? correctNoun.difficulty : 0;
                 GameManager.Instance.gameDataHandler.RpcCaseDifficultyValues(currentCase.identifier, prefixDifficulty, nounDifficulty);
             }
         }
@@ -741,6 +757,11 @@ namespace ChickenScratch
             return true;
         }
 
+        public int GetNumberOfConnectedPlayers()
+        {
+            return gamePlayers.Count - disconnectedPlayers.Count;
+        }
+
         public void SetPlayerObjectOwnership()
         {
             bool isTheaterMode = GameManager.Instance.currentGameScene == GameManager.GameScene.theater;
@@ -748,7 +769,8 @@ namespace ChickenScratch
             playerOrder = playerOrder.OrderBy(a => Guid.NewGuid()).ToList();
             int iterator = 0;
 
-            foreach (BirdName player in SettingsManager.Instance.playerNameMap.Keys)
+            List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
+            foreach (BirdName player in allPlayerBirds)
             {
                 GameManager.Instance.gameDataHandler.RpcRandomizedSetBirdPosition(playerOrder[iterator], player);
                 GameManager.Instance.playerFlowManager.slidesRound.initializeGalleryBird(playerOrder[iterator], player);
@@ -762,7 +784,7 @@ namespace ChickenScratch
         {
             foreach (KeyValuePair<BirdName, int> cabinetPairing in playerCabinetMap)
             {
-                if (!connectedPlayers.Contains(cabinetPairing.Key)) continue;
+                if (SettingsManager.Instance.GetConnection(cabinetPairing.Key) == null) continue;
 
                 CabinetDrawer drawer = GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[cabinetPairing.Value];
                 drawer.setCabinetOwner(cabinetPairing.Key);
@@ -801,7 +823,7 @@ namespace ChickenScratch
         {
             //Send the possible options to the guesser
             //Send possible words
-            GameManager.Instance.gameDataHandler.TargetPossibleWordsWrapper(SettingsManager.Instance.birdConnectionMap[caseData.guesser], caseData.identifier, caseData.possibleWordsMap);
+            GameManager.Instance.gameDataHandler.TargetPossibleWordsWrapper(SettingsManager.Instance.GetConnection(caseData.guessData.author), caseData.identifier, caseData.possibleWordsMap);
         }
     }
 

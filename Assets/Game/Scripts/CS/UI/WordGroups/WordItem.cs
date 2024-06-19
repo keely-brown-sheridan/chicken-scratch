@@ -77,6 +77,9 @@ namespace ChickenScratch
             wordData.category = category;
         }
 
-
+        public void ForceInputToUppercase()
+        {
+            wordText.text = wordText.text.ToUpper();
+        }
     }
 }

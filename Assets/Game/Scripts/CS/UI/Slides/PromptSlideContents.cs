@@ -7,6 +7,8 @@ namespace ChickenScratch
     public class PromptSlideContents : SlideContents
     {
         [SerializeField]
+        private GoldStarDetectionArea goldStarDetectionArea;
+        [SerializeField]
         private TMP_Text originalPromptReminderText;
         [SerializeField]
         private TMP_Text playerPromptText;
@@ -14,7 +16,10 @@ namespace ChickenScratch
         private Image authorImage;
         [SerializeField]
         private TMP_Text authorNameText;
-
+        [SerializeField]
+        private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
+        [SerializeField]
+        private SlideTimeModifierDecrementVisual slideTimeModifierDecrementVisual;
         private float duration;
         private float timeActive = 0f;
 
@@ -22,7 +27,7 @@ namespace ChickenScratch
         {
             if (active)
             {
-                timeActive += Time.deltaTime;
+                timeActive += Time.deltaTime * GameManager.Instance.playerFlowManager.slidesRound.slideSpeed;
                 if (timeActive > duration)
                 {
                     isComplete = true;
@@ -30,17 +35,22 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(PlayerTextInputData promptData, string correctPrompt, float inDuration)
+        public void Initialize(PlayerTextInputData promptData, string prefix, string noun, int round, int caseID, float inDuration, float inTimeModifierDecrement)
         {
             duration = inDuration;
             timeActive = 0f;
             Bird authorBird = ColourManager.Instance.birdMap[promptData.author];
             authorImage.sprite = authorBird.faceSprite;
+            authorNameText.text = SettingsManager.Instance.GetPlayerName(promptData.author);
             authorNameText.color = authorBird.colour;
 
-            originalPromptReminderText.text = correctPrompt;
+            originalPromptReminderText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
             playerPromptText.text = promptData.text;
             playerPromptText.color = authorBird.colour;
+            goldStarDetectionArea.Initialize(promptData.author, round, caseID);
+            EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
+            caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
+            slideTimeModifierDecrementVisual.Initialize(inTimeModifierDecrement);
         }
     }
 }

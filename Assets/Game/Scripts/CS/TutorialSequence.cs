@@ -54,7 +54,7 @@ namespace ChickenScratch
                     if (!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
                     {
                         //Debug.LogError("Adding tutorial_finished condition.");
-                        GameManager.Instance.gameFlowManager.activeTransitionConditions.Add("tutorial_finished:" + bird);
+                        GameManager.Instance.gameFlowManager.addTransitionCondition("tutorial_finished:" + bird);
                     }
                 }
             }

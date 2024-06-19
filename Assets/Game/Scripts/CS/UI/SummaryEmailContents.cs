@@ -57,6 +57,22 @@ namespace ChickenScratch
                     {
                         timeMap.Add(currentTask.assignedPlayer, 0.0f);
                     }
+                    switch(currentTask.taskType)
+                    {
+                        case TaskData.TaskType.base_drawing:
+                        case TaskData.TaskType.add_drawing:
+                        case TaskData.TaskType.compile_drawing:
+                        case TaskData.TaskType.copy_drawing:
+                        case TaskData.TaskType.prompt_drawing:
+                            timeMap[currentTask.assignedPlayer] += currentTask.drawingData.timeTaken;
+                            break;
+                        case TaskData.TaskType.prompting:
+                            timeMap[currentTask.assignedPlayer] += currentTask.promptData.timeTaken;
+                            break;
+                        case TaskData.TaskType.base_guessing:
+                            timeMap[currentTask.assignedPlayer] += currentCase.guessData.timeTaken;
+                            break;
+                    }
                     //timeMap[currentTask.assignedPlayer] += currentTask.timeTaken;
                 }
             }

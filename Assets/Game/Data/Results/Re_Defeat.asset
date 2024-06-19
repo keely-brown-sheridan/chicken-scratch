@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e9facf5b1ad6743a946c7409f26fe3, type: 3}
+  m_Name: Re_Defeat
+  m_EditorClassIdentifier: 
+  goalTextColour: {r: 1, g: 0, b: 0, a: 1}
+  sheetColour: {r: 1, g: 0.3647059, b: 0.3647059, a: 1}
+  resultTextColour: {r: 1, g: 0, b: 0, a: 1}
+  slideProgressBGColour: {r: 0.65882355, g: 0.3019608, b: 0.3019608, a: 1}
+  slideProgressFillColour: {r: 1, g: 0, b: 0, a: 1}
+  lineMaterial: {fileID: 2100000, guid: 492e523e5b7ec67499c68795bc03e5d9, type: 2}
+  resultName: Employee Termination
+  shortFormIdentifier: Loss
+  bossFaceReaction: {fileID: 21300000, guid: 825b0874cbf685749ace1a030cbdc505, type: 3}
+  finalFaceState: 7
+  bossMessage: Pack your things immediately!
+  sfxToPlay: Defeat
+  requiredPointThresholds:
+  - gameModeName: Deadline
+    requiredPointThresholdPerPlayer: 0
+  - gameModeName: Standard4
+    requiredPointThresholdPerPlayer: 0
+  goal: 3

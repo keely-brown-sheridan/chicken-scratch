@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using static ChickenScratch.TaskData;
 
 namespace ChickenScratch
@@ -13,10 +14,15 @@ namespace ChickenScratch
         [SerializeField]
         private TMPro.TMP_Text promptText;
 
-        public void Initialize(string inPromptText)
+        private TaskModifier drawingBoxModifier;
+
+        public void Initialize(string inPromptText, TaskData.TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
         {
+            drawingBoxModifier = inDrawingBoxModifier;
             promptText.text = inPromptText;
             promptText.gameObject.SetActive(true);
+            timeCompleteAction = inTimeCompleteAction;
+            RegisterToTimer(timeCompleteAction);
         }
 
         public override void Show(Color inFolderColour, float taskTime, float currentModifier, float modifierDecrement)
@@ -39,7 +45,7 @@ namespace ChickenScratch
 
             drawingBoard.initialize();
             drawingBoard.gameObject.SetActive(true);
-            drawingBoard.open();
+            drawingBoard.open(drawingBoxModifier);
         }
 
         public override void Hide()

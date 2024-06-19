@@ -13,14 +13,22 @@ namespace ChickenScratch
 
         [SerializeField]
         private float drawingSize;
+        [SerializeField]
+        private TMPro.TMP_Text playerNameText;
 
-        public void Initialize(DrawingData drawingData, PlayerRatingData ratingData)
+        public void Initialize(DrawingData drawingData, PlayerRatingData ratingData, float drawingRatio)
         {
             Bird drawingBird = ColourManager.Instance.birdMap[drawingData.author];
             playerImage.sprite = drawingBird.faceSprite;
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(drawingParent.position);
+            worldPosition = new Vector3(worldPosition.x, worldPosition.y, 0f);
+            drawingParent.position = worldPosition;
 
-            Vector3 drawingScale = new Vector3(drawingSize, drawingSize, 0f);
-            GameManager.Instance.playerFlowManager.createDrawingVisuals(drawingData, drawingParent, drawingParent.position, drawingScale, drawingSize);
+            playerNameText.color = drawingBird.colour;
+            playerNameText.text = SettingsManager.Instance.GetPlayerName(drawingData.author);
+
+            Vector3 drawingScale = new Vector3(drawingSize* drawingRatio, drawingSize*drawingRatio, 0f);
+            GameManager.Instance.playerFlowManager.createDrawingVisuals(drawingData, drawingParent, drawingParent.position, drawingScale, drawingSize* drawingRatio);
 
             SetRating(ratingData.likeCount);
         }

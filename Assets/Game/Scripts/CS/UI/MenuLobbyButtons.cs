@@ -13,7 +13,14 @@ namespace ChickenScratch
 {
     public class MenuLobbyButtons : Singleton<MenuLobbyButtons>
     {
-        public GameObject SplashPageObject, RoomsPageObject, LobbyPageObject;
+        public enum MenuState
+        {
+            splash, zooming_in, fading_out, fading_in, pressing_pc_button, booting_pc, rooms, lobby, waiting
+        }
+        public MenuState currentMenuState = MenuState.splash;
+        private MenuState previousMenuState = MenuState.splash;
+
+        public GameObject SplashPageObject, RoomsPageObject, LobbyPageObject, LoadingPageObject;
         public List<PlayerIdentification> PlayerIdentifiers = new List<PlayerIdentification>();
 
         public Text CreateRoomNameText, SetPlayerNameText, RoomListingsPlayerNameText;
@@ -106,10 +113,11 @@ namespace ChickenScratch
         private List<RoomListing> activeRoomListings = new List<RoomListing>();
 
         private RoomListing selectedRoomListing;
-        private float currentTimeLogging = 0.0f;
         private float timeTurningOn = 0.0f, timeBootingUp = 0.0f;
         [SerializeField]
         private float buttonPressTimeThreshold;
+        [SerializeField]
+        private float roomUpdateThreshold = 5f;
 
 
         private float timeFadingIn = 0.0f, timeFadingOut = 0.0f;
@@ -119,7 +127,7 @@ namespace ChickenScratch
         private bool isInitialized = false;
         private string sceneName = "";
         private bool buttonHasBeenPressed = false;
-
+        private float timeSinceLastRoomListingUpdate = 0f;
         private static bool hasSkippedIntro = false;
 
         private void Start()
@@ -133,7 +141,7 @@ namespace ChickenScratch
         private bool initialize()
         {
             sceneName = SceneManager.GetActiveScene().name;
-            if (sceneName == "Game" || sceneName == "Theater")
+            if (sceneName != "MainMenu")
             {
                 return false;
             }
@@ -152,38 +160,10 @@ namespace ChickenScratch
             computerSticky1Text.text = possibleComputerStickyMessages[0];
             computerSticky2Text.text = possibleComputerStickyMessages[1];
 
-            if (NetworkClient.isConnected)
+            if (NetworkClient.isConnected && SettingsManager.Instance.currentSceneTransitionState == SettingsManager.SceneTransitionState.return_to_lobby_room)
             {
-                roomCodeText.text = "*****";
-                AudioManager.Instance.StopSound("SplashMusic");
-                AudioManager.Instance.StopSound("sfx_lobby_amb_outdoor");
-                AudioManager.Instance.PlaySound("LobbyMusic");
-                LobbyPageObject.SetActive(true);
-                RoomsPageObject.SetActive(true);
-
-                SettingsManager.Instance.SetGameMode(SettingsManager.Instance.gameMode.name);
-
-                if (!SettingsManager.Instance.isHost)
-                {
-                    if (!SettingsManager.Instance.isHostInLobby)
-                    {
-                        WaitingForHostPrompt.SetActive(true);
-                    }
-                    else
-                    {
-                        //Request bird avatars
-                        //LobbyNetwork.Instance.FromClientQueue.Add("RequestLobbyInfo" + GameDelim.BASE + PhotonNetwork.NickName);
-                    }
-                    tutorialsButton.containerObject.SetActive(false);
-                    quickplayToggle.interactable = false;
-                }
-                else
-                {
-                    tutorialsButton.Initialize(SettingsManager.Instance.GetSetting("tutorials", true));
-                    tutorialsButton.containerObject.SetActive(true);
-                    quickplayToggle.interactable = true;
-                }
-
+                //We're already connected to a game so we should load up the lobby page
+                LoadLobbyFromGame();
             }
             else if (SettingsManager.Instance.currentSceneTransitionState == SettingsManager.SceneTransitionState.return_to_room_listings)
             {
@@ -215,92 +195,100 @@ namespace ChickenScratch
             {
                 return;
             }
-            if (currentTimeLogging > 0.0f)
-            {
-                currentTimeLogging += Time.deltaTime;
-                if (currentTimeLogging > TimeForIssueLogging)
-                {
-                    currentTimeLogging = 0.0f;
-                }
-            }
-            if (timeTurningOn > 0.0f)
-            {
-                if (timeTurningOn > buttonPressTimeThreshold && !buttonHasBeenPressed)
-                {
-                    buttonHasBeenPressed = true;
-                    AudioManager.Instance.PlaySound("sfx_lobby_int_computer_press");
-                }
-                timeTurningOn += Time.deltaTime;
-                if (timeTurningOn > timeToTurnOn)
-                {
-                    timeTurningOn = 0.0f;
-
-                    AudioManager.Instance.PlaySound("sfx_lobby_int_computer_boot");
-                    lobbyBGObject.SetActive(true);
-                    computerSticky1Text.color = new Color(computerSticky1Text.color.r, computerSticky1Text.color.g, computerSticky1Text.color.b, 1f);
-                    computerSticky2Text.color = new Color(computerSticky2Text.color.r, computerSticky2Text.color.g, computerSticky2Text.color.b, 1f);
-                    lobbyScreenImage.color = new Color(lobbyScreenImage.color.r, lobbyScreenImage.color.g, lobbyScreenImage.color.b, 1f);
-                    splashScreenFadeImage.gameObject.SetActive(true);
-                    SplashPageObject.SetActive(false);
-                    timeBootingUp += Time.deltaTime;
-                    logoObject.SetActive(true);
-                }
-            }
-            if (timeBootingUp > 0.0f)
-            {
-                timeBootingUp += Time.deltaTime;
-                if (timeBootingUp > timeToBootUp)
-                {
-                    AudioManager.Instance.PlaySound("LobbyMusic");
-                    skipIntroButton.SetActive(false);
-                    timeBootingUp = 0.0f;
-                    loginObject.SetActive(true);
-                    loginInputField.text = SettingsManager.Instance.GetStringSetting("user_name", "");
-                    loginInputField.Select();
-                }
-            }
-            if (isTransitioning)
-            {
-                cameraUpdate();
-            }
-            else if (timeFadingOut > 0.0f)
-            {
-                timeFadingOut += Time.deltaTime;
-                splashScreenFadeImage.color = new Color(splashScreenFadeImage.color.r, splashScreenFadeImage.color.g, splashScreenFadeImage.color.b, (timeFadingOut / timeToFadeOut));
-
-                if (timeFadingOut > timeToFadeOut)
-                {
-                    timeFadingIn += Time.deltaTime;
-                    timeFadingOut = 0.0f;
-                }
-            }
-            else if (timeFadingIn > 0.0f)
-            {
-                timeFadingIn += Time.deltaTime;
-                float progressRatio = timeFadingIn / timeToFadeIn;
-                computerSticky1Text.color = new Color(computerSticky1Text.color.r, computerSticky1Text.color.g, computerSticky1Text.color.b, progressRatio);
-                computerSticky2Text.color = new Color(computerSticky2Text.color.r, computerSticky2Text.color.g, computerSticky2Text.color.b, progressRatio);
-                lobbyScreenImage.color = new Color(lobbyScreenImage.color.r, lobbyScreenImage.color.g, lobbyScreenImage.color.b, progressRatio);
-                if (timeFadingIn > timeToFadeIn)
-                {
-                    AudioManager.Instance.PlaySound("sfx_lobby_int_computer_reach");
-                    AudioManager.Instance.FadeOutSound("SplashMusic", 2.0f);
-                    AudioManager.Instance.FadeOutSound("sfx_lobby_amb_outdoor", 2.0f);
-                    SplashPageObject.SetActive(false);
-                    //Randomize the bird arm
-                    int birdIndex = UnityEngine.Random.Range(0, ColourManager.Instance.allBirds.Count);
-                    splashArmAnimatorMap[ColourManager.Instance.allBirds[birdIndex].name].SetTrigger("move");
-                    timeTurningOn += Time.deltaTime;
-                    timeFadingIn = 0.0f;
-                }
-            }
+            UpdateMenuState();
 
         }
 
+        private void UpdateMenuState()
+        {
+            if(previousMenuState != currentMenuState)
+            {
+                previousMenuState = currentMenuState;
+            }
+            switch(currentMenuState)
+            {
+                case MenuState.zooming_in:
+                    cameraUpdate();
+                    break;
+                case MenuState.fading_out:
+                    timeFadingOut += Time.deltaTime;
+                    splashScreenFadeImage.color = new Color(splashScreenFadeImage.color.r, splashScreenFadeImage.color.g, splashScreenFadeImage.color.b, (timeFadingOut / timeToFadeOut));
+
+                    if (timeFadingOut > timeToFadeOut)
+                    {
+                        currentMenuState = MenuState.fading_in;
+                        timeFadingIn += Time.deltaTime;
+                        timeFadingOut = 0.0f;
+                    }
+                    break;
+                case MenuState.fading_in:
+                    timeFadingIn += Time.deltaTime;
+                    float progressRatio = timeFadingIn / timeToFadeIn;
+                    computerSticky1Text.color = new Color(computerSticky1Text.color.r, computerSticky1Text.color.g, computerSticky1Text.color.b, progressRatio);
+                    computerSticky2Text.color = new Color(computerSticky2Text.color.r, computerSticky2Text.color.g, computerSticky2Text.color.b, progressRatio);
+                    lobbyScreenImage.color = new Color(lobbyScreenImage.color.r, lobbyScreenImage.color.g, lobbyScreenImage.color.b, progressRatio);
+                    if (timeFadingIn > timeToFadeIn)
+                    {
+                        currentMenuState = MenuState.pressing_pc_button;
+                        AudioManager.Instance.PlaySound("sfx_lobby_int_computer_reach");
+                        AudioManager.Instance.FadeOutSound("SplashMusic", 2.0f);
+                        AudioManager.Instance.FadeOutSound("sfx_lobby_amb_outdoor", 2.0f);
+                        SplashPageObject.SetActive(false);
+                        //Randomize the bird arm
+                        int birdIndex = UnityEngine.Random.Range(0, ColourManager.Instance.allBirds.Count);
+                        splashArmAnimatorMap[ColourManager.Instance.allBirds[birdIndex].name].SetTrigger("move");
+                        timeTurningOn += Time.deltaTime;
+                        timeFadingIn = 0.0f;
+                    }
+                    break;
+
+                case MenuState.pressing_pc_button:
+                    if (timeTurningOn > buttonPressTimeThreshold && !buttonHasBeenPressed)
+                    {
+                        buttonHasBeenPressed = true;
+                        AudioManager.Instance.PlaySound("sfx_lobby_int_computer_press");
+                    }
+                    timeTurningOn += Time.deltaTime;
+                    if (timeTurningOn > timeToTurnOn)
+                    {
+                        timeTurningOn = 0.0f;
+                        currentMenuState = MenuState.booting_pc;
+                        AudioManager.Instance.PlaySound("sfx_lobby_int_computer_boot");
+                        lobbyBGObject.SetActive(true);
+                        computerSticky1Text.color = new Color(computerSticky1Text.color.r, computerSticky1Text.color.g, computerSticky1Text.color.b, 1f);
+                        computerSticky2Text.color = new Color(computerSticky2Text.color.r, computerSticky2Text.color.g, computerSticky2Text.color.b, 1f);
+                        lobbyScreenImage.color = new Color(lobbyScreenImage.color.r, lobbyScreenImage.color.g, lobbyScreenImage.color.b, 1f);
+                        splashScreenFadeImage.gameObject.SetActive(true);
+                        SplashPageObject.SetActive(false);
+                        timeBootingUp += Time.deltaTime;
+                        logoObject.SetActive(true);
+                    }
+                    break;
+                case MenuState.booting_pc:
+                    timeBootingUp += Time.deltaTime;
+                    if (timeBootingUp > timeToBootUp)
+                    {
+                        currentMenuState = MenuState.rooms;
+                        AudioManager.Instance.PlaySound("LobbyMusic");
+                        skipIntroButton.SetActive(false);
+                        timeBootingUp = 0.0f;
+                        roomListingsObject.SetActive(true);
+                        RoomListingsPlayerNameText.text = "User: \n" + SettingsManager.Instance.playerName;
+                    }
+                    break;
+                case MenuState.rooms:
+                    timeSinceLastRoomListingUpdate += Time.deltaTime;
+                    if(timeSinceLastRoomListingUpdate > roomUpdateThreshold)
+                    {
+                        timeSinceLastRoomListingUpdate = 0f;
+                        LobbyNetwork.Instance.RequestSteamRoomListings();
+                    }
+                    break;
+            }
+        }
 
         #region SplashPage
         private float cameraStateTime = 0f;
-        private bool isTransitioning = false;
 
         private void cameraUpdate()
         {
@@ -308,17 +296,18 @@ namespace ChickenScratch
             cameraStateTime += Time.deltaTime;
 
             //Transition
-            splashRectTransform.anchoredPosition = Vector3.Lerp(baseTransitionCameraDock.position, splashTransitionCameraDock.position, cameraStateTime * baseTransitionCameraDock.transitionMoveSpeed);
-            splashRectTransform.localScale = Vector3.Lerp(baseTransitionCameraDock.zoom, splashTransitionCameraDock.zoom, cameraStateTime * baseTransitionCameraDock.transitionZoomSpeed);
+            float transitionRatio = cameraStateTime / splashTransitionCameraDock.transitionDuration;
+            splashRectTransform.anchoredPosition = Vector3.Lerp(baseTransitionCameraDock.position, splashTransitionCameraDock.position, transitionRatio);
+            splashRectTransform.localScale = Vector3.Lerp(baseTransitionCameraDock.zoom, splashTransitionCameraDock.zoom, transitionRatio);
 
-            if (cameraStateTime * baseTransitionCameraDock.transitionMoveSpeed > 1)
+            if (transitionRatio > 1)
             {
+                currentMenuState = MenuState.fading_out;
                 cameraStateTime = 0.0f;
                 lobbyBGObject.SetActive(true);
 
                 timeFadingOut += Time.deltaTime;
                 splashScreenFadeImage.gameObject.SetActive(true);
-                isTransitioning = false;
             }
 
 
@@ -333,10 +322,11 @@ namespace ChickenScratch
             }
             else
             {
+                currentMenuState = MenuState.zooming_in;
                 AudioManager.Instance.PlaySound("sfx_lobby_int_enter_sign");
-                isTransitioning = true;
                 openDoorObject.SetActive(true);
                 skipIntroButton.SetActive(true);
+                LobbyNetwork.Instance.RequestSteamRoomListings();
             }
 
 
@@ -351,6 +341,7 @@ namespace ChickenScratch
 
         public void SkipIntro_OnClick()
         {
+            currentMenuState = MenuState.rooms;
             AudioManager.Instance.PlaySound("sfx_lobby_int_skip_sticky");
             SkipIntro();
         }
@@ -362,21 +353,17 @@ namespace ChickenScratch
             computerSticky1Text.color = new Color(computerSticky1Text.color.r, computerSticky1Text.color.g, computerSticky1Text.color.b, 1f);
             computerSticky2Text.color = new Color(computerSticky2Text.color.r, computerSticky2Text.color.g, computerSticky2Text.color.b, 1f);
             lobbyScreenImage.color = new Color(lobbyScreenImage.color.r, lobbyScreenImage.color.g, lobbyScreenImage.color.b, 1f);
-            isTransitioning = false;
             lobbyBGObject.SetActive(true);
             splashScreenFadeImage.gameObject.SetActive(true);
-            loginObject.SetActive(true);
+            roomListingsObject.SetActive(true);
+            RoomListingsPlayerNameText.text = "User: \n" + SettingsManager.Instance.playerName;
             SplashPageObject.SetActive(false);
             skipIntroButton.SetActive(false);
             cameraStateTime = 0.0f;
             timeBootingUp = 0.0f;
             timeTurningOn = 0.0f;
-            currentTimeLogging = 0.0f;
             timeFadingIn = 0.0f;
             timeFadingOut = 0.0f;
-            loginInputField.text = SettingsManager.Instance.GetStringSetting("user_name", "");
-
-            loginInputField.Select();
             hasSkippedIntro = true;
         }
 
@@ -390,13 +377,9 @@ namespace ChickenScratch
 
         #region Network Responses
 
-        public void JoinedLobby()
-        {
-
-        }
-
         public void JoinedRoom()
         {
+            currentMenuState = MenuState.lobby;
             roomCodeText.text = "*****";
             splashScreenPauseMenu.canBeOpened = false;
             LobbyPageObject.SetActive(true);
@@ -419,33 +402,25 @@ namespace ChickenScratch
                 quickplayToggle.interactable = false;
             }
             stickiesButton.Initialize(SettingsManager.Instance.GetSetting("stickies", true));
-
-            for (int i = activeRoomListings.Count - 1; i >= 0; i--)
-            {
-                Destroy(activeRoomListings[i].gameObject);
-            }
-            activeRoomListings.Clear();
         }
 
-        public void FailedToCreateRoom(string message)
-        {
-            currentTimeLogging += Time.deltaTime;
-        }
+
 
         public void LeftLobby()
         {
+            currentMenuState = MenuState.rooms;
             splashScreenPauseMenu.canBeOpened = true;
             PlayerListingMap.Clear();
-            SettingsManager.Instance.playerNameMap.Clear();
+            SettingsManager.Instance.ClearPlayerNameMap();
             SplashPageObject.SetActive(true);
         }
 
         public void LeftRoom()
         {
-
+            currentMenuState = MenuState.rooms;
             //Clear room contents
             PlayerListingMap.Clear();
-            SettingsManager.Instance.playerNameMap.Clear();
+            SettingsManager.Instance.ClearPlayerNameMap();
 
             foreach (KeyValuePair<ColourManager.BirdName, PlayerIdentification> playerID in PlayerIdentificationMap)
             {
@@ -460,49 +435,63 @@ namespace ChickenScratch
 
         }
 
-        private List<CSteamID> existingRoomIDs = new List<CSteamID>();
+        private List<CSteamID> previousRoomIDs = new List<CSteamID>();
         private Dictionary<CSteamID, RoomListing> roomListingMap = new Dictionary<CSteamID, RoomListing>();
         public void UpdateRoomListings(List<CSteamID> currentRoomIDs)
         {
             GameObject newRoomListing;
             RoomListing rListingBehaviour;
-
-            for (int i = existingRoomIDs.Count - 1; i >= 0; i--)
+            for (int i = previousRoomIDs.Count - 1; i >= 0; i--)
             {
-                if (!currentRoomIDs.Contains(existingRoomIDs[i]))
+                if (!currentRoomIDs.Contains(previousRoomIDs[i]))
                 {
-                    RoomListing roomListingsToRemove = roomListingMap[existingRoomIDs[i]];
-                    Destroy(roomListingsToRemove.gameObject);
-                    roomListingMap.Remove(existingRoomIDs[i]);
-                    existingRoomIDs.RemoveAt(i);
+                    if (roomListingMap.ContainsKey(previousRoomIDs[i]))
+                    {
+                        
+                        RoomListing roomListingsToRemove = roomListingMap[previousRoomIDs[i]];
+                        if(roomListingsToRemove.gameObject != null)
+                        {
+                            Destroy(roomListingsToRemove.gameObject);
+                        }
+                        
+                        roomListingMap.Remove(previousRoomIDs[i]);
+                    }
+                    previousRoomIDs.RemoveAt(i);
                 }
 
             }
             foreach (CSteamID roomID in currentRoomIDs)
             {
 
-                if (!existingRoomIDs.Contains(roomID))
+                if (!previousRoomIDs.Contains(roomID))
                 {
-                    string roomName = Steamworks.SteamMatchmaking.GetLobbyData(roomID, "roomName");
-                    if (!activeRoomListings.Any(rl => rl.roomName == roomName))
+                    newRoomListing = Instantiate(RoomListingPrefab, RoomListingsParent);
+                    rListingBehaviour = newRoomListing.GetComponent<RoomListing>();
+                    rListingBehaviour.roomID = roomID;
+                    if (rListingBehaviour)
                     {
-                        newRoomListing = Instantiate(RoomListingPrefab, RoomListingsParent);
-                        rListingBehaviour = newRoomListing.GetComponent<RoomListing>();
-                        rListingBehaviour.roomID = roomID;
-                        if (rListingBehaviour)
-                        {
-
-                            rListingBehaviour.RoomNameText.text = roomName.Length < 25 ? roomName : roomName.Substring(0, 25) + "..";
-                            rListingBehaviour.AttendeeCountText.text = SteamMatchmaking.GetNumLobbyMembers(roomID).ToString() + "/" + Steamworks.SteamMatchmaking.GetLobbyMemberLimit(roomID).ToString();
-                            rListingBehaviour.roomName = roomName;
-                            activeRoomListings.Add(rListingBehaviour);
-                        }
+                        string roomName = Steamworks.SteamMatchmaking.GetLobbyData(roomID, "roomName");
+                        roomListingMap.Add(roomID, rListingBehaviour);
+                        previousRoomIDs.Add(roomID);
+                        rListingBehaviour.RoomNameText.text = roomName.Length < 25 ? roomName : roomName.Substring(0, 25) + "..";
+                        rListingBehaviour.AttendeeCountText.text = SteamMatchmaking.GetNumLobbyMembers(roomID).ToString() + "/" + Steamworks.SteamMatchmaking.GetLobbyMemberLimit(roomID).ToString();
+                        rListingBehaviour.roomName = roomName;
+                        activeRoomListings.Add(rListingBehaviour);
+                    }
+                }
+                else
+                {
+                    if (roomListingMap.ContainsKey(roomID))
+                    {
+                        rListingBehaviour = roomListingMap[roomID];
+                        rListingBehaviour.AttendeeCountText.text = SteamMatchmaking.GetNumLobbyMembers(roomID).ToString() + "/" + SteamMatchmaking.GetLobbyMemberLimit(roomID).ToString();
                     }
                     else
                     {
-                        rListingBehaviour = activeRoomListings.Single(rl => rl.roomName == roomName);
-                        rListingBehaviour.AttendeeCountText.text = SteamMatchmaking.GetNumLobbyMembers(roomID).ToString() + "/" + SteamMatchmaking.GetLobbyMemberLimit(roomID).ToString();
+                        Debug.LogError("ERROR: Room exists but room listing object has been destroyed.");
+                        previousRoomIDs.Remove(roomID);
                     }
+
                 }
             }
         }
@@ -517,7 +506,7 @@ namespace ChickenScratch
                 return;
             }
             AudioManager.Instance.PlaySoundVariant("sfx_lobby_int_click_ok");
-
+            
             SettingsManager.Instance.playerID = loginInputField.text;
             roomListingsObject.SetActive(true);
             RoomListingsPlayerNameText.text = "User: \n" + SettingsManager.Instance.playerName;
@@ -658,10 +647,15 @@ namespace ChickenScratch
         {
             AudioManager.Instance.PlaySoundVariant("sfx_lobby_int_click_cancel_back");
 
-            loginObject.SetActive(true);
-            loginInputField.text = SettingsManager.Instance.GetStringSetting("user_name", "");
-            loginInputField.Select();
+            SplashPageObject.SetActive(true);
+            loginObject.SetActive(false);
+            lobbyBGObject.SetActive(false);
+            logoObject.SetActive(false);
             roomListingsObject.SetActive(false);
+            
+            splashRectTransform.anchoredPosition = baseTransitionCameraDock.position;
+            splashRectTransform.localScale = baseTransitionCameraDock.zoom;
+            splashScreenFadeImage.gameObject.SetActive(false);
         }
 
         public void SelectRoomListing(RoomListing roomListing)
@@ -685,9 +679,9 @@ namespace ChickenScratch
             AudioManager.Instance.PlaySound("sfx_scan_int_start");
 
             string loadingLevel = "Game";
-            Debug.Log("Playername count[" + SettingsManager.Instance.playerNameMap.Count.ToString() + "], Gamemode players[" + SettingsManager.Instance.gameMode.minimumNumberOfPlayers.ToString() + "]");
+            int playerNameCount = SettingsManager.Instance.GetPlayerNameCount();
 
-            if (SettingsManager.Instance.playerNameMap.Count >= SettingsManager.Instance.gameMode.minimumNumberOfPlayers)
+            if (playerNameCount >= SettingsManager.Instance.gameMode.minimumNumberOfPlayers)
             {
                 NetworkManager.singleton.ServerChangeScene(loadingLevel);
             }
@@ -703,25 +697,25 @@ namespace ChickenScratch
             AudioManager.Instance.PlaySound("sfx_scan_int_leave");
             SelectedID = null;
             LobbyPageObject.SetActive(false);
-
+            LoadingPageObject.SetActive(false);
             LobbyNetwork.Instance.LeaveRoom();
 
         }
 
         public bool IsBirdSelected(ColourManager.BirdName birdName)
         {
-            if (PlayerIdentificationMap[birdName].playerID != "")
+            if (PlayerIdentificationMap[birdName].playerName != "")
             {
                 return false;
             }
-            return SettingsManager.Instance.playerNameMap.ContainsKey(birdName);
+            return SettingsManager.Instance.IsBirdSelected(birdName);
         }
 
-        public BirdName GetPreviouslySelectedBird(string playerID)
+        public BirdName GetPreviouslySelectedBird(string playerName)
         {
             foreach (PlayerIdentification playerIdentification in PlayerIdentifiers)
             {
-                if (playerIdentification.playerID == playerID)
+                if (playerIdentification.playerName == playerName)
                 {
                     return playerIdentification.birdName;
                 }
@@ -731,33 +725,38 @@ namespace ChickenScratch
 
         public void SelectPlayerBird(ColourManager.BirdName birdName, string playerName)
         {
-            if (!SettingsManager.Instance.playerNameMap.ContainsKey(birdName))
-            {
-                SettingsManager.Instance.playerNameMap.Add(birdName, playerName);
-                lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.playerNameMap.Count() == NetworkServer.connections.Count();
-            }
-
+            SettingsManager.Instance.AssignBirdToPlayer(birdName, playerName);
+            lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.GetPlayerNameCount() == NetworkServer.connections.Count();
             //If this is the current player's bird
             if (playerName == SettingsManager.Instance.playerName)
             {
                 selectedBirdImage.sprite = ColourManager.Instance.birdMap[birdName].faceSprite;
                 selectedBirdParentObject.SetActive(true);
                 selectionInstructionsObject.SetActive(false);
+                SettingsManager.Instance.birdName = birdName;
             }
 
             PlayerIdentificationMap[birdName].Select(playerName);
 
             //Update the player listing
-            PlayerListingMap[playerName].ChangePlayerBird(birdName);
+            if(PlayerListingMap.ContainsKey(playerName))
+            {
+                PlayerListingMap[playerName].ChangePlayerBird(birdName);
+            }
+            else
+            {
+                Debug.LogError("Player listing map is missing player["+playerName+"], outputting listings to review.");
+                foreach(KeyValuePair<string,PlayerListing> playerListing in PlayerListingMap)
+                {
+                    Debug.LogError("Player listing: " + playerListing.Key);
+                }
+            }
         }
 
         public void DeselectPlayerBird(ColourManager.BirdName birdName)
         {
-            if (SettingsManager.Instance.playerNameMap.ContainsKey(birdName))
-            {
-                SettingsManager.Instance.playerNameMap.Remove(birdName);
-                lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.playerNameMap.Count() == NetworkServer.connections.Count;
-            }
+            SettingsManager.Instance.DeassignBirdToPlayer(birdName);
+            lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.GetPlayerNameCount() == NetworkServer.connections.Count();
             PlayerIdentificationMap[birdName].Deselect();
         }
 
@@ -881,6 +880,50 @@ namespace ChickenScratch
         {
             //LobbyNetwork.Instance.BroadcastQueue.Add("update_quickplay" + GameDelim.BASE + quickplayToggle.isOn.ToString());
             SettingsManager.Instance.showFastResults = quickplayToggle.isOn;
+        }
+
+        public void LoadLobbyFromGame()
+        {
+            currentMenuState = MenuState.waiting;
+            roomCodeText.text = "*****";
+            AudioManager.Instance.StopSound("SplashMusic");
+            AudioManager.Instance.StopSound("sfx_lobby_amb_outdoor");
+            AudioManager.Instance.PlaySound("LobbyMusic");
+            LobbyPageObject.SetActive(true);
+            RoomsPageObject.SetActive(true);
+            LoadingPageObject.SetActive(true);
+            LobbyStartGameBtn.interactable = SettingsManager.Instance.isHost;
+            SettingsManager.Instance.SetGameMode(SettingsManager.Instance.gameMode.name);
+            
+            
+            if (SettingsManager.Instance.isHost)
+            {
+                wordGroupsController.Initialize();
+                UpdatePlayerCount();
+                gameModeButton.interactable = true;
+                tutorialsButton.Initialize(SettingsManager.Instance.GetSetting("tutorials", true));
+                tutorialsButton.containerObject.SetActive(true);
+                quickplayToggle.interactable = true;
+                lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.GetPlayerNameCount() == NetworkServer.connections.Count();
+            }
+            else
+            {
+                Text startGameButtonText = LobbyStartGameBtn.GetComponentInChildren<Text>();
+                if (startGameButtonText)
+                {
+                    startGameButtonText.gameObject.SetActive(false);
+                }
+                gameModeButton.interactable = false;
+                tutorialsButton.containerObject.SetActive(false);
+                quickplayToggle.interactable = false;
+            }
+        }
+
+        public void OpenRoomsPage()
+        {
+            currentMenuState = MenuLobbyButtons.MenuState.rooms;
+            LobbyPageObject.SetActive(false);
+            RoomsPageObject.SetActive(true);
         }
     }
 }

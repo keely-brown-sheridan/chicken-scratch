@@ -3,6 +3,7 @@ using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace ChickenScratch
 {
@@ -47,23 +48,39 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(int caseID, Dictionary<int,List<string>> inPossibleWords, DrawingData drawingData)
+        public void Initialize(int caseID, Dictionary<int,List<string>> inPossibleWords, DrawingData drawingData, UnityAction inTimeCompleteAction)
         {
             currentCaseIndex = caseID;
             guessingContainer.Show(drawingData, drawingScalingFactor, drawingOffset);
             PossiblePrompt currentPossibleWord;
             int iterator = 1;
+            Color guessButtonColour = Color.white;
+            Color guessButtonTextColour = Color.black;
             foreach (KeyValuePair<int, List<string>> possibleWordGroup in inPossibleWords)
             {
+                if(possibleWordGroup.Key == 1)
+                {
+                    guessButtonColour = SettingsManager.Instance.prefixBGColour;
+                    guessButtonTextColour = SettingsManager.Instance.prefixFontColour;
+                }
+                else if(possibleWordGroup.Key == 2)
+                {
+                    guessButtonColour = SettingsManager.Instance.nounBGColour;
+                    guessButtonTextColour = SettingsManager.Instance.nounFontColour;
+                }
                 iterator = 1;
                 foreach (string possibleWord in possibleWordGroup.Value)
                 {
                     currentPossibleWord = possibleWordMap[possibleWordGroup.Key][iterator.ToString()];
                     currentPossibleWord.displayText.text = possibleWord;
+                    currentPossibleWord.displayText.color = guessButtonTextColour;
+                    currentPossibleWord.backgroundImage.color = guessButtonColour;
                     currentPossibleWord.gameObject.SetActive(true);
                     iterator++;
                 }
             }
+            timeCompleteAction = inTimeCompleteAction;
+            RegisterToTimer(inTimeCompleteAction);
         }
 
         public override void Show(Color inFolderColour, float taskTime, float currentModifier, float modifierDecrement)
@@ -82,7 +99,7 @@ namespace ChickenScratch
             return guessWords.Count == 2;
         }
 
-        public void ChooseGuess()
+        public void ChooseGuess(int caseID)
         {
             AudioManager.Instance.PlaySoundVariant("sfx_game_int_answer_select");
 
@@ -104,47 +121,56 @@ namespace ChickenScratch
 
             AudioManager.Instance.PlaySound("Stamp");
             GameManager.Instance.playerFlowManager.drawingRound.stampIsActive = false;
-
-            GameManager.Instance.gameDataHandler.CmdPromptGuessWrapper(SettingsManager.Instance.birdName, tempGuessWords, currentCaseIndex);
+            float timeTaken = GameManager.Instance.playerFlowManager.drawingRound.timeInCurrentCase;
+            StatTracker.Instance.timeInGuessingRound += timeTaken;
+            GuessData guessData = new GuessData();
+            guessData.timeTaken = timeTaken;
+            guessData.author = SettingsManager.Instance.birdName;
+            guessData.prefix = guessWords.ContainsKey(1) ? guessWords[1] : "";
+            guessData.noun = guessWords.ContainsKey(2) ? guessWords[2] : "";
+            guessData.round = GameManager.Instance.playerFlowManager.drawingRound.queuedFolderMap[caseID].round;
+            GameManager.Instance.gameDataHandler.CmdPromptGuess(guessData, currentCaseIndex, timeTaken);
             ClearGuess(1);
             ClearGuess(2);
             guessWords.Clear();
         }
 
-        public void ForceGuess()
+        public void ForceGuess(int caseID)
         {
             AudioManager.Instance.PlaySound("ButtonPress");
             foreach (PossiblePrompt possiblePrompt in allPossibleWords)
             {
                 possiblePrompt.gameObject.SetActive(false);
             }
+            float timeTaken = GameManager.Instance.playerFlowManager.drawingRound.timeInCurrentCase;
+            StatTracker.Instance.timeInGuessingRound += timeTaken;
+            GuessData guessData = new GuessData();
+            guessData.timeTaken = timeTaken;
+            guessData.author = SettingsManager.Instance.birdName;
+            guessData.prefix = guessWords.ContainsKey(1) ? guessWords[1] : "";
+            guessData.noun = guessWords.ContainsKey(2) ? guessWords[2] : "";
+            guessData.round = GameManager.Instance.playerFlowManager.drawingRound.queuedFolderMap[caseID].round;
+            GameManager.Instance.gameDataHandler.CmdPromptGuess(guessData, currentCaseIndex, timeTaken);
 
-            if (SettingsManager.Instance.isHost)
-            {
-                GameManager.Instance.playerFlowManager.addGuessPrompt(SettingsManager.Instance.birdName, guessWords, currentCaseIndex);
-            }
-            else
-            {
-                GameManager.Instance.gameDataHandler.CmdPromptGuessWrapper(SettingsManager.Instance.birdName, guessWords, currentCaseIndex);
-            }
-            Hide();
             StatTracker.Instance.wordIsGuessed = true;
         }
 
         private void ClearGuess(int wordIndex)
         {
             guessText.text = "";
+            Color wordBackgroundColour = Color.white;
             //Unhighlight other prefix buttons
             foreach (KeyValuePair<string, PossiblePrompt> word in possibleWordMap[wordIndex])
             {
-                if (word.Value.isCorrect)
+                if(word.Value.wordIndex == 1)
                 {
-                    word.Value.backgroundImage.color = Color.green;
+                    wordBackgroundColour = SettingsManager.Instance.prefixBGColour;
                 }
-                else
+                else if(word.Value.wordIndex == 2)
                 {
-                    word.Value.backgroundImage.color = Color.white;
+                    wordBackgroundColour = SettingsManager.Instance.nounBGColour;
                 }
+                word.Value.backgroundImage.color = wordBackgroundColour;
             }
         }
 
@@ -175,8 +201,9 @@ namespace ChickenScratch
 
             //Highlight the button
             possibleWordMap[wordIndex][wordIndexSegments[1]].backgroundImage.color = Color.yellow;
-            guessText.color = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].colour;
-            guessText.text = (guessWords.ContainsKey(1) ? guessWords[1] : "") + " " + (guessWords.ContainsKey(2) ? guessWords[2] : "");
+            string prefixText = guessWords.ContainsKey(1) ? SettingsManager.Instance.CreatePrefixText(guessWords[1]) : "";
+            string nounText = guessWords.ContainsKey(2) ? SettingsManager.Instance.CreateNounText(guessWords[2]) : "";
+            guessText.text = prefixText + " " + nounText;
         }
     }
 }

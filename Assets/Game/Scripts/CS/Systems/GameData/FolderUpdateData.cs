@@ -18,5 +18,7 @@ namespace ChickenScratch
         public int roundNumber;
         public int caseID;
         public BirdName player;
+        public List<TaskData.TaskModifier> taskModifiers;
+        public BirdName lastPlayer;
     }
 }

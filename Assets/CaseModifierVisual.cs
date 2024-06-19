@@ -42,6 +42,7 @@ public class CaseModifierVisual : MonoBehaviour
         modifierImage.color = fullColour;
         scoreFillImage.color = fullColour;
         scoreFillImage.transform.localScale = Vector3.one;
+        gameObject.SetActive(true);
     }
 
     // Update is called once per frame

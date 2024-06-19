@@ -64,6 +64,9 @@ namespace ChickenScratch
                 case "Purple":
                     SettingsManager.Instance.birdName = ColourManager.BirdName.purple;
                     break;
+                case "Orange":
+                    SettingsManager.Instance.birdName = ColourManager.BirdName.orange;
+                    break;
             }
 
             tryToSelectBird(SettingsManager.Instance.playerName, SettingsManager.Instance.birdName);

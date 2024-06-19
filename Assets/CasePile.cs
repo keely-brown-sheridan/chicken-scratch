@@ -49,7 +49,7 @@ public class CasePile : MonoBehaviour
 
     public void Activate()
     {
-        if(SettingsManager.Instance.gameMode.numberOfCases > 0)
+        if(SettingsManager.Instance.gameMode.casesRemaining > 0)
         {
             foreach (GameObject objectToShow in objectsToShowOnActivate)
             {

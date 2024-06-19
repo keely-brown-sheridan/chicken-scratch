@@ -27,7 +27,12 @@ namespace ChickenScratch
         private float timePlacing = 0.0f;
         private float timeRetracting = 0.0f;
 
-        public void StartPlacing()
+        public void StartPlacing(float waitDuration = 0f)
+        {
+            Invoke("StartPlacingAfterDelay", waitDuration);
+        }
+
+        private void StartPlacingAfterDelay()
         {
             startingPosition = cardHolder.transform.localPosition;
             timePlacing = Time.deltaTime;

@@ -65,7 +65,7 @@ namespace ChickenScratch
                 }
                 else
                 {
-                    GameManager.Instance.gameDataHandler.TargetInitializePlayer(SettingsManager.Instance.birdConnectionMap[player.Key], player.Key, player.Value);
+                    GameManager.Instance.gameDataHandler.TargetInitializePlayer(SettingsManager.Instance.GetConnection(player.Key), player.Key, player.Value);
                     //GameNetwork.Instance.addToPlayerQueue(player.Key.ToString() + GameDelim.BASE + "role_distribution" + GameDelim.BASE + player.Value.playerRole.ToString());
                 }
             }

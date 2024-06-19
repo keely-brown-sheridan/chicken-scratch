@@ -34,10 +34,7 @@ namespace ChickenScratch
 
         void Update()
         {
-            if (guessRoundStarted && !wordIsGuessed)
-            {
-                timeInGuessingRound += Time.deltaTime;
-            }
+
         }
 
         private void Initialize()

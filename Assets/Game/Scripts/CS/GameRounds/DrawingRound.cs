@@ -1,4 +1,5 @@
 using Mirror;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,8 +31,10 @@ namespace ChickenScratch
         public int maxLineMessageLength = 300;
 
         public bool isInitialized = false;
+        public bool hasRequestedCaseDetails = false;
         public bool hasSentCaseDetails = false;
-        public Dictionary<int,int> currentRoundMap = new Dictionary<int, int>();
+        public Dictionary<int,QueuedFolderData> queuedFolderMap = new Dictionary<int, QueuedFolderData>();
+        private List<int> queuedCaseFolders = new List<int>();
         public int playerCabinetIndex = -1;
 
         public UnityEvent onPlayerSubmitTask;
@@ -65,6 +68,14 @@ namespace ChickenScratch
 
         public bool stampIsActive = false;
 
+        public float timeInCurrentCase = 0f;
+
+        public UnityAction caseFolderOnStartAction;
+
+        public int currentRound => _currentRound;
+        private int _currentRound;
+
+        private bool timeHasExpired = false;
 
 
         private void Awake()
@@ -73,6 +84,15 @@ namespace ChickenScratch
             {
                 Initialize();
             }
+        }
+
+        private void Update()
+        {
+            if(GameManager.Instance.playerFlowManager.currentPhaseName == GameFlowManager.GamePhase.drawing && !playerIsReady)
+            {
+                timeInCurrentCase += Time.deltaTime;
+            }
+            
         }
 
         public void Initialize()
@@ -98,7 +118,7 @@ namespace ChickenScratch
             playerIsReady = true;
             hasSentCaseDetails = false;
             isInitialized = true;
-            UpdateNumberOfCases(SettingsManager.Instance.gameMode.numberOfCases);
+            UpdateNumberOfCases(SettingsManager.Instance.gameMode.casesRemaining);
         }
 
         public override void StartRound()
@@ -167,11 +187,37 @@ namespace ChickenScratch
 
         public void UpdateToNewFolderState()
         {
+            if(queuedCaseFolders.Count == 0)
+            {
+                Debug.LogError("ERROR: Cannot select and update to a new folder state while there are no queued cases.");
+                return;
+            }
+
+            int queuedCaseIndex = queuedCaseFolders[0];
+            queuedCaseFolders.RemoveAt(0);
+
+            if(!caseMap.ContainsKey(queuedCaseIndex))
+            {
+                Debug.LogError("ERROR: Cannot select and update to a new folder state for case["+queuedCaseIndex.ToString()+"] because it doesn't exist in the case map.");
+                return;
+            }
+
+            if(!queuedFolderMap.ContainsKey(queuedCaseIndex))
+            {
+                Debug.LogError("ERROR: Cannot select and update to a new folder state for case["+queuedCaseIndex.ToString()+"] because it doesn't exist in the queued folder map.");
+                return;
+            }
+            cabinetDrawerMap[playerCabinetIndex].currentChainData = caseMap[queuedCaseIndex];
+            cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier = queuedCaseIndex;
+            currentState = queuedFolderMap[queuedCaseIndex].queuedState;
+
             ChainData chainData = cabinetDrawerMap[playerCabinetIndex].currentChainData;
             float currentTaskTime = chainData.currentTaskDuration;
             float scoreDecrement = SettingsManager.Instance.gameMode.scoreModifierDecrement;
             Color inFolderColour = Color.white;
-            int lastRoundIndex = currentRoundMap.ContainsKey(chainData.identifier) ? currentRoundMap[chainData.identifier] -1 : -1;
+            SetCurrentDrawingRound(queuedFolderMap[queuedCaseIndex]);
+            int lastRoundIndex = currentRound-1;
+            TaskModifier drawingBoxModifier = TaskModifier.standard;
             if(lastRoundIndex == -1)
             {
                 Debug.LogError("ERROR[UpdateToNewFolderState]: Last round index could not be set for case[" + chainData.identifier + "].");
@@ -185,8 +231,7 @@ namespace ChickenScratch
                     {
                         inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
                     }
-                    promptingCaseFolder.RegisterToTimer(ForceSubmit);
-                    promptingCaseFolder.Initialize(chainData.drawings[lastRoundIndex]);
+                    promptingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], ForceCaseExpirySubmit);
                     promptingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
 
                     break;
@@ -195,15 +240,38 @@ namespace ChickenScratch
                     if (chainData.prompts.ContainsKey(lastRoundIndex))
                     {
                         prompt = chainData.prompts[lastRoundIndex].text;
-                        inFolderColour = ColourManager.Instance.birdMap[chainData.prompts[lastRoundIndex].author].folderColour;
+                        //Author is not being set here
+                        BirdName lastAuthor = chainData.prompts[lastRoundIndex].author;
+                        if (lastAuthor == BirdName.none)
+                        {
+                            lastAuthor = chainData.playerOrder[lastRoundIndex];
+                        }
+                        inFolderColour = ColourManager.Instance.birdMap[lastAuthor].folderColour;
                     }
                     else
                     {
                         inFolderColour = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].folderColour;
                         prompt = chainData.correctPrompt;
                     }
-                    drawingCaseFolder.RegisterToTimer(ForceSubmit);
-                    drawingCaseFolder.Initialize(prompt);
+                    foreach(TaskModifier modifier in chainData.currentTaskModifiers)
+                    {
+                        switch(modifier)
+                        {
+                            case TaskModifier.shrunk:
+                            case TaskModifier.thirds_first:
+                            case TaskModifier.thirds_second:
+                            case TaskModifier.thirds_third:
+                            case TaskModifier.top:
+                            case TaskModifier.bottom:
+                            case TaskModifier.top_left:
+                            case TaskModifier.top_right:
+                            case TaskModifier.bottom_left:
+                            case TaskModifier.bottom_right:
+                                drawingBoxModifier = modifier;
+                                break;
+                        }
+                    }
+                    drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
                     drawingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
 
                     break;
@@ -212,12 +280,29 @@ namespace ChickenScratch
                     {
                         inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
                     }
-                    copyingCaseFolder.RegisterToTimer(ForceSubmit);
                     if(!chainData.drawings.ContainsKey(lastRoundIndex))
                     {
                         Debug.LogError("Could not access drawing for round["+lastRoundIndex.ToString()+"] in case["+chainData.identifier.ToString()+"].");
                     }
-                    copyingCaseFolder.Initialize(chainData.drawings[lastRoundIndex]);
+                    foreach (TaskModifier modifier in chainData.currentTaskModifiers)
+                    {
+                        switch (modifier)
+                        {
+                            case TaskModifier.shrunk:
+                            case TaskModifier.thirds_first:
+                            case TaskModifier.thirds_second:
+                            case TaskModifier.thirds_third:
+                            case TaskModifier.top:
+                            case TaskModifier.bottom:
+                            case TaskModifier.top_left:
+                            case TaskModifier.top_right:
+                            case TaskModifier.bottom_left:
+                            case TaskModifier.bottom_right:
+                                drawingBoxModifier = modifier;
+                                break;
+                        }
+                    }
+                    copyingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], drawingBoxModifier, ForceCaseExpirySubmit);
                     copyingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
                     
                     break;
@@ -230,13 +315,29 @@ namespace ChickenScratch
                     {
                         inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
                     }
-                    addingCaseFolder.RegisterToTimer(ForceSubmit);
-                    addingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], chainData.correctPrompt);
+                    foreach (TaskModifier modifier in chainData.currentTaskModifiers)
+                    {
+                        switch (modifier)
+                        {
+                            case TaskModifier.shrunk:
+                            case TaskModifier.thirds_first:
+                            case TaskModifier.thirds_second:
+                            case TaskModifier.thirds_third:
+                            case TaskModifier.top:
+                            case TaskModifier.bottom:
+                            case TaskModifier.top_left:
+                            case TaskModifier.top_right:
+                            case TaskModifier.bottom_left:
+                            case TaskModifier.bottom_right:
+                                drawingBoxModifier = modifier;
+                                break;
+                        }
+                    }
+                    addingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], chainData.correctPrompt, drawingBoxModifier, ForceCaseExpirySubmit);
                     addingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
                     break;
                 case CaseState.guessing:
-                    guessingCaseFolder.RegisterToTimer(ForceSubmit);
-                    guessingCaseFolder.Initialize(chainData.identifier, chainData.possibleWordsMap, chainData.drawings[lastRoundIndex]);
+                    guessingCaseFolder.Initialize(chainData.identifier, chainData.possibleWordsMap, chainData.drawings[lastRoundIndex], ForceCaseExpirySubmit);
 
                     inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
 
@@ -264,10 +365,11 @@ namespace ChickenScratch
 
         public void ReleaseDeskFolder()
         {
+            
             CabinetDrawer selectedCabinet = cabinetDrawerMap[playerCabinetIndex];
             ChainData selectedCase = selectedCabinet.currentChainData;
             DrawingData newDrawing;
-            int currentRoundIndex = currentRoundMap.ContainsKey(selectedCase.identifier) ? currentRoundMap[selectedCase.identifier] : -1;
+            int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
             {
                 Debug.LogError("ERROR[ReleaseDeskFolder]: Could not isolate currentRoundIndex for case["+selectedCase.identifier.ToString()+"].");
@@ -282,14 +384,14 @@ namespace ChickenScratch
                         selectedCase.drawings.Add(currentRoundIndex, newDrawing);
                     }
 
-                    if (!ReleaseDeskDrawingFolder(selectedCase, false))
+                    if (!ReleaseDeskDrawingFolder(selectedCase, timeHasExpired))
                     {
                         Debug.LogError("Failed to release desk drawing folder.");
                         return;
                     }
                     break;
                 case CaseState.prompting:
-                    if (!ReleaseDeskPromptFolder(selectedCabinet, false))
+                    if (!ReleaseDeskPromptFolder(selectedCabinet, timeHasExpired))
                     {
                         Debug.LogError("Failed to release desk prompting folder.");
                         return;
@@ -303,7 +405,7 @@ namespace ChickenScratch
                         selectedCase.drawings.Add(currentRoundIndex, newDrawing);
                     }
 
-                    if (!ReleaseDeskCopyingFolder(selectedCase, false))
+                    if (!ReleaseDeskCopyingFolder(selectedCase, timeHasExpired))
                     {
                         Debug.LogError("Failed to release desk copying folder.");
                         return;
@@ -316,18 +418,27 @@ namespace ChickenScratch
                         selectedCase.drawings.Add(currentRoundIndex, newDrawing);
                     }
 
-                    if (!ReleaseDeskAddingFolder(selectedCase, false))
+                    if (!ReleaseDeskAddingFolder(selectedCase, timeHasExpired))
                     {
                         Debug.LogError("Failed to release desk adding folder.");
                         return;
                     }
                     break;
                 case CaseState.guessing:
-                    guessingCaseFolder.ChooseGuess();
+                    if(timeHasExpired)
+                    {
+                        guessingCaseFolder.ForceGuess(selectedCase.identifier);
+                    }
+                    else
+                    {
+                        guessingCaseFolder.ChooseGuess(selectedCase.identifier);
+                    }
+                    
                     break;
             }
 
             Submit(false);
+            timeHasExpired = false;
         }
 
         public void UpdateBirdFolderStatus(BirdName birdName, Color folderColour, bool isOn)
@@ -340,6 +451,7 @@ namespace ChickenScratch
         {
             if (!drawingCaseFolder.HasStarted() && !force)
             {
+                Debug.LogError("Cannot release the drawing folder.");
                 return false;
             }
             if (SettingsManager.Instance.GetSetting("stickies"))
@@ -358,13 +470,19 @@ namespace ChickenScratch
 
             float timeUsed = SettingsManager.Instance.gameMode.baseTimeInDrawingRound - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
-            int currentRoundIndex = currentRoundMap.ContainsKey(currentChain.identifier) ? currentRoundMap[currentChain.identifier] : -1;
+            int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
             {
                 Debug.LogError("ERROR[ReleaseDeskDrawingFolder]: Could not isolate currentRoundIndex for case["+currentChain.identifier.ToString()+"]");
             }
-            DrawingData newDrawing = currentChain.drawings[currentRoundIndex];
-
+            DrawingData newDrawing;
+            if (!currentChain.drawings.ContainsKey(currentRoundIndex))
+            {
+                currentChain.drawings.Add(currentRoundIndex, new DrawingData());
+            }
+            newDrawing = currentChain.drawings[currentRoundIndex];
+            newDrawing.caseID = currentChain.identifier;
+            newDrawing.round = currentRoundIndex;
             newDrawing.author = SettingsManager.Instance.birdName;
             newDrawing.timeTaken = timeUsed;
             newDrawing.visuals = drawingCaseFolder.GetVisuals();
@@ -376,6 +494,7 @@ namespace ChickenScratch
         {
             if (!copyingCaseFolder.HasStarted() && !force)
             {
+                Debug.LogError("Cannot release the copying folder.");
                 Debug.LogError("HasStarted[" + copyingCaseFolder.HasStarted().ToString() + "], force[" + force.ToString() + "]");
                 return false;
             }
@@ -395,18 +514,23 @@ namespace ChickenScratch
 
             float timeUsed = SettingsManager.Instance.gameMode.baseTimeInDrawingRound - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
-            int currentRoundIndex = currentRoundMap.ContainsKey(currentChain.identifier) ? currentRoundMap[currentChain.identifier] : -1;
+            int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
             {
                 Debug.LogError("Error[ReleaseDeskCopyingFolder]: Could not isolate currentRoundIndex for case["+currentChain.identifier.ToString()+"]");
             }
-            DrawingData newDrawing = currentChain.drawings[currentRoundIndex];
-
+            DrawingData newDrawing;
+            if (!currentChain.drawings.ContainsKey(currentRoundIndex))
+            {
+                currentChain.drawings.Add(currentRoundIndex, new DrawingData());
+                
+            }
+            newDrawing = currentChain.drawings[currentRoundIndex];
+            newDrawing.caseID = currentChain.identifier;
+            newDrawing.round = currentRoundIndex;
             newDrawing.author = SettingsManager.Instance.birdName;
             newDrawing.timeTaken = timeUsed;
             newDrawing.visuals = copyingCaseFolder.GetVisuals();
-
-            copyingCaseFolder.Hide();
 
             return true;
         }
@@ -415,6 +539,7 @@ namespace ChickenScratch
         {
             if (!addingCaseFolder.HasStarted() && !force)
             {
+                Debug.LogError("Cannot release the adding folder.");
                 Debug.LogError("HasStarted[" + copyingCaseFolder.HasStarted().ToString() + "], force[" + force.ToString() + "]");
                 return false;
             }
@@ -434,18 +559,22 @@ namespace ChickenScratch
 
             float timeUsed = SettingsManager.Instance.gameMode.baseTimeInDrawingRound - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
-            int currentRoundIndex = currentRoundMap.ContainsKey(currentChain.identifier) ? currentRoundMap[currentChain.identifier] : -1;
+            int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
             {
                 Debug.LogError("ERROR[ReleaseDeskAddingFolder]: Could not isolate currentRoundIndex for case[" + currentChain.identifier.ToString() +"]");
             }
-            DrawingData newDrawing = currentChain.drawings[currentRoundIndex];
-
+            DrawingData newDrawing;
+            if (!currentChain.drawings.ContainsKey(currentRoundIndex))
+            {
+                currentChain.drawings.Add(currentRoundIndex, new DrawingData());
+            }
+            newDrawing = currentChain.drawings[currentRoundIndex];
+            newDrawing.caseID = currentChain.identifier;
+            newDrawing.round = currentRoundIndex;
             newDrawing.author = SettingsManager.Instance.birdName;
             newDrawing.timeTaken = timeUsed;
             newDrawing.visuals = addingCaseFolder.GetVisuals();
-
-            addingCaseFolder.Hide();
 
             return true;
         }
@@ -454,12 +583,13 @@ namespace ChickenScratch
         {
             if (!promptingCaseFolder.HasStarted() && !force)
             {
+                Debug.LogError("Cannot release prompting folder.");
                 return false;
             }
 
             PlayerTextInputData prompt;
             int caseID = selectedCabinet.currentChainData.identifier;
-            int currentRoundIndex = currentRoundMap.ContainsKey(caseID) ? currentRoundMap[caseID] : -1;
+            int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
             {
                 Debug.LogError("ERROR[ReleaseDeskPromptFolder]: Could not isolate currentRoundIndex for case["+caseID.ToString()+"]");
@@ -474,21 +604,24 @@ namespace ChickenScratch
                 prompt = selectedCabinet.currentChainData.prompts[currentRoundIndex];
             }
 
-            float timeUsed = 0f;
-            prompt.timeTaken = timeUsed;
+            prompt.timeTaken = timeInCurrentCase;
             prompt.text = GameDelim.stripGameDelims(promptingCaseFolder.GetPromptText());
             
-            promptingCaseFolder.Hide();
-
             return true;
         }
 
         public void Submit(bool force)
         {
+            if(force && playerIsReady)
+            {
+                //The player does not have a cabinet ready, do not try to submit something
+                GameManager.Instance.gameDataHandler.CmdTransitionCondition("force_submit:" + SettingsManager.Instance.birdName);
+                return;
+            }
             int caseID;
             float currentScoreModifier = 1f;
             if (playerCabinetIndex == -1 ||
-                        !cabinetDrawerMap.ContainsKey(playerCabinetIndex))
+                !cabinetDrawerMap.ContainsKey(playerCabinetIndex))
             {
                 playerCabinetIndex = -1;
                 foreach (CabinetDrawer cabinet in cabinetDrawerMap.Values)
@@ -496,7 +629,7 @@ namespace ChickenScratch
                     if (cabinet.currentChainData.active)
                     {
                         caseID = cabinet.currentChainData.identifier;
-                        int currentRoundIndex = currentRoundMap.ContainsKey(caseID) ? currentRoundMap[caseID] : -1;
+                        int currentRoundIndex = currentRound;
                         if(cabinet.currentChainData.playerOrder.ContainsKey(currentRoundIndex) && cabinet.currentChainData.playerOrder[currentRoundIndex] == SettingsManager.Instance.birdName)
                         {
                             playerCabinetIndex = cabinet.id;
@@ -512,53 +645,55 @@ namespace ChickenScratch
             switch (currentState)
             {
                 case CaseState.drawing:
+                    if(force)
+                    {
+                        ReleaseDeskDrawingFolder(cabinetDrawerMap[playerCabinetIndex].currentChainData, true);
+                    }
                     AudioManager.Instance.PlaySound("Stamp");
                     SubmitDrawing();
-                    drawingCaseFolder.DeregisterFromTimer(ForceSubmit);
                     drawingCaseFolder.Hide();
                     currentScoreModifier = drawingCaseFolder.GetScoreModifier();
                     break;
                 case CaseState.prompting:
                     AudioManager.Instance.PlaySound("Stamp");
                     SubmitPrompt(cabinetDrawerMap[playerCabinetIndex], force);
-                    promptingCaseFolder.DeregisterFromTimer(ForceSubmit);
                     promptingCaseFolder.Hide();
                     currentScoreModifier = promptingCaseFolder.GetScoreModifier();
                     break;
                 case CaseState.guessing:
-                    guessingCaseFolder.DeregisterFromTimer(ForceSubmit);
+                    if(force)
+                    {
+                        guessingCaseFolder.ForceGuess(cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier);
+                    }
                     guessingCaseFolder.Hide();
                     currentScoreModifier = guessingCaseFolder.GetScoreModifier();
                     break;
                 case CaseState.copy_drawing:
+                    if(force)
+                    {
+                        ReleaseDeskCopyingFolder(cabinetDrawerMap[playerCabinetIndex].currentChainData, true);
+                    }
                     AudioManager.Instance.PlaySound("Stamp");
                     SubmitDrawing();
-                    copyingCaseFolder.DeregisterFromTimer(ForceSubmit);
                     copyingCaseFolder.Hide();
                     currentScoreModifier = copyingCaseFolder.GetScoreModifier();
                     break;
                 case CaseState.add_drawing:
+                    if(force)
+                    {
+                        ReleaseDeskAddingFolder(cabinetDrawerMap[playerCabinetIndex].currentChainData, true);
+                    }
                     AudioManager.Instance.PlaySound("Stamp");
                     SubmitDrawing();
-                    addingCaseFolder.DeregisterFromTimer(ForceSubmit);
                     addingCaseFolder.Hide();
                     currentScoreModifier = addingCaseFolder.GetScoreModifier();
                     break;
             }
 
-            
-
             caseID = cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier;
             if (force)
             {
-                if (SettingsManager.Instance.isHost)
-                {
-                    GameManager.Instance.gameFlowManager.resolveTransitionCondition("force_submit:" + SettingsManager.Instance.birdName);
-                }
-                else
-                {
-                    GameManager.Instance.gameDataHandler.CmdTransitionCondition("force_submit:" + SettingsManager.Instance.birdName);
-                }
+                GameManager.Instance.gameDataHandler.CmdTransitionCondition("force_submit:" + SettingsManager.Instance.birdName);
             }
             else
             {
@@ -592,36 +727,45 @@ namespace ChickenScratch
                 CaseState caseState = CaseState.invalid;
 
                 TaskData queuedTaskData = firstQueuedChain.Item1.taskQueue[firstQueuedChain.Item3-1];
-                NetworkConnectionToClient birdConnection = SettingsManager.Instance.birdConnectionMap[birdToSendTo];
+                NetworkConnectionToClient birdConnection = SettingsManager.Instance.GetConnection(birdToSendTo);
                 switch (queuedTaskData.taskType)
                 {
-                    case TaskData.TaskType.prompt_drawing:
+                    case TaskType.prompt_drawing:
                         //Send them the prompt?
                         caseState = CaseState.drawing;
                         break;
-                    case TaskData.TaskType.prompting:
+                    case TaskType.prompting:
                         //Send them the drawing
                         caseState = CaseState.prompting;
                         break;
-                    case TaskData.TaskType.copy_drawing:
+                    case TaskType.copy_drawing:
                         //Send them the drawing
                         caseState = CaseState.copy_drawing;
                         break;
-                    case TaskData.TaskType.add_drawing:
+                    case TaskType.add_drawing:
                         caseState = CaseState.add_drawing;
                         //Send them the original prompt
                         GameManager.Instance.gameDataHandler.TargetInitialCabinetPromptContents(birdConnection, currentCaseIndex, currentCase.correctPrompt, false);
                         break;
-                    case TaskData.TaskType.base_drawing:
+                    case TaskType.base_drawing:
+                    case TaskType.compile_drawing:
                         //Send them the prompt
                         caseState = CaseState.drawing;
                         break;
-                    case TaskData.TaskType.base_guessing:
+                    case TaskType.base_guessing:
                         //Send them the possible prompts and drawing
                         caseState = CaseState.guessing;
                         break;
                 }
-
+                BirdName lastBird;
+                if (currentCase.playerOrder.ContainsKey(currentRound-1))
+                {
+                    lastBird = currentCase.playerOrder[currentRound - 1];
+                }
+                else
+                {
+                    lastBird = birdToSendTo;
+                }
                 FolderUpdateData folderUpdateData = new FolderUpdateData()
                 {
                     cabinetIndex = cabinetIndex,
@@ -630,7 +774,9 @@ namespace ChickenScratch
                     caseID = currentCaseIndex,
                     player = birdToSendTo,
                     taskTime = queuedTaskData.duration,
-                    currentScoreModifier = currentCase.currentScoreModifier
+                    currentScoreModifier = currentCase.currentScoreModifier,
+                    taskModifiers = currentCase.taskQueue[currentRound-1].modifiers,
+                    lastPlayer = lastBird
                 };
                 GameManager.Instance.gameDataHandler.RpcUpdateFolderAsReady(folderUpdateData);
             }
@@ -641,29 +787,39 @@ namespace ChickenScratch
             }
         }
 
-        public void StartChoiceCaseDrawing(int caseID, string prompt, float taskTime, float currentModifierValue, float modifierDecrement)
+        public void StartChoiceCaseDrawing(int cabinetIndex, int caseID, string prompt, float taskTime, float currentModifierValue, float modifierDecrement, TaskModifier drawingBoxModifier)
         {
-            drawingCaseFolder.RegisterToTimer(ForceSubmit);
             currentState = CaseState.drawing;
-            ChainData newChain = new ChainData();
-            cabinetDrawerMap[playerCabinetIndex].currentChainData = newChain;
 
+            ChainData newChain;
+            if (!caseMap.ContainsKey(caseID))
+            {
+                newChain = new ChainData();
+                caseMap.Add(caseID, newChain);
+            }
+            else
+            {
+                newChain = caseMap[caseID];
+            }
             newChain.identifier = caseID;
+            cabinetDrawerMap[cabinetIndex].currentChainData = newChain;
             Color folderColour = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].folderColour;
-            drawingCaseFolder.Initialize(prompt);
+            SetCurrentDrawingRound(1);
+            drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
             drawingCaseFolder.Show(folderColour, taskTime, currentModifierValue, modifierDecrement);
         }
 
-        private void ForceSubmit()
+        private void ForceCaseExpirySubmit()
         {
-            Submit(true);
+            timeHasExpired = true;
+            ReleaseDeskFolder();
         }
 
         private void SubmitDrawing()
         {
             ChainData selectedCase = cabinetDrawerMap[playerCabinetIndex].currentChainData;
             DrawingData newDrawing;
-            int currentRoundIndex = currentRoundMap.ContainsKey(selectedCase.identifier) ? currentRoundMap[selectedCase.identifier] : -1;
+            int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
             {
                 Debug.LogError("ERROR[SubmitDrawing]: Could not isolate currentRoundIndex for case["+selectedCase.identifier.ToString()+"]");
@@ -678,7 +834,7 @@ namespace ChickenScratch
             {
                 newDrawing = selectedCase.drawings[currentRoundIndex];
             }
-
+            newDrawing.timeTaken = timeInCurrentCase;
             GameManager.Instance.gameDataHandler.CmdSendDrawing(newDrawing);
             GameManager.Instance.gameDataHandler.CmdTransitionCondition("drawing_submitted:" + SettingsManager.Instance.birdName.ToString());
 
@@ -703,9 +859,9 @@ namespace ChickenScratch
             }
         }
 
-        public void ShowCaseChoices(CaseChoiceData choice1, CaseChoiceData choice2)
+        public void ShowCaseChoices(List<CaseChoiceNetData> choices)
         {
-            caseChoicePanel.SetChoices(choice1, choice2);
+            caseChoicePanel.SetChoices(choices[0], choices[1], choices[2]);
         }
 
         private void SendEmptyDrawingToServer(BirdName author, int caseID, int round)
@@ -715,34 +871,28 @@ namespace ChickenScratch
 
         private void SubmitPrompt(CabinetDrawer selectedCabinet, bool force)
         {
+            
             int caseID = selectedCabinet.currentChainData.identifier;
-            int currentRoundIndex = currentRoundMap.ContainsKey(caseID) ? currentRoundMap[caseID] : -1;
-            if(currentRoundIndex == -1)
+            int currentRoundIndex = currentRound;
+            Debug.LogError("Submitting prompt for case["+caseID.ToString()+"].");
+            if (currentRoundIndex == -1)
             {
                 Debug.LogError("ERROR[SubmitPrompt]: Could not isolate currentRoundIndex for case["+caseID.ToString()+"]");
             }
             PlayerTextInputData prompt;
             if (force)
             {
-                if (SettingsManager.Instance.isHost)
-                {
-                    GameManager.Instance.gameFlowManager.dequeueFrontCase(SettingsManager.Instance.birdName);
-                }
-                else
-                {
-                    GameManager.Instance.gameDataHandler.CmdDequeueFrontCase(SettingsManager.Instance.birdName);
-                }
                 ReleaseDeskPromptFolder(selectedCabinet, force);
                 prompt = selectedCabinet.currentChainData.prompts.ContainsKey(currentRoundIndex) ? selectedCabinet.currentChainData.prompts[currentRoundIndex] : new PlayerTextInputData();
-
             }
             else
             {
                 prompt = selectedCabinet.currentChainData.prompts.ContainsKey(currentRoundIndex) ? selectedCabinet.currentChainData.prompts[currentRoundIndex] : new PlayerTextInputData();
+                canGetCabinet = true;
             }
 
             GameManager.Instance.gameDataHandler.CmdPrompt(selectedCabinet.currentChainData.identifier, currentRoundIndex, SettingsManager.Instance.birdName, prompt.text, prompt.timeTaken);
-            canGetCabinet = true;
+            
 
         }
 
@@ -752,7 +902,7 @@ namespace ChickenScratch
             foreach (KeyValuePair<int, CabinetDrawer> drawer in cabinetDrawerMap)
             {
                 int caseID = drawer.Value.currentChainData.identifier;
-                int currentRoundIndex = currentRoundMap.ContainsKey(caseID) ? currentRoundMap[caseID] : -1;
+                int currentRoundIndex = currentRound;
 
                 if (drawer.Value.currentChainData.playerOrder.ContainsKey(currentRoundIndex) &&
                     drawer.Value.currentChainData.playerOrder[currentRoundIndex] == player)
@@ -766,8 +916,13 @@ namespace ChickenScratch
 
         public void UpdateNumberOfCases(int numberOfCases)
         {
-            SettingsManager.Instance.gameMode.numberOfCases = numberOfCases;
+            SettingsManager.Instance.gameMode.casesRemaining = numberOfCases;
             casesRemainingText.text = numberOfCases.ToString() + " cases\n remaining";
+            if(numberOfCases <= 0)
+            {
+                //Turn off the casepile
+                newCaseCabinet.Deactivate();
+            }
         }
 
         public void ForcePlayerToSubmit(BirdName player)
@@ -791,7 +946,7 @@ namespace ChickenScratch
                             if (drawer.currentChainData.active)
                             {
                                 int caseID = drawer.currentChainData.identifier;
-                                int currentRoundIndex = currentRoundMap.ContainsKey(caseID) ? currentRoundMap[caseID] : -1;
+                                int currentRoundIndex = currentRound;
                                 if(drawer.currentChainData.playerOrder[currentRoundIndex] == player)
                                 {
                                     cabinetID = drawer.id;
@@ -808,7 +963,7 @@ namespace ChickenScratch
                 {
                     Debug.LogError("Could not match cabinet ID to player[" + player.ToString() + "] to request a forced submission.");
                 }
-                GameManager.Instance.gameDataHandler.TargetForceSubmit(SettingsManager.Instance.birdConnectionMap[player]);
+                GameManager.Instance.gameDataHandler.TargetForceSubmit(SettingsManager.Instance.GetConnection(player));
             }
         }
 
@@ -824,47 +979,42 @@ namespace ChickenScratch
 
         public void SendEmptyDrawingToClient(int caseID, int round, BirdName nextPlayer, BirdName author)
         {
-            GameManager.Instance.gameDataHandler.TargetEmptyDrawing(SettingsManager.Instance.birdConnectionMap[nextPlayer], caseID, round, author);
+            GameManager.Instance.gameDataHandler.TargetEmptyDrawing(SettingsManager.Instance.GetConnection(nextPlayer), caseID, round, author);
         }
 
-        public void SetInitialPrompt(int caseID, string prompt, bool requiresConfirmation)
+        public void SetInitialPrompt(int caseID, string prompt)
         {
             CabinetDrawer selectedCabinet = cabinetDrawerMap[playerCabinetIndex];
             ChainData selectedCabinetData = new ChainData();
 
             if (!caseMap.ContainsKey(caseID))
             {
-                selectedCabinet.currentChainData = selectedCabinetData;
                 caseMap.Add(caseID, selectedCabinet.currentChainData);
             }
             else
             {
                 selectedCabinetData = caseMap[caseID];
-                selectedCabinet.currentChainData = selectedCabinetData;
             }
-            Debug.LogError("Setting initial prompt["+prompt+"] for case["+caseID.ToString()+"]");
             selectedCabinetData.identifier = caseID;
-
-            if (!SettingsManager.Instance.isHost)
-            {
-                selectedCabinetData.correctPrompt = prompt;
-                if (requiresConfirmation)
-                {
-                    GameManager.Instance.gameDataHandler.CmdTransitionCondition("initial_cabinet_prompt_receipt:" + SettingsManager.Instance.birdName);
-                }
-            }
-            drawingCaseFolder.Initialize(prompt);
+            selectedCabinetData.correctPrompt = prompt;
         }
 
-        public void UpdateCaseRound(int caseID, int round)
+        public void UpdateQueuedFolder(int caseID, int roundNumber, CaseState currentState)
         {
-            if(!currentRoundMap.ContainsKey(caseID))
+            QueuedFolderData queuedFolderData = new QueuedFolderData();
+            queuedFolderData.round = roundNumber;
+            queuedFolderData.queuedState = currentState;
+            if(!queuedFolderMap.ContainsKey(caseID))
             {
-                currentRoundMap.Add(caseID, round);
+                queuedFolderMap.Add(caseID, queuedFolderData);
             }
             else
             {
-                currentRoundMap[caseID] = round;
+                queuedFolderMap[caseID] = queuedFolderData;
+            }
+            if(!queuedCaseFolders.Contains(caseID))
+            {
+                queuedCaseFolders.Add(caseID);
             }
         }
 
@@ -899,6 +1049,11 @@ namespace ChickenScratch
                 {
                     StatTracker.Instance.AddEmptySubmitter(author);
                 }
+                if(selectedCabinetData.playerOrder.Count <= (tab+1))
+                {
+                    Debug.LogError("Could not access player order["+selectedCabinetData.playerOrder.Count.ToString()+"] for round["+(tab+1).ToString()+"] on case["+caseID.ToString()+"]");
+                    
+                }
                 queuedPlayer = selectedCabinetData.playerOrder[tab + 1];
                 if (GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(queuedPlayer))
                 {
@@ -908,7 +1063,7 @@ namespace ChickenScratch
                 else if (queuedPlayer != SettingsManager.Instance.birdName)
                 {
                     GameManager.Instance.gameFlowManager.addTransitionCondition("cabinet_prompt_receipt:" + queuedPlayer);
-                    GameManager.Instance.gameDataHandler.TargetCabinetPromptContents(SettingsManager.Instance.birdConnectionMap[queuedPlayer], caseID, tab, newPromptData.author, newPromptData.text);
+                    GameManager.Instance.gameDataHandler.TargetCabinetPromptContents(SettingsManager.Instance.GetConnection(queuedPlayer), caseID, tab, newPromptData.author, newPromptData.text);
                 }
             }
             else
@@ -943,10 +1098,23 @@ namespace ChickenScratch
         private void HandlePlayerSubmitTask()
         {
             playerIsReady = true;
+
         }
         private void HandlePlayerStartTask()
         {
+            timeInCurrentCase = 0f;
             playerIsReady = false;
+        }
+
+ 
+        public void SetCurrentDrawingRound(QueuedFolderData folderData)
+        {
+            _currentRound = folderData.round;
+        }
+
+        public void SetCurrentDrawingRound(int newRound)
+        {
+            _currentRound = newRound;
         }
     }
 }

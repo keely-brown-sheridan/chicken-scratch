@@ -74,9 +74,9 @@ namespace ChickenScratch
             base.StartRound();
 
             int numberOfPlayers = GameManager.Instance.playerFlowManager.playerNameMap.Count;
-            slideSpeed = numPlayersSpedUp == numberOfPlayers ? 4.0f : 4.0f / (4.0f - (numberOfPlayers - numPlayersSpedUp) / numberOfPlayers);
+            //slideSpeed = numPlayersSpedUp == numberOfPlayers ? 4.0f : 4.0f / (4.0f - (numberOfPlayers - numPlayersSpedUp) / numberOfPlayers);
 
-            GameManager.Instance.playerFlowManager.screenshotter.clearOldTempData();
+            //GameManager.Instance.playerFlowManager.screenshotter.clearOldTempData();
 
             if (SettingsManager.Instance.GetSetting("stickies"))
             {
@@ -124,7 +124,7 @@ namespace ChickenScratch
                     
                     //Get the next active case which has content which can be shown
                     currentSlideCaseIndex++;
-                    Debug.LogError("Attempting to update to next slide[" + currentSlideCaseIndex.ToString() + "] while there are ["+caseDataMap.Count.ToString()+"] cases in total.");
+
                     //If there are no more cases left then it's time to move on, so send the ratings
                     if (!caseDataMap.ContainsKey(currentSlideCaseIndex))
                     {
@@ -142,7 +142,6 @@ namespace ChickenScratch
                     }
                     else
                     {
-                        Debug.LogError("Creating the slides.");
                         //Create the slides for the next case and start showing them
                         GameManager.Instance.gameDataHandler.RpcCreateSlidesFromCaseWrapper(caseDataMap[currentSlideCaseIndex]);
                     }
@@ -174,20 +173,22 @@ namespace ChickenScratch
 
         public void CreateSlidesFromCase(EndgameCaseData caseData)
         {
+            string correctPrefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]).value;
+            string correctNoun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]).value;
             goldStarManager.restock();
             ClearPreviousSlides();
             //Create the intro slide
             SlideTypeData currentSlideType = slideTypeMap[SlideTypeData.SlideType.intro];
             GameObject introSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
             IntroSlideContents introSlide = introSlideObject.GetComponent<IntroSlideContents>();
-            introSlide.Initialize(caseData.correctPrompt, currentSlideType.showDuration);
+            introSlide.Initialize(correctPrefix, correctNoun, caseData.identifier, currentSlideType.showDuration);
             queuedSlides.Add(introSlide);
 
             //Create summary slide
             currentSlideType = slideTypeMap[SlideTypeData.SlideType.summary];
             GameObject summarySlideObject = Instantiate(currentSlideType.prefab, slidesParent);
             SummarySlideContents summarySlide = summarySlideObject.GetComponent<SummarySlideContents>();
-            summarySlide.Initialize(caseData.correctPrompt, currentSlideType.showDuration);
+            summarySlide.Initialize(correctPrefix, correctNoun, caseData.identifier, currentSlideType.showDuration, caseData.GetTotalPoints());
 
             //Create task slides
             foreach (KeyValuePair<int,EndgameTaskData> taskData in caseData.taskDataMap)
@@ -196,30 +197,31 @@ namespace ChickenScratch
                 {
                     case TaskData.TaskType.base_drawing:
                     case TaskData.TaskType.add_drawing:
+                    case TaskData.TaskType.compile_drawing:
                     case TaskData.TaskType.copy_drawing:
                     case TaskData.TaskType.prompt_drawing:
                         currentSlideType = slideTypeMap[SlideTypeData.SlideType.drawing];
                         GameObject drawingSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
                         DrawingSlideContents drawingSlide = drawingSlideObject.GetComponent<DrawingSlideContents>();
-                        drawingSlide.Initialize(taskData.Value.drawingData, caseData.correctPrompt, currentSlideType.showDuration);
+                        drawingSlide.Initialize(taskData.Value.drawingData, correctPrefix, correctNoun, taskData.Key, caseData.identifier, currentSlideType.showDuration, taskData.Value.timeModifierDecrement);
                         queuedSlides.Add(drawingSlide);
-                        summarySlide.AddDrawing(taskData.Value.drawingData, summarySlide.transform);
+                        summarySlide.AddDrawing(taskData.Value.drawingData, taskData.Key, caseData.identifier, summarySlide.transform, taskData.Value.timeModifierDecrement);
                         break;
                     case TaskData.TaskType.prompting:
                         currentSlideType = slideTypeMap[SlideTypeData.SlideType.prompt];
                         GameObject promptingSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
                         PromptSlideContents promptingSlide = promptingSlideObject.GetComponent<PromptSlideContents>();
-                        promptingSlide.Initialize(taskData.Value.promptData, caseData.correctPrompt, currentSlideType.showDuration);
+                        promptingSlide.Initialize(taskData.Value.promptData, correctPrefix, correctNoun, taskData.Key, caseData.identifier, currentSlideType.showDuration, taskData.Value.timeModifierDecrement);
                         queuedSlides.Add(promptingSlide);
-                        summarySlide.AddPrompt(taskData.Value.promptData);
+                        summarySlide.AddPrompt(taskData.Value.promptData, taskData.Key, caseData.identifier, taskData.Value.timeModifierDecrement);
                         break;
                     case TaskData.TaskType.base_guessing:
                         currentSlideType = slideTypeMap[SlideTypeData.SlideType.guess];
                         GameObject guessingSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
                         GuessSlideContents guessingSlide = guessingSlideObject.GetComponent<GuessSlideContents>();
-                        guessingSlide.Initialize(taskData.Value.assignedPlayer, caseData.guessesMap, caseData.correctWordsMap, currentSlideType.showDuration);
+                        guessingSlide.Initialize(caseData, taskData.Value, taskData.Key, currentSlideType.showDuration);
                         queuedSlides.Add(guessingSlide);
-                        summarySlide.AddGuess(taskData.Value.assignedPlayer, caseData.guessesMap, caseData.correctWordsMap);
+                        summarySlide.AddGuess(caseData.guessData, caseData.correctWordIdentifierMap, taskData.Key, caseData.identifier, taskData.Value.timeModifierDecrement);
                         break;
                 }
             }
@@ -236,7 +238,11 @@ namespace ChickenScratch
         {
             for(int i = queuedSlides.Count -1; i >= 0; i--)
             {
-                Destroy(queuedSlides[i].gameObject);
+                if (queuedSlides[i] != null)
+                {
+                    Destroy(queuedSlides[i].gameObject);
+                }
+                
             }
             queuedSlides.Clear();
         }
@@ -249,7 +255,6 @@ namespace ChickenScratch
             currentSlideContents = queuedSlides[currentSlideContentIndex];
             currentSlideContents.Show();
             currentSlideContents.gameObject.SetActive(true);
-            currentSlideContents.active = true;
         }
 
         public void initializeGalleryBird(int index, ColourManager.BirdName inBirdName)
@@ -268,7 +273,7 @@ namespace ChickenScratch
             }
         }
 
-        public bool canGiveLikeToRound(int caseID, int round)
+        public bool hasAlreadyGivenLikeToRound(int caseID, int round)
         {
             bool hasAlreadyGivenLikeToRound = caseDataMap[caseID].taskDataMap[round].ratingData.target != BirdName.none;
             return hasAlreadyGivenLikeToRound;
@@ -370,9 +375,9 @@ namespace ChickenScratch
         {
             List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
 
-            foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name) * GameManager.Instance.playerFlowManager.playerNameMap.Count);
+                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
                 goals.Add(new WorkingGoalsManager.Goal(result.goal, requiredPoints, result.resultName));
             }
             

@@ -9,7 +9,7 @@ namespace ChickenScratch
     {
         public ColourManager.BirdName birdName;
         public Image birdImage;
-        public string playerID;
+        public string playerName;
 
         [SerializeField]
         private GameObject selectedCardPrefab;
@@ -25,20 +25,18 @@ namespace ChickenScratch
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            Debug.Log("OnPointerDown playerName[" + playerID.ToString() + "] isSelected[" + isSelected.ToString() + "]");
             // this object was clicked - do something
-            if (playerID == "" && !isSelected)
+            if (playerName == "" && !isSelected)
             {
-                Debug.LogError("SettingsManager - PlayerName[" + SettingsManager.Instance.playerName + "]");
                 LobbyNetwork.Instance.lobbyDataHandler.CmdSelectPlayerBird(SettingsManager.Instance.playerName, birdName);
             }
         }
 
-        public void Select(string inPlayerID)
+        public void Select(string inPlayerName)
         {
-            if (playerID != "") return;
+            if (playerName != "") return;
             isSelected = true;
-            playerID = inPlayerID;
+            playerName = inPlayerName;
             if (lobbyBirdArm.currentState == LobbyBirdArm.State.rest ||
                 lobbyBirdArm.currentState == LobbyBirdArm.State.slide_left ||
                 lobbyBirdArm.currentState == LobbyBirdArm.State.slide_right)
@@ -63,7 +61,7 @@ namespace ChickenScratch
             {
                 Destroy(selectedPlayerCard.gameObject);
             }
-            playerID = "";
+            playerName = "";
         }
 
         public void OnPointerEnter(PointerEventData eventData)

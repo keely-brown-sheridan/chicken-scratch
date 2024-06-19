@@ -106,5 +106,10 @@ namespace ChickenScratch
             WordGroupData currentWordGroup = new WordGroupData(nameInputField.text, currentWordType, words, true, false);
             return currentWordGroup;
         }
+
+        public void ForceInputToUppercase()
+        {
+            nameInputField.text = nameInputField.text.ToUpper();
+        }
     }
 }

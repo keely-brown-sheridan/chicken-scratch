@@ -24,7 +24,7 @@ namespace ChickenScratch
         private int _caseID;
         private int _round;
 
-        public void Reset(BirdName inBirdName, int inRound, int inCaseID)
+        public void Initialize(BirdName inBirdName, int inRound, int inCaseID)
         {
             hasBeenStarred = false;
             Unhover();
@@ -51,9 +51,9 @@ namespace ChickenScratch
         public bool GiveStar()
         {
             SlidesRound slidesRound = GameManager.Instance.playerFlowManager.slidesRound;
-            if (birdName == BirdName.none || SettingsManager.Instance.birdName == birdName || !slidesRound.canGiveLikeToRound(caseID, round))
+            if (birdName == BirdName.none || SettingsManager.Instance.birdName == birdName || slidesRound.hasAlreadyGivenLikeToRound(caseID, round))
             {
-                //Debug.LogError("Cannot give star. BirdName["+birdName.ToString()+"], ThisPlayer["+SettingsManager.Instance.birdName.ToString()+"]");
+                Debug.LogError("Cannot give star. BirdName["+birdName.ToString()+"], ThisPlayer["+SettingsManager.Instance.birdName.ToString()+"]");
                 return false;
             }
 

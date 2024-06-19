@@ -159,14 +159,11 @@ namespace ChickenScratch
             if (timeSinceLastMove > moveDelay)
             {
                 timeSinceLastMove = 0.0f;
-                if (SettingsManager.Instance.isHost)
-                {
-                    GameManager.Instance.gameFlowManager.SetBirdArmPosition(birdName, transform.position);
-                }
-                else
+                if(GameManager.Instance.playerFlowManager.serverIsReady && NetworkClient.ready)
                 {
                     GameManager.Instance.gameDataHandler.CmdDrawingArmPosition(birdName, transform.position);
                 }
+                
             }
         }
     }

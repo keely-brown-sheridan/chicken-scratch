@@ -6,6 +6,8 @@ namespace ChickenScratch
     public class DrawingSummarySlideSection : SummarySlideSection
     {
         [SerializeField]
+        private GoldStarDetectionArea goldStarDetectionArea;
+        [SerializeField]
         private Transform drawingReferencePoint;
 
         [SerializeField]
@@ -13,6 +15,9 @@ namespace ChickenScratch
 
         [SerializeField]
         private float drawingSize;
+
+        [SerializeField]
+        private SlideTimeModifierDecrementVisual slideTimeModifierDecrementVisual;
 
         public Transform summarySlideTransform;
 
@@ -23,7 +28,7 @@ namespace ChickenScratch
             Show();
         }
 
-        public void Initialize(DrawingData inDrawingData, Transform inSummarySlideTransform)
+        public void Initialize(DrawingData inDrawingData, Transform inSummarySlideTransform, int round, int caseID, float timeModifierDecrement)
         {
             drawingData = inDrawingData;
             summarySlideTransform = inSummarySlideTransform;
@@ -31,7 +36,10 @@ namespace ChickenScratch
             Bird authorBird = ColourManager.Instance.birdMap[drawingData.author];
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
-            //Add the name?
+            authorNameText.text = SettingsManager.Instance.GetPlayerName(inDrawingData.author);
+
+            goldStarDetectionArea.Initialize(inDrawingData.author, round, caseID);
+            slideTimeModifierDecrementVisual.Initialize(timeModifierDecrement);
         }
 
         public override void Show()

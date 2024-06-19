@@ -16,6 +16,8 @@ namespace ChickenScratch
         private Button editWordGroupButton;
         [SerializeField]
         private Button deleteWordGroupButton;
+        [SerializeField]
+        private Image wordGroupBackgroundImage;
 
         private WordGroupData wordGroup;
 
@@ -25,7 +27,22 @@ namespace ChickenScratch
         {
             wordGroup = inWordGroup;
 
-            wordGroupText.text = wordGroup.name + "[" + wordGroup.wordType.ToString() + "] - " + wordGroup.words.Count.ToString() + " Words";
+            Color wordGroupBackgroundColour = Color.white;
+            Color wordGroupFontColour = Color.black;
+            switch(inWordGroup.wordType)
+            {
+                case WordGroupData.WordType.prefixes:
+                    wordGroupBackgroundColour = SettingsManager.Instance.prefixBGColour;
+                    wordGroupFontColour = SettingsManager.Instance.prefixFontColour;
+                    break;
+                case WordGroupData.WordType.nouns:
+                    wordGroupBackgroundColour = SettingsManager.Instance.nounBGColour;
+                    wordGroupFontColour = SettingsManager.Instance.nounFontColour;
+                    break;
+            }
+            wordGroupBackgroundImage.color = wordGroupBackgroundColour;
+            wordGroupText.text = wordGroup.name + " - " + wordGroup.words.Count.ToString() + " Words";
+            wordGroupText.color = wordGroupFontColour;
             wordGroupToggle.interactable = isHost;
 
             wordGroupsController = inWordGroupsController;
@@ -33,8 +50,8 @@ namespace ChickenScratch
 
         public void SetAsLocked()
         {
-            editWordGroupButton.interactable = false;
-            deleteWordGroupButton.interactable = false;
+            editWordGroupButton.gameObject.SetActive(false);
+            deleteWordGroupButton.gameObject.SetActive(false);
         }
 
         public void Toggle()

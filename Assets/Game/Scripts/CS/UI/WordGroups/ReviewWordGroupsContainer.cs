@@ -12,6 +12,19 @@ namespace ChickenScratch
         [SerializeField]
         private GameObject contentObject;
 
+        public void ClearWordGroups()
+        {
+            List<GameObject> wordGroupDisplayItems = new List<GameObject>();
+            foreach (Transform child in contentObject.transform)
+            {
+                wordGroupDisplayItems.Add(child.gameObject);
+            }
+            for (int i = wordGroupDisplayItems.Count - 1; i >= 0; i--)
+            {
+                Destroy(wordGroupDisplayItems[i]);
+            }
+        }
+
         public WordGroupItem CreateWordGroup(string wordGroupName, WordGroupData.WordType wordType, List<WordData> words, WordGroupsController wordGroupsController, bool isHost)
         {
             GameObject wordGroupObject = Instantiate(wordGroupItemPrefab, contentObject.transform);

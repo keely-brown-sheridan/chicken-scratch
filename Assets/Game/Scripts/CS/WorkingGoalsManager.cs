@@ -166,28 +166,28 @@ namespace ChickenScratch
             _goals.Add(newGoal);
             _pointsPerCase = new List<PlayerPoints>();
             EndgameCaseData test = new EndgameCaseData();
-            test.correctWordsMap.Add(1, new CaseWordData("hot", null, -1));
-            test.correctWordsMap.Add(2, new CaseWordData("potato", null, -1));
-            test.guessesMap.Add(1, "bot");
-            test.guessesMap.Add(2, "potato");
+            test.correctWordIdentifierMap.Add(1, "");
+            test.correctWordIdentifierMap.Add(2, "");
+            test.guessData.prefix = "bot";
+            test.guessData.noun = "potato";
             _pointsPerCase.Add(new PlayerPoints(BirdName.red, 8, test));
             test = new EndgameCaseData();
-            test.correctWordsMap.Add(1, new CaseWordData("hot", null, -1));
-            test.correctWordsMap.Add(2, new CaseWordData("potato", null, -1));
-            test.guessesMap.Add(1, "hot");
-            test.guessesMap.Add(2, "tomato");
+            test.correctWordIdentifierMap.Add(1, "");
+            test.correctWordIdentifierMap.Add(2, "");
+            test.guessData.prefix = "hot";
+            test.guessData.noun = "tomato";
             _pointsPerCase.Add(new PlayerPoints(BirdName.green, 4, test));
             test = new EndgameCaseData();
-            test.correctWordsMap.Add(1, new CaseWordData("hot", null, -1));
-            test.correctWordsMap.Add(2, new CaseWordData("potato", null, -1));
-            test.guessesMap.Add(1, "bot");
-            test.guessesMap.Add(2, "totato");
+            test.correctWordIdentifierMap.Add(1, "");
+            test.correctWordIdentifierMap.Add(2, "");
+            test.guessData.prefix = "bot";
+            test.guessData.noun = "totato";
             _pointsPerCase.Add(new PlayerPoints(BirdName.blue, 2, test));
             test = new EndgameCaseData();
-            test.correctWordsMap.Add(1, new CaseWordData("hot", null, -1));
-            test.correctWordsMap.Add(2, new CaseWordData("potato", null, -1));
-            test.guessesMap.Add(1, "hot");
-            test.guessesMap.Add(2, "potato");
+            test.correctWordIdentifierMap.Add(1, "");
+            test.correctWordIdentifierMap.Add(2, "");
+            test.guessData.prefix = "hot";
+            test.guessData.noun = "potato";
             _pointsPerCase.Add(new PlayerPoints(BirdName.orange, 25, test));
             _pointsPerCase.Add(new PlayerPoints(BirdName.orange, 25, test));
             _pointsPerCase.Add(new PlayerPoints(BirdName.orange, 25, test));
@@ -308,11 +308,13 @@ namespace ChickenScratch
                 bossAnimator.SetTrigger("Reset");
                 bossAnimator.SetBool("Mad", false);
                 bossAnimator.SetBool("Happy", false);
-                if (_pointsPerCase[_currentCaseIndex].caseData.correctWordsMap[1].value == _pointsPerCase[_currentCaseIndex].caseData.guessesMap[1])
+                CaseWordData correctPrefix = GameDataManager.Instance.GetWord(_pointsPerCase[_currentCaseIndex].caseData.correctWordIdentifierMap[1]);
+                if (correctPrefix.value == _pointsPerCase[_currentCaseIndex].caseData.guessData.prefix)
                 {
                     numberOfCorrectWords++;
                 }
-                if (_pointsPerCase[_currentCaseIndex].caseData.correctWordsMap[2].value == _pointsPerCase[_currentCaseIndex].caseData.guessesMap[2])
+                CaseWordData correctNoun = GameDataManager.Instance.GetWord(_pointsPerCase[_currentCaseIndex].caseData.correctWordIdentifierMap[2]);
+                if (correctNoun.value == _pointsPerCase[_currentCaseIndex].caseData.guessData.noun)
                 {
                     numberOfCorrectWords++;
                 }
@@ -397,18 +399,19 @@ namespace ChickenScratch
         private void setCurrentCaseWords(Bird currentBird)
         {
             EndgameCaseData currentCaseData = _pointsPerCase[_currentCaseIndex].caseData;
-            foreach (KeyValuePair<int, CaseWordData> correctWord in currentCaseData.correctWordsMap)
+            foreach (KeyValuePair<int, string> correctWordIdentifier in currentCaseData.correctWordIdentifierMap)
             {
-                if (!wordTextsMap.ContainsKey(correctWord.Key))
+                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
+                if (!wordTextsMap.ContainsKey(correctWordIdentifier.Key))
                 {
-                    Debug.LogError("Could not show word[" + correctWord.Value + "] from cabinet[" + correctWord.Key.ToString() + "] in the working goals manager because the index was missing from the wordTextsMap.");
+                    Debug.LogError("Could not show word[" + correctWordIdentifier.Value + "] from cabinet[" + correctWordIdentifier.Key.ToString() + "] in the working goals manager because the index was missing from the wordTextsMap.");
                     continue;
                 }
-                Text wordText = wordTextsMap[correctWord.Key];
-                string guess = currentCaseData.guessesMap.ContainsKey(correctWord.Key) ? currentCaseData.guessesMap[correctWord.Key] : "";
+                Text wordText = wordTextsMap[correctWordIdentifier.Key];
+                string guess = correctWordIdentifier.Key == 1 ? currentCaseData.guessData.prefix : currentCaseData.guessData.noun;
 
                 wordText.text = guess;
-                wordText.color = guess == correctWord.Value.value ? new Color(0.25f, 0.75f, 0.25f) : Color.red;
+                wordText.color = guess == correctWord.value ? new Color(0.25f, 0.75f, 0.25f) : Color.red;
                 ParticleSystem.MainModule settings = progressParticleEffect.main;
                 settings.startColor = currentBird.colour;
             }
@@ -617,9 +620,9 @@ namespace ChickenScratch
                 }
                 else
                 {
-                    SettingsManager.EndgameResult matchingResult = null;
+                    ResultData matchingResult = null;
                     //Get the matching result
-                    foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+                    foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
                     {
                         if (result.resultName == goal.name)
                         {
@@ -686,6 +689,21 @@ namespace ChickenScratch
                     lowestGoal = goal;
                 }
             }
+            if(lowestGoal == null)
+            {
+                //Then we need to choose the highest goal because we've broken the record :O
+                foreach (Goal goal in _goals)
+                {
+                    if (lowestGoal == null)
+                    {
+                        lowestGoal = goal;
+                    }
+                    else if (goal.requiredPoints > lowestGoal.requiredPoints)
+                    {
+                        lowestGoal = goal;
+                    }
+                }
+            }
 
             return lowestGoal;
         }
@@ -722,6 +740,7 @@ namespace ChickenScratch
         private void initializeGraphingLine()
         {
             _timeShowingPoint = 0.0f;
+            
             Bird currentBird = ColourManager.Instance.birdMap[_pointsPerCase[0].player];
             currentLineRenderer = Instantiate(linePrefab, resizableObjectsHolder.transform).GetComponent<LineRenderer>();
             currentLineRenderer.material = currentBird.material;
@@ -739,18 +758,19 @@ namespace ChickenScratch
             //guessContainer.transform.position = Camera.main.WorldToScreenPoint(guessPosition + guessOffsetMap[clampedPointsValue]);
             //guessContainer.transform.eulerAngles = new Vector3(0, 0, guessRotationMap[clampedPointsValue]);
             EndgameCaseData currentCaseData = _pointsPerCase[0].caseData;
-            foreach (KeyValuePair<int, CaseWordData> correctWord in currentCaseData.correctWordsMap)
+            foreach (KeyValuePair<int, string> correctWordIdentifier in currentCaseData.correctWordIdentifierMap)
             {
-                if (!wordTextsMap.ContainsKey(correctWord.Key))
+                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
+                if (!wordTextsMap.ContainsKey(correctWordIdentifier.Key))
                 {
-                    Debug.LogError("Could not show word[" + correctWord.Value + "] from cabinet[" + correctWord.Key.ToString() + "] in the working goals manager because the index was missing from the wordTextsMap.");
+                    Debug.LogError("Could not show word[" + correctWordIdentifier.Value + "] from cabinet[" + correctWordIdentifier.Key.ToString() + "] in the working goals manager because the index was missing from the wordTextsMap.");
                     continue;
                 }
-                Text wordText = wordTextsMap[correctWord.Key];
-                string guess = currentCaseData.guessesMap[correctWord.Key];
+                Text wordText = wordTextsMap[correctWordIdentifier.Key];
+                string guess = correctWordIdentifier.Key == 1 ? currentCaseData.guessData.prefix : currentCaseData.guessData.noun;
 
                 wordText.text = guess;
-                wordText.color = guess == correctWord.Value.value ? new Color(0.25f, 0.75f, 0.25f) : Color.red;
+                wordText.color = guess == correctWord.value ? new Color(0.25f, 0.75f, 0.25f) : Color.red;
             }
             _heightReached = startingPosition.y;
             int soundIndexToPlay = Mathf.Clamp(_pointsPerCase[0].points, 0, 3);
@@ -761,8 +781,8 @@ namespace ChickenScratch
         private void showFinalResult(Goal goal)
         {
             //Get the matching result
-            SettingsManager.EndgameResult matchingResult = null;
-            foreach (SettingsManager.EndgameResult result in SettingsManager.Instance.resultPossibilities)
+            ResultData matchingResult = null;
+            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
                 if (result.resultName == goal.name)
                 {

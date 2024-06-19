@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c5960dbc4aa1044a0794ad46fea8e9, type: 3}
+  m_Name: Ch_Easy Thirds
+  m_EditorClassIdentifier: 
+  identifier: Easy Thirds
+  caseFormat: 4
+  numberOfTasks: 4
+  pointsPerCorrectWord: 4
+  bonusPoints: 2
+  cost: 0
+  difficulty: 1
+  penalty: 0
+  startingScoreModifier: 1.5
+  taskFalloff: 1
+  colour: {r: 1, g: 0.3915094, b: 0.3915094, a: 1}
+  startingWordIdentifiers:
+  - prefix
+  - noun
+  selectionFrequency: 1
+  taskTimingData:
+  - taskType: 0
+    duration: 60
+  - taskType: 3
+    duration: 60
+  - taskType: 5
+    duration: 60
+  queuedTaskSprites: 00000000000000000000000002000000
+  description: Your canvas will only be a third of the space. Other players will
+    add to it.

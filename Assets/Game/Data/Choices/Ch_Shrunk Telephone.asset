@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c5960dbc4aa1044a0794ad46fea8e9, type: 3}
+  m_Name: Ch_Shrunk Telephone
+  m_EditorClassIdentifier: 
+  identifier: Shrunk Telephone
+  caseFormat: 3
+  numberOfTasks: 4
+  pointsPerCorrectWord: 5
+  bonusPoints: 6
+  cost: 0
+  difficulty: 2
+  penalty: 0
+  startingScoreModifier: 1.5
+  colour: {r: 0.6117647, g: 0.7254902, b: 0.69803923, a: 1}
+  startingWordIdentifiers:
+  - prefix
+  - noun
+  selectionFrequency: 1
+  taskTimingData:
+  - taskType: 0
+    duration: 120
+  - taskType: 4
+    duration: 120
+  - taskType: 1
+    duration: 60
+  - taskType: 5
+    duration: 60
+  queuedTaskSprites: 00000000010000000000000002000000
+  description: A standard telephone case. You will have less space to draw in.
