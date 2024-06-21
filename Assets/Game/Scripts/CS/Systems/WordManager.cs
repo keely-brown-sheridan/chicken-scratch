@@ -161,6 +161,7 @@ namespace ChickenScratch
             caseChoiceNetData.possibleWordsMap = possibleWords;
             caseChoiceNetData.correctWordIdentifiersMap = correctWords;
             caseChoiceNetData.caseChoiceIdentifier = choice.identifier;
+            caseChoiceNetData.maxScoreModifier = choice.maxScoreModifier;
             return caseChoiceNetData;
         }
 

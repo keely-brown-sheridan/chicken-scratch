@@ -36,11 +36,14 @@ namespace ChickenScratch
             CaseChoiceData caseChoiceData = GameDataManager.Instance.GetCaseChoice(inCaseChoiceData.caseChoiceIdentifier);
             titleText.text = caseChoiceData.identifier;
             descriptionText.text = caseChoiceData.description;
-            if(inCaseChoiceData.correctWordIdentifiersMap.Count == 2)
+            int totalReward = 0;
+            if (inCaseChoiceData.correctWordIdentifiersMap.Count == 2)
             {
                 CaseWordData prefixWord = GameDataManager.Instance.GetWord(inCaseChoiceData.correctWordIdentifiersMap[0]);
                 CaseWordData nounWord = GameDataManager.Instance.GetWord(inCaseChoiceData.correctWordIdentifiersMap[1]);
                 prefixText.text = SettingsManager.Instance.CreatePromptText(prefixWord.value, nounWord.value);
+                totalReward += prefixWord.difficulty;
+                totalReward += nounWord.difficulty;
             }
             else
             {
@@ -66,7 +69,8 @@ namespace ChickenScratch
                 GameObject spawnedTaskImageObject = Instantiate(taskPrefab, taskHolder);
                 spawnedTaskImageObject.GetComponent<Image>().sprite = SettingsManager.Instance.GetTaskSprite(queuedTaskSprite);
             }
-            int totalReward = caseChoiceData.pointsPerCorrectWord * 2 + caseChoiceData.bonusPoints;
+            totalReward += caseChoiceData.pointsPerCorrectWord * 2 + caseChoiceData.bonusPoints;
+
             rewardText.text = totalReward.ToString();
         }
     }

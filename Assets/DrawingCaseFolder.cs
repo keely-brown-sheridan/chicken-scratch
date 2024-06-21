@@ -25,9 +25,9 @@ namespace ChickenScratch
             RegisterToTimer(timeCompleteAction);
         }
 
-        public override void Show(Color inFolderColour, float taskTime, float currentModifier, float modifierDecrement)
+        public override void Show(Color inFolderColour, float taskTime, float currentModifier, float maxModifierValue, float modifierDecrement)
         {
-            base.Show(inFolderColour, taskTime, currentModifier, modifierDecrement);
+            base.Show(inFolderColour, taskTime, currentModifier, maxModifierValue, modifierDecrement);
 
             if (SettingsManager.Instance.GetSetting("stickies"))
             {

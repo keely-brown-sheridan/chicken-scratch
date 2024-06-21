@@ -57,6 +57,7 @@ namespace ChickenScratch
 
         private bool isPrefixCorrect, isNounCorrect;
         private float prefixScoreTarget, nounScoreTarget, modifierScoreTarget;
+        
 
         private void Start()
         {
@@ -65,6 +66,7 @@ namespace ChickenScratch
 
         private void Test()
         {
+            SettingsManager.Instance.AssignBirdToPlayer(ColourManager.BirdName.red, "test");
             GameDataManager.Instance.RefreshWords(new List<CaseWordData>());
             Dictionary<int,string> testCorrectIdentifiers = new Dictionary<int, string>() { { 1, "prefixes-NEUTRAL-ATTACHED" }, {2, "nouns-ANIMAL-AARDVARK" } };
             GuessData testGuess = new GuessData() { author = ColourManager.BirdName.red, prefix = "ATTACHED", noun = "AARDVARK", round = 1, timeTaken = 0f };
@@ -100,24 +102,27 @@ namespace ChickenScratch
             slideTimeModifierDecrementVisual.Initialize(taskData.timeModifierDecrement);
 
             CaseChoiceData originalCaseChoice = GameDataManager.Instance.GetCaseChoice(caseData.caseTypeName);
-            float bestModifier = originalCaseChoice.startingScoreModifier;
-            float bestPossibleScore = bestModifier * (originalCaseChoice.bonusPoints + originalCaseChoice.pointsPerCorrectWord * 2);
-            slideCaseScoreVisualization.Initialize(bestPossibleScore, caseData.scoreModifier);
+            
+            slideCaseScoreVisualization.Initialize(caseData.scoreModifier, caseData.maxScoreModifier);
 
+            int pointsFromThisCase = 0;
             if(isPrefixCorrect)
             {
-                prefixScoreTarget = originalCaseChoice.pointsPerCorrectWord;
+                pointsFromThisCase += originalCaseChoice.pointsPerCorrectWord;
+                prefixScoreTarget = originalCaseChoice.pointsPerCorrectWord + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
             }
             nounScoreTarget = prefixScoreTarget;
             if(isNounCorrect)
             {
+                pointsFromThisCase += originalCaseChoice.pointsPerCorrectWord;
                 nounScoreTarget += originalCaseChoice.pointsPerCorrectWord;
                 if(isPrefixCorrect)
                 {
                     nounScoreTarget += originalCaseChoice.bonusPoints;
+                    pointsFromThisCase += originalCaseChoice.bonusPoints;
                 }
             }
-            modifierScoreTarget = nounScoreTarget * caseData.scoreModifier;
+            modifierScoreTarget = pointsFromThisCase * caseData.scoreModifier + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
         }
 
         private void Update()

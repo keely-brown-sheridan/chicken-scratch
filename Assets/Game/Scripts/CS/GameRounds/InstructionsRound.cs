@@ -21,12 +21,18 @@ namespace ChickenScratch
         public Animator bossNoteWorkerAnimator, bossNoteBotcherAnimator;
 
         private Dictionary<int, TutorialSticky> cabinetStickyMap;
-        private float timeInRoundSoFar = 0.0f;
         public bool active = false;
+
+        [SerializeField]
+        private DayInstructions dayInstructions;
 
         public override void StartRound()
         {
             base.StartRound();
+            if(SettingsManager.Instance.isHost)
+            {
+                GameManager.Instance.gameFlowManager.timeRemainingInPhase = timeInRound;
+            }
             hasGottenFirstCabinet = false;
             hasSeenFirstCabinet = false;
 
@@ -46,6 +52,10 @@ namespace ChickenScratch
             }
 
             GameManager.Instance.playerFlowManager.drawingRound.deskRenderer.color = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].bgColour;
+
+            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            int currentGoal = SettingsManager.Instance.GetCurrentGoal();
+            dayInstructions.Show(currentDay, currentGoal);
         }
 
         private void initializeInstructionsRound()
@@ -86,7 +96,11 @@ namespace ChickenScratch
 
         private void PlaceStartingStickies(bool playerIsBotcher)
         {
-            removeDeskSticky.Queue(true);
+            if(!removeDeskSticky.hasBeenPlaced)
+            {
+                removeDeskSticky.Queue(true);
+            }
+            
         }
 
         private void Update()

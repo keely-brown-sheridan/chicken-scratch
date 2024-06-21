@@ -21,6 +21,7 @@ MonoBehaviour:
   difficulty: 2
   penalty: 0
   startingScoreModifier: 1.5
+  maxScoreModifier: 1.5
   taskFalloff: 0.75
   colour: {r: 1, g: 0.5529412, b: 0.5529412, a: 1}
   startingWordIdentifiers:

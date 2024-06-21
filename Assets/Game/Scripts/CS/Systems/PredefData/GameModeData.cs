@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace ChickenScratch
 {
-    [System.Serializable]
-    public class GameModeData
+    [CreateAssetMenu(fileName = "GameMode", menuName = "GameData/Create Game Mode")]
+    public class GameModeData : ScriptableObject
     {
-        public string name;
+        public string title;
         public enum CaseDeliveryMode
         {
             queue, free_for_all
@@ -17,6 +17,8 @@ namespace ChickenScratch
             random
         }
 
+        public List<DayData> days;
+
         public int minimumNumberOfPlayers = 2;
 
         public WordDistributionMode wordDistributionMode = WordDistributionMode.random;
@@ -24,16 +26,14 @@ namespace ChickenScratch
 
         public CaseTemplateData baseTemplateData;
         public List<string> caseChoiceIdentifiers = new List<string>();
-        public List<TaskTimingData> taskTimingData;
         public float scoreModifierDecrement;
-        public float casesPerPlayer;
+
         public int casesRemaining;
         public float contributionTaskRatio;
 
         public string description;
-        public int goalPointsPerCharacter;
-        public float baseTimeInDrawingRound = 120;
         public float totalGameTime;
+        public int maxDays;
 
     }
 }

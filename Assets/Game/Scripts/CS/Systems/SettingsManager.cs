@@ -52,6 +52,7 @@ namespace ChickenScratch
 
         public Color prefixBGColour, prefixFontColour;
         public Color nounBGColour, nounFontColour;
+        public Gradient scoreModifierGradient;
 
         private Dictionary<ColourManager.BirdName, string> playerNameMap = new Dictionary<ColourManager.BirdName, string>();
         private Dictionary<ColourManager.BirdName, NetworkConnectionToClient> birdConnectionMap = new Dictionary<ColourManager.BirdName, NetworkConnectionToClient>();
@@ -89,8 +90,8 @@ namespace ChickenScratch
             gameMode = allGameModes[0];
             if (MenuLobbyButtons.Instance.gameModeButtonText != null)
             {
-                MenuLobbyButtons.Instance.gameModeButtonText.text = gameMode.name.ToUpper();
-                MenuLobbyButtons.Instance.gameModeInformationHeaderText.text = "Game Mode: " + SettingsManager.Instance.gameMode.name;
+                MenuLobbyButtons.Instance.gameModeButtonText.text = gameMode.title.ToUpper();
+                MenuLobbyButtons.Instance.gameModeInformationHeaderText.text = "Game Mode: " + SettingsManager.Instance.gameMode.title;
                 MenuLobbyButtons.Instance.gameModeDescriptionText.text = SettingsManager.Instance.gameMode.description;
             }
             foreach (string settingName in intSettingNames)
@@ -231,7 +232,7 @@ namespace ChickenScratch
 
             gameMode = allGameModes[currentIndex];
 
-            return gameMode.name;
+            return gameMode.title;
         }
 
         public void SetGameMode(string inGameMode)
@@ -240,12 +241,12 @@ namespace ChickenScratch
 
             foreach (GameModeData currentGameMode in allGameModes)
             {
-                if (currentGameMode.name == inGameMode)
+                if (currentGameMode.title == inGameMode)
                 {
                     gameMode = currentGameMode;
                 }
             }
-            MenuLobbyButtons.Instance.gameModeInformationHeaderText.text = "Game Mode: " + gameMode.name;
+            MenuLobbyButtons.Instance.gameModeInformationHeaderText.text = "Game Mode: " + gameMode.title;
             MenuLobbyButtons.Instance.gameModeDescriptionText.text = gameMode.description;
         }
 
@@ -288,6 +289,15 @@ namespace ChickenScratch
             {
                 playerNameMap.Remove(bird);
             }
+        }
+
+        public void BroadcastBirdAssignment()
+        {
+            foreach(KeyValuePair<ColourManager.BirdName,string> birdAssignment in playerNameMap)
+            {
+                GameManager.Instance.gameDataHandler.RpcSetPlayerBird(birdAssignment.Value, birdAssignment.Key);
+            }
+            
         }
 
         public bool IsBirdSelected(ColourManager.BirdName bird)
@@ -447,6 +457,40 @@ namespace ChickenScratch
         {
             string hexcode = ColorUtility.ToHtmlStringRGB(nounFontColour);
             return "<color=#" + hexcode + ">" + nounText + "</color>";
+        }
+
+        public Color GetModifierColour(float ratio)
+        {
+            Color modifierColour = scoreModifierGradient.Evaluate(ratio);
+            return modifierColour;
+        }
+
+        public int GetCurrentGoal()
+        {
+            return gameMode.days[GameManager.Instance.playerFlowManager.currentDay].goalPerPlayer * GetPlayerNameCount();
+        }
+
+        public int GetCaseCountForDay()
+        {
+            return (int)(gameMode.days[GameManager.Instance.playerFlowManager.currentDay].casesPerPlayer * GetPlayerNameCount());
+        }
+
+        public ResultData GetDayResult()
+        {
+            DayData currentDayData = gameMode.days[GameManager.Instance.playerFlowManager.currentDay];
+            if(DidPlayersPassDay())
+            {
+                return currentDayData.winResult;
+            }
+            else
+            {
+                return currentDayData.loseResult;
+            }
+        }
+
+        public bool DidPlayersPassDay()
+        {
+            return GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal >= GetCurrentGoal();
         }
     }
 }

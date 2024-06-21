@@ -17,13 +17,11 @@ public class CaseModifierVisual : MonoBehaviour
     private TMPro.TMP_Text modifierText;
 
     [SerializeField]
-    private Color fullColour, halfColour;
-
-    [SerializeField]
     private string thresholdCrossSFXName;
 
     private float timeForTask;
     private float timeRemaining;
+    private float maxModifierValue;
     private float startingModifierValue;
     private float modifierDecrement;
 
@@ -31,7 +29,7 @@ public class CaseModifierVisual : MonoBehaviour
 
     public UnityEvent onTimeComplete;
 
-    public void Initialize(float inTimeForTask, float currentModifierValue, float inModifierDecrement)
+    public void Initialize(float inTimeForTask, float currentModifierValue, float inMaxModifierValue, float inModifierDecrement)
     {
         timeForTask = inTimeForTask;
         timeRemaining = inTimeForTask;
@@ -39,8 +37,11 @@ public class CaseModifierVisual : MonoBehaviour
         modifierDecrement = inModifierDecrement;
 
         modifierText.text = currentModifierValue.ToString() + "x";
-        modifierImage.color = fullColour;
-        scoreFillImage.color = fullColour;
+        maxModifierValue = inMaxModifierValue;
+        Color currentModifierColour = SettingsManager.Instance.GetModifierColour(currentModifierValue / maxModifierValue);
+
+        modifierImage.color = currentModifierColour;
+        scoreFillImage.color = currentModifierColour;
         scoreFillImage.transform.localScale = Vector3.one;
         gameObject.SetActive(true);
     }
@@ -53,18 +54,21 @@ public class CaseModifierVisual : MonoBehaviour
         
         if(ratio < 0)
         {
+            Debug.LogError("Out of time.");
+            startingModifierValue -= modifierDecrement;
             gameObject.SetActive(false);
             onTimeComplete.Invoke();
-            startingModifierValue -= modifierDecrement;
+            
         }
         else if (ratio < 0.5f && !hasCrossedThreshold)
         {
-            modifierImage.color = halfColour;
-            scoreFillImage.color = halfColour;
             AudioManager.Instance.PlaySound(thresholdCrossSFXName);
             startingModifierValue -= modifierDecrement;
             modifierText.text = startingModifierValue.ToString() + "x";
             hasCrossedThreshold = true;
+            Color currentModifierColour = SettingsManager.Instance.GetModifierColour(startingModifierValue / maxModifierValue);
+            modifierImage.color = currentModifierColour;
+            scoreFillImage.color = currentModifierColour;
         }
         scoreFillImage.transform.localScale = new Vector3(1, ratio, 1);
     }

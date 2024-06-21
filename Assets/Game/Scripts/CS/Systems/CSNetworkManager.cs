@@ -81,6 +81,7 @@ public class CSNetworkManager : NetworkManager
             case NetworkState.lobby:
                 break;
             case NetworkState.ingame:
+                return;
                 currentState = NetworkState.disconnected;
                 SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_room_listings;
                 SettingsManager.Instance.playerQuit = true;
@@ -94,6 +95,11 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnStopClient()
     {
+        switch(currentState)
+        {
+            case NetworkState.ingame:
+                return;
+        }
         //intentionalDisconnection = true;
         SettingsManager.Instance.DisconnectFromLobby();
         if (dcManager == null)

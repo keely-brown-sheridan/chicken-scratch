@@ -83,9 +83,9 @@ namespace ChickenScratch
             RegisterToTimer(inTimeCompleteAction);
         }
 
-        public override void Show(Color inFolderColour, float taskTime, float currentModifier, float modifierDecrement)
+        public override void Show(Color inFolderColour, float taskTime, float currentModifier, float maxModifierValue, float modifierDecrement)
         {
-            base.Show(inFolderColour, taskTime, currentModifier, modifierDecrement);
+            base.Show(inFolderColour, taskTime, currentModifier, maxModifierValue, modifierDecrement);
         }
 
         public override void Hide()

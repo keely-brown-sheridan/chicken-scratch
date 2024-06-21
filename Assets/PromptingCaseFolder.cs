@@ -25,10 +25,10 @@ namespace ChickenScratch
             timeCompleteAction = inTimeCompleteAction;
             RegisterToTimer(inTimeCompleteAction);
         }
-        public override void Show(Color inFolderColour, float taskTime, float currentModifier, float modifierDecrement)
+        public override void Show(Color inFolderColour, float taskTime, float currentModifier, float maxModifierValue, float modifierDecrement)
         {
             GameManager.Instance.playerFlowManager.drawingRound.caseFolderOnStartAction = QueueSelectInputField;
-            base.Show(inFolderColour, taskTime, currentModifier, modifierDecrement);
+            base.Show(inFolderColour, taskTime, currentModifier, maxModifierValue, modifierDecrement);
         }
         public override void Hide()
         {

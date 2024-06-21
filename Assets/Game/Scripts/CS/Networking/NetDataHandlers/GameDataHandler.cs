@@ -25,7 +25,8 @@ public class GameDataHandler : NetworkBehaviour
     {
         
         SettingsManager.Instance.AssignBirdToConnection(birdName, sender);
-        RpcSetPlayerBird(playerID, birdName);
+        SettingsManager.Instance.AssignBirdToPlayer(birdName, playerID);
+        SettingsManager.Instance.BroadcastBirdAssignment();
     }
 
     [ClientRpc]
@@ -90,6 +91,19 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.playerNameMap = playerNameMap;
     }
 
+    [ClientRpc]
+    public void RpcShowDayResult()
+    {
+        GameManager.Instance.playerFlowManager.slidesRound.ShowDayResult();
+    }
+
+    [ClientRpc]
+    public void RpcUpdateGameDay(int newDayValue)
+    {
+        GameManager.Instance.playerFlowManager.currentDay = newDayValue;
+        GameManager.Instance.playerFlowManager.slidesRound.Reset();
+    }
+
     //Broadcast - cabinet_drawer_is_ready
     [ClientRpc]
     public void RpcUpdateFolderAsReady(FolderUpdateData folderUpdateData)
@@ -110,6 +124,7 @@ public class GameDataHandler : NetworkBehaviour
             currentCase = drawingRound.caseMap[folderUpdateData.caseID];
             currentCase.identifier = folderUpdateData.caseID;
             currentCase.currentScoreModifier = folderUpdateData.currentScoreModifier;
+            currentCase.maxScoreModifier = folderUpdateData.maxScoreModifier;
             currentCase.currentTaskDuration = folderUpdateData.taskTime;
             currentCase.currentTaskModifiers = folderUpdateData.taskModifiers;
             if (!currentCase.playerOrder.ContainsKey(folderUpdateData.roundNumber))
@@ -497,10 +512,10 @@ public class GameDataHandler : NetworkBehaviour
     }
 
     [TargetRpc]
-    public void TargetStartChoiceDrawing(NetworkConnectionToClient target, int cabinetIndex, int caseID, string prompt, TaskData taskData, float currentModifier, TaskData.TaskModifier drawingBoxModifier)
+    public void TargetStartChoiceDrawing(NetworkConnectionToClient target, int cabinetIndex, int caseID, string prompt, TaskData taskData, float currentModifier, float maxScoreModifier, TaskData.TaskModifier drawingBoxModifier)
     {
         float modifierDecrement = SettingsManager.Instance.gameMode.scoreModifierDecrement;
-        GameManager.Instance.playerFlowManager.drawingRound.StartChoiceCaseDrawing(cabinetIndex, caseID, prompt, taskData.duration, currentModifier, modifierDecrement, drawingBoxModifier);
+        GameManager.Instance.playerFlowManager.drawingRound.StartChoiceCaseDrawing(cabinetIndex, caseID, prompt, taskData.duration, currentModifier, maxScoreModifier, modifierDecrement, drawingBoxModifier);
     }
 
     [TargetRpc]
@@ -703,7 +718,7 @@ public class GameDataHandler : NetworkBehaviour
             }
         }
         int birdCabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[birdName];
-        TargetStartChoiceDrawing(SettingsManager.Instance.GetConnection(birdName), birdCabinetIndex, caseID, choiceData.correctPrompt, baseTaskData, newCase.currentScoreModifier, drawingBoxModifier);
+        TargetStartChoiceDrawing(SettingsManager.Instance.GetConnection(birdName), birdCabinetIndex, caseID, choiceData.correctPrompt, baseTaskData, newCase.currentScoreModifier, choiceData.maxScoreModifier, drawingBoxModifier);
         
     }
 
@@ -713,14 +728,19 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.drawingRound.SendNextInQueue(birdName);
     }
     [Command(requiresAuthority =false)]
-    public void CmdTransitionCase(int caseID, float inScoreModifier)
+    public void CmdTransitionCase(int caseID)
+    {
+        GameManager.Instance.gameFlowManager.SendTaskToNextPlayer(caseID);
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdUpdateCaseScoreModifier(int caseID, float inScoreModifier)
     {
         ChainData transitioningCase = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
-        TaskData transitioningTask = transitioningCase.taskQueue[transitioningCase.currentRound-1];
+        TaskData transitioningTask = transitioningCase.taskQueue[transitioningCase.currentRound - 1];
         float changeInScoreModifier = inScoreModifier - transitioningCase.currentScoreModifier;
         transitioningTask.timeModifierDecrement += changeInScoreModifier;
         transitioningCase.currentScoreModifier = inScoreModifier;
-        GameManager.Instance.gameFlowManager.SendTaskToNextPlayer(caseID);
     }
 
     [ClientRpc]

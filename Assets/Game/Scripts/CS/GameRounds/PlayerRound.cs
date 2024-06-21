@@ -13,6 +13,7 @@ namespace ChickenScratch
 
         public virtual void StartRound()
         {
+            Debug.LogError("Starting round[" + gamePhaseName.ToString() + "]");
             foreach (GameObject objectToShowOnStart in objectsToShowOnStart)
             {
                 if (objectToShowOnStart)

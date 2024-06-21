@@ -34,6 +34,8 @@ namespace ChickenScratch
         private float waitDuration;
         [SerializeField]
         private float preparationDuration;
+        [SerializeField]
+        private float reactionDuration;
 
         private float timeRotating = 0.0f;
         private float timeRising = 0.0f;
@@ -43,6 +45,9 @@ namespace ChickenScratch
         private float startingHeight;
         public string responseSoundClip;
 
+        private Vector3 startingArmPosition;
+        private Quaternion startingArmRotation;
+
         [SerializeField]
         private GameObject angryFaceObject;
         [SerializeField]
@@ -50,14 +55,12 @@ namespace ChickenScratch
 
         [SerializeField]
         private GameObject neutralFaceObject;
-        [SerializeField]
-        private WorkingGoalsManager workingGoalsManager;
-
-
 
         // Start is called before the first frame update
         void Start()
         {
+            startingArmPosition = armTransform.position;
+            startingArmRotation = armTransform.rotation;
             startingHeight = transform.position.y;
             timeRotating = 0.0f;
         }
@@ -80,7 +83,6 @@ namespace ChickenScratch
                     timeRising += Time.deltaTime;
                     float currentHeight = startingHeight + (risingHeightPositionTransform.position.y - startingHeight) * timeRising / risingDuration;
                     transform.position = new Vector3(transform.position.x, currentHeight, transform.position.z);
-
                     if (timeRising > risingDuration)
                     {
                         timeRising = 0.0f;
@@ -118,24 +120,51 @@ namespace ChickenScratch
                     }
                     break;
                 case State.neutral:
-                    currentState = State.idle;
-                    workingGoalsManager.active = false;
+                    timeWaiting += Time.deltaTime;
+                    AudioManager.Instance.PlaySound(responseSoundClip);
+                    if (timeWaiting > reactionDuration)
+                    {
+                        gameObject.SetActive(false);
+                        timeWaiting = 0.0f;
+                        currentState = State.idle;
+                        if (SettingsManager.Instance.isHost)
+                        {
+                            GameManager.Instance.playerFlowManager.slidesRound.ResolveDay();
+                        }
+                    }
                     break;
                 case State.angry:
+                    timeWaiting += Time.deltaTime;
                     neutralFaceObject.SetActive(false);
                     angryFaceObject.SetActive(true);
-                    currentState = State.idle;
                     AudioManager.Instance.PlaySound(responseSoundClip);
-                    workingGoalsManager.active = false;
+                    if (timeWaiting > reactionDuration)
+                    {
+                        gameObject.SetActive(false);
+                        timeWaiting = 0.0f;
+                        currentState = State.idle;
+                        if(SettingsManager.Instance.isHost)
+                        {
+                            GameManager.Instance.playerFlowManager.slidesRound.ResolveDay();
+                        }
+                        
+                    }
                     break;
                 case State.happy:
+                    timeWaiting += Time.deltaTime;
                     neutralFaceObject.SetActive(false);
                     happyFaceObject.SetActive(true);
-                    currentState = State.idle;
                     AudioManager.Instance.PlaySound(responseSoundClip);
-                    workingGoalsManager.celebrationActive = true;
-                    //workingGoalsManager.active = true;
-                    workingGoalsManager.enabled = true;
+                    if (timeWaiting > reactionDuration)
+                    {
+                        gameObject.SetActive(false);
+                        timeWaiting = 0.0f;
+                        currentState = State.idle;
+                        if (SettingsManager.Instance.isHost)
+                        {
+                            GameManager.Instance.playerFlowManager.slidesRound.ResolveDay();
+                        }
+                    }
                     break;
             }
 
@@ -143,7 +172,14 @@ namespace ChickenScratch
 
         public void Play()
         {
+            transform.position = new Vector3(transform.position.x, startingHeight, transform.position.z);
+            armTransform.position = startingArmPosition;
+            armTransform.rotation = startingArmRotation;
+            angryFaceObject.SetActive(false);
+            happyFaceObject.SetActive(false);
+            neutralFaceObject.SetActive(true);
             currentState = State.preparing;
+            gameObject.SetActive(true);
         }
     }
 }

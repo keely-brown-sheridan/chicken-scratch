@@ -35,7 +35,7 @@ namespace ChickenScratch
             
         }
 
-        public virtual void Show(Color inFolderColour, float timeForTask, float currentModifierValue, float modifierDecrement)
+        public virtual void Show(Color inFolderColour, float timeForTask, float currentModifierValue, float maxModifierValue, float modifierDecrement)
         {
             isActive = true;
             if (SettingsManager.Instance.GetSetting("stickies") &&
@@ -54,7 +54,7 @@ namespace ChickenScratch
             }
 
             formAnimator.SetBool("Slide", true);
-            caseModifierVisual.Initialize(timeForTask, currentModifierValue, modifierDecrement);
+            caseModifierVisual.Initialize(timeForTask, currentModifierValue, maxModifierValue, modifierDecrement);
             
         }
 

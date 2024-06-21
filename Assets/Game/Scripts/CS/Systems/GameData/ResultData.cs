@@ -19,7 +19,6 @@ namespace ChickenScratch
         public string bossMessage = "";
         public string sfxToPlay = "";
         public List<GameModeRequiredPointThreshold> requiredPointThresholds;
-        public WorkingGoalsManager.GoalType goal;
 
         public float getRequiredPointThreshold(string gameModeName)
         {

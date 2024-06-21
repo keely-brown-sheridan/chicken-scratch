@@ -13,31 +13,49 @@ public class SlideCaseScoreVisualization : MonoBehaviour
     private TMPro.TMP_Text currentScoreText;
 
     [SerializeField]
+    private TMPro.TMP_Text goalScoreText;
+
+    [SerializeField]
     private GameObject scoreModifierObject;
+
+    [SerializeField]
+    private Image scoreModifierImage;
 
     [SerializeField]
     private TMPro.TMP_Text scoreModifierText;
 
     [SerializeField]
     private Transform modifierScoreStartingDock, modifierScoreEndingDock;
+    [SerializeField]
+    private GameObject birdBuckPrefabObject;
+
+    [SerializeField]
+    private Transform birdBuckHolderParent;
 
 
     private float timeToReachTime;
     private float maximumPossibleScore;
     private float startingScore;
-    private float currentScore;
     private float targetScore;
 
     private float currentTimeReachingTarget;
     private float scoreModifier;
+    private float currentScore;
 
-    public void Initialize(float inMaxScore, float inScoreModifier)
+    private int lastScore;
+
+    public void Initialize(float inScoreModifier, float maxScoreModifier)
     {
-        maximumPossibleScore = inMaxScore;
-        startingScore = 0f;
-        currentScore = 0f;
+        maximumPossibleScore = SettingsManager.Instance.GetCurrentGoal();
+        goalScoreText.text = "Goal:\n" + maximumPossibleScore.ToString() + " Birdbucks";
+        startingScore = GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
+        currentScore = startingScore;
+        lastScore = (int)startingScore;
+        
         scoreModifier = inScoreModifier;
         scoreModifierText.text = inScoreModifier.ToString() + "x";
+
+        scoreModifierImage.color = SettingsManager.Instance.GetModifierColour(inScoreModifier / maxScoreModifier);
     }
 
     public void SetTarget(float inTargetScore, float inTimeToReach)
@@ -48,6 +66,8 @@ public class SlideCaseScoreVisualization : MonoBehaviour
             float previousTargetRatio = targetScore / maximumPossibleScore;
             progressBarImageTransform.localScale = new Vector3(previousTargetRatio, 1f, 1f);
             currentScore = targetScore;
+            GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal = (int)currentScore;
+            lastScore = (int)targetScore;
         }
         currentTimeReachingTarget = Time.deltaTime;
         startingScore = currentScore;
@@ -57,7 +77,7 @@ public class SlideCaseScoreVisualization : MonoBehaviour
 
     public void ShowScoreModifier()
     {
-        if(scoreModifier > 1f)
+        if(scoreModifier > 1f && GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal != 0)
         {
             AudioManager.Instance.PlaySound("increase-score");
         }
@@ -78,16 +98,20 @@ public class SlideCaseScoreVisualization : MonoBehaviour
             }
             float currentTimeRatio = currentTimeReachingTarget / timeToReachTime;
             currentScore = Mathf.Lerp(startingScore, targetScore, currentTimeRatio);
+            if(lastScore < (int)currentScore)
+            {
+                //Spawn bird buck
+                Instantiate(birdBuckPrefabObject, scoreModifierObject.transform.position, Quaternion.identity, birdBuckHolderParent);
+                lastScore = (int)currentScore;
+                GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal = (int)currentScore;
+            }
 
-            float scoreRatio = currentScore / maximumPossibleScore;
+            float scoreRatio = Mathf.Clamp(currentScore / maximumPossibleScore, 0f, 1f);
             progressBarImageTransform.localScale = new Vector3(scoreRatio, 1f, 1f);
 
-            currentScoreText.text = "Points Earned: " + ((int)currentScore).ToString();
+            currentScoreText.text = "Current Total:\n" + ((int)currentScore).ToString() + " Birdbucks";
 
-            if(scoreModifierObject.activeSelf)
-            {
-                scoreModifierObject.transform.position = Vector3.Lerp(modifierScoreStartingDock.position, modifierScoreEndingDock.position, scoreRatio);
-            }
+            scoreModifierObject.transform.position = Vector3.Lerp(modifierScoreStartingDock.position, modifierScoreEndingDock.position, scoreRatio);
 
             if (finished)
             {

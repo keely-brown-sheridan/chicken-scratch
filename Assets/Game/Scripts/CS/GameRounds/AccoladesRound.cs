@@ -27,7 +27,6 @@ namespace ChickenScratch
 
         public GameObject accoladesSpriteContainer;
         public Image accoladesBackground;
-        public WorkingGoalsManager workingGoalsManager;
         public Text workerWinText;
         public GameObject extraVoteRewardTipObject;
 
@@ -45,7 +44,7 @@ namespace ChickenScratch
         private Dictionary<CameraDock.CameraState, CameraDock> cameraDockMap;
         private Dictionary<int, GameObject> successTokenMap, failTokenMap;
         private float timeSoFar = 0.0f, cameraStateTime = 0.0f;
-        public float timeToShowCabinetResults = 2.0f, timeToShowResults = 4.0f, timeShowingResults = 8.0f;
+        public float timeShowingEOTM = 6.0f;
         private bool hasShownResults = false, hasShownCabinetResults = false;
         private int numberOfRoundResultsShown = 0, totalFails = 0, totalSuccesses = 0, totalPoints = 0;
         private bool hasEOTMRisen = false;
@@ -86,7 +85,7 @@ namespace ChickenScratch
             if (isActive)
             {
                 if (currentCameraState != CameraDock.CameraState.reset &&
-                    currentCameraState != CameraDock.CameraState.result)
+                    currentCameraState != CameraDock.CameraState.accs_rest)
                 {
                     cameraUpdate();
                     if (currentCameraDock.state == CameraDock.CameraState.accs_rest && !currentCameraDock.restingFinished)
@@ -100,38 +99,13 @@ namespace ChickenScratch
 
                     }
                 }
-                else if (workingGoalsManager.active)
-                {
-                    return;
-                }
                 else
                 {
                     timeSoFar += Time.deltaTime;
 
-                    if (timeSoFar > timeToShowCabinetResults &&
-                        !hasShownCabinetResults)
+                    if (timeSoFar > timeShowingEOTM)
                     {
-                        accoladesBackground.color = new Color(0, 0, 0, 0);
-                        accoladesSpriteContainer.SetActive(true);
-
-                        workingGoalsManager.startShowingWorkingGoals(SettingsManager.Instance.gameMode.goalPointsPerCharacter < totalPoints);
-                        hasShownCabinetResults = true;
-                        timeSoFar = 0.0f;
-                    }
-                    else if (timeSoFar > timeToShowResults &&
-                        !hasShownResults)
-                    {
-                        resultsContainerObject.SetActive(true);
-                        hasShownResults = true;
-                        timeSoFar = 0.0f;
-                    }
-                    else if (timeSoFar > timeShowingResults &&
-                        hasShownResults)
-                    {
-                        //workingGoalsManager.gameObject.SetActive(false);
-                        //accoladesSpriteContainer.SetActive(false);
                         isActive = false;
-
                     }
                 }
 
@@ -276,39 +250,15 @@ namespace ChickenScratch
                     currentBird = ColourManager.Instance.birdMap[playerReviewStatus.Key];
                     currentRow.playerNameText.color = currentBird.colour;
                     currentRow.playerNameText.text = playerReviewStatus.Value.playerName;
-                    currentRow.StartPlacing();
+                    float randomizedPlacementWait = Random.Range(0, cardPlacementWaitVariance);
+
+                    currentRow.StartPlacing(randomizedPlacementWait);
                 }
             }
 
             //Set the accolades
             setAccolades(bestEmployeeCandidate.birdName, bestEmployeeCandidate.playerName);
             isActive = true;
-
-            List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
-            
-            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
-            {
-                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
-                goals.Add(new WorkingGoalsManager.Goal(result.goal, requiredPoints, result.resultName));
-            }
-            
-            List<WorkingGoalsManager.PlayerPoints> casePoints = new List<WorkingGoalsManager.PlayerPoints>();
-            foreach (KeyValuePair<int, EndgameCaseData> caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap)
-            {
-                int points = caseData.Value.GetTotalPoints();
-                BirdName guesser = caseData.Value.GetGuesser();
-
-                if(guesser == BirdName.none)
-                {
-                    continue;
-                }
-                casePoints.Add(new WorkingGoalsManager.PlayerPoints(guesser, points, caseData.Value));
-            }
-
-            workingGoalsManager.initializeWorkingGoals(goals, casePoints);
-
-            //leftTrashObjects[Random.Range(0, leftTrashObjects.Count)].SetActive(true);
-            rightTrashObjects[Random.Range(0, rightTrashObjects.Count)].SetActive(true);
         }
 
 

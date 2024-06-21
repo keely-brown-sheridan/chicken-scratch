@@ -765,7 +765,7 @@ namespace ChickenScratch
             AudioManager.Instance.PlaySoundVariant("sfx_scan_int_gamemode_select");
             string newGameMode = SettingsManager.Instance.ChangeGameMode();
             gameModeButtonText.text = newGameMode.ToUpper();
-            gameModeInformationHeaderText.text = "Game Mode: " + SettingsManager.Instance.gameMode.name;
+            gameModeInformationHeaderText.text = "Game Mode: " + SettingsManager.Instance.gameMode.title;
             gameModeDescriptionText.text = SettingsManager.Instance.gameMode.description;
             //LobbyNetwork.Instance.BroadcastQueue.Add("UpdateGameMode" + GameDelim.BASE + newGameMode);
         }
@@ -893,7 +893,7 @@ namespace ChickenScratch
             RoomsPageObject.SetActive(true);
             LoadingPageObject.SetActive(true);
             LobbyStartGameBtn.interactable = SettingsManager.Instance.isHost;
-            SettingsManager.Instance.SetGameMode(SettingsManager.Instance.gameMode.name);
+            SettingsManager.Instance.SetGameMode(SettingsManager.Instance.gameMode.title);
             
             
             if (SettingsManager.Instance.isHost)

@@ -14,5 +14,6 @@ namespace ChickenScratch
         public List<string> correctWordIdentifiersMap = new List<string>();
         public string correctPrompt;
         public string caseChoiceIdentifier;
+        public float maxScoreModifier;
     }
 }

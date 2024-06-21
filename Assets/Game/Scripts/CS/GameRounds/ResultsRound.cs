@@ -121,8 +121,8 @@ namespace ChickenScratch
 
             foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                int requiredPointThreshold = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
-                if (highestResult == null && result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name) == 0)
+                int requiredPointThreshold = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.title));
+                if (highestResult == null && result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.title) == 0)
                 {
                     highestResult = result;
                 }

@@ -116,9 +116,8 @@ namespace ChickenScratch
                 birdArmMap.Add(birdArm.birdName, birdArm);
             }
             playerIsReady = true;
-            hasSentCaseDetails = false;
+            
             isInitialized = true;
-            UpdateNumberOfCases(SettingsManager.Instance.gameMode.casesRemaining);
         }
 
         public override void StartRound()
@@ -129,17 +128,24 @@ namespace ChickenScratch
             {
                 Initialize();
             }
-
+            
             if (SettingsManager.Instance.isHost)
             {
-                if(SettingsManager.Instance.gameMode.caseDeliveryMode == GameModeData.CaseDeliveryMode.queue)
+                GameManager.Instance.gameFlowManager.totalCompletedCases = 0;
+                if (SettingsManager.Instance.gameMode.caseDeliveryMode == GameModeData.CaseDeliveryMode.queue)
                 {
                     InitializeCabinetDrawers();
+                }
+                else
+                {
+                    GameManager.Instance.gameDataHandler.RpcUpdateNumberOfCases((int)(SettingsManager.Instance.GetCaseCountForDay()));
+                    GameManager.Instance.gameDataHandler.RpcActivateCasePile();
                 }
                 GameManager.Instance.gameFlowManager.timeRemainingInPhase = SettingsManager.Instance.gameMode.totalGameTime;
                 GameManager.Instance.gameDataHandler.RpcUpdateTimer(SettingsManager.Instance.gameMode.totalGameTime);
             }
-
+            hasRequestedCaseDetails = false;
+            hasSentCaseDetails = false;
             //Start the clock
             GameManager.Instance.playerFlowManager.loadingCircleObject.SetActive(false);
         }
@@ -167,7 +173,8 @@ namespace ChickenScratch
                         caseID = cabinetDrawer.Value.currentChainData.identifier,
                         player = currentBird,
                         taskTime = currentChainData.taskQueue[0].duration,
-                        currentScoreModifier = currentChainData.currentScoreModifier
+                        currentScoreModifier = currentChainData.currentScoreModifier,
+                        maxScoreModifier = currentChainData.maxScoreModifier
                     };
                     GameManager.Instance.gameDataHandler.RpcUpdateFolderAsReady(folderUpdateData);
                 }
@@ -232,7 +239,7 @@ namespace ChickenScratch
                         inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
                     }
                     promptingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], ForceCaseExpirySubmit);
-                    promptingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
+                    promptingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
 
                     break;
                 case CaseState.drawing:
@@ -272,7 +279,7 @@ namespace ChickenScratch
                         }
                     }
                     drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
-                    drawingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
+                    drawingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
 
                     break;
                 case CaseState.copy_drawing:
@@ -303,7 +310,7 @@ namespace ChickenScratch
                         }
                     }
                     copyingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], drawingBoxModifier, ForceCaseExpirySubmit);
-                    copyingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
+                    copyingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     
                     break;
                 case CaseState.add_drawing:
@@ -334,14 +341,14 @@ namespace ChickenScratch
                         }
                     }
                     addingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], chainData.correctPrompt, drawingBoxModifier, ForceCaseExpirySubmit);
-                    addingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
+                    addingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     break;
                 case CaseState.guessing:
                     guessingCaseFolder.Initialize(chainData.identifier, chainData.possibleWordsMap, chainData.drawings[lastRoundIndex], ForceCaseExpirySubmit);
 
                     inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
 
-                    guessingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, scoreDecrement);
+                    guessingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     break;
             }
 
@@ -468,7 +475,7 @@ namespace ChickenScratch
                 }
             }
 
-            float timeUsed = SettingsManager.Instance.gameMode.baseTimeInDrawingRound - GameManager.Instance.playerFlowManager.currentTimeInRound;
+            float timeUsed = SettingsManager.Instance.gameMode.totalGameTime - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
             int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
@@ -512,7 +519,7 @@ namespace ChickenScratch
                 }
             }
 
-            float timeUsed = SettingsManager.Instance.gameMode.baseTimeInDrawingRound - GameManager.Instance.playerFlowManager.currentTimeInRound;
+            float timeUsed = SettingsManager.Instance.gameMode.totalGameTime - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
             int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
@@ -557,7 +564,7 @@ namespace ChickenScratch
                 }
             }
 
-            float timeUsed = SettingsManager.Instance.gameMode.baseTimeInDrawingRound - GameManager.Instance.playerFlowManager.currentTimeInRound;
+            float timeUsed = SettingsManager.Instance.gameMode.totalGameTime - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
             int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
@@ -691,6 +698,7 @@ namespace ChickenScratch
             }
 
             caseID = cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier;
+            GameManager.Instance.gameDataHandler.CmdUpdateCaseScoreModifier(caseID, currentScoreModifier);
             if (force)
             {
                 GameManager.Instance.gameDataHandler.CmdTransitionCondition("force_submit:" + SettingsManager.Instance.birdName);
@@ -702,7 +710,7 @@ namespace ChickenScratch
                 {
                     if (currentState != CaseState.guessing)
                     {
-                        GameManager.Instance.gameDataHandler.CmdTransitionCase(caseID, currentScoreModifier);
+                        GameManager.Instance.gameDataHandler.CmdTransitionCase(caseID);
                     }
                     GameManager.Instance.gameDataHandler.CmdRequestNextCase(SettingsManager.Instance.birdName);
                 }
@@ -775,6 +783,7 @@ namespace ChickenScratch
                     player = birdToSendTo,
                     taskTime = queuedTaskData.duration,
                     currentScoreModifier = currentCase.currentScoreModifier,
+                    maxScoreModifier = currentCase.maxScoreModifier,
                     taskModifiers = currentCase.taskQueue[currentRound-1].modifiers,
                     lastPlayer = lastBird
                 };
@@ -787,7 +796,7 @@ namespace ChickenScratch
             }
         }
 
-        public void StartChoiceCaseDrawing(int cabinetIndex, int caseID, string prompt, float taskTime, float currentModifierValue, float modifierDecrement, TaskModifier drawingBoxModifier)
+        public void StartChoiceCaseDrawing(int cabinetIndex, int caseID, string prompt, float taskTime, float currentModifierValue, float maxModifierValue, float modifierDecrement, TaskModifier drawingBoxModifier)
         {
             currentState = CaseState.drawing;
 
@@ -806,7 +815,7 @@ namespace ChickenScratch
             Color folderColour = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].folderColour;
             SetCurrentDrawingRound(1);
             drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
-            drawingCaseFolder.Show(folderColour, taskTime, currentModifierValue, modifierDecrement);
+            drawingCaseFolder.Show(folderColour, taskTime, currentModifierValue, maxModifierValue, modifierDecrement);
         }
 
         private void ForceCaseExpirySubmit()
@@ -874,7 +883,6 @@ namespace ChickenScratch
             
             int caseID = selectedCabinet.currentChainData.identifier;
             int currentRoundIndex = currentRound;
-            Debug.LogError("Submitting prompt for case["+caseID.ToString()+"].");
             if (currentRoundIndex == -1)
             {
                 Debug.LogError("ERROR[SubmitPrompt]: Could not isolate currentRoundIndex for case["+caseID.ToString()+"]");

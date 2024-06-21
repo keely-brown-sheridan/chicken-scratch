@@ -68,7 +68,7 @@ namespace ChickenScratch
 
         public WordManager wordManager = new WordManager();
 
-        private int totalCompletedCases = 0;
+        public int totalCompletedCases = 0;
         private bool hasRequestedBirdClaim = false;
 
         // Start is called before the first frame update
@@ -128,10 +128,8 @@ namespace ChickenScratch
             }
 
             GameManager.Instance.gameDataHandler.RpcServerIsReady();
-            GameManager.Instance.gameDataHandler.RpcUpdateNumberOfCases((int)(SettingsManager.Instance.gameMode.casesPerPlayer * connectedPlayers.Count));
             GameManager.Instance.gameFlowManager.SetCabinetOwnership();
             InitializeGame();
-
             
             timeRemainingInPhase = loadingTimeLimit;
             active = true;
@@ -174,7 +172,7 @@ namespace ChickenScratch
                     InitializeQueueMode();
                     break;
                 case GameModeData.CaseDeliveryMode.free_for_all:
-                    GameManager.Instance.gameDataHandler.RpcActivateCasePile();
+                    
                     break;
             }
         }
@@ -253,7 +251,9 @@ namespace ChickenScratch
         public void IncreaseNumberOfCompletedCases()
         {
             totalCompletedCases++;
-            if(totalCompletedCases >= SettingsManager.Instance.gameMode.casesPerPlayer * connectedPlayers.Count)
+            int requiredCaseCount = SettingsManager.Instance.GetCaseCountForDay();
+
+            if(totalCompletedCases >= requiredCaseCount)
             {
                 //Drawing round is over, moving on to the next round
                 timeRemainingInPhase = 0f;
@@ -319,6 +319,7 @@ namespace ChickenScratch
             tempPromptData.text = newChain.correctPrompt;
             newChain.prompts.Add(1, tempPromptData);
             newChain.currentScoreModifier = selectedCase.startingScoreModifier;
+            newChain.maxScoreModifier = choiceNetData.maxScoreModifier;
             if (!GameManager.Instance.playerFlowManager.drawingRound.caseMap.ContainsKey(newChain.identifier))
             {
                 GameManager.Instance.playerFlowManager.drawingRound.caseMap.Add(newChain.identifier, newChain);
@@ -499,6 +500,7 @@ namespace ChickenScratch
 
         private void TransitionPhase()
         {
+            Debug.LogError("Transitioning from phase["+currentGamePhase.ToString()+"], IsRoundOver["+ isRoundOver().ToString()+ "], are Slides active["+ playerFlowManager.slidesRound.inProgress.ToString()+ "]");
             if (!playerFlowManager)
             {
                 playerFlowManager = GameManager.Instance.playerFlowManager;
@@ -574,15 +576,6 @@ namespace ChickenScratch
                             return;
                         }
                         
-                        foreach (BirdName bird in gamePlayers.Keys)
-                        {
-                            if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
-                            {
-                                addTransitionCondition("ratings_loaded:" + bird);
-                                addTransitionCondition("stats_loaded:" + bird);
-                            }
-                        }
-
                         //Send the difficulty values of the correct values to each player
                         broadcastCaseDifficultyValues();
                         currentGamePhase = GamePhase.slides;
@@ -619,6 +612,7 @@ namespace ChickenScratch
                     {
                         return;
                     }
+                    currentGamePhase = GameManager.Instance.playerFlowManager.slidesRound.phaseToTransitionTo;
                     if (SettingsManager.Instance.showFastResults)
                     {
                         if (!playerFlowManager.slidesRound.quickplaySummarySlide.isActive)
@@ -628,10 +622,6 @@ namespace ChickenScratch
                             GameManager.Instance.gameDataHandler.RpcShowQuickResults();
                         }
                         return;
-                    }
-                    else
-                    {
-                        currentGamePhase = GamePhase.accolades;
                     }
                     break;
                 case GamePhase.accolades:

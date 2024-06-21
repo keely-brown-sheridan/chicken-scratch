@@ -11,7 +11,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game/Scenes/Game.unity
     guid: be7efa09ff7b50b48bf2702ea32afd10
-  - enabled: 0
-    path: Assets/Game/Scenes/CS/Theater.unity
-    guid: 31c694a45be821e4f99086fc1bccea72
   m_configObjects: {}

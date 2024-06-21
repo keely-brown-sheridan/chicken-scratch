@@ -36,6 +36,7 @@ namespace ChickenScratch
         public int pointsForBonus;
         public int pointsPerCorrectWord;
         public float currentScoreModifier;
+        public float maxScoreModifier;
         public int penalty;
         public float currentTaskDuration;
         public List<TaskData.TaskModifier> currentTaskModifiers;
@@ -75,7 +76,6 @@ namespace ChickenScratch
         {
             foreach (KeyValuePair<int, PlayerTextInputData> prompt in prompts)
             {
-                if (prompt.Key < 2) continue;
                 prompt.Value.author = playerOrder[prompt.Key];
                 if (clientName == SettingsManager.Instance.birdName)
                 {

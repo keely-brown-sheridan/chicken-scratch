@@ -45,8 +45,9 @@ namespace ChickenScratch
                     break;
                 case GameScene.game:
                 case GameScene.theater:
-                    handleHostDisconnection();
-                    break;
+                    return;
+                    //handleHostDisconnection();
+                    //break;
             }
 
         }

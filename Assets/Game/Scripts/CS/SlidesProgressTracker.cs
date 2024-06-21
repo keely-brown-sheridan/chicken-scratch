@@ -61,10 +61,10 @@ namespace ChickenScratch
         void test()
         {
             //Set game goals
-            List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
+            List<GoalData> goals = new List<GoalData>();
             foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                WorkingGoalsManager.Goal goal = new WorkingGoalsManager.Goal(WorkingGoalsManager.GoalType.endgame_result_state, (int)result.getRequiredPointThreshold("standard"), result.resultName);
+                GoalData goal = new GoalData((int)result.getRequiredPointThreshold("standard"), result.resultName);
                 goals.Add(goal);
             }
             SetGameGoals(goals);
@@ -132,7 +132,7 @@ namespace ChickenScratch
             targetHeight = (pointsToAdd + currentPoints) / highestGoalPoints * (bgTopHeight - bgBottomHeight) + bgBottomHeight;
         }
 
-        public void SetGameGoals(List<WorkingGoalsManager.Goal> goals)
+        public void SetGameGoals(List<GoalData> goals)
         {
             float bgTopHeight = fillBackground.rectTransform.offsetMax.x;
             float bgBottomHeight = fillBackground.rectTransform.offsetMin.x + 3;
@@ -140,7 +140,7 @@ namespace ChickenScratch
             float currentGoalHeightOffset;
             //Get the matching working goal from the provided goals
             List<ResultData> endgameGoals = new List<ResultData>();
-            foreach (WorkingGoalsManager.Goal goal in goals)
+            foreach (GoalData goal in goals)
             {
                 foreach (ResultData endgameGoal in SettingsManager.Instance.resultPossibilities)
                 {
@@ -152,9 +152,9 @@ namespace ChickenScratch
             }
 
             //Order the goals based on their required points
-            endgameGoals = endgameGoals.OrderBy(g => g.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name)).ToList();
+            endgameGoals = endgameGoals.OrderBy(g => g.getRequiredPointThreshold(SettingsManager.Instance.gameMode.title)).ToList();
 
-            highestGoalPoints = endgameGoals[endgameGoals.Count - 1].getRequiredPointThreshold(SettingsManager.Instance.gameMode.name);
+            highestGoalPoints = endgameGoals[endgameGoals.Count - 1].getRequiredPointThreshold(SettingsManager.Instance.gameMode.title);
             if (pointsArePlayerDependent)
             {
                 highestGoalPoints *= GameManager.Instance.playerFlowManager.playerNameMap.Count;
@@ -183,7 +183,7 @@ namespace ChickenScratch
                     newGoalFillObject.transform.position = transform.position;
                     SlideProgressFill newGoalFill = newGoalFillObject.GetComponent<SlideProgressFill>();
                     float bottom = 0;
-                    float currentGoalRequiredPoints = endgameGoals[i].getRequiredPointThreshold(SettingsManager.Instance.gameMode.name);
+                    float currentGoalRequiredPoints = endgameGoals[i].getRequiredPointThreshold(SettingsManager.Instance.gameMode.title);
                     if (i == 0)
                     {
                         bottom = bgBottomHeight;
@@ -196,7 +196,7 @@ namespace ChickenScratch
                         }
                         bottom = currentGoalRequiredPoints / highestGoalPoints * (bgTopHeight - bgBottomHeight) + bgBottomHeight;
                     }
-                    float nextGoalRequiredPoints = endgameGoals[i + 1].getRequiredPointThreshold(SettingsManager.Instance.gameMode.name);
+                    float nextGoalRequiredPoints = endgameGoals[i + 1].getRequiredPointThreshold(SettingsManager.Instance.gameMode.title);
                     if (pointsArePlayerDependent)
                     {
                         nextGoalRequiredPoints *= GameManager.Instance.playerFlowManager.playerNameMap.Count;

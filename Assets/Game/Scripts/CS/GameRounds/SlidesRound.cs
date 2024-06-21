@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static ChickenScratch.ColourManager;
+using static ChickenScratch.GameFlowManager;
 using static ChickenScratch.ReactionIndex;
 using static GameDataHandler;
 
@@ -16,14 +17,14 @@ namespace ChickenScratch
 
         public List<PeanutBird> allChatBirds = new List<PeanutBird>();
 
-        public Dictionary<int,EndgameCaseData> caseDataMap = new Dictionary<int,EndgameCaseData>();
+        public Dictionary<int, EndgameCaseData> caseDataMap = new Dictionary<int, EndgameCaseData>();
 
 
         private float currentTimeOnSlide;
         public int currentSlideCaseIndex = 0;
         public float slideSpeed = 1.0f;
         public float baseSlideSpeed = 1.0f;
-        
+
 
         public float timeToShowSlideSpeedIncreaseIndicator = 1.0f;
         public GameObject slideSpeedIncreaseIndicator;
@@ -52,33 +53,42 @@ namespace ChickenScratch
         [SerializeField]
         private GoldStarManager goldStarManager;
 
+        [SerializeField]
+        private EndlessModeResultForm dayResultForm;
+        [SerializeField]
+        private FinalEndgameResultManager finalResultManager;
+
         public SlidesProgressTracker slidesProgressTracker;
         public QuickplaySummarySlide quickplaySummarySlide;
 
-        
+        public int currentBirdBuckTotal = 0;
 
+        public GamePhase phaseToTransitionTo => _phaseToTransitionTo;
+
+        private GamePhase _phaseToTransitionTo;
 
         private bool hasSentRatings = false;
+        private bool hasStartedShowingDayResult = false;
         private bool hasSpedUp = false;
         private int numPlayersSpedUp = 0;
         public int currentSlideContentIndex = 0;
 
         public override void StartRound()
         {
+            currentBirdBuckTotal = 0;
+            hasStartedShowingDayResult = false;
             inProgress = true;
             slideTypeMap.Clear();
-            foreach(SlideTypeData slideType in slideTypes)
+            foreach (SlideTypeData slideType in slideTypes)
             {
                 slideTypeMap.Add(slideType.slideType, slideType);
             }
             base.StartRound();
 
             int numberOfPlayers = GameManager.Instance.playerFlowManager.playerNameMap.Count;
-            //slideSpeed = numPlayersSpedUp == numberOfPlayers ? 4.0f : 4.0f / (4.0f - (numberOfPlayers - numPlayersSpedUp) / numberOfPlayers);
 
-            //GameManager.Instance.playerFlowManager.screenshotter.clearOldTempData();
-
-            if (SettingsManager.Instance.GetSetting("stickies"))
+            if (SettingsManager.Instance.GetSetting("stickies") &&
+                !GameManager.Instance.playerFlowManager.instructionRound.slidesChatSticky.hasBeenPlaced)
             {
                 GameManager.Instance.playerFlowManager.instructionRound.slidesChatSticky.Queue(true);
             }
@@ -105,9 +115,10 @@ namespace ChickenScratch
 
         public void GenerateEndgameData()
         {
+            Debug.LogError("Generating endgame data.");
             Dictionary<int, ChainData> gameCaseMap = GameManager.Instance.playerFlowManager.drawingRound.caseMap;
             List<EndgameCaseData> endgameCases = new List<EndgameCaseData>();
-            foreach(KeyValuePair<int,ChainData> currentCase in gameCaseMap)
+            foreach (KeyValuePair<int, ChainData> currentCase in gameCaseMap)
             {
                 EndgameCaseData endgameCase = new EndgameCaseData(currentCase.Value);
                 endgameCases.Add(endgameCase);
@@ -119,26 +130,22 @@ namespace ChickenScratch
         {
             if (inProgress)
             {
-                if(currentSlideContents == null || !currentSlideContents.active)
+                if (currentSlideContents == null || !currentSlideContents.active)
                 {
-                    
+                    if (hasStartedShowingDayResult)
+                    {
+                        return;
+                    }
                     //Get the next active case which has content which can be shown
                     currentSlideCaseIndex++;
 
                     //If there are no more cases left then it's time to move on, so send the ratings
                     if (!caseDataMap.ContainsKey(currentSlideCaseIndex))
                     {
-                        if (!hasSentRatings)
-                        {
-                            GameManager.Instance.gameFlowManager.timeRemainingInPhase = 0.0f;
-
-                            //Send broadcast to players for ratings
-                            GameManager.Instance.gameDataHandler.RpcSendStats();
-                            StatTracker.Instance.SetServerPlayerStats();
-                            sendRatingsToClients();
-                            inProgress = false;
-                            return;
-                        }
+                        Debug.LogError("Finishing slides round.");
+                        
+                        GameManager.Instance.gameDataHandler.RpcShowDayResult();
+                        hasStartedShowingDayResult = true;
                     }
                     else
                     {
@@ -150,7 +157,7 @@ namespace ChickenScratch
                 else
                 {
                     //If the current slide is finished then we need to either
-                    if(currentSlideContents.isComplete)
+                    if (currentSlideContents.isComplete)
                     {
                         //Move to the next slide in the queue
                         if (queuedSlides.Count - 1 > currentSlideContentIndex)
@@ -160,10 +167,6 @@ namespace ChickenScratch
                         else
                         {
                             //Or destroy the current set of slides to move on to the next
-                            for(int i = queuedSlides.Count - 1; i >=0; i--)
-                            {
-                                Destroy(queuedSlides[i].gameObject);
-                            }
                             currentSlideContents = null;
                         }
                     }
@@ -173,6 +176,7 @@ namespace ChickenScratch
 
         public void CreateSlidesFromCase(EndgameCaseData caseData)
         {
+            Debug.LogError("Create slides from case.");
             string correctPrefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]).value;
             string correctNoun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]).value;
             goldStarManager.restock();
@@ -193,6 +197,7 @@ namespace ChickenScratch
             //Create task slides
             foreach (KeyValuePair<int,EndgameTaskData> taskData in caseData.taskDataMap)
             {
+                if (taskData.Value.assignedPlayer == BirdName.none) continue;
                 switch(taskData.Value.taskType)
                 {
                     case TaskData.TaskType.base_drawing:
@@ -373,12 +378,12 @@ namespace ChickenScratch
 
         public void InitializeSlidesProgressTracker()
         {
-            List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
+            List<GoalData> goals = new List<GoalData>();
 
             foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
-                goals.Add(new WorkingGoalsManager.Goal(result.goal, requiredPoints, result.resultName));
+                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.title));
+                goals.Add(new GoalData(requiredPoints, result.resultName));
             }
             
             slidesProgressTracker.SetGameGoals(goals);
@@ -394,6 +399,75 @@ namespace ChickenScratch
 
             quickplaySummarySlide.Initialize();
             quickplaySummarySlide.Activate();
+        }
+
+        public void ShowDayResult()
+        {
+            ResultData gameResult = SettingsManager.Instance.GetDayResult();
+
+            dayResultForm.resultMessageText.text = gameResult.bossMessage;
+            dayResultForm.resultNameText.color = gameResult.resultTextColour;
+            dayResultForm.resultNameText.text = gameResult.resultName;
+            dayResultForm.gameObject.SetActive(true);
+            finalResultManager.chosenReactionState = gameResult.finalFaceState;
+            finalResultManager.responseSoundClip = gameResult.sfxToPlay;
+            finalResultManager.Play();
+        }
+
+        public void ResolveDay()
+        {
+            inProgress = false;
+            GameManager.Instance.gameFlowManager.timeRemainingInPhase = 0.0f;
+
+            if(SettingsManager.Instance.DidPlayersPassDay())
+            {
+                if(GameManager.Instance.playerFlowManager.currentDay + 1 >= SettingsManager.Instance.gameMode.maxDays)
+                {
+                    foreach (BirdName bird in GameManager.Instance.gameFlowManager.gamePlayers.Keys)
+                    {
+                        if (!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
+                        {
+                            GameManager.Instance.gameFlowManager.addTransitionCondition("ratings_loaded:" + bird);
+                            GameManager.Instance.gameFlowManager.addTransitionCondition("stats_loaded:" + bird);
+                        }
+                    }
+                    //Send broadcast to players for ratings
+                    GameManager.Instance.gameDataHandler.RpcSendStats();
+                    StatTracker.Instance.SetServerPlayerStats();
+                    sendRatingsToClients();
+                    _phaseToTransitionTo = GamePhase.accolades;
+                }
+                else
+                {
+                    currentSlideContents = null;
+                    currentSlideCaseIndex--;
+                    GameManager.Instance.gameDataHandler.RpcUpdateGameDay(GameManager.Instance.playerFlowManager.currentDay + 1);
+                    _phaseToTransitionTo = GamePhase.instructions;
+                }
+            }
+            else
+            {
+                foreach (BirdName bird in GameManager.Instance.gameFlowManager.gamePlayers.Keys)
+                {
+                    if (!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
+                    {
+                        GameManager.Instance.gameFlowManager.addTransitionCondition("ratings_loaded:" + bird);
+                        GameManager.Instance.gameFlowManager.addTransitionCondition("stats_loaded:" + bird);
+                    }
+                }
+
+                //Send broadcast to players for ratings
+                GameManager.Instance.gameDataHandler.RpcSendStats();
+                StatTracker.Instance.SetServerPlayerStats();
+                sendRatingsToClients();
+                _phaseToTransitionTo = GamePhase.accolades;
+            }
+        }
+
+        public void Reset()
+        {
+            
+
         }
     }
 }

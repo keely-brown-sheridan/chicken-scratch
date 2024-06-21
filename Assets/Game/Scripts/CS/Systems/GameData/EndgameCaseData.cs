@@ -13,6 +13,7 @@ namespace ChickenScratch
         public GuessData guessData = new GuessData();
         public Dictionary<int, string> correctWordIdentifierMap = new Dictionary<int, string>();
         public float scoreModifier;
+        public float maxScoreModifier;
         public int pointsForBonus;
         public int pointsPerCorrectWord;
         public int penalty;
@@ -33,6 +34,7 @@ namespace ChickenScratch
             correctWordIdentifierMap = inChainData.correctWordIdentifierMap;
             guessData = inChainData.guessData;
             scoreModifier = inChainData.currentScoreModifier;
+            maxScoreModifier = inChainData.maxScoreModifier;
             pointsForBonus = inChainData.pointsForBonus;
             pointsPerCorrectWord = inChainData.pointsPerCorrectWord;
             penalty = inChainData.penalty;
@@ -145,6 +147,7 @@ namespace ChickenScratch
                 if((correctWordIdentifier.Key == 1 && correctWord.value == guessData.prefix) ||
                     (correctWordIdentifier.Key == 2 && correctWord.value == guessData.noun))
                 {
+                    totalPoints += correctWord.difficulty;
                     totalPoints += pointsPerCorrectWord;
                 }
                 else

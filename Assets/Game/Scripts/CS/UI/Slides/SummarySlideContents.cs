@@ -42,10 +42,15 @@ namespace ChickenScratch
 
         private void Start()
         {
+            //test();
+        }
+
+        private void test()
+        {
             //DrawingData drawingData = new DrawingData();
             //drawingData.author = ColourManager.BirdName.red;
             //drawingData.visuals = new List<DrawingLineData>() { new DrawingLineData() { lineColour = DrawingLineData.LineColour.Colour, author = ColourManager.BirdName.red, positions = new List<Vector3>() { { new Vector3(1f,1f,0f) }, { new Vector3(3f, 1f, 0f) }, { new Vector3(6f, 1f, 0f) }, { new Vector3(3f, 3f, 0f) } } } };
-            //Initialize("yup nope", 100f);
+            //Initialize("yup", "nope", 1, 8f, 10f);
             //Dictionary<int, string> guessesMap = new Dictionary<int, string>() { { 1, "yup" }, { 2, "nope" } };
             //Dictionary<int, CaseWordData> correctWordsMap = new Dictionary<int, CaseWordData>() { { 1, new CaseWordData("yup", null, 1) }, { 2, new CaseWordData("yup", null, 1) } };
             //AddDrawing(drawingData, GameManager.Instance.playerFlowManager.slidesRound.transform);
@@ -55,9 +60,8 @@ namespace ChickenScratch
             //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap);
             //AddDrawing(drawingData, GameManager.Instance.playerFlowManager.slidesRound.transform);
             //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap);
-            //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap);
+            //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap, 0f);
         }
-
 
         private void Update()
         {
@@ -85,7 +89,7 @@ namespace ChickenScratch
             originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
             EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
             caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
-            finalScoreText.text = "Points Earned: " + finalScore.ToString();
+            finalScoreText.text = "Birdbucks: " + finalScore.ToString();
         }
 
         public void AddDrawing(DrawingData drawingData, int round, int caseID, Transform summarySlidetransform, float timeModifierDecrement)

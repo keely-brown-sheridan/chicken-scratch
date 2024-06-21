@@ -18,7 +18,7 @@ MonoBehaviour:
   slideProgressBGColour: {r: 0.21568628, g: 0.54509807, b: 0.5764706, a: 1}
   slideProgressFillColour: {r: 0.63529414, g: 0.9882353, b: 1, a: 1}
   lineMaterial: {fileID: 2100000, guid: 113a14930de453247a91ea34a9bae5ae, type: 2}
-  resultName: Pizza Party!
+  resultName: Pizza Party
   shortFormIdentifier: Pizza
   bossFaceReaction: {fileID: 21300000, guid: e744f0305cc71b2419117087b5a292cc, type: 3}
   finalFaceState: 5
@@ -29,4 +29,3 @@ MonoBehaviour:
     requiredPointThresholdPerPlayer: 20
   - gameModeName: Deadline
     requiredPointThresholdPerPlayer: 20
-  goal: 3

@@ -8,42 +8,8 @@ namespace ChickenScratch
 {
     public class WorkingGoalsManager : MonoBehaviour
     {
-        public enum GoalType
-        {
-            worker_win, extra_vote, employee_review, endgame_result_state, invalid
-        }
-
-        public class Goal
-        {
-            public GoalType type = GoalType.invalid;
-            public int requiredPoints = -1;
-            public string name = "";
-
-            public Goal(GoalType inType, int inRequiredPoints, string inName = "")
-            {
-                type = inType;
-                requiredPoints = inRequiredPoints;
-                name = inName;
-            }
-        }
-
-        public class PlayerPoints
-        {
-            public BirdName player = BirdName.none;
-            public int points = -1;
-            public EndgameCaseData caseData;
-
-            public PlayerPoints(BirdName inPlayer, int inPoints, EndgameCaseData inCaseData)
-            {
-                player = inPlayer;
-                points = inPoints;
-                caseData = inCaseData;
-            }
-        }
-
         public bool active = false;
         public bool graphingActive = true;
-        public bool celebrationActive = false;
         public bool didWorkersWin = false;
         public float graphWidth = 5f;
         public float graphHeight = 5f;
@@ -57,26 +23,20 @@ namespace ChickenScratch
         public float timeToShowPoint = 1.0f;
         public List<string> graphingSounds;
 
-        public GameObject extraVoteVisualPrefab, evaluateVisualPrefab, workerWinVisualPrefab, endlessModeResultVisualPrefab;
+        public GameObject resultVisualPrefab;
         public GameObject guessContainer;
         public List<Text> allWordTexts = new List<Text>();
         public Dictionary<int, Text> wordTextsMap = new Dictionary<int, Text>();
         public Image authorImage;
 
-        [SerializeField] private Animator bossAnimator;
+        
         [SerializeField] private ParticleSystem progressParticleEffect;
-        [SerializeField] private Animator confettiCannon1, confettiCannon2, confettiCannon3, confettiCannon4;
-        [SerializeField] private GameObject confettiWinEffect;
-        [SerializeField] private Animator pinkSlipAnimator;
-        [SerializeField] private EndlessModeResultForm endlessModeResultForm;
-        [SerializeField] private float endlessModeSpeedupIncrement;
-        [SerializeField] private int endlessModeSpeedupStartRound;
-        [SerializeField] private float endlessModeSpeedupCap;
         [SerializeField] private Transform thresholdLineHolderTransform;
         [SerializeField]
         private LineRenderer yAxisLineRenderer;
-        [SerializeField]
-        private FinalEndgameResultManager finalResultManager;
+
+        private Animator bossAnimator;
+
         public GameObject resizableObjectsHolder;
         private Dictionary<int, Vector3> guessOffsetMap = new Dictionary<int, Vector3>();
         private Dictionary<int, float> guessRotationMap = new Dictionary<int, float>();
@@ -85,12 +45,9 @@ namespace ChickenScratch
         private float _timeShowingPoint = 0f;
         private float _heightReached = 0f;
         private int _currentCaseIndex = 0;
-        private List<Goal> _goals = new List<Goal>();
-        private List<PlayerPoints> _pointsPerCase = new List<PlayerPoints>();
+        private List<GoalData> _goals = new List<GoalData>();
+        private List<PlayerPointsData> _pointsPerCase = new List<PlayerPointsData>();
         private bool _isInitialized = false;
-        private float _timeSinceLastConfettiCannonFired = 0f;
-        private float _timeBetweenConfettiCannonFires = 1.0f;
-        private int _currentConfettiCannonIndex = 0;
         private float _timeUntilEndgameResolution = 2.5f;
         private float _currentTimeWaitingForEndgameResolution = 0.0f;
         private float _currentWidthPerCase = 1.0f;
@@ -104,7 +61,7 @@ namespace ChickenScratch
         private float _timeBetweenGraphResizingTransitions = 2.5f;
         private float _currentTimeResizingGraph = 0.0f;
         private float _minimumHeightPerSegment = 0.01f;
-        private Goal _nextGoal;
+        private GoalData _nextGoal;
         private int _initialPointsForGraphHeight = 0;
         private int _initialCasesForGraphWidth = 0;
         private Dictionary<string, WorkingGoal> _activeWorkingGoalsMap = new Dictionary<string, WorkingGoal>();
@@ -115,7 +72,7 @@ namespace ChickenScratch
         public void Start()
         {
             initialize();
-            //test();
+            test();
         }
 
         private void initialize()
@@ -156,42 +113,43 @@ namespace ChickenScratch
 
         private void test()
         {
-            _goals = new List<Goal>();
-            Goal newGoal = new Goal(GoalType.endgame_result_state, 10);
+            GameDataManager.Instance.RefreshWords(new List<CaseWordData>());
+            _goals = new List<GoalData>();
+            GoalData newGoal = new GoalData(10);
             newGoal.name = "Pizza Party";
             _goals.Add(newGoal);
-            _pointsPerCase = new List<PlayerPoints>();
-            newGoal = new Goal(GoalType.endgame_result_state, 300);
+            _pointsPerCase = new List<PlayerPointsData>();
+            newGoal = new GoalData(300);
             newGoal.name = "Up for Promotion";
             _goals.Add(newGoal);
-            _pointsPerCase = new List<PlayerPoints>();
+            _pointsPerCase = new List<PlayerPointsData>();
             EndgameCaseData test = new EndgameCaseData();
-            test.correctWordIdentifierMap.Add(1, "");
-            test.correctWordIdentifierMap.Add(2, "");
+            test.correctWordIdentifierMap.Add(1, "prefixes-NEUTRAL-ATTACHED");
+            test.correctWordIdentifierMap.Add(2, "nouns-ANIMAL-AARDVARK");
             test.guessData.prefix = "bot";
             test.guessData.noun = "potato";
-            _pointsPerCase.Add(new PlayerPoints(BirdName.red, 8, test));
+            _pointsPerCase.Add(new PlayerPointsData(BirdName.red, 8, test));
             test = new EndgameCaseData();
-            test.correctWordIdentifierMap.Add(1, "");
-            test.correctWordIdentifierMap.Add(2, "");
-            test.guessData.prefix = "hot";
-            test.guessData.noun = "tomato";
-            _pointsPerCase.Add(new PlayerPoints(BirdName.green, 4, test));
+            test.correctWordIdentifierMap.Add(1, "prefixes-NEUTRAL-ATTACHED");
+            test.correctWordIdentifierMap.Add(2, "nouns-ANIMAL-AARDVARK");
+            test.guessData.prefix = "ATTACHED";
+            test.guessData.noun = "AARDVARK";
+            _pointsPerCase.Add(new PlayerPointsData(BirdName.green, 4, test));
             test = new EndgameCaseData();
-            test.correctWordIdentifierMap.Add(1, "");
-            test.correctWordIdentifierMap.Add(2, "");
-            test.guessData.prefix = "bot";
+            test.correctWordIdentifierMap.Add(1, "prefixes-NEUTRAL-ATTACHED");
+            test.correctWordIdentifierMap.Add(2, "nouns-ANIMAL-AARDVARK");
+            test.guessData.prefix = "ATTACHED";
             test.guessData.noun = "totato";
-            _pointsPerCase.Add(new PlayerPoints(BirdName.blue, 2, test));
+            _pointsPerCase.Add(new PlayerPointsData(BirdName.blue, 2, test));
             test = new EndgameCaseData();
-            test.correctWordIdentifierMap.Add(1, "");
-            test.correctWordIdentifierMap.Add(2, "");
+            test.correctWordIdentifierMap.Add(1, "prefixes-NEUTRAL-ATTACHED");
+            test.correctWordIdentifierMap.Add(2, "nouns-ANIMAL-AARDVARK");
             test.guessData.prefix = "hot";
-            test.guessData.noun = "potato";
-            _pointsPerCase.Add(new PlayerPoints(BirdName.orange, 25, test));
-            _pointsPerCase.Add(new PlayerPoints(BirdName.orange, 25, test));
-            _pointsPerCase.Add(new PlayerPoints(BirdName.orange, 25, test));
-            _pointsPerCase.Add(new PlayerPoints(BirdName.orange, 25, test));
+            test.guessData.noun = "AARDVARK";
+            _pointsPerCase.Add(new PlayerPointsData(BirdName.orange, 25, test));
+            _pointsPerCase.Add(new PlayerPointsData(BirdName.orange, 25, test));
+            _pointsPerCase.Add(new PlayerPointsData(BirdName.orange, 25, test));
+            _pointsPerCase.Add(new PlayerPointsData(BirdName.orange, 25, test));
 
             startShowingWorkingGoals(true);
         }
@@ -216,19 +174,12 @@ namespace ChickenScratch
 
                 else
                 {
-                    if (celebrationActive)
-                    {
-                        updateCelebrationState();
-                    }
-                    else
-                    {
-                        updateResolutionState();
-                    }
+                    updateResolutionState();
                 }
             }
         }
 
-        public void initializeWorkingGoals(List<Goal> goals, List<PlayerPoints> playerPoints)
+        public void initializeWorkingGoals(List<GoalData> goals, List<PlayerPointsData> playerPoints)
         {
             _goals = goals;
             _pointsPerCase = playerPoints;
@@ -417,11 +368,11 @@ namespace ChickenScratch
             }
         }
 
-        private int getNumberOfCasesToGoal(Goal goal)
+        private int getNumberOfCasesToGoal(GoalData goal)
         {
             int numberOfCasesToGoal = 0;
             int cumulativePoints = 0;
-            foreach (PlayerPoints pointsGroup in _pointsPerCase)
+            foreach (PlayerPointsData pointsGroup in _pointsPerCase)
             {
                 cumulativePoints += pointsGroup.points;
                 numberOfCasesToGoal++;
@@ -433,43 +384,7 @@ namespace ChickenScratch
             return numberOfCasesToGoal;
         }
 
-        private void updateCelebrationState()
-        {
-            _timeSinceLastConfettiCannonFired += Time.deltaTime;
-            if (_timeBetweenConfettiCannonFires < _timeSinceLastConfettiCannonFired)
-            {
-                _currentConfettiCannonIndex++;
-                switch (_currentConfettiCannonIndex)
-                {
-                    case 1:
-                        confettiCannon1.gameObject.SetActive(true);
-                        AudioManager.Instance.PlaySound("ConfettiCannon");
-                        confettiCannon1.SetTrigger("Fire");
-                        break;
-                    case 2:
-                        confettiCannon2.gameObject.SetActive(true);
-                        AudioManager.Instance.PlaySound("ConfettiCannon");
-                        confettiCannon2.SetTrigger("Fire");
-                        break;
-                    case 3:
-                        confettiCannon3.gameObject.SetActive(true);
-                        AudioManager.Instance.PlaySound("ConfettiCannon");
-                        confettiCannon3.SetTrigger("Fire");
-                        break;
-                    case 4:
-                        confettiCannon4.gameObject.SetActive(true);
-                        AudioManager.Instance.PlaySound("ConfettiCannon");
-                        confettiCannon4.SetTrigger("Fire");
-                        break;
-                    case 5:
-                        celebrationActive = false;
-                        active = false;
-                        break;
-                }
-                _timeSinceLastConfettiCannonFired = 0.0f;
-            }
-        }
-
+        
 
         private void updateResolutionState()
         {
@@ -478,19 +393,6 @@ namespace ChickenScratch
             {
                 showFinalResult(getHighestGoalUnderPoints(_currentPoints));
                 return;
-                if (didWorkersWin)
-                {
-                    celebrationActive = true;
-                    AudioManager.Instance.PlaySound("Celebration");
-                    confettiWinEffect.SetActive(true);
-                }
-                else
-                {
-                    AudioManager.Instance.PlaySound("Defeat");
-                    pinkSlipAnimator.gameObject.SetActive(true);
-                    pinkSlipAnimator.SetTrigger("Slide");
-                    active = false;
-                }
             }
         }
 
@@ -503,7 +405,7 @@ namespace ChickenScratch
             didWorkersWin = inDidWorkersWin;
             guessContainer.SetActive(true);
             _currentCaseIndex = 0;
-            foreach (PlayerPoints point in _pointsPerCase)
+            foreach (PlayerPointsData point in _pointsPerCase)
             {
                 _totalPoints += point.points;
             }
@@ -511,7 +413,7 @@ namespace ChickenScratch
             _currentPoints = 0;
 
             //Determine the goal with the lowest height under current points
-            Goal lowestGoal = getLowestGoalOverPoints(_currentPoints);
+            GoalData lowestGoal = getLowestGoalOverPoints(_currentPoints);
 
             if (_pointsPerCase.Count == 0)
             {
@@ -538,11 +440,11 @@ namespace ChickenScratch
             active = true;
         }
 
-        private float getCurrentWidthPerCase(Goal goal)
+        private float getCurrentWidthPerCase(GoalData goal)
         {
             int numberOfCases = 0;
             int numberOfPointsReached = 0;
-            foreach (PlayerPoints pointsGroup in _pointsPerCase)
+            foreach (PlayerPointsData pointsGroup in _pointsPerCase)
             {
                 numberOfPointsReached += pointsGroup.points;
                 numberOfCases++;
@@ -556,7 +458,7 @@ namespace ChickenScratch
             return currentWidthPerCase;
         }
 
-        private float getCurrentHeightPerPoint(Goal goal)
+        private float getCurrentHeightPerPoint(GoalData goal)
         {
             float currentHeightPerPoint = Mathf.Max(graphHeight / goal.requiredPoints, _minimumHeightPerSegment);
             _initialPointsForGraphHeight = goal.requiredPoints;
@@ -566,7 +468,7 @@ namespace ChickenScratch
         private void createGoalVisualsMap(float heightPerPoint)
         {
             _activeWorkingGoalsMap.Clear();
-            foreach (Goal goal in _goals)
+            foreach (GoalData goal in _goals)
             {
                 //Instantiate a threshold line at the corresponding height
                 GameObject lineObject = Instantiate(thresholdLinePrefab, new Vector3(0f, 0f, 0), Quaternion.identity, thresholdLineHolderTransform);
@@ -581,23 +483,8 @@ namespace ChickenScratch
                 GameObject selectedPrefab;
 
                 //Instantiate the goal image at the corresponding height
-                switch (goal.type)
-                {
-                    case GoalType.employee_review:
-                        selectedPrefab = evaluateVisualPrefab;
-                        break;
-                    case GoalType.extra_vote:
-                        selectedPrefab = extraVoteVisualPrefab;
-                        break;
-                    case GoalType.worker_win:
-                        selectedPrefab = workerWinVisualPrefab;
-                        break;
-                    case GoalType.endgame_result_state:
-                        selectedPrefab = endlessModeResultVisualPrefab;
-                        break;
-                    default:
-                        continue;
-                }
+                selectedPrefab = resultVisualPrefab;
+
                 Vector3 screenPoint = Camera.main.WorldToScreenPoint(new Vector3(startingPosition.x, startingPosition.y + heightPerPoint * goal.requiredPoints, -2));
                 GameObject newObject = Instantiate(selectedPrefab, Vector3.zero, Quaternion.identity, resizableObjectsHolder.transform);
                 newObject.transform.localPosition = screenPoint;
@@ -645,7 +532,6 @@ namespace ChickenScratch
                         {
                             Debug.LogError("Threshold line label was null for goal[" + goal.name + "]");
                         }
-
                     }
                     else
                     {
@@ -655,11 +541,11 @@ namespace ChickenScratch
             }
         }
 
-        private Goal getHighestGoalUnderPoints(int points)
+        private GoalData getHighestGoalUnderPoints(int points)
         {
-            Goal highestGoal = null;
+            GoalData highestGoal = null;
 
-            foreach (Goal goal in _goals)
+            foreach (GoalData goal in _goals)
             {
                 if (highestGoal == null && goal.requiredPoints <= points)
                 {
@@ -674,11 +560,11 @@ namespace ChickenScratch
             return highestGoal;
         }
 
-        private Goal getLowestGoalOverPoints(int points)
+        private GoalData getLowestGoalOverPoints(int points)
         {
-            Goal lowestGoal = null;
+            GoalData lowestGoal = null;
 
-            foreach (Goal goal in _goals)
+            foreach (GoalData goal in _goals)
             {
                 if (lowestGoal == null && goal.requiredPoints > points)
                 {
@@ -692,7 +578,7 @@ namespace ChickenScratch
             if(lowestGoal == null)
             {
                 //Then we need to choose the highest goal because we've broken the record :O
-                foreach (Goal goal in _goals)
+                foreach (GoalData goal in _goals)
                 {
                     if (lowestGoal == null)
                     {
@@ -778,34 +664,10 @@ namespace ChickenScratch
             progressParticleEffect.gameObject.SetActive(true);
         }
 
-        private void showFinalResult(Goal goal)
+        private void showFinalResult(GoalData goal)
         {
             //Get the matching result
-            ResultData matchingResult = null;
-            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
-            {
-                if (result.resultName == goal.name)
-                {
-                    matchingResult = result;
-                }
-            }
-
-            if (matchingResult == null)
-            {
-                Debug.LogError("Could not show endless mode result, could not match a result to the provided goal[" + goal.name + "].");
-            }
-            //endlessModeResultForm.bossReactionImage.sprite = matchingResult.bossFaceReaction;
-            //endlessModeResultForm.formImage.color = matchingResult.sheetColour;
-            endlessModeResultForm.resultMessageText.text = matchingResult.bossMessage;
-            endlessModeResultForm.resultNameText.color = matchingResult.resultTextColour;
-            endlessModeResultForm.resultNameText.text = matchingResult.resultName;
-            //AudioManager.Instance.PlaySound(matchingResult.sfxToPlay);
-            endlessModeResultForm.gameObject.SetActive(true);
-            AudioManager.Instance.PlaySound("sfx_game_env_boss_lower");
-            bossAnimator.SetBool("Slide", false);
-            finalResultManager.chosenReactionState = matchingResult.finalFaceState;
-            finalResultManager.responseSoundClip = matchingResult.sfxToPlay;
-            finalResultManager.Play();
+            
             enabled = false;
             //endlessModeResultForm.formAnimator.SetTrigger("Slide");
             //active = false;

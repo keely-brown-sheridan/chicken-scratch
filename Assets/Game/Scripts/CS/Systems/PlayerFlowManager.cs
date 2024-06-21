@@ -40,6 +40,7 @@ namespace ChickenScratch
         public GameObject loadingCircleObject;
 
         public GameObject waitingForPlayersNotification;
+        public int currentDay = 0;
 
         [SerializeField]
         private PauseMenu pauseMenu;
@@ -184,7 +185,6 @@ namespace ChickenScratch
 
                 foreach(BirdName playerToSubmit in playersToForceSubmit)
                 {
-                    Debug.LogError("Forcing player["+playerToSubmit.ToString()+"] to submit.");
                     GameManager.Instance.gameFlowManager.addTransitionCondition("force_submit:" + playerToSubmit.ToString());
                     GameManager.Instance.gameDataHandler.TargetForceSubmit(SettingsManager.Instance.GetConnection(playerToSubmit));
                 }

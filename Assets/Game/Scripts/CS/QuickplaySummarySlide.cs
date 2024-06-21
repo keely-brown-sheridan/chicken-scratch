@@ -108,17 +108,17 @@ namespace ChickenScratch
                 totalPoints += caseData.GetTotalPoints();
             }
             
-            List<WorkingGoalsManager.Goal> goals = new List<WorkingGoalsManager.Goal>();
+            List<GoalData> goals = new List<GoalData>();
 
             foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
             {
-                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.name));
-                goals.Add(new WorkingGoalsManager.Goal(result.goal, requiredPoints, result.resultName));
+                int requiredPoints = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.title));
+                goals.Add(new GoalData(requiredPoints, result.resultName));
             }
 
-            WorkingGoalsManager.Goal highestGoal = null;
+            GoalData highestGoal = null;
 
-            foreach (WorkingGoalsManager.Goal goal in goals)
+            foreach (GoalData goal in goals)
             {
                 if (highestGoal == null && goal.requiredPoints <= totalPoints)
                 {
