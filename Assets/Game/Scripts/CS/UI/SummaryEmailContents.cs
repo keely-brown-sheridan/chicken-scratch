@@ -45,7 +45,7 @@ namespace ChickenScratch
                     {
                         pointsMap.Add(guesser, 0);
                     }
-                    pointsMap[guesser] += currentCase.GetTotalPoints();
+                    pointsMap[guesser] += currentCase.scoringData.GetTotalPoints();
                 }
                 foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
                 {

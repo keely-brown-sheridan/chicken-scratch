@@ -81,6 +81,11 @@ public class CSNetworkManager : NetworkManager
             case NetworkState.lobby:
                 break;
             case NetworkState.ingame:
+                if (dcManager == null)
+                {
+                    dcManager = FindObjectOfType<DCManager>();
+                }
+                dcManager.handleHostDisconnection();
                 return;
                 currentState = NetworkState.disconnected;
                 SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_room_listings;

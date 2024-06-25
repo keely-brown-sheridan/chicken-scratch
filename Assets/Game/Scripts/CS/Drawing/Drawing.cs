@@ -11,41 +11,12 @@ namespace ChickenScratch
         public List<GameObject> CreateDrawingsFromVisuals(List<DrawingLineData> drawingVisuals, Vector3 position, float thicknessReductionFactor)
         {
             Material drawingMaterial;
-            GameObject drawingPrefab = null;
+            GameObject drawingPrefab = ColourManager.Instance.linePrefab;
             float lineThickness = -1;
             foreach (DrawingLineData visual in drawingVisuals)
             {
                 DrawingLineData line = (DrawingLineData)visual;
-                if (line.lineColour == DrawingLineData.LineColour.Base)
-                {
-                    drawingMaterial = ColourManager.Instance.baseLineMaterial;
-                    drawingPrefab = ColourManager.Instance.linePrefab;
-                }
-                else if (line.lineColour == DrawingLineData.LineColour.Colour)
-                {
-                    drawingMaterial = ColourManager.Instance.birdMap[line.author].material;
-                    drawingPrefab = ColourManager.Instance.linePrefab;
-                }
-                else if (line.lineColour == DrawingLineData.LineColour.Light)
-                {
-                    drawingMaterial = ColourManager.Instance.birdMap[line.author].bgLineMaterial;
-                    drawingPrefab = ColourManager.Instance.linePrefab;
-                }
-                else if (line.lineColour == DrawingLineData.LineColour.Erase)
-                {
-                    drawingMaterial = ColourManager.Instance.eraseLineMaterial;
-                    drawingPrefab = ColourManager.Instance.linePrefab;
-                }
-                else if (line.lineColour == DrawingLineData.LineColour.Clear)
-                {
-                    drawingMaterial = ColourManager.Instance.clearLineMaterial;
-                    drawingPrefab = ColourManager.Instance.linePrefab;
-                }
-                else
-                {
-                    Debug.LogError("Invalid line type[" + line.lineColour + "] provided for line. Cannot create drawing.");
-                    return new List<GameObject>();
-                }
+                drawingMaterial = ColourManager.Instance.baseLineMaterial;
 
                 lineThickness = line.lineSize * thicknessReductionFactor;
                 if (lineThickness == -1)
@@ -63,6 +34,7 @@ namespace ChickenScratch
 
                 newLineRenderer.material = drawingMaterial;
                 newLineRenderer.positionCount = line.positions.Count;
+                newLineRenderer.material.color = line.lineColour;
 
                 int iterator = 0;
                 

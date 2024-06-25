@@ -23,7 +23,9 @@ namespace ChickenScratch
 
         public void Initialize(GuessData guessData, Dictionary<int,string> correctWordIdentifiersMap, int round, int caseID, float timeModifierDecrement)
         {
+            
             Bird authorBird = ColourManager.Instance.birdMap[guessData.author];
+            _author = guessData.author;
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);

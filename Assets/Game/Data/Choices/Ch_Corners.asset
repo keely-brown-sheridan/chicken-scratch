@@ -22,7 +22,7 @@ MonoBehaviour:
   penalty: 0
   startingScoreModifier: 1.5
   maxScoreModifier: 1.5
-  taskFalloff: 1
+  taskFalloff: 0
   colour: {r: 1, g: 0.96186435, b: 0.6367924, a: 1}
   startingWordIdentifiers:
   - prefix

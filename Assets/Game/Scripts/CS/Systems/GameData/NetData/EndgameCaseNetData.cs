@@ -22,6 +22,7 @@ namespace ChickenScratch
         public int penalty;
         public string caseTypeName;
         public Color caseTypeColour;
+        public CaseScoringData scoringData;
         public EndgameCaseNetData()
         {
 
@@ -41,6 +42,7 @@ namespace ChickenScratch
             penalty = inCaseData.penalty;
             caseTypeName = inCaseData.caseTypeName;
             caseTypeColour = inCaseData.caseTypeColour;
+            scoringData = inCaseData.scoringData;
         }
     }
 }

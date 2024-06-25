@@ -60,6 +60,7 @@ namespace ChickenScratch
         private void Test()
         {
             EndgameCaseData testCase = new EndgameCaseData();
+
             //create task queue
             EndgameTaskData testTask = new EndgameTaskData();
             testTask.taskType = TaskData.TaskType.base_guessing;

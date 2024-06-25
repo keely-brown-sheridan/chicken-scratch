@@ -79,6 +79,7 @@ namespace ChickenScratch
             hasStartedShowingDayResult = false;
             inProgress = true;
             slideTypeMap.Clear();
+            GameManager.Instance.gameFlowManager.addTransitionCondition("slides_complete");
             foreach (SlideTypeData slideType in slideTypes)
             {
                 slideTypeMap.Add(slideType.slideType, slideType);
@@ -115,7 +116,6 @@ namespace ChickenScratch
 
         public void GenerateEndgameData()
         {
-            Debug.LogError("Generating endgame data.");
             Dictionary<int, ChainData> gameCaseMap = GameManager.Instance.playerFlowManager.drawingRound.caseMap;
             List<EndgameCaseData> endgameCases = new List<EndgameCaseData>();
             foreach (KeyValuePair<int, ChainData> currentCase in gameCaseMap)
@@ -124,6 +124,8 @@ namespace ChickenScratch
                 endgameCases.Add(endgameCase);
             }
             GameManager.Instance.gameDataHandler.RpcSendEndgameCaseDataWrapper(endgameCases);
+
+
         }
 
         private void updateSlideFlow()
@@ -142,8 +144,6 @@ namespace ChickenScratch
                     //If there are no more cases left then it's time to move on, so send the ratings
                     if (!caseDataMap.ContainsKey(currentSlideCaseIndex))
                     {
-                        Debug.LogError("Finishing slides round.");
-                        
                         GameManager.Instance.gameDataHandler.RpcShowDayResult();
                         hasStartedShowingDayResult = true;
                     }
@@ -176,7 +176,6 @@ namespace ChickenScratch
 
         public void CreateSlidesFromCase(EndgameCaseData caseData)
         {
-            Debug.LogError("Create slides from case.");
             string correctPrefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]).value;
             string correctNoun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]).value;
             goldStarManager.restock();
@@ -192,7 +191,7 @@ namespace ChickenScratch
             currentSlideType = slideTypeMap[SlideTypeData.SlideType.summary];
             GameObject summarySlideObject = Instantiate(currentSlideType.prefab, slidesParent);
             SummarySlideContents summarySlide = summarySlideObject.GetComponent<SummarySlideContents>();
-            summarySlide.Initialize(correctPrefix, correctNoun, caseData.identifier, currentSlideType.showDuration, caseData.GetTotalPoints());
+            summarySlide.Initialize(correctPrefix, correctNoun, caseData.identifier, currentSlideType.showDuration, caseData.scoringData.GetTotalPoints());
 
             //Create task slides
             foreach (KeyValuePair<int,EndgameTaskData> taskData in caseData.taskDataMap)
@@ -230,7 +229,8 @@ namespace ChickenScratch
                         break;
                 }
             }
-            
+
+            summarySlide.LoadSections();
             queuedSlides.Add(summarySlide);
             //Show the first slide
             currentSlideContents = introSlide;
@@ -265,12 +265,7 @@ namespace ChickenScratch
         public void initializeGalleryBird(int index, ColourManager.BirdName inBirdName)
         {
             PeanutBird peanutBird = allChatBirds[index];
-            peanutBird.gameObject.SetActive(true);
-            Instantiate(ColourManager.Instance.birdMap[inBirdName].slidesBirdPrefab, peanutBird.transform);
-            peanutBird.Colourize(ColourManager.Instance.birdMap[inBirdName].colour);
-            peanutBird.birdName = inBirdName;
-            peanutBird.chatBubble.bubbleText.color = ColourManager.Instance.birdMap[inBirdName].colour;
-            peanutBird.isInitialized = true;
+            peanutBird.Initialize(inBirdName);
 
             if (inBirdName == SettingsManager.Instance.birdName)
             {
@@ -404,7 +399,7 @@ namespace ChickenScratch
         public void ShowDayResult()
         {
             ResultData gameResult = SettingsManager.Instance.GetDayResult();
-
+            ClearPreviousSlides();
             dayResultForm.resultMessageText.text = gameResult.bossMessage;
             dayResultForm.resultNameText.color = gameResult.resultTextColour;
             dayResultForm.resultNameText.text = gameResult.resultName;
@@ -442,7 +437,15 @@ namespace ChickenScratch
                     currentSlideContents = null;
                     currentSlideCaseIndex--;
                     GameManager.Instance.gameDataHandler.RpcUpdateGameDay(GameManager.Instance.playerFlowManager.currentDay + 1);
-                    _phaseToTransitionTo = GamePhase.instructions;
+                    foreach (BirdName bird in GameManager.Instance.gameFlowManager.gamePlayers.Keys)
+                    {
+                        if (!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
+                        {
+                            GameManager.Instance.gameFlowManager.addTransitionCondition("day_loaded:" + bird);
+                        }
+                    }
+                    
+                    _phaseToTransitionTo = GamePhase.store;
                 }
             }
             else
@@ -462,12 +465,7 @@ namespace ChickenScratch
                 sendRatingsToClients();
                 _phaseToTransitionTo = GamePhase.accolades;
             }
-        }
-
-        public void Reset()
-        {
-            
-
+            GameManager.Instance.gameFlowManager.resolveTransitionCondition("slides_complete");
         }
     }
 }

@@ -1,6 +1,8 @@
 using ChickenScratch;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static ChickenScratch.CaseWordTemplateData;
 using static ChickenScratch.WordGroupData;
@@ -21,6 +23,9 @@ public class GameDataManager : Singleton<GameDataManager>
     private WordDataList wordDataList;
 
     private Dictionary<string, CaseWordData> caseWordMap = new Dictionary<string, CaseWordData>();
+
+    [SerializeField]
+    private List<StoreItemData> storeItems = new List<StoreItemData>();
 
     // Start is called before the first frame update
     void Awake()
@@ -135,5 +140,19 @@ public class GameDataManager : Singleton<GameDataManager>
 
         }
         return wordGroups;
+    }
+
+    public StoreItemData GetUnusedStoreItem(List<StoreItem.StoreItemType> usedTypes)
+    {
+        StoreItemData chosenStoreItem = null;
+
+        List<StoreItemData> validItems = storeItems.Where(i => !usedTypes.Contains(i.itemType)).OrderBy(cp => Guid.NewGuid()).ToList();
+
+        if(validItems.Count > 0)
+        {
+            chosenStoreItem = validItems[0];
+        }
+
+        return chosenStoreItem;
     }
 }

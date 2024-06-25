@@ -83,46 +83,28 @@ namespace ChickenScratch
         {
             duration = inDuration;
             GuessData guessData = caseData.guessData;
-            string prefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]).value;
-            string noun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]).value;
+            CaseWordData prefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]);
+            CaseWordData noun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]);
             timeWaiting = 0f;
             Bird authorBird = ColourManager.Instance.birdMap[guessData.author];
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);
             prefixText.text = guessData.prefix;
-            isPrefixCorrect = guessData.prefix == prefix;
+            isPrefixCorrect = guessData.prefix == prefix.value;
             prefixText.color = isPrefixCorrect ? correctColour : incorrectColour;
             nounText.text = guessData.noun;
-            isNounCorrect = guessData.noun == noun;
+            isNounCorrect = guessData.noun == noun.value;
             nounText.color = isNounCorrect ? correctColour : incorrectColour;
             goldStarDetectionArea.Initialize(guessData.author, round, caseData.identifier);
             caseTypeSlideVisualizer.Initialize(caseData.caseTypeColour, caseData.caseTypeName);
-            originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
+            originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix.value, noun.value);
             slideTimeModifierDecrementVisual.Initialize(taskData.timeModifierDecrement);
-
-            CaseChoiceData originalCaseChoice = GameDataManager.Instance.GetCaseChoice(caseData.caseTypeName);
-            
             slideCaseScoreVisualization.Initialize(caseData.scoreModifier, caseData.maxScoreModifier);
 
-            int pointsFromThisCase = 0;
-            if(isPrefixCorrect)
-            {
-                pointsFromThisCase += originalCaseChoice.pointsPerCorrectWord;
-                prefixScoreTarget = originalCaseChoice.pointsPerCorrectWord + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
-            }
-            nounScoreTarget = prefixScoreTarget;
-            if(isNounCorrect)
-            {
-                pointsFromThisCase += originalCaseChoice.pointsPerCorrectWord;
-                nounScoreTarget += originalCaseChoice.pointsPerCorrectWord;
-                if(isPrefixCorrect)
-                {
-                    nounScoreTarget += originalCaseChoice.bonusPoints;
-                    pointsFromThisCase += originalCaseChoice.bonusPoints;
-                }
-            }
-            modifierScoreTarget = pointsFromThisCase * caseData.scoreModifier + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
+            prefixScoreTarget = caseData.scoringData.prefixBirdbucks + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
+            nounScoreTarget = caseData.scoringData.bonusBirdbucks + caseData.scoringData.nounBirdbucks + prefixScoreTarget;
+            modifierScoreTarget = caseData.scoringData.GetTotalPoints() + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
         }
 
         private void Update()

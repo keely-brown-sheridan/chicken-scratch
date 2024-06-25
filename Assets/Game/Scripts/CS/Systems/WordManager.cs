@@ -14,6 +14,8 @@ namespace ChickenScratch
         public Dictionary<string, WordGroupData> AllNouns => allNouns;
         private Dictionary<string, WordGroupData> allNouns = new Dictionary<string, WordGroupData>();
         public Dictionary<string, WordGroupData> AllPrefixes => allPrefixes;
+
+        public static string testingPrefixIdentifier = "prefixes-NEUTRAL-ATTACHED", testingNounIdentifier = "nouns-ANIMAL-AXOLOTL";
         private Dictionary<string, WordGroupData> allPrefixes = new Dictionary<string, WordGroupData>();
 
         private List<WordData> nounQueue = new List<WordData>();

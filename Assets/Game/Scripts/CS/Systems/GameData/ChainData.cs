@@ -139,5 +139,31 @@ namespace ChickenScratch
         {
             return guessData.prefix != "" || guessData.noun != "";
         }
+
+        public int GetTotalPoints()
+        {
+            int totalPoints = 0;
+            bool allCorrect = true;
+            foreach (KeyValuePair<int, string> correctWordIdentifier in correctWordIdentifierMap)
+            {
+                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
+                if ((correctWordIdentifier.Key == 1 && correctWord.value == guessData.prefix) ||
+                    (correctWordIdentifier.Key == 2 && correctWord.value == guessData.noun))
+                {
+                    totalPoints += correctWord.difficulty;
+                    totalPoints += pointsPerCorrectWord;
+                }
+                else
+                {
+                    allCorrect = false;
+                }
+            }
+            if (allCorrect)
+            {
+                totalPoints += pointsForBonus;
+            }
+
+            return (int)(totalPoints * currentScoreModifier);
+        }
     }
 }

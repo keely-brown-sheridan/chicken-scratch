@@ -19,6 +19,9 @@ namespace ChickenScratch
         [SerializeField]
         private Vector3 drawingOffset;
 
+        [SerializeField]
+        private CaseWordCategoryVisual caseWordCategoryVisual;
+
         public void Initialize(DrawingData drawingData, UnityAction inTimeCompleteAction)
         {
             promptingContainer.Show(drawingData, drawingScalingFactor, drawingOffset);
@@ -36,6 +39,7 @@ namespace ChickenScratch
             base.Hide();
             promptInputField.text = "";
             HidePreviousDrawings();
+            caseWordCategoryVisual.Hide();
         }
 
         public void HidePreviousDrawings()
@@ -67,6 +71,12 @@ namespace ChickenScratch
         {
             yield return new WaitForEndOfFrame();
             promptInputField.ActivateInputField();
+        }
+
+        public void ShowCategory(WordCategoryData wordCategoryData)
+        {
+            caseWordCategoryVisual.Initialize(wordCategoryData);
+            caseWordCategoryVisual.Show();
         }
     }
 

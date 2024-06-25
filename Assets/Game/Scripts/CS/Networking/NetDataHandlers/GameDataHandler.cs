@@ -101,7 +101,7 @@ public class GameDataHandler : NetworkBehaviour
     public void RpcUpdateGameDay(int newDayValue)
     {
         GameManager.Instance.playerFlowManager.currentDay = newDayValue;
-        GameManager.Instance.playerFlowManager.slidesRound.Reset();
+        GameManager.Instance.gameDataHandler.CmdTransitionCondition("day_loaded:" + SettingsManager.Instance.birdName);
     }
 
     //Broadcast - cabinet_drawer_is_ready
@@ -119,7 +119,7 @@ public class GameDataHandler : NetworkBehaviour
         }
         if (folderUpdateData.cabinetIndex == drawingRound.playerCabinetIndex)
         {
-            drawingRound.UpdateQueuedFolder(folderUpdateData.caseID, folderUpdateData.roundNumber, folderUpdateData.currentState);
+            drawingRound.UpdateQueuedFolder(folderUpdateData.caseID, folderUpdateData.roundNumber, folderUpdateData.currentState, folderUpdateData.wordCategory);
 
             currentCase = drawingRound.caseMap[folderUpdateData.caseID];
             currentCase.identifier = folderUpdateData.caseID;
@@ -127,13 +127,13 @@ public class GameDataHandler : NetworkBehaviour
             currentCase.maxScoreModifier = folderUpdateData.maxScoreModifier;
             currentCase.currentTaskDuration = folderUpdateData.taskTime;
             currentCase.currentTaskModifiers = folderUpdateData.taskModifiers;
-            if (!currentCase.playerOrder.ContainsKey(folderUpdateData.roundNumber))
+            if (!currentCase.playerOrder.ContainsKey(folderUpdateData.roundNumber-1))
             {
-                currentCase.playerOrder.Add(folderUpdateData.roundNumber, folderUpdateData.lastPlayer);
+                currentCase.playerOrder.Add(folderUpdateData.roundNumber-1, folderUpdateData.lastPlayer);
             }
             else
             {
-                currentCase.playerOrder[folderUpdateData.roundNumber] = folderUpdateData.lastPlayer;
+                currentCase.playerOrder[folderUpdateData.roundNumber-1] = folderUpdateData.lastPlayer;
             }
         }
 
@@ -415,7 +415,15 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Clear();
         foreach (EndgameCaseNetData netDataCase in netDataCases)
         {
-            GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Add(netDataCase.identifier, new EndgameCaseData(netDataCase));
+            EndgameCaseData endgameCase = new EndgameCaseData(netDataCase);
+            GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Add(netDataCase.identifier, endgameCase);
+            
+            bool caseContainsPlayer = endgameCase.ContainsBird(SettingsManager.Instance.birdName);
+            if (caseContainsPlayer)
+            {
+                int birdBucksEarned = endgameCase.scoringData.GetTotalPoints() / endgameCase.taskDataMap.Count;
+                GameManager.Instance.playerFlowManager.storeRound.IncreaseCurrentMoney(birdBucksEarned);
+            }
         }
         CmdTransitionCondition("endgame_data_loaded:" + SettingsManager.Instance.birdName.ToString());
     }
@@ -534,11 +542,23 @@ public class GameDataHandler : NetworkBehaviour
         
     }
 
+    [TargetRpc]
+    public void TargetSendPointsToScoreTrackerPlayer(NetworkConnectionToClient target, int points)
+    {
+        GameManager.Instance.playerFlowManager.drawingRound.UpdateScoreTrackerPoints(points);
+    }
+
     //Command - transition_condition
     [Command(requiresAuthority = false)]
     public void CmdTransitionCondition(string transitionCondition)
     {
         GameManager.Instance.gameFlowManager.resolveTransitionCondition(transitionCondition);
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdFinishWithStore(BirdName player)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.FinishWithStoreForPlayer(player);
     }
 
     //Command - prompt
@@ -632,6 +652,7 @@ public class GameDataHandler : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdRequestCaseChoice(BirdName birdName)
     {
+        SettingsManager.Instance.gameMode.casesRemaining--;
         List<CaseChoiceData> allCaseChoices = GameDataManager.Instance.GetCaseChoices(SettingsManager.Instance.gameMode.caseChoiceIdentifiers);
         int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
         List<CaseChoiceData> validCaseChoices = new List<CaseChoiceData>();
@@ -662,9 +683,56 @@ public class GameDataHandler : NetworkBehaviour
                     break;
             }
         }
-        SettingsManager.Instance.gameMode.casesRemaining--;
+        
         RpcUpdateNumberOfCases(SettingsManager.Instance.gameMode.casesRemaining);
         TargetSendCaseChoices(SettingsManager.Instance.GetConnection(birdName), caseChoiceDatas);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdRerollCaseChoice(BirdName birdName)
+    {
+        List<CaseChoiceData> allCaseChoices = GameDataManager.Instance.GetCaseChoices(SettingsManager.Instance.gameMode.caseChoiceIdentifiers);
+        int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
+        List<CaseChoiceData> validCaseChoices = new List<CaseChoiceData>();
+        //Iterate over all case choices and add to the valid case choice list based on what is possible to complete and the frequency set in the choice
+        foreach (CaseChoiceData caseChoice in allCaseChoices)
+        {
+            if (caseChoice.numberOfTasks <= numberOfPlayers)
+            {
+                for (int i = 0; i < caseChoice.selectionFrequency; i++)
+                {
+                    validCaseChoices.Add(caseChoice);
+                }
+            }
+        }
+        List<CaseChoiceData> caseChoices = new List<CaseChoiceData>();
+        caseChoices.Add(validCaseChoices.OrderBy(x => Guid.NewGuid()).ToList()[0]);
+        caseChoices.Add(validCaseChoices.OrderBy(x => Guid.NewGuid()).ToList()[0]);
+        caseChoices.Add(validCaseChoices.OrderBy(x => Guid.NewGuid()).ToList()[0]);
+
+        List<CaseChoiceNetData> caseChoiceDatas = new List<CaseChoiceNetData>();
+        foreach (CaseChoiceData caseChoice in caseChoices)
+        {
+            //Set the word options for the choices
+            switch (SettingsManager.Instance.gameMode.wordDistributionMode)
+            {
+                case GameModeData.WordDistributionMode.random:
+                    caseChoiceDatas.Add(GameManager.Instance.gameFlowManager.wordManager.PopulateChoiceWords(caseChoice));
+                    break;
+            }
+        }
+
+        TargetSendCaseChoices(SettingsManager.Instance.GetConnection(birdName), caseChoiceDatas);
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdRegisterPlayerForScoreTracker(BirdName player)
+    {
+        if (!GameManager.Instance.gameFlowManager.scoreTrackerPlayers.Contains(player))
+        {
+            GameManager.Instance.gameFlowManager.scoreTrackerPlayers.Add(player);
+        }
+            
     }
 
     [Command(requiresAuthority = false)]
@@ -727,6 +795,19 @@ public class GameDataHandler : NetworkBehaviour
     {
         GameManager.Instance.playerFlowManager.drawingRound.SendNextInQueue(birdName);
     }
+
+    [Command(requiresAuthority =false)]
+    public void CmdSendPointsToScoreTrackerPlayers(int caseID)
+    {
+        ChainData currentCase = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
+        int casePoints = currentCase.GetTotalPoints();
+        foreach(BirdName player in GameManager.Instance.gameFlowManager.scoreTrackerPlayers)
+        {
+            TargetSendPointsToScoreTrackerPlayer(SettingsManager.Instance.GetConnection(player), casePoints);
+        }
+        
+    }
+
     [Command(requiresAuthority =false)]
     public void CmdTransitionCase(int caseID)
     {

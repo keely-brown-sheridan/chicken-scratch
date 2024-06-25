@@ -13,7 +13,7 @@ namespace ChickenScratch
         }
 
         public GameScene currentGameScene;
-        public GameObject DCPrompt;
+        public PlayerMessagePrompt DCPrompt;
         public DisconnectionNotification disconnectionNotification;
         private bool masterClientHasSwitched = false;
 
@@ -59,7 +59,7 @@ namespace ChickenScratch
             {
                 case GameScene.theater:
                 case GameScene.game:
-                    DCPrompt.SetActive(true);
+                    DCPrompt.gameObject.SetActive(true);
                     GameManager.Instance.playerFlowManager.active = false;
                     break;
             }
@@ -78,7 +78,7 @@ namespace ChickenScratch
                         GameManager.Instance.playerFlowManager.resultsRound.HostHasReturnedToLobby();
                         return;
                     }
-                    DCPrompt.SetActive(true);
+                    DCPrompt.gameObject.SetActive(true);
                     GameManager.Instance.playerFlowManager.active = false;
                     break;
             }
@@ -104,7 +104,8 @@ namespace ChickenScratch
 
                         if (SettingsManager.Instance.GetPlayerNameCount() == 1)
                         {
-                            DCPrompt.SetActive(true);
+                            DCPrompt.promptText.text = "There are not enough players to continue the game.";
+                            DCPrompt.gameObject.SetActive(true);
                             GameManager.Instance.playerFlowManager.active = false;
                             return;
                         }

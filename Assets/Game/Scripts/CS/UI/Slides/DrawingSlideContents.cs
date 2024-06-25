@@ -28,6 +28,9 @@ namespace ChickenScratch
         private float drawingSize;
 
         [SerializeField]
+        private float timeShowingDrawing;
+
+        [SerializeField]
         private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
 
         [SerializeField]
@@ -35,12 +38,14 @@ namespace ChickenScratch
 
         private float duration;
         private float timeActive = 0f;
+        private DrawingData drawingData;
 
         private void Update()
         {
             if (active)
             {
                 timeActive += Time.deltaTime * GameManager.Instance.playerFlowManager.slidesRound.slideSpeed;
+
                 if (timeActive > duration)
                 {
                     isComplete = true;
@@ -48,23 +53,30 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(DrawingData drawingData, string prefix, string noun, int round, int caseID, float inDuration, float timeModifierDecrement)
+        public void Initialize(DrawingData inDrawingData, string inPrefix, string inNoun, int inRound, int inCaseID, float inDuration, float inTimeModifierDecrement)
         {
+            drawingData = inDrawingData;
             duration = inDuration;
             timeActive = 0f;
-            Vector3 drawingScale = new Vector3(drawingSize, drawingSize, 1f);
-            GameManager.Instance.playerFlowManager.createDrawingVisuals(drawingData, drawingHolder, drawingHolder.position + drawingOffset, drawingScale, drawingSize);
-
-            Bird authorBird = ColourManager.Instance.birdMap[drawingData.author];
+            
+            Bird authorBird = ColourManager.Instance.birdMap[inDrawingData.author];
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
-            authorNameText.text = SettingsManager.Instance.GetPlayerName(drawingData.author);
-            goldStarDetectionArea.Initialize(drawingData.author, round, caseID);
+            authorNameText.text = SettingsManager.Instance.GetPlayerName(inDrawingData.author);
+            goldStarDetectionArea.Initialize(inDrawingData.author, inRound, inCaseID);
 
-            originalPromptReminderText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
-            EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
+            originalPromptReminderText.text = SettingsManager.Instance.CreatePromptText(inPrefix, inNoun);
+            EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[inCaseID];
             caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
-            slideTimeModifierDecrementVisual.Initialize(timeModifierDecrement);
+            slideTimeModifierDecrementVisual.Initialize(inTimeModifierDecrement);
+        }
+
+        public override void Show()
+        {
+            Vector3 drawingScale = new Vector3(drawingSize, drawingSize, 1f);
+            GameManager.Instance.playerFlowManager.AnimateDrawingVisuals(drawingData, drawingHolder, drawingHolder.position + drawingOffset, drawingScale, drawingSize, timeShowingDrawing);
+
+            base.Show();
         }
     }
 }

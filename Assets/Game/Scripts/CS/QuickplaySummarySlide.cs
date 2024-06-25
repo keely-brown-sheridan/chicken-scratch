@@ -105,7 +105,7 @@ namespace ChickenScratch
             int totalPoints = 0;
             foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
-                totalPoints += caseData.GetTotalPoints();
+                totalPoints += caseData.scoringData.GetTotalPoints();
             }
             
             List<GoalData> goals = new List<GoalData>();

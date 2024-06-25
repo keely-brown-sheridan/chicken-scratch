@@ -18,7 +18,7 @@ namespace ChickenScratch
     {
         public enum GamePhase
         {
-            loading, game_tutorial, instructions, drawing, results, slides_tutorial, slides, accolades, invalid
+            loading, game_tutorial, instructions, drawing, results, slides_tutorial, slides, accolades, store, invalid
         }
         public GamePhase currentGamePhase = GamePhase.loading;
 
@@ -54,6 +54,8 @@ namespace ChickenScratch
 
         public TutorialSequence botcherGameTutorialSequence, bossRushGameTutorialSequence, botcherSlidesTutorialSequence, bossRushSlidesTutorialSequence, accusationTutorialSequence;
         public TutorialSequence endlessModeTutorialSequence;
+
+        public List<BirdName> scoreTrackerPlayers;
         private PlayerFlowManager playerFlowManager;
         private float timeSinceLastArmUpdate = 0.0f;
         public int totalPlayersConnected = 1;
@@ -309,7 +311,6 @@ namespace ChickenScratch
                 {
                     newChain.playerOrder.Add(newChain.playerOrder.Count + 1, randomizedPlayers[j]);
                 }
-                
             }
 
             newChain.guessData.author = newChain.playerOrder[choiceData.numberOfTasks];
@@ -500,7 +501,6 @@ namespace ChickenScratch
 
         private void TransitionPhase()
         {
-            Debug.LogError("Transitioning from phase["+currentGamePhase.ToString()+"], IsRoundOver["+ isRoundOver().ToString()+ "], are Slides active["+ playerFlowManager.slidesRound.inProgress.ToString()+ "]");
             if (!playerFlowManager)
             {
                 playerFlowManager = GameManager.Instance.playerFlowManager;
@@ -557,8 +557,10 @@ namespace ChickenScratch
                         {
                             return;
                         }
+                        queuedChains.Clear();
                         foreach (BirdName bird in gamePlayers.Keys)
                         {
+                            updateQueuedFolderVisuals(bird);
                             if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
                             {
                                 addTransitionCondition("endgame_data_loaded:" + bird);
@@ -630,6 +632,17 @@ namespace ChickenScratch
                         return;
                     }
                     currentGamePhase = GamePhase.results;
+                    break;
+                case GamePhase.store:
+                    foreach(BirdName bird in SettingsManager.Instance.GetAllActiveBirds())
+                    {
+                        string potentiallyActiveCondition = "store_complete:" + bird.ToString();
+                        if (activeTransitionConditions.Contains(potentiallyActiveCondition))
+                        {
+                            activeTransitionConditions.Remove(potentiallyActiveCondition);
+                        }
+                    }
+                    currentGamePhase = GamePhase.instructions;
                     break;
                 case GamePhase.results:
                     return;

@@ -1,5 +1,6 @@
 using Mirror;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -13,8 +14,10 @@ namespace ChickenScratch
         public InstructionsRound instructionRound;
         public DrawingRound drawingRound;
         public SlidesRound slidesRound;
+        public StoreRound storeRound;
         public AccoladesRound accoladesRound;
         public ResultsRound resultsRound;
+       
 
         public Text timeRemainingText;
         public GameObject failureNoticeBGObject, pointsTotalBGObject;
@@ -45,6 +48,7 @@ namespace ChickenScratch
         [SerializeField]
         private PauseMenu pauseMenu;
         private bool isInitialized = false;
+        private Dictionary<StoreItem.StoreItemType, StoreItemData> storeItemDataMap = new Dictionary<StoreItem.StoreItemType, StoreItemData>();
 
         private void Start()
         {
@@ -236,6 +240,9 @@ namespace ChickenScratch
                 case GameFlowManager.GamePhase.accolades:
                     accoladesRound.StartRound();
                     break;
+                case GameFlowManager.GamePhase.store:
+                    storeRound.StartRound();
+                    break;
                 case GameFlowManager.GamePhase.slides:
                     Cursor.visible = true;
                     slidesRound.StartRound();
@@ -286,51 +293,23 @@ namespace ChickenScratch
             drawingContainer.transform.parent = drawingParent;
             drawingContainer.transform.position = drawingParent.position;
             Material drawingMaterial;
-            GameObject drawingPrefab = null;
+            GameObject drawingPrefab = ColourManager.Instance.linePrefab;
 
             foreach (DrawingVisualData visual in drawingData.visuals)
             {
                 if (visual is DrawingLineData)
                 {
                     DrawingLineData line = (DrawingLineData)visual;
-                    if (line.lineColour == DrawingLineData.LineColour.Base)
-                    {
-                        drawingMaterial = ColourManager.Instance.baseLineMaterial;
-                        drawingPrefab = ColourManager.Instance.linePrefab;
-                    }
-                    else if (line.lineColour == DrawingLineData.LineColour.Colour)
-                    {
-                        drawingMaterial = ColourManager.Instance.birdMap[line.author].material;
-                        drawingPrefab = ColourManager.Instance.linePrefab;
-                    }
-                    else if (line.lineColour == DrawingLineData.LineColour.Light)
-                    {
-                        drawingMaterial = ColourManager.Instance.birdMap[line.author].bgLineMaterial;
-                        drawingPrefab = ColourManager.Instance.linePrefab;
-                    }
-                    else if (line.lineColour == DrawingLineData.LineColour.Erase)
-                    {
-                        drawingMaterial = ColourManager.Instance.eraseLineMaterial;
-                        drawingPrefab = ColourManager.Instance.linePrefab;
-                    }
-                    else if (line.lineColour == DrawingLineData.LineColour.Clear)
-                    {
-                        drawingMaterial = ColourManager.Instance.clearLineMaterial;
-                        drawingPrefab = ColourManager.Instance.linePrefab;
-                    }
-                    else
-                    {
-                        Debug.LogError("Invalid line type[" + line.lineColour + "] provided for line. Cannot create drawing.");
-                        return;
-                    }
-
+                    drawingMaterial = ColourManager.Instance.baseLineMaterial;
+                    
                     GameObject newLine = Instantiate(drawingPrefab, position, Quaternion.identity, drawingContainer.transform);
                     LineRenderer newLineRenderer = newLine.GetComponent<LineRenderer>();
 
                     newLineRenderer.material = drawingMaterial;
+                    newLineRenderer.material.color = line.lineColour;
                     newLineRenderer.positionCount = line.positions.Count;
 
-                    newLineRenderer.SetPositions(line.GetTransformedPositions(position, scale).ToArray());
+                    newLineRenderer.SetPositions(line.GetTransformedPositions(position, scale, line.positions.Count).ToArray());
                     newLine.transform.position = new Vector3(newLine.transform.position.x, newLine.transform.position.y, line.zDepth);
                     newLineRenderer.startWidth = line.lineSize * lineThicknessReductionFactor;
                     newLineRenderer.endWidth = line.lineSize * lineThicknessReductionFactor;
@@ -339,6 +318,48 @@ namespace ChickenScratch
             }
 
             drawingContainer.transform.localScale = scale;
+        }
+
+        public void AnimateDrawingVisuals(DrawingData drawingData, Transform drawingParent, Vector3 position, Vector3 scale, float lineThicknessReductionFactor, float duration)
+        {
+
+            GameObject drawingContainer = new GameObject();
+            drawingContainer.transform.parent = drawingParent;
+            drawingContainer.transform.position = drawingParent.position;
+            Material drawingMaterial;
+            GameObject drawingPrefab = ColourManager.Instance.linePrefab;
+            drawingContainer.transform.localScale = scale;
+
+            foreach (DrawingVisualData visual in drawingData.visuals)
+            {
+                if (visual is DrawingLineData)
+                {
+                    DrawingLineData line = (DrawingLineData)visual;
+                    drawingMaterial = ColourManager.Instance.baseLineMaterial;
+                    
+                    GameObject newLine = Instantiate(drawingPrefab, position, Quaternion.identity, drawingContainer.transform);
+                    LineRenderer newLineRenderer = newLine.GetComponent<LineRenderer>();
+
+                    newLineRenderer.material = drawingMaterial;
+                    newLineRenderer.material.color = line.lineColour;
+                    newLine.transform.position = new Vector3(newLine.transform.position.x, newLine.transform.position.y, line.zDepth);
+                    newLineRenderer.startWidth = line.lineSize * lineThicknessReductionFactor;
+                    newLineRenderer.endWidth = line.lineSize * lineThicknessReductionFactor;
+
+                    StartCoroutine(AnimateDrawingVisual(newLineRenderer, line, position, scale));
+                }
+            }       
+        }
+
+        private IEnumerator AnimateDrawingVisual(LineRenderer newLineRenderer, DrawingLineData line, Vector3 position, Vector3 scale)
+        {
+            for (int i = 1; i < line.positions.Count; i++)
+            {
+                newLineRenderer.positionCount = i;
+                newLineRenderer.SetPositions(line.GetTransformedPositions(position, scale, i).ToArray());
+                yield return null;
+                yield return null;
+            }
         }
 
         public void addGuessPrompt(GuessData inGuessData, int caseID, float timeTaken)
@@ -424,6 +445,41 @@ namespace ChickenScratch
             }
 
             //gifConverter.SaveGIF(loadedTextures, savingFolder + "\\" + promptName + ".gif");
+        }
+
+        public void AddStoreItem(StoreItemData inStoreItemData)
+        {
+            if(storeItemDataMap.ContainsKey(inStoreItemData.itemType))
+            {
+                Debug.LogError("Player already has store item["+inStoreItemData.itemType.ToString()+"].");
+                return;
+            }
+            storeItemDataMap.Add(inStoreItemData.itemType,inStoreItemData);
+
+            if(inStoreItemData.itemType == StoreItem.StoreItemType.score_tracker)
+            {
+                GameManager.Instance.gameDataHandler.CmdRegisterPlayerForScoreTracker(SettingsManager.Instance.birdName);
+            }
+        }
+
+        public bool HasStoreItem(StoreItem.StoreItemType storeItemType)
+        {
+            return storeItemDataMap.ContainsKey(storeItemType);
+        }
+
+        public Color GetStoreItemMarkerColour(StoreItem.StoreItemType markerType)
+        {
+            return ((MarkerStoreItemData)storeItemDataMap[markerType]).markerColour;
+        }
+
+        public bool StoreItemHasCharges(StoreItem.StoreItemType itemType)
+        {
+            return HasStoreItem(itemType) && ((ChargedStoreItemData)(storeItemDataMap[itemType])).numberOfUses > 0;
+        }
+
+        public void UseChargedItem(StoreItem.StoreItemType itemType)
+        {
+            ((ChargedStoreItemData)(storeItemDataMap[itemType])).numberOfUses--;
         }
     }
 }

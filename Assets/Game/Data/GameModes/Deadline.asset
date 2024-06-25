@@ -15,15 +15,15 @@ MonoBehaviour:
   title: Deadline
   days:
   - goalPerPlayer: 10
-    casesPerPlayer: 1.5
+    casesPerPlayer: 1
     winResult: {fileID: 11400000, guid: ef990e2c1bbb114449760b118b1f7266, type: 2}
     loseResult: {fileID: 11400000, guid: 961dc0b86e73c8a4590192ac0af3ced3, type: 2}
-  - goalPerPlayer: 20
+  - goalPerPlayer: 25
     casesPerPlayer: 2
     winResult: {fileID: 11400000, guid: 3173dc4d4cb60d24f9b5a46e20565ce3, type: 2}
     loseResult: {fileID: 11400000, guid: 961dc0b86e73c8a4590192ac0af3ced3, type: 2}
-  - goalPerPlayer: 30
-    casesPerPlayer: 2.5
+  - goalPerPlayer: 40
+    casesPerPlayer: 3
     winResult: {fileID: 11400000, guid: 015fafb42a44a054d88a177495ffd290, type: 2}
     loseResult: {fileID: 11400000, guid: f1126f6783963cf4087a235ce41cc13e, type: 2}
   minimumNumberOfPlayers: 2
@@ -54,8 +54,8 @@ MonoBehaviour:
   - TopBottom
   - Quick Copy
   scoreModifierDecrement: 0.25
-  casesRemaining: 0
+  casesRemaining: 3
   contributionTaskRatio: 0.5
   description: 
-  totalGameTime: 120
+  totalGameTime: 60
   maxDays: 3

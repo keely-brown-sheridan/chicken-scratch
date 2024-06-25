@@ -87,7 +87,7 @@ namespace ChickenScratch
 
             Dictionary<BirdName, int> lineCountMap = new Dictionary<BirdName, int>();
             Dictionary<BirdName, int> pointsCountMap = new Dictionary<BirdName, int>();
-            Dictionary<BirdName, List<DrawingLineData.LineColour>> colourUsageMap = new Dictionary<BirdName, List<DrawingLineData.LineColour>>();
+            Dictionary<BirdName, List<Color>> colourUsageMap = new Dictionary<BirdName, List<Color>>();
             foreach (EndgameCaseData currentCase in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
                 foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
@@ -96,7 +96,7 @@ namespace ChickenScratch
                     {
                         pointsCountMap.Add(currentTask.assignedPlayer, 0);
                     }
-                    pointsCountMap[currentTask.assignedPlayer] += currentCase.GetTotalPoints();
+                    pointsCountMap[currentTask.assignedPlayer] += currentCase.scoringData.GetTotalPoints();
                     switch (currentTask.taskType)
                     {
                         case TaskData.TaskType.prompt_drawing:
@@ -127,7 +127,7 @@ namespace ChickenScratch
                                 {
                                     if (!colourUsageMap.ContainsKey(currentTask.drawingData.author))
                                     {
-                                        colourUsageMap.Add(currentTask.drawingData.author, new List<DrawingLineData.LineColour>());
+                                        colourUsageMap.Add(currentTask.drawingData.author, new List<Color>());
                                     }
                                     if (!colourUsageMap[currentTask.drawingData.author].Contains(visual.lineColour))
                                     {

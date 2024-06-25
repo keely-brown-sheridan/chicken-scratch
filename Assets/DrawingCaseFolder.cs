@@ -14,6 +14,9 @@ namespace ChickenScratch
         [SerializeField]
         private TMPro.TMP_Text promptText;
 
+        [SerializeField]
+        private CaseWordCategoryVisual caseWordCategoryVisual;
+
         private TaskModifier drawingBoxModifier;
 
         public void Initialize(string inPromptText, TaskData.TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
@@ -42,16 +45,17 @@ namespace ChickenScratch
                     drawingToolsSticky2.Queue(true);
                 }
             }
-
-            drawingBoard.initialize();
             drawingBoard.gameObject.SetActive(true);
-            drawingBoard.open(drawingBoxModifier);
+            //drawingBoard.initialize();
+            
+            drawingBoard.SetDrawingBoxType(drawingBoxModifier);
         }
 
         public override void Hide()
         {
             base.Hide();
             drawingBoard.clearVisuals();
+            caseWordCategoryVisual.Hide();
         }
 
         public override bool HasStarted()
@@ -62,6 +66,12 @@ namespace ChickenScratch
         public List<DrawingLineData> GetVisuals()
         {
             return drawingBoard.getDrawingVisuals();
+        }
+
+        public void ShowCategory(WordCategoryData wordCategory)
+        {
+            caseWordCategoryVisual.Initialize(wordCategory);
+            caseWordCategoryVisual.Show();
         }
     }
 }

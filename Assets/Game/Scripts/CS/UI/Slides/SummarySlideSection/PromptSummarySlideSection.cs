@@ -14,6 +14,8 @@ namespace ChickenScratch
         public void Initialize(PlayerTextInputData promptData, int round, int caseID, float timeModifierDecrement)
         {
             Bird authorBird = ColourManager.Instance.birdMap[promptData.author];
+            _author = promptData.author;
+
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(promptData.author);

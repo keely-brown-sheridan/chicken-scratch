@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,9 @@ namespace ChickenScratch
         [SerializeField]
         private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
 
+        [SerializeField]
+        private SlideBirdbuckDistributor slideBirdbuckDistributor;
+
         private Dictionary<SlideTypeData.SlideType, GameObject> summarySectionPrefabMap = new Dictionary<SlideTypeData.SlideType, GameObject>();
 
         private List<SummarySlideSection> summarySections = new List<SummarySlideSection>();
@@ -39,6 +43,7 @@ namespace ChickenScratch
         private float timeActive = 0f;
         private int currentRow = 0;
         private int currentColumn = 0;
+        private int currentCaseID = -1;
 
         private void Start()
         {
@@ -47,20 +52,30 @@ namespace ChickenScratch
 
         private void test()
         {
-            //DrawingData drawingData = new DrawingData();
-            //drawingData.author = ColourManager.BirdName.red;
-            //drawingData.visuals = new List<DrawingLineData>() { new DrawingLineData() { lineColour = DrawingLineData.LineColour.Colour, author = ColourManager.BirdName.red, positions = new List<Vector3>() { { new Vector3(1f,1f,0f) }, { new Vector3(3f, 1f, 0f) }, { new Vector3(6f, 1f, 0f) }, { new Vector3(3f, 3f, 0f) } } } };
-            //Initialize("yup", "nope", 1, 8f, 10f);
-            //Dictionary<int, string> guessesMap = new Dictionary<int, string>() { { 1, "yup" }, { 2, "nope" } };
-            //Dictionary<int, CaseWordData> correctWordsMap = new Dictionary<int, CaseWordData>() { { 1, new CaseWordData("yup", null, 1) }, { 2, new CaseWordData("yup", null, 1) } };
-            //AddDrawing(drawingData, GameManager.Instance.playerFlowManager.slidesRound.transform);
-            //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap);
-            //AddDrawing(drawingData, GameManager.Instance.playerFlowManager.slidesRound.transform);
-            //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap);
-            //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap);
-            //AddDrawing(drawingData, GameManager.Instance.playerFlowManager.slidesRound.transform);
-            //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap);
-            //AddGuess(ColourManager.BirdName.red, guessesMap, correctWordsMap, 0f);
+            SettingsManager.Instance.AssignBirdToPlayer(ColourManager.BirdName.red, "test");
+            SettingsManager.Instance.AssignBirdToPlayer(ColourManager.BirdName.blue, "test");
+            SettingsManager.Instance.AssignBirdToPlayer(ColourManager.BirdName.green, "test");
+            SettingsManager.Instance.AssignBirdToPlayer(ColourManager.BirdName.orange, "test");
+            GameDataManager.Instance.RefreshWords(new List<CaseWordData>());
+            EndgameCaseData caseData = new EndgameCaseData() { caseTypeColour = Color.red, caseTypeName = "beans" };
+            caseData.scoringData.prefixBirdbucks = 4;
+            caseData.scoringData.nounBirdbucks = 6;
+            caseData.scoringData.scoreModifier = 5.0f;
+            GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Add(1, caseData);
+            currentCaseID = 1;
+
+            DrawingData drawingData = new DrawingData();
+            drawingData.author = ColourManager.BirdName.red;
+            drawingData.visuals = new List<DrawingLineData>() { new DrawingLineData() { lineColour = Color.red, author = ColourManager.BirdName.red, positions = new List<Vector3>() { { new Vector3(1f, 1f, 0f) }, { new Vector3(3f, 1f, 0f) }, { new Vector3(6f, 1f, 0f) }, { new Vector3(3f, 3f, 0f) } } } };
+            Initialize("yup", "nope", 1, 8f, 10f);
+            GuessData guess = new GuessData() { author = ColourManager.BirdName.red, prefix = "yup", noun = "nope", round = 2, timeTaken = 5f };
+            Dictionary<int, string> correctWordsMap = new Dictionary<int, string>() { { 1, WordManager.testingPrefixIdentifier }, { 2, WordManager.testingNounIdentifier } };
+            AddDrawing(drawingData, 1, 1, GameManager.Instance.playerFlowManager.slidesRound.transform, 0f);
+            AddDrawing(drawingData, 1, 1, GameManager.Instance.playerFlowManager.slidesRound.transform, 0f);
+            AddDrawing(drawingData, 1, 1, GameManager.Instance.playerFlowManager.slidesRound.transform, 0f);
+            AddGuess(guess, correctWordsMap, 2, 1, 0f);
+            LoadSections();
+            active = true;
         }
 
         private void Update()
@@ -79,6 +94,7 @@ namespace ChickenScratch
         {
             duration = inDuration;
             timeActive = 0f;
+            currentCaseID = caseID;
             summarySectionPrefabMap = new Dictionary<SlideTypeData.SlideType, GameObject>();
             foreach(GameObject summarySectionPrefab in summarySectionPrefabs)
             {
@@ -90,6 +106,7 @@ namespace ChickenScratch
             EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
             caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
             finalScoreText.text = "Birdbucks: " + finalScore.ToString();
+            
         }
 
         public void AddDrawing(DrawingData drawingData, int round, int caseID, Transform summarySlidetransform, float timeModifierDecrement)
@@ -121,6 +138,12 @@ namespace ChickenScratch
             guessSummarySlideSection.Initialize(guessData, correctWordIdentifiersMap, round, caseID, timeModifierDecrement);
             guessSummarySlideSection.positionWhereItShouldBeIfUnityWasntShit = spawnPosition;
             summarySections.Add(guessSummarySlideSection);
+        }
+
+        public void LoadSections()
+        {
+            EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[currentCaseID];
+            slideBirdbuckDistributor.Initialize(currentCase.scoringData, summarySections);
         }
 
         private Vector3 GetSpawnPosition()

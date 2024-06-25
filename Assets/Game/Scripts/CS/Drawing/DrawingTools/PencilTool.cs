@@ -44,10 +44,8 @@ namespace ChickenScratch
         [SerializeField]
         private List<GameObject> objectsToHideOnSelect = new List<GameObject>();
 
-        [SerializeField]
-        private List<DrawingToolHand> allDrawingToolHands = new List<DrawingToolHand>();
+        
 
-        private DrawingToolHand drawingToolHand;
         [SerializeField]
         private Transform holdingPositionTransform;
         private GameObject _currentLineObject;
@@ -65,19 +63,13 @@ namespace ChickenScratch
         private float jaggednessDistanceThreshold;
 
         private int _globalSortingOrder;
-
-        private List<DrawingLineData.LineColour> _lineColourOptions = new List<DrawingLineData.LineColour>() { DrawingLineData.LineColour.Base };
         private int _currentLineColourIndex = 0;
 
         private void Start()
         {
-            foreach (DrawingToolHand currentHand in allDrawingToolHands)
-            {
-                if (currentHand.GetComponent<BirdTag>().birdName == SettingsManager.Instance.birdName)
-                {
-                    drawingToolHand = currentHand;
-                }
-            }
+            controller = GetComponentInParent<DrawingController>();
+            selectionButton.onClick.AddListener(delegate { controller.setCurrentDrawingToolType("pencil"); });
+            onHoverVisualRise.Initialize(toolVisualsHolder.position);
         }
 
         public override DrawingAction drawingUpdate()
@@ -166,18 +158,10 @@ namespace ChickenScratch
             DrawingLineData lineData = _currentLineObject.GetComponent<DrawingLine>().drawingLineData;
             lineData.lineSize = _currentDrawingSize;
             lineData.author = SettingsManager.Instance.birdName;
-            DrawingLineData.LineColour lineColour = DrawingLineData.LineColour.Invalid;
             Material lineMaterial = null;
-            lineColour = _lineColourOptions[_currentLineColourIndex];
             lineMaterial = _currentLineMaterial;
-
-            //Debug.LogError("Current line colour["+ lineData.lineColour.ToString() + "].");
-            lineData.lineColour = lineColour;
-
-            if (lineData.lineColour == DrawingLineData.LineColour.Invalid)
-            {
-                Debug.LogError("Invalid line colour name[" + lineColour.ToString() + "] set for creating foreground line.");
-            }
+            lineMaterial.color = Color.black;
+            lineData.lineColour = Color.black;
 
             _currentLineObject.transform.position = new Vector3(0, 0, pencilLineZOffset);
             _lineRenderer = _currentLineObject.GetComponent<LineRenderer>();
@@ -269,6 +253,7 @@ namespace ChickenScratch
 
         public override void use()
         {
+            OnSelect.Invoke();
             foreach (GameObject objectToShowOnUse in objectsToShowOnSelect)
             {
                 objectToShowOnUse.SetActive(true);
@@ -277,7 +262,7 @@ namespace ChickenScratch
             {
                 objectToHideOnUse.SetActive(false);
             }
-            drawingToolHand.SetTargetTransform(holdingPositionTransform);
+            
             _currentLineMaterial = ColourManager.Instance.baseLineMaterial;
             setCursorSize();
             _currentSizeRatio = (_currentDrawingSize - minSize) / (maxSize - minSize);
@@ -304,6 +289,7 @@ namespace ChickenScratch
 
         public override void release()
         {
+            OnDeselect.Invoke();
             foreach (GameObject objectToShowOnUse in objectsToShowOnSelect)
             {
                 objectToShowOnUse.SetActive(false);

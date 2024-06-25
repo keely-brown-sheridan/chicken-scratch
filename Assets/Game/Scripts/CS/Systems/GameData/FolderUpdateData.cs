@@ -21,5 +21,6 @@ namespace ChickenScratch
         public BirdName player;
         public List<TaskData.TaskModifier> taskModifiers;
         public BirdName lastPlayer;
+        public WordCategoryData wordCategory;
     }
 }

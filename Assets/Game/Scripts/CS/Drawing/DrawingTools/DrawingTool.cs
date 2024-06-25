@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ChickenScratch.DrawingController;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace ChickenScratch
 {
@@ -15,10 +17,22 @@ namespace ChickenScratch
         [SerializeField]
         protected GameObject glowFillObject;
 
+        [SerializeField]
+        protected OnHoverVisualRise onHoverVisualRise;
+
         public float currentSizeRatio => _currentSizeRatio;
 
         [SerializeField]
         protected float _currentSizeRatio = 0.5f;
+
+        [SerializeField]
+        private Transform pouchVisualsHolder;
+
+        [SerializeField]
+        protected Button selectionButton;
+
+        public UnityEvent OnSelect;
+        public UnityEvent OnDeselect;
 
         public abstract DrawingAction drawingUpdate();
         public abstract void use();
@@ -32,6 +46,11 @@ namespace ChickenScratch
         public virtual int getMaxSizeIndex()
         {
             return -1;
+        }
+
+        public virtual void SetPouchVisualsPosition(Vector3 position)
+        {
+            pouchVisualsHolder.position = position;
         }
     }
 }

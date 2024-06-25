@@ -7,10 +7,11 @@ namespace ChickenScratch
 {
     public class DrawingController : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject baseDrawingBox;
-        [SerializeField]
-        private List<DrawingBoxType> drawingBoxes;
+        public static bool isMouseInDrawingArea = false;
+        public static bool isLeftMouseHeld = false;
+        public static bool isLeftMouseDown = false;
+        public static bool isLeftMouseUp = false;
+        public static float zBufferValue = 0.001f;
 
         public LayerMask drawingLayer;
         public GameObject drawingObjectPrefab;
@@ -24,73 +25,112 @@ namespace ChickenScratch
 
         public static int currentSortingOrder = 1;
 
-        private Drawing currentDrawing = null;
+        [SerializeField]
+        private List<DrawingToolHand> allDrawingToolHands = new List<DrawingToolHand>();
 
-        private bool isInitialized = false;
+        [SerializeField]
+        private GameObject baseDrawingBox;
+        [SerializeField]
+        private List<DrawingBoxType> drawingBoxes;
 
         private int currentToolIndex = 0;
         [SerializeField]
         private List<DrawingToolType> usableToolTypes = new List<DrawingToolType>();
+
         [SerializeField]
         private Slider sizeSlider;
+
         [SerializeField]
         private List<BirdTag> taggedObjects;
+
         [SerializeField]
         private Transform drawingOriginTransform;
-        private Dictionary<TaskData.TaskModifier, GameObject> drawingBoxMap = new Dictionary<TaskData.TaskModifier, GameObject>();
-        private void Start()
-        {
-            if (!isInitialized)
-            {
-                initialize();
-            }
-        }
-
-        public enum DrawingToolType
-        {
-            pencil, colour_marker, light_marker, eraser, square_stamp, circle_stamp, invalid
-        }
-        private DrawingToolType currentDrawingToolType = DrawingToolType.pencil;
 
         [SerializeField]
-        private PencilTool pencilTool;
+        private List<Transform> drawingToolPouchSlots;
+        [SerializeField]
+        private Transform drawingToolPouchParent;
+        [SerializeField]
+        private Transform heldDrawingToolParent;
 
         [SerializeField]
-        private MarkerTool colourMarkerTool;
-
-        [SerializeField]
-        private MarkerTool lightMarkerTool;
-
-        [SerializeField]
-        private EraserTool eraserTool;
-
-        [SerializeField]
-        private SquareStampTool squareStampTool;
-        [SerializeField]
-        private CircleStampTool circleStampTool;
+        private List<DrawingToolData> possibleDrawingTools;
         [SerializeField]
         private WhiteOut whiteOut;
         [SerializeField]
         private TrashCan trashCan;
-        [SerializeField]
-        private List<HUDDrawingColourBtn> drawingColourButtons = new List<HUDDrawingColourBtn>();
-        [SerializeField]
-        private GameObject drawingButtonsObject;
-        [SerializeField]
-        private GameObject sizeButtonsObject;
+
         [SerializeField]
         private GameObject sliderKnobObject;
         [SerializeField]
         private PauseMenu pauseMenu;
 
-        private List<DrawingAction> playerDrawingActions = new List<DrawingAction>();
-        private Dictionary<DrawingToolType, DrawingTool> drawingToolMap = new Dictionary<DrawingToolType, DrawingTool>();
+        public enum DrawingToolType
+        {
+            pencil, colour_marker, light_marker, eraser, square_stamp, circle_stamp, highlighter, invalid
+        }
+        private DrawingToolType currentDrawingToolType = DrawingToolType.pencil;
 
-        public static bool isMouseInDrawingArea = false;
-        public static bool isLeftMouseHeld = false;
-        public static bool isLeftMouseDown = false;
-        public static bool isLeftMouseUp = false;
-        public static float zBufferValue = 0.001f;
+
+
+        private List<DrawingAction> playerDrawingActions = new List<DrawingAction>();
+
+        private Dictionary<DrawingToolType, DrawingTool> activeDrawingToolMap = new Dictionary<DrawingToolType, DrawingTool>();
+        private Dictionary<DrawingToolType, DrawingToolData> possibleDrawingToolMap = new Dictionary<DrawingToolType, DrawingToolData>();
+        private Dictionary<TaskData.TaskModifier, GameObject> drawingBoxMap = new Dictionary<TaskData.TaskModifier, GameObject>();
+        private Drawing currentDrawing = null;
+        private TaskData.TaskModifier boxType;
+
+        private bool isInitialized = false;
+
+        private void OnEnable()
+        {
+            initialize();
+            //test();
+            open();
+        }
+
+        private void test()
+        {
+            StoreItemData storeItem = new MarkerStoreItemData() { itemType = StoreItem.StoreItemType.highlighter, markerColour = new Color(1f, 1f, 0f, 0.4f) };
+            GameManager.Instance.playerFlowManager.AddStoreItem(storeItem);
+        }
+
+        public void initialize()
+        {
+            if (!isInitialized)
+            {
+                foreach (BirdTag birdTag in taggedObjects)
+                {
+                    if (birdTag.birdName == SettingsManager.Instance.birdName)
+                    {
+                        birdTag.gameObject.SetActive(true);
+                    }
+                }
+                foreach (DrawingToolHand currentHand in allDrawingToolHands)
+                {
+                    if (currentHand.GetComponent<BirdTag>().birdName == SettingsManager.Instance.birdName)
+                    {
+                        currentHand.gameObject.SetActive(true);
+                    }
+                }
+                foreach (DrawingBoxType drawingBox in drawingBoxes)
+                {
+                    drawingBoxMap.Add(drawingBox.modifier, drawingBox.gameObject);
+                }
+                foreach(DrawingToolData possibleTool in possibleDrawingTools)
+                {
+                    possibleDrawingToolMap.Add(possibleTool.toolType, possibleTool);
+                }
+                currentDrawingToolType = DrawingToolType.colour_marker;
+                isInitialized = true;
+            }
+        }
+
+        public void SetDrawingBoxType(TaskData.TaskModifier inBoxType)
+        {
+            boxType = inBoxType;
+        }
 
         void Update()
         {
@@ -101,19 +141,158 @@ namespace ChickenScratch
 
         }
 
-        public void open(TaskData.TaskModifier modifier)
+        private void GenerateTools()
         {
-            if (currentDrawingToolType == DrawingToolType.eraser)
+            ClearTools();
+
+            int currentDrawingToolPouchSlot = 0;
+            if(usableToolTypes.Contains(DrawingToolType.pencil))
             {
-                setMarkerAsToolWithoutSound();
+                GenerateTool(DrawingToolType.pencil, currentDrawingToolPouchSlot);
+                currentDrawingToolPouchSlot++;
             }
+            if (usableToolTypes.Contains(DrawingToolType.colour_marker))
+            {
+                GenerateTool(DrawingToolType.colour_marker, currentDrawingToolPouchSlot);
+                currentDrawingToolPouchSlot++;
+            }
+
+            if (!usableToolTypes.Contains(DrawingToolType.light_marker) && GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.marker))
+            {
+                usableToolTypes.Add(DrawingToolType.light_marker);
+            }
+            if(usableToolTypes.Contains(DrawingToolType.light_marker))
+            {
+                GenerateTool(DrawingToolType.light_marker, currentDrawingToolPouchSlot);
+                currentDrawingToolPouchSlot++;
+            }
+
+            if (!usableToolTypes.Contains(DrawingToolType.highlighter) && GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.highlighter))
+            {
+                usableToolTypes.Add(DrawingToolType.highlighter);
+            }
+            if (usableToolTypes.Contains(DrawingToolType.highlighter))
+            {
+                GenerateTool(DrawingToolType.highlighter, currentDrawingToolPouchSlot);
+                currentDrawingToolPouchSlot++;
+            }
+
+            if (!usableToolTypes.Contains(DrawingToolType.eraser) && GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.eraser))
+            {
+                usableToolTypes.Add(DrawingToolType.eraser);
+            }
+            if (usableToolTypes.Contains(DrawingToolType.eraser))
+            {
+                GenerateTool(DrawingToolType.eraser, currentDrawingToolPouchSlot);
+                currentDrawingToolPouchSlot++;
+            }
+
+            if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.white_out))
+            {
+                whiteOut.gameObject.SetActive(true);
+            }
+        }
+
+        private void GenerateTool(DrawingToolType toolType, int pouchSlot)
+        {
+            if(!possibleDrawingToolMap.ContainsKey(toolType))
+            {
+                Debug.LogError("Cannot generate tool["+toolType.ToString()+"] because it does not exist in the possible drawing tool map["+possibleDrawingToolMap.Count.ToString()+"].");
+                return;
+            }
+
+            //Create the tool
+            DrawingToolData selectedDrawingTool = possibleDrawingToolMap[toolType];
+            GameObject pouchToolVisualObject = Instantiate(selectedDrawingTool.toolPrefab, drawingToolPouchParent);
+            GameObject heldToolVisualObject = Instantiate(selectedDrawingTool.heldPrefab, heldDrawingToolParent);
+            DrawingTool newTool = pouchToolVisualObject.GetComponent<DrawingTool>();
+            HeldDrawingTool heldTool = heldToolVisualObject.GetComponent<HeldDrawingTool>();
+            newTool.SetPouchVisualsPosition(drawingToolPouchSlots[pouchSlot].position);
+            //Add to the drawing tool map
+            activeDrawingToolMap.Add(toolType, newTool);
+            heldTool.Initialize(newTool);
+            
+
+            Color toolColour;
+            switch(toolType)
+            {
+                case DrawingToolType.colour_marker:
+                    //Initialize the colour
+                    MarkerTool colourMarkerTool = (MarkerTool)newTool;
+                    toolColour = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].colour;
+                    colourMarkerTool.setColour(toolColour);
+                    heldTool.SetColour(toolColour);
+                    break;
+                case DrawingToolType.light_marker:
+                    //Initialize the colour
+                    toolColour = GameManager.Instance.playerFlowManager.GetStoreItemMarkerColour(StoreItem.StoreItemType.marker);
+                    MarkerTool lightMarkerTool = (MarkerTool)newTool;
+                    lightMarkerTool.setColour(toolColour);
+                    heldTool.SetColour(toolColour);
+                    break;
+                case DrawingToolType.highlighter:
+                    //Initialize the colour
+                    toolColour = GameManager.Instance.playerFlowManager.GetStoreItemMarkerColour(StoreItem.StoreItemType.highlighter);
+                    MarkerTool highlighterTool = (MarkerTool)newTool;
+                    highlighterTool.setColour(toolColour);
+                    heldTool.SetColour(toolColour);
+                    break;
+            }
+            newTool.gameObject.SetActive(true);
+            //usableToolTypes.Add(toolType);
+        }
+
+        private void ClearTools()
+        {
+            List<Transform> transformsToClear = new List<Transform>();
+            foreach(Transform child in drawingToolPouchParent)
+            {
+                transformsToClear.Add(child);
+            }
+            foreach(Transform child in heldDrawingToolParent)
+            {
+                transformsToClear.Add(child);
+            }
+            for(int i = transformsToClear.Count -1; i >= 0; i--)
+            {
+                Destroy(transformsToClear[i].gameObject);
+            }
+            activeDrawingToolMap.Clear();
+        }
+
+        public void open()
+        {
+            GenerateTools();
+            if (activeDrawingToolMap.ContainsKey(DrawingToolType.colour_marker))
+            {
+                if (currentDrawingToolType == DrawingToolType.eraser || currentDrawingToolType == DrawingToolType.colour_marker)
+                {
+                    MarkerTool colourMarkerTool = (MarkerTool)activeDrawingToolMap[DrawingToolType.colour_marker];
+                    currentToolIndex = usableToolTypes.IndexOf(currentDrawingToolType);
+                    colourMarkerTool.setCursorSize();
+                    colourMarkerTool.turnOnGlow();
+                    setMarkerAsToolWithoutSound();
+                    sizeSlider.SetValueWithoutNotify(colourMarkerTool.currentSizeRatio);
+                }
+                else
+                {
+                    activeDrawingToolMap[usableToolTypes[currentToolIndex]].use();
+                }
+            }
+            else
+            {
+                Debug.LogError("Tools have been generated in initialization but colour marker hasn't been added to the active drawing tool map.");
+            }
+
+
             foreach(DrawingBoxType drawingBox in drawingBoxes)
             {
                 drawingBox.gameObject.SetActive(false);
             }
-            if (drawingBoxMap.ContainsKey(modifier))
+
+            if (drawingBoxMap.ContainsKey(boxType))
             {
-                drawingBoxMap[modifier].SetActive(true);
+                drawingBoxMap[boxType].SetActive(true);
             }
             else
             {
@@ -151,7 +330,7 @@ namespace ChickenScratch
             if (canDraw)
             {
                 //Update the currently active tool
-                DrawingAction action = drawingToolMap[currentDrawingToolType].drawingUpdate();
+                DrawingAction action = activeDrawingToolMap[currentDrawingToolType].drawingUpdate();
                 if (action != null)
                 {
                     playerDrawingActions.Add(action);
@@ -169,15 +348,15 @@ namespace ChickenScratch
             {
                 setCurrentDrawingToolType(DrawingToolType.colour_marker);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            else if (Input.GetKeyDown(KeyCode.Alpha3) && GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.marker))
             {
                 setCurrentDrawingToolType(DrawingToolType.light_marker);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            else if (Input.GetKeyDown(KeyCode.Alpha4) && GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.eraser))
             {
                 setCurrentDrawingToolType(DrawingToolType.eraser);
             }
-            else if (Input.GetKeyDown(KeyCode.Z) && Input.GetKey(KeyCode.LeftControl))
+            else if (Input.GetKeyDown(KeyCode.Z) && Input.GetKey(KeyCode.LeftControl) && GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.white_out))
             {
                 whiteOut.undo();
             }
@@ -201,15 +380,15 @@ namespace ChickenScratch
         {
             if (newDrawingToolType == currentDrawingToolType) return;
 
-            if (drawingToolMap.ContainsKey(currentDrawingToolType))
+            if (activeDrawingToolMap.ContainsKey(currentDrawingToolType))
             {
-                drawingToolMap[currentDrawingToolType].release();
+                activeDrawingToolMap[currentDrawingToolType].release();
             }
             currentToolIndex = usableToolTypes.IndexOf(newDrawingToolType);
             currentDrawingToolType = newDrawingToolType;
-            if (drawingToolMap.ContainsKey(currentDrawingToolType))
+            if (activeDrawingToolMap.ContainsKey(currentDrawingToolType))
             {
-                DrawingTool currentDrawingTool = drawingToolMap[currentDrawingToolType];
+                DrawingTool currentDrawingTool = activeDrawingToolMap[currentDrawingToolType];
                 currentDrawingTool.use();
                 sizeSlider.SetValueWithoutNotify(currentDrawingTool.currentSizeRatio);
 
@@ -218,16 +397,15 @@ namespace ChickenScratch
 
         public void setMarkerAsToolWithoutSound()
         {
-            if (DrawingToolType.colour_marker == currentDrawingToolType) return;
-
-            if (drawingToolMap.ContainsKey(currentDrawingToolType))
+            if (activeDrawingToolMap.ContainsKey(currentDrawingToolType))
             {
-                drawingToolMap[currentDrawingToolType].release();
+                activeDrawingToolMap[currentDrawingToolType].release();
             }
             currentToolIndex = usableToolTypes.IndexOf(DrawingToolType.colour_marker);
             currentDrawingToolType = DrawingToolType.colour_marker;
-            if (drawingToolMap.ContainsKey(currentDrawingToolType))
+            if (activeDrawingToolMap.ContainsKey(currentDrawingToolType))
             {
+                MarkerTool colourMarkerTool = (MarkerTool)activeDrawingToolMap[DrawingToolType.colour_marker];
                 colourMarkerTool.useWithoutSound();
                 sizeSlider.SetValueWithoutNotify(colourMarkerTool.currentSizeRatio);
             }
@@ -235,7 +413,7 @@ namespace ChickenScratch
 
         public void setCurrentDrawingToolSize(float sizeChangeDelta)
         {
-            DrawingTool currentDrawingTool = drawingToolMap[currentDrawingToolType];
+            DrawingTool currentDrawingTool = activeDrawingToolMap[currentDrawingToolType];
             currentDrawingTool.changeSize(sizeChangeDelta);
             sizeSlider.SetValueWithoutNotify(currentDrawingTool.currentSizeRatio);
             //updateHUDDrawingSize(currentDrawingTool.currentSizeRatio, currentDrawingTool.getMaxSizeIndex());
@@ -265,16 +443,6 @@ namespace ChickenScratch
             sliderKnobObject.transform.localPosition = new Vector3(xPosition, sliderKnobObject.transform.localPosition.y, sliderKnobObject.transform.localPosition.z);
         }
 
-        private void selectCurrentDrawingColourButton(DrawingLineData.LineColour inDrawingColourType)
-        {
-            foreach (HUDDrawingColourBtn colourButton in drawingColourButtons)
-            {
-                if (colourButton.colour == inDrawingColourType)
-                {
-                    colourButton.Select();
-                }
-            }
-        }
         public void undoLastDrawingAction()
         {
             if (playerDrawingActions.Count == 0) return;
@@ -323,57 +491,6 @@ namespace ChickenScratch
             playerDrawingActions.Add(inAction);
         }
 
-
-        public void initialize()
-        {
-            if (!isInitialized)
-            {
-                foreach (BirdTag birdTag in taggedObjects)
-                {
-                    if (birdTag.birdName == SettingsManager.Instance.birdName)
-                    {
-                        birdTag.gameObject.SetActive(true);
-                    }
-                }
-                foreach(DrawingBoxType drawingBox in drawingBoxes)
-                {
-                    drawingBoxMap.Add(drawingBox.modifier, drawingBox.gameObject);
-                }
-                drawingToolMap.Add(pencilTool.type, pencilTool);
-                drawingToolMap.Add(colourMarkerTool.type, colourMarkerTool);
-                drawingToolMap.Add(lightMarkerTool.type, lightMarkerTool);
-                drawingToolMap.Add(eraserTool.type, eraserTool);
-                colourMarkerTool.setColour();
-                lightMarkerTool.setColour();
-                currentDrawingToolType = DrawingToolType.colour_marker;
-                colourMarkerTool.setCursorSize();
-                colourMarkerTool.turnOnGlow();
-                colourMarkerTool.useWithoutSound();
-                sizeSlider.SetValueWithoutNotify(colourMarkerTool.currentSizeRatio);
-
-                isInitialized = true;
-            }
-        }
-
-        public void ShowColourButtons()
-        {
-            drawingButtonsObject.SetActive(true);
-        }
-        public void HideColourButtons()
-        {
-            drawingButtonsObject.SetActive(false);
-        }
-        public void ShowSizeButtons()
-        {
-            sizeButtonsObject.SetActive(true);
-        }
-        public void HideSizeButtons()
-        {
-            sizeButtonsObject.SetActive(false);
-        }
-
-
-
         void StartNewDrawing()
         {
             currentSortingOrder = 1;
@@ -386,14 +503,17 @@ namespace ChickenScratch
         {
             if (currentDrawingToolType == DrawingToolType.pencil)
             {
+                PencilTool pencilTool = (PencilTool)activeDrawingToolMap[DrawingToolType.pencil];
                 pencilTool.saveCurrentLine();
             }
             else if (currentDrawingToolType == DrawingToolType.colour_marker)
             {
+                MarkerTool colourMarkerTool = (MarkerTool)activeDrawingToolMap[DrawingToolType.colour_marker];
                 colourMarkerTool.saveCurrentLine();
             }
             else if (currentDrawingToolType == DrawingToolType.light_marker)
             {
+                MarkerTool lightMarkerTool = (MarkerTool)activeDrawingToolMap[DrawingToolType.light_marker];
                 lightMarkerTool.saveCurrentLine();
             }
 
@@ -451,18 +571,9 @@ namespace ChickenScratch
             return (drawingLines.Count > 0 || drawingSquares.Count > 0);
         }
 
-        public void deselectColourButtons()
-        {
-            foreach (HUDDrawingColourBtn drawingColourButton in drawingColourButtons)
-            {
-                drawingColourButton.Deselect();
-            }
-        }
-
         public void onDrawingSizeSliderChange(float value)
         {
-            drawingToolMap[currentDrawingToolType].setSize(sizeSlider.value);
-
+            activeDrawingToolMap[currentDrawingToolType].setSize(sizeSlider.value);
         }
 
 

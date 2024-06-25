@@ -34,6 +34,7 @@ namespace ChickenScratch
             summarySlideTransform = inSummarySlideTransform;
 
             Bird authorBird = ColourManager.Instance.birdMap[drawingData.author];
+            _author = drawingData.author;
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(inDrawingData.author);

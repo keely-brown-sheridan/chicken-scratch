@@ -20,6 +20,9 @@ namespace ChickenScratch
         [SerializeField]
         private DrawingController drawingBoard;
 
+        [SerializeField]
+        private CaseWordCategoryVisual caseWordCategoryVisual;
+
         private TaskModifier drawingBoxModifier;
 
         public void Initialize(DrawingData drawingData, TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
@@ -33,9 +36,10 @@ namespace ChickenScratch
         public override void Show(Color inFolderColour, float taskTime, float currentModifier, float maxModifierValue, float modifierDecrement)
         {
             base.Show(inFolderColour, taskTime, currentModifier, maxModifierValue, modifierDecrement);
-            drawingBoard.initialize();
             drawingBoard.gameObject.SetActive(true);
-            drawingBoard.open(drawingBoxModifier);
+            //drawingBoard.initialize();
+            
+            drawingBoard.SetDrawingBoxType(drawingBoxModifier);
         }
 
         public override void Hide()
@@ -43,6 +47,7 @@ namespace ChickenScratch
             base.Hide();
             drawingBoard.clearVisuals();
             HidePreviousDrawings();
+            caseWordCategoryVisual.Hide();
         }
 
         public void HidePreviousDrawings()
@@ -58,6 +63,12 @@ namespace ChickenScratch
         public List<DrawingLineData> GetVisuals()
         {
             return drawingBoard.getDrawingVisuals();
+        }
+
+        public void ShowCategory(WordCategoryData wordCategoryData)
+        {
+            caseWordCategoryVisual.Initialize(wordCategoryData);
+            caseWordCategoryVisual.Show();
         }
     }
 

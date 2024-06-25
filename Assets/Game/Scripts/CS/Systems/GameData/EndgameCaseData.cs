@@ -19,12 +19,11 @@ namespace ChickenScratch
         public int penalty;
         public string caseTypeName = "";
         public Color caseTypeColour = Color.white;
-
-
+        public CaseScoringData scoringData = new CaseScoringData();
 
         public EndgameCaseData()
         {
-
+            //scoringData = new CaseScoringData(this);
         }
 
         public EndgameCaseData(ChainData inChainData)
@@ -86,7 +85,7 @@ namespace ChickenScratch
                 }
                 taskDataMap.Add(taskRound, endgameTaskData);
             }
-
+            scoringData = new CaseScoringData(this);
         }
 
         public EndgameCaseData(EndgameCaseNetData netData)
@@ -110,6 +109,7 @@ namespace ChickenScratch
             penalty = netData.penalty;
             caseTypeName = netData.caseTypeName;
             caseTypeColour = netData.caseTypeColour;
+            scoringData = netData.scoringData;
         }
 
         public void IncreaseRating(int round, ColourManager.BirdName target)
@@ -120,46 +120,6 @@ namespace ChickenScratch
             }
             taskDataMap[round].ratingData.likeCount++;
             taskDataMap[round].ratingData.target = target;
-        }
-
-        public int GetBasePoints()
-        {
-            int totalPoints = 0;
-            foreach (KeyValuePair<int, string> correctWordIdentifier in correctWordIdentifierMap)
-            {
-                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
-                if ((correctWordIdentifier.Key == 1 && correctWord.value == guessData.prefix) ||
-                    (correctWordIdentifier.Key == 2 && correctWord.value == guessData.noun))
-                {
-                    totalPoints += pointsPerCorrectWord;
-                }
-            }
-            return totalPoints;
-        }
-
-        public int GetTotalPoints()
-        {
-            int totalPoints = 0;
-            bool allCorrect = true;
-            foreach(KeyValuePair<int,string> correctWordIdentifier in correctWordIdentifierMap)
-            {
-                CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifier.Value);
-                if((correctWordIdentifier.Key == 1 && correctWord.value == guessData.prefix) ||
-                    (correctWordIdentifier.Key == 2 && correctWord.value == guessData.noun))
-                {
-                    totalPoints += correctWord.difficulty;
-                    totalPoints += pointsPerCorrectWord;
-                }
-                else
-                {
-                    allCorrect = false;
-                }
-            }
-            if(allCorrect)
-            {
-                totalPoints += pointsForBonus;
-            }
-            return (int)(totalPoints * scoreModifier);
         }
 
         public bool WasCorrect()
@@ -197,6 +157,19 @@ namespace ChickenScratch
                 }
             }
             return ColourManager.BirdName.none;
+        }
+
+        public bool ContainsBird(ColourManager.BirdName bird)
+        {
+            
+            foreach(KeyValuePair<int,EndgameTaskData> taskData in taskDataMap)
+            {
+                if(taskData.Value.assignedPlayer == bird)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

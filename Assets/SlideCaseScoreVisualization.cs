@@ -56,6 +56,9 @@ public class SlideCaseScoreVisualization : MonoBehaviour
         scoreModifierText.text = inScoreModifier.ToString() + "x";
 
         scoreModifierImage.color = SettingsManager.Instance.GetModifierColour(inScoreModifier / maxScoreModifier);
+
+        float scoreRatio = Mathf.Clamp(currentScore / maximumPossibleScore, 0f, 1f);
+        progressBarImageTransform.localScale = new Vector3(scoreRatio, 1f, 1f);
     }
 
     public void SetTarget(float inTargetScore, float inTimeToReach)
@@ -79,7 +82,7 @@ public class SlideCaseScoreVisualization : MonoBehaviour
     {
         if(scoreModifier > 1f && GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal != 0)
         {
-            AudioManager.Instance.PlaySound("increase-score");
+            AudioManager.Instance.PlaySound("TimeBonus");
         }
         scoreModifierObject.SetActive(true);
     }

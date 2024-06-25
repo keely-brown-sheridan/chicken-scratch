@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 351a2f0fd57bad14f8afa97582bde130, type: 3}
+  m_Name: Dt_Marker
+  m_EditorClassIdentifier: 
+  toolPrefab: {fileID: 5680630067773520091, guid: 236c76abea000b94e9fc03cd98b894eb,
+    type: 3}
+  heldPrefab: {fileID: 949479268104139540, guid: 54d9d20caf80e28488af2593b44eb4b0,
+    type: 3}
+  toolType: 1

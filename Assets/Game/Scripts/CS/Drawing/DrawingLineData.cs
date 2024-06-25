@@ -11,15 +11,11 @@ namespace ChickenScratch
     [Serializable]
     public class DrawingLineData : DrawingVisualData
     {
-        public enum LineColour
-        {
-            Base, Colour, Light, Erase, Clear, Invalid
-        }
         public enum LineType
         {
             Freeform, Straight, Invalid
         }
-        public LineColour lineColour = LineColour.Invalid;
+        public Color lineColour = Color.black;
         public LineType lineType = LineType.Invalid;
         public float lineSize = 0.15f;
         public BirdName author = BirdName.none;
@@ -35,15 +31,21 @@ namespace ChickenScratch
             return allPositions;
         }
 
-        public List<Vector3> GetTransformedPositions(Vector3 parentPosition, Vector3 parentScale)
+        public List<Vector3> GetTransformedPositions(Vector3 parentPosition, Vector3 parentScale, int numberOfPositionsToReturn)
         {
             List<Vector3> allTransformedPositions = new List<Vector3>();
+            int iterator = 0;
             foreach (Vector3 position in positions)
             {
                 Vector3 transformedPosition = position;
                 transformedPosition = new Vector3(transformedPosition.x * parentScale.x, transformedPosition.y * parentScale.y, transformedPosition.z * parentScale.z);
                 transformedPosition += parentPosition;
                 allTransformedPositions.Add(transformedPosition);
+                iterator++;
+                if(iterator >= numberOfPositionsToReturn)
+                {
+                    break;
+                }
             }
             return allTransformedPositions;
         }
@@ -79,12 +81,8 @@ namespace ChickenScratch
             author = inAuthor;
             index = int.TryParse(networkingMessageSegments[1], out index) ? index : -1;
             subIndex = int.TryParse(networkingMessageSegments[2], out subIndex) ? subIndex : -1;
-            lineColour = Enum.TryParse(networkingMessageSegments[3], out lineColour) ? lineColour : DrawingLineData.LineColour.Invalid;
-            if (lineColour == DrawingLineData.LineColour.Invalid)
-            {
-                Debug.LogError("Invalid drawing line type[" + lineColour + "] set for adding drawing line data.");
+            lineColour = Enum.TryParse(networkingMessageSegments[3], out lineColour) ? lineColour : Color.black;
 
-            }
             lineSize = float.Parse(networkingMessageSegments[4]);
             zDepth = int.Parse(networkingMessageSegments[5]);
             sortingOrder = int.Parse(networkingMessageSegments[6]);
@@ -112,11 +110,6 @@ namespace ChickenScratch
             if (author == BirdName.none)
             {
                 Debug.LogError("Author was in invalid format.");
-                return;
-            }
-            if (lineColour == DrawingLineData.LineColour.Invalid)
-            {
-                Debug.LogError("Line colour was in invalid format.");
                 return;
             }
             if (sortingOrder == -1)

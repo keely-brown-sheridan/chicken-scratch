@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ChickenScratch.ReactionIndex;
+using UnityEngine.UI;
+using static ChickenScratch.ColourManager;
+using static ChickenScratch.DrawingLineData;
 
 namespace ChickenScratch
 {
     public class PeanutBird : MonoBehaviour
     {
-        public ChatBubble chatBubble;
         public ColourManager.BirdName birdName;
         public bool isInitialized = false;
         public float totalTimeToShowReaction = 3.0f;
@@ -15,6 +17,9 @@ namespace ChickenScratch
         private GameObject likeEffectPrefab;
         [SerializeField]
         private List<GameObject> inactiveStickerObjects;
+
+        [SerializeField]
+        private Transform birdImageHolder;
         private float currentTimeShowingReaction = 0.0f;
         private Reaction currentReaction = Reaction.invalid;
 
@@ -55,10 +60,15 @@ namespace ChickenScratch
             }
         }
 
-        public void Colourize(Color inColour)
+        public void Initialize(BirdName inBirdName)
         {
-            colourizer.Colourize(inColour);
+            gameObject.SetActive(true);
+            Instantiate(ColourManager.Instance.birdMap[inBirdName].slidesBirdPrefab, birdImageHolder);
+            colourizer.Colourize(ColourManager.Instance.birdMap[inBirdName].colour);
+            birdName = inBirdName;
+            isInitialized = true;
         }
+
 
         public void ShowReaction(Reaction reaction)
         {

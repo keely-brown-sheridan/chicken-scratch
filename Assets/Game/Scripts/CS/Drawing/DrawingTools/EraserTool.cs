@@ -52,27 +52,22 @@ namespace ChickenScratch
         private List<GameObject> objectsToHideOnSelect = new List<GameObject>();
 
         [SerializeField]
-        private List<DrawingToolHand> allDrawingToolHands = new List<DrawingToolHand>();
-        [SerializeField]
         private float jaggednessAngleThreshold;
 
         [SerializeField]
         private float jaggednessDistanceThreshold;
-        private DrawingToolHand drawingToolHand = null;
+
         [SerializeField]
         private Transform holdingPositionTransform;
         private Material _currentLineMaterial;
 
-        void Start()
+        private void Start()
         {
-            foreach (DrawingToolHand currentHand in allDrawingToolHands)
-            {
-                if (currentHand.GetComponent<BirdTag>().birdName == SettingsManager.Instance.birdName)
-                {
-                    drawingToolHand = currentHand;
-                }
-            }
+            controller = GetComponentInParent<DrawingController>();
+            selectionButton.onClick.AddListener(delegate { controller.setCurrentDrawingToolType("eraser"); });
+            onHoverVisualRise.Initialize(toolVisualsHolder.position);
         }
+
         public override DrawingAction drawingUpdate()
         {
             bool requiresNewPencilLine = _lineRenderer == null;
@@ -148,12 +143,12 @@ namespace ChickenScratch
         {
             _currentLineObject = Instantiate(drawingLinePrefab, Vector3.zero, Quaternion.identity, controller.transform);
             DrawingLine drawingLine = _currentLineObject.GetComponent<DrawingLine>();
-            Material lineMaterial = null;
-            lineMaterial = _currentLineMaterial;
+            Material lineMaterial = _currentLineMaterial;
             drawingLine.drawingLineData.lineSize = _currentDrawingSize;
             drawingLine.drawingLineData.author = SettingsManager.Instance.birdName;
             //Debug.LogError("Current line colour["+ lineData.lineColour.ToString() + "].");
-            drawingLine.drawingLineData.lineColour = DrawingLineData.LineColour.Erase;
+            drawingLine.drawingLineData.lineColour = Color.white;
+            lineMaterial.color = Color.white;
 
             _currentLineObject.transform.position = new Vector3(0, 0, eraserLineZOffset);
             _lineRenderer = _currentLineObject.GetComponent<LineRenderer>();
@@ -240,6 +235,8 @@ namespace ChickenScratch
 
         public override void use()
         {
+            
+            OnSelect.Invoke();
             foreach (GameObject objectToShowOnUse in objectsToShowOnSelect)
             {
                 objectToShowOnUse.SetActive(true);
@@ -248,7 +245,7 @@ namespace ChickenScratch
             {
                 objectToHideOnUse.SetActive(false);
             }
-            drawingToolHand.SetTargetTransform(holdingPositionTransform);
+
             _currentLineMaterial = ColourManager.Instance.eraseLineMaterial;
             AudioManager.Instance.PlaySound(selectionSoundName);
             _isActive = true;
@@ -260,6 +257,7 @@ namespace ChickenScratch
 
         public override void release()
         {
+            OnDeselect.Invoke();
             foreach (GameObject objectToShowOnUse in objectsToShowOnSelect)
             {
                 objectToShowOnUse.SetActive(false);

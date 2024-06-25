@@ -26,6 +26,22 @@ namespace ChickenScratch
         [SerializeField]
         private Transform visualsHolderTransform;
 
+        [SerializeField]
+        private float risingHeight;
+
+        private bool isInitialized = false;
+
+        public void Initialize(Vector3 startingPosition)
+        {
+            if (!isInitialized)
+            {
+                loweredAnchorTransform.position = startingPosition;
+                raisedAnchorTransform.position = startingPosition + Vector3.up * risingHeight;
+                isInitialized = true;
+            }
+            
+        }
+
         void Update()
         {
             switch (currentState)

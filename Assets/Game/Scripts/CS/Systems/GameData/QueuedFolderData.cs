@@ -11,5 +11,6 @@ namespace ChickenScratch
     {
         public int round = -1;
         public DrawingRound.CaseState queuedState = DrawingRound.CaseState.invalid;
+        public WordCategoryData wordCategory;
     }
 }

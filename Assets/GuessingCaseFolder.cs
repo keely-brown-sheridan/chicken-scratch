@@ -24,6 +24,9 @@ namespace ChickenScratch
         [SerializeField]
         private Vector3 drawingOffset;
 
+        [SerializeField]
+        private CaseWordCategoryVisual caseWordCategoryVisual;
+
         private Dictionary<int, Dictionary<string, PossiblePrompt>> possibleWordMap;
         private Dictionary<int, string> correctWords = new Dictionary<int, string>();
         private Dictionary<int, string> guessWords = new Dictionary<int, string>();
@@ -92,6 +95,7 @@ namespace ChickenScratch
         {
             base.Hide();
             guessingContainer.HidePreviousDrawings();
+            caseWordCategoryVisual.Hide();
         }
 
         public override bool HasStarted()
@@ -204,6 +208,12 @@ namespace ChickenScratch
             string prefixText = guessWords.ContainsKey(1) ? SettingsManager.Instance.CreatePrefixText(guessWords[1]) : "";
             string nounText = guessWords.ContainsKey(2) ? SettingsManager.Instance.CreateNounText(guessWords[2]) : "";
             guessText.text = prefixText + " " + nounText;
+        }
+
+        public void ShowCategory(WordCategoryData wordCategoryData)
+        {
+            caseWordCategoryVisual.Initialize(wordCategoryData);
+            caseWordCategoryVisual.Show();
         }
     }
 }

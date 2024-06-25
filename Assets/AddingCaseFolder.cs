@@ -18,6 +18,9 @@ public class AddingCaseFolder : CaseFolder
     [SerializeField]
     private TMPro.TMP_Text promptText;
 
+    [SerializeField]
+    private CaseWordCategoryVisual caseWordCategoryVisual;
+
     private TaskData.TaskModifier drawingBoxModifier;
 
     public void Initialize(DrawingData drawingData, string prompt, TaskData.TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
@@ -34,15 +37,17 @@ public class AddingCaseFolder : CaseFolder
     public override void Show(Color inFolderColour, float taskTime, float currentModifier, float maxModifierValue, float modifierDecrement)
     {
         base.Show(inFolderColour, taskTime, currentModifier, maxModifierValue, modifierDecrement);
-        drawingBoard.initialize();
         drawingBoard.gameObject.SetActive(true);
-        drawingBoard.open(drawingBoxModifier);
+        //drawingBoard.initialize();
+        
+        drawingBoard.SetDrawingBoxType(drawingBoxModifier);
     }
 
     public override void Hide()
     {
         base.Hide();
         drawingBoard.clearVisuals();
+        caseWordCategoryVisual.Hide();
     }
 
     public override bool HasStarted()
@@ -53,5 +58,11 @@ public class AddingCaseFolder : CaseFolder
     public List<DrawingLineData> GetVisuals()
     {
         return drawingBoard.getDrawingVisuals();
+    }
+
+    public void ShowCategory(WordCategoryData wordCategoryData)
+    {
+        caseWordCategoryVisual.Initialize(wordCategoryData);
+        caseWordCategoryVisual.Show();
     }
 }

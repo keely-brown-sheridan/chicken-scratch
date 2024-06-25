@@ -18,22 +18,28 @@ public class CaseModifierVisual : MonoBehaviour
 
     [SerializeField]
     private string thresholdCrossSFXName;
+    [SerializeField]
+    private string resetTimeSFXName;
+    [SerializeField]
+    private GameObject stopWatchObject;
 
     private float timeForTask;
     private float timeRemaining;
     private float maxModifierValue;
     private float startingModifierValue;
+    private float currentModifierValue;
     private float modifierDecrement;
 
     private bool hasCrossedThreshold = false;
 
     public UnityEvent onTimeComplete;
 
-    public void Initialize(float inTimeForTask, float currentModifierValue, float inMaxModifierValue, float inModifierDecrement)
+    public void Initialize(float inTimeForTask, float inCurrentModifierValue, float inMaxModifierValue, float inModifierDecrement)
     {
         timeForTask = inTimeForTask;
         timeRemaining = inTimeForTask;
-        startingModifierValue = currentModifierValue;
+        startingModifierValue = inCurrentModifierValue;
+        currentModifierValue = inCurrentModifierValue;
         modifierDecrement = inModifierDecrement;
 
         modifierText.text = currentModifierValue.ToString() + "x";
@@ -44,6 +50,12 @@ public class CaseModifierVisual : MonoBehaviour
         scoreFillImage.color = currentModifierColour;
         scoreFillImage.transform.localScale = Vector3.one;
         gameObject.SetActive(true);
+
+        if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.stopwatch) &&
+            !GameManager.Instance.playerFlowManager.StoreItemHasCharges(StoreItem.StoreItemType.stopwatch))
+        {
+            stopWatchObject.SetActive(true);
+        }
     }
 
     // Update is called once per frame
@@ -54,19 +66,17 @@ public class CaseModifierVisual : MonoBehaviour
         
         if(ratio < 0)
         {
-            Debug.LogError("Out of time.");
-            startingModifierValue -= modifierDecrement;
+            currentModifierValue -= modifierDecrement;
             gameObject.SetActive(false);
             onTimeComplete.Invoke();
-            
         }
         else if (ratio < 0.5f && !hasCrossedThreshold)
         {
             AudioManager.Instance.PlaySound(thresholdCrossSFXName);
-            startingModifierValue -= modifierDecrement;
-            modifierText.text = startingModifierValue.ToString() + "x";
+            currentModifierValue -= modifierDecrement;
+            modifierText.text = currentModifierValue.ToString() + "x";
             hasCrossedThreshold = true;
-            Color currentModifierColour = SettingsManager.Instance.GetModifierColour(startingModifierValue / maxModifierValue);
+            Color currentModifierColour = SettingsManager.Instance.GetModifierColour(currentModifierValue / maxModifierValue);
             modifierImage.color = currentModifierColour;
             scoreFillImage.color = currentModifierColour;
         }
@@ -75,6 +85,21 @@ public class CaseModifierVisual : MonoBehaviour
 
     public float GetFinalModifierValue()
     {
-        return startingModifierValue;
+        return currentModifierValue;
+    }
+
+    public void ResetTime()
+    {
+        stopWatchObject.SetActive(false);
+        AudioManager.Instance.PlaySound(resetTimeSFXName);
+        currentModifierValue = startingModifierValue;
+        timeRemaining = timeForTask;
+        Color currentModifierColour = SettingsManager.Instance.GetModifierColour(currentModifierValue / maxModifierValue);
+        modifierImage.color = currentModifierColour;
+        scoreFillImage.color = currentModifierColour;
+        hasCrossedThreshold = false;
+        modifierText.text = currentModifierValue.ToString() + "x";
+
+        GameManager.Instance.playerFlowManager.UseChargedItem(StoreItem.StoreItemType.stopwatch);
     }
 }

@@ -63,6 +63,9 @@ namespace ChickenScratch
 
         [SerializeField]
         private CaseChoicePanel caseChoicePanel;
+
+        [SerializeField]
+        private ScoreTracker scoreTracker;
         
         public CasePile newCaseCabinet;
 
@@ -128,6 +131,8 @@ namespace ChickenScratch
             {
                 Initialize();
             }
+            queuedCaseFolders.Clear();
+            queuedFolderMap.Clear();
             
             if (SettingsManager.Instance.isHost)
             {
@@ -148,6 +153,12 @@ namespace ChickenScratch
             hasSentCaseDetails = false;
             //Start the clock
             GameManager.Instance.playerFlowManager.loadingCircleObject.SetActive(false);
+
+            if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.score_tracker))
+            {
+                scoreTracker.Reset();
+                scoreTracker.gameObject.SetActive(true);
+            }
         }
 
         private void InitializeCabinetDrawers()
@@ -164,6 +175,10 @@ namespace ChickenScratch
                     //Open the cabinet drawer
                     cabinetDrawer.Value.setAsReady(currentBird);
                     ChainData currentChainData = cabinetDrawer.Value.currentChainData;
+                    WordCategoryData wordCategory = new WordCategoryData();
+                    wordCategory.prefixCategory = GameDataManager.Instance.GetWord(currentChainData.correctWordIdentifierMap[1]).category;
+                    wordCategory.nounCategory = GameDataManager.Instance.GetWord(currentChainData.correctWordIdentifierMap[2]).category;
+
                     //Broadcast to other players to open the drawers
                     FolderUpdateData folderUpdateData = new FolderUpdateData()
                     {
@@ -174,7 +189,8 @@ namespace ChickenScratch
                         player = currentBird,
                         taskTime = currentChainData.taskQueue[0].duration,
                         currentScoreModifier = currentChainData.currentScoreModifier,
-                        maxScoreModifier = currentChainData.maxScoreModifier
+                        maxScoreModifier = currentChainData.maxScoreModifier,
+                        wordCategory = wordCategory
                     };
                     GameManager.Instance.gameDataHandler.RpcUpdateFolderAsReady(folderUpdateData);
                 }
@@ -239,6 +255,10 @@ namespace ChickenScratch
                         inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
                     }
                     promptingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], ForceCaseExpirySubmit);
+                    if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
+                    {
+                        promptingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
+                    }
                     promptingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
 
                     break;
@@ -279,6 +299,10 @@ namespace ChickenScratch
                         }
                     }
                     drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
+                    if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
+                    {
+                        drawingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
+                    }
                     drawingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
 
                     break;
@@ -310,6 +334,10 @@ namespace ChickenScratch
                         }
                     }
                     copyingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], drawingBoxModifier, ForceCaseExpirySubmit);
+                    if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
+                    {
+                        copyingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
+                    }
                     copyingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     
                     break;
@@ -341,11 +369,18 @@ namespace ChickenScratch
                         }
                     }
                     addingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], chainData.correctPrompt, drawingBoxModifier, ForceCaseExpirySubmit);
+                    if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
+                    {
+                        addingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
+                    }
                     addingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     break;
                 case CaseState.guessing:
                     guessingCaseFolder.Initialize(chainData.identifier, chainData.possibleWordsMap, chainData.drawings[lastRoundIndex], ForceCaseExpirySubmit);
-
+                    if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
+                    {
+                        guessingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
+                    }
                     inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
 
                     guessingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
@@ -613,6 +648,7 @@ namespace ChickenScratch
 
             prompt.timeTaken = timeInCurrentCase;
             prompt.text = GameDelim.stripGameDelims(promptingCaseFolder.GetPromptText());
+            prompt.author = SettingsManager.Instance.birdName;
             
             return true;
         }
@@ -712,6 +748,10 @@ namespace ChickenScratch
                     {
                         GameManager.Instance.gameDataHandler.CmdTransitionCase(caseID);
                     }
+                    else
+                    {
+                        GameManager.Instance.gameDataHandler.CmdSendPointsToScoreTrackerPlayers(caseID);
+                    }
                     GameManager.Instance.gameDataHandler.CmdRequestNextCase(SettingsManager.Instance.birdName);
                 }
             }
@@ -774,6 +814,12 @@ namespace ChickenScratch
                 {
                     lastBird = birdToSendTo;
                 }
+
+                //Randomly pick between prefix and noun then create the word category for the scanner
+                WordCategoryData wordCategory = new WordCategoryData();
+                wordCategory.prefixCategory = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[1]).category;
+                wordCategory.nounCategory = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[2]).category;
+
                 FolderUpdateData folderUpdateData = new FolderUpdateData()
                 {
                     cabinetIndex = cabinetIndex,
@@ -785,7 +831,8 @@ namespace ChickenScratch
                     currentScoreModifier = currentCase.currentScoreModifier,
                     maxScoreModifier = currentCase.maxScoreModifier,
                     taskModifiers = currentCase.taskQueue[currentRound-1].modifiers,
-                    lastPlayer = lastBird
+                    lastPlayer = lastBird,
+                    wordCategory = wordCategory
                 };
                 GameManager.Instance.gameDataHandler.RpcUpdateFolderAsReady(folderUpdateData);
             }
@@ -900,8 +947,6 @@ namespace ChickenScratch
             }
 
             GameManager.Instance.gameDataHandler.CmdPrompt(selectedCabinet.currentChainData.identifier, currentRoundIndex, SettingsManager.Instance.birdName, prompt.text, prompt.timeTaken);
-            
-
         }
 
         public int GetCabinetID(BirdName player)
@@ -1007,11 +1052,12 @@ namespace ChickenScratch
             selectedCabinetData.correctPrompt = prompt;
         }
 
-        public void UpdateQueuedFolder(int caseID, int roundNumber, CaseState currentState)
+        public void UpdateQueuedFolder(int caseID, int roundNumber, CaseState currentState, WordCategoryData wordCategory)
         {
             QueuedFolderData queuedFolderData = new QueuedFolderData();
             queuedFolderData.round = roundNumber;
             queuedFolderData.queuedState = currentState;
+            queuedFolderData.wordCategory = wordCategory;
             if(!queuedFolderMap.ContainsKey(caseID))
             {
                 queuedFolderMap.Add(caseID, queuedFolderData);
@@ -1123,6 +1169,11 @@ namespace ChickenScratch
         public void SetCurrentDrawingRound(int newRound)
         {
             _currentRound = newRound;
+        }
+
+        public void UpdateScoreTrackerPoints(int trackerPoints)
+        {
+            scoreTracker.IncreaseEarnedBonusBucks(trackerPoints);
         }
     }
 }

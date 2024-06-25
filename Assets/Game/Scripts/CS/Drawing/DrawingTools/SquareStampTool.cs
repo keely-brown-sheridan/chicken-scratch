@@ -53,7 +53,6 @@ namespace ChickenScratch
         [SerializeField]
         private LayerMask drawingAreaLayerMask;
 
-        private List<DrawingLineData.LineColour> _lineColourOptions = new List<DrawingLineData.LineColour>() { DrawingLineData.LineColour.Base, DrawingLineData.LineColour.Colour, DrawingLineData.LineColour.Light, DrawingLineData.LineColour.Erase };
         private int _currentLineColourIndex = 2;
 
         private int _currentSortingOrder = -1;
@@ -134,32 +133,7 @@ namespace ChickenScratch
         public void updateColour()
         {
             Color currentColourValue = Color.clear;
-            DrawingLineData.LineColour currentLineColour = _lineColourOptions[_currentLineColourIndex];
-            _currentColourType = currentLineColour;
-            Bird currentBird = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName];
-            switch (currentLineColour)
-            {
-                case DrawingLineData.LineColour.Base:
-                    currentColourValue = Color.black;
-                    _currentLineMaterial = ColourManager.Instance.baseLineMaterial;
-                    _currentGhostLineMaterial = ColourManager.Instance.stampBorderGhostMaterial;
-                    break;
-                case DrawingLineData.LineColour.Colour:
-                    currentColourValue = currentBird.colour;
-                    _currentLineMaterial = currentBird.material;
-                    _currentGhostLineMaterial = currentBird.ghostMaterial;
-                    break;
-                case DrawingLineData.LineColour.Light:
-                    currentColourValue = currentBird.bgColour;
-                    _currentLineMaterial = currentBird.bgLineMaterial;
-                    _currentGhostLineMaterial = currentBird.ghostBGMaterial;
-                    break;
-                case DrawingLineData.LineColour.Erase:
-                    currentColourValue = Color.white;
-                    _currentLineMaterial = ColourManager.Instance.eraseLineMaterial;
-                    _currentGhostLineMaterial = ColourManager.Instance.eraseGhostMaterial;
-                    break;
-            }
+
 
             foreach (SpriteRenderer colouredRenderer in colouredRenderers)
             {
@@ -245,7 +219,7 @@ namespace ChickenScratch
             DrawingLineData topLineData = topBorderLineObject.GetComponent<DrawingLine>().drawingLineData;
             topLineData.lineSize = lineWidth;
             topLineData.author = SettingsManager.Instance.birdName;
-            topLineData.lineColour = DrawingLineData.LineColour.Base;
+
             topLineData.zDepth = stampLineZOffset;
 
             GameObject bottomBorderLineObject = Instantiate(squareLinePrefab, linePosition, Quaternion.identity, newSquareObject.transform);
@@ -261,7 +235,7 @@ namespace ChickenScratch
             DrawingLineData bottomLineData = bottomBorderLineObject.GetComponent<DrawingLine>().drawingLineData;
             bottomLineData.lineSize = lineWidth;
             bottomLineData.author = SettingsManager.Instance.birdName;
-            bottomLineData.lineColour = DrawingLineData.LineColour.Base;
+
             bottomLineData.zDepth = stampLineZOffset;
 
             GameObject leftBorderLineObject = Instantiate(squareLinePrefab, linePosition, Quaternion.identity, newSquareObject.transform);
@@ -277,7 +251,7 @@ namespace ChickenScratch
             DrawingLineData leftLineData = leftBorderLineObject.GetComponent<DrawingLine>().drawingLineData;
             leftLineData.lineSize = lineWidth;
             leftLineData.author = SettingsManager.Instance.birdName;
-            leftLineData.lineColour = DrawingLineData.LineColour.Base;
+
             leftLineData.zDepth = stampLineZOffset;
 
             GameObject rightBorderLineObject = Instantiate(squareLinePrefab, linePosition, Quaternion.identity, newSquareObject.transform);
@@ -293,7 +267,7 @@ namespace ChickenScratch
             DrawingLineData rightLineData = rightBorderLineObject.GetComponent<DrawingLine>().drawingLineData;
             rightLineData.lineSize = lineWidth;
             rightLineData.author = SettingsManager.Instance.birdName;
-            rightLineData.lineColour = DrawingLineData.LineColour.Base;
+
             rightLineData.zDepth = stampLineZOffset;
 
             //Create the fill
@@ -305,7 +279,7 @@ namespace ChickenScratch
             DrawingLineData fillLineData = fillLineObject.GetComponent<DrawingLine>().drawingLineData;
             fillLineData.lineSize = lineWidth;
             fillLineData.author = SettingsManager.Instance.birdName;
-            fillLineData.lineColour = _lineColourOptions[_currentLineColourIndex];
+
             fillLineData.zDepth = stampLineZOffset;
             fillLineObject.transform.localPosition = new Vector3(0, 0, linePosition.z);
             LineRenderer fillLineRenderer = fillLineObject.GetComponent<LineRenderer>();

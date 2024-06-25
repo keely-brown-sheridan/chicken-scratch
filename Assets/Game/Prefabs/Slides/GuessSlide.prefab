@@ -106,7 +106,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1916086832}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &603847672
 GameObject:
@@ -274,7 +274,7 @@ RectTransform:
   - {fileID: 1896436047}
   - {fileID: 1587751618}
   m_Father: {fileID: 1916086832}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -447,7 +447,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1916086832}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1587751617
 GameObject:
@@ -768,10 +768,10 @@ RectTransform:
   - {fileID: 213284620}
   - {fileID: 603847673}
   - {fileID: 1745686811}
+  - {fileID: 975058096}
   - {fileID: 4644908365357000899}
   - {fileID: 1404414212}
   - {fileID: 344423537}
-  - {fileID: 975058096}
   - {fileID: 1285857757}
   m_Father: {fileID: 666087695642482567}
   m_RootOrder: 13
@@ -21564,7 +21564,7 @@ MonoBehaviour:
   originalPromptText: {fileID: 7299621593195310194}
   prefixWaitDuration: 2
   nounWaitDuration: 4
-  modifierWaitDuration: 6
+  modifierWaitDuration: 6.5
   successDescriptorEffect: {fileID: 4833407588688974509}
   successNounEffect: {fileID: 4833407586921303968}
   failureDescriptorEffect: {fileID: 4833407588698317155}
@@ -21576,7 +21576,7 @@ MonoBehaviour:
   slideCaseScoreVisualization: {fileID: 1916086833}
   timeToUpdatePrefixScore: 1.5
   timeToUpdateNounScore: 1.5
-  timeToUpdateModifierScore: 3.5
+  timeToUpdateModifierScore: 2.5
 --- !u!1 &7518227129861168372
 GameObject:
   m_ObjectHideFlags: 0
@@ -21655,7 +21655,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1916086832}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

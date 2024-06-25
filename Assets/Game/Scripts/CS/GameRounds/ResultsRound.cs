@@ -116,7 +116,7 @@ namespace ChickenScratch
             ResultData highestResult = null;
             foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
-                totalPoints += caseData.GetTotalPoints();
+                totalPoints += caseData.scoringData.GetTotalPoints();
             }
 
             foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
