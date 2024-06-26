@@ -209,10 +209,21 @@ namespace ChickenScratch
             }
 
             //Set the employee of the month
-            eotmBirdFaceImage.sprite = ColourManager.Instance.birdMap[bestEmployeeCandidate.birdName].faceSprite;
+            Bird bestBird = ColourManager.Instance.GetBird(bestEmployeeCandidate.birdName);
+            if (bestBird == null)
+            {
+                Debug.LogError("Could not set employee of the month details because the bird["+bestEmployeeCandidate.birdName.ToString()+"] has not been mapped in the Colour Manager.");
+            }
+            else
+            {
+                eotmPlayerName.color = bestBird.colour;
+                eotmSFX = bestBird.birdSoundName;
+                eotmBirdFaceImage.sprite = bestBird.faceSprite;
+
+            }
+            
             eotmPlayerName.text = bestEmployeeCandidate.playerName;
-            eotmPlayerName.color = ColourManager.Instance.birdMap[bestEmployeeCandidate.birdName].colour;
-            eotmSFX = ColourManager.Instance.birdMap[bestEmployeeCandidate.birdName].birdSoundName;
+            
         }
 
         private void SetEndgameButtons()

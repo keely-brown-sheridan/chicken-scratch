@@ -31,9 +31,20 @@ namespace ChickenScratch
         [SerializeField]
         private TMPro.TMP_Text rewardText;
 
+        [SerializeField]
+        private TMPro.TMP_Text modifierText;
+
+        [SerializeField]
+        private GameObject caseTabObject;
+
+        [SerializeField]
+        private Image caseTabFillImage;
+
+        private CaseChoiceData caseChoiceData;
+
         public void Initialize(CaseChoiceNetData inCaseChoiceData)
         {
-            CaseChoiceData caseChoiceData = GameDataManager.Instance.GetCaseChoice(inCaseChoiceData.caseChoiceIdentifier);
+            caseChoiceData = GameDataManager.Instance.GetCaseChoice(inCaseChoiceData.caseChoiceIdentifier);
             titleText.text = caseChoiceData.identifier;
             descriptionText.text = caseChoiceData.description;
             int totalReward = 0;
@@ -72,6 +83,19 @@ namespace ChickenScratch
             totalReward += caseChoiceData.pointsPerCorrectWord * 2 + caseChoiceData.bonusPoints;
 
             rewardText.text = totalReward.ToString();
+            modifierText.text = caseChoiceData.startingScoreModifier.ToString();
+        }
+
+        public void SetCaseTab(float caseTabModifierValue)
+        {
+            caseTabObject.SetActive(true);
+            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            if(playerBird == null)
+            {
+                Debug.LogError("ERROR[SetCaseTab]: Could not get player bird["+SettingsManager.Instance.birdName.ToString()+"] because it doesn't exist in the ColourManager.");
+            }
+            caseTabFillImage.color = playerBird.colour;
+            modifierText.text = (caseChoiceData.startingScoreModifier + caseTabModifierValue).ToString();
         }
     }
 }

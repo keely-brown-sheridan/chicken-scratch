@@ -71,6 +71,7 @@ namespace ChickenScratch
         private bool hasStartedShowingDayResult = false;
         private bool hasSpedUp = false;
         private int numPlayersSpedUp = 0;
+        private Dictionary<BirdName, PeanutBird> chatBirdMap = new Dictionary<BirdName, PeanutBird>();
         public int currentSlideContentIndex = 0;
 
         public override void StartRound()
@@ -78,11 +79,25 @@ namespace ChickenScratch
             currentBirdBuckTotal = 0;
             hasStartedShowingDayResult = false;
             inProgress = true;
+
+            if (SettingsManager.Instance.isHost)
+            {
+                GameManager.Instance.gameFlowManager.addTransitionCondition("slides_complete");
+            }
             slideTypeMap.Clear();
-            GameManager.Instance.gameFlowManager.addTransitionCondition("slides_complete");
             foreach (SlideTypeData slideType in slideTypes)
             {
                 slideTypeMap.Add(slideType.slideType, slideType);
+            }
+            chatBirdMap.Clear();
+            foreach(PeanutBird chatBird in allChatBirds)
+            {
+                if(!chatBird.isInitialized || chatBirdMap.ContainsKey(chatBird.birdName))
+                {
+                    Debug.LogError("Could not load chat bird["+chatBird.birdName.ToString()+"] because it either isn't initialized or already exists in the chatBirdMap.");
+                    continue;
+                }
+                chatBirdMap.Add(chatBird.birdName, chatBird);
             }
             base.StartRound();
 
@@ -112,6 +127,15 @@ namespace ChickenScratch
             {
                 updateSlideFlow();
             }
+        }
+
+        public PeanutBird GetChatBird(BirdName birdName)
+        {
+            if(chatBirdMap.ContainsKey(birdName))
+            {
+                return chatBirdMap[birdName];
+            }
+            return null;
         }
 
         public void GenerateEndgameData()
@@ -178,8 +202,19 @@ namespace ChickenScratch
         {
             string correctPrefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]).value;
             string correctNoun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]).value;
-            goldStarManager.restock();
+            goldStarManager.Restock();
             ClearPreviousSlides();
+
+            //Check to make sure the slide type map contains all of the required slides
+            if(!slideTypeMap.ContainsKey(SlideTypeData.SlideType.intro) ||
+                !slideTypeMap.ContainsKey(SlideTypeData.SlideType.drawing) ||
+                !slideTypeMap.ContainsKey(SlideTypeData.SlideType.prompt) ||
+                !slideTypeMap.ContainsKey(SlideTypeData.SlideType.guess))
+            {
+                Debug.LogError("ERROR[CreateSlidesFromCase]: Missing slide types from the slide type map.");
+                return;
+            }
+
             //Create the intro slide
             SlideTypeData currentSlideType = slideTypeMap[SlideTypeData.SlideType.intro];
             GameObject introSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
@@ -254,9 +289,18 @@ namespace ChickenScratch
 
         public void ShowNextSlide()
         {
-            currentSlideContents.gameObject.SetActive(false);
+            if(currentSlideContents != null && currentSlideContents.gameObject != null)
+            {
+                currentSlideContents.gameObject.SetActive(false);
+            }
+            
             currentSlideContentIndex++;
             
+            if(queuedSlides.Count <= currentSlideContentIndex)
+            {
+                Debug.LogError("Could not display slide["+currentSlideContentIndex.ToString()+"] because there aren't enough queued slides["+queuedSlides.Count.ToString()+"].");
+                return;
+            }
             currentSlideContents = queuedSlides[currentSlideContentIndex];
             currentSlideContents.Show();
             currentSlideContents.gameObject.SetActive(true);
@@ -286,21 +330,21 @@ namespace ChickenScratch
         }
 
 
-        public void updateChainRatings(List<EndgameCaseData> inCaseData)
+        public void UpdateCaseRatings(List<EndgameCaseData> inCaseData)
         {
             PlayerRatingData selectedRatingData;
             foreach (EndgameCaseData serverCase in inCaseData)
             {
                 if(!caseDataMap.ContainsKey(serverCase.identifier))
                 {
-                    Debug.LogError("ERROR[updateChainRatings]: Could not find matching case["+ serverCase.identifier+"] on client.");
+                    Debug.LogError("ERROR[UpdateCaseRatings]: Could not find matching case["+ serverCase.identifier+"] on client.");
                 }
                 EndgameCaseData matchingCase = caseDataMap[serverCase.identifier];
                 foreach(KeyValuePair<int,EndgameTaskData> serverTask in serverCase.taskDataMap)
                 {
                     if (!matchingCase.taskDataMap.ContainsKey(serverTask.Key))
                     {
-                        Debug.LogError("ERROR[updateChainRatings]: Could not access task[" + serverTask.Key.ToString() + "] for case because it wasn't in the queue.");
+                        Debug.LogError("ERROR[UpdateCaseRatings]: Could not access task[" + serverTask.Key.ToString() + "] for case because it wasn't in the queue.");
                     }
                     selectedRatingData = matchingCase.taskDataMap[serverTask.Key].ratingData;
                     selectedRatingData.likeCount = serverTask.Value.ratingData.likeCount;
@@ -340,7 +384,13 @@ namespace ChickenScratch
 
         public void showReaction(BirdName birdName, Reaction reaction)
         {
-            allChatBirds.Where(pb => pb.isInitialized).Single(pb => pb.birdName == birdName).ShowReaction(reaction);
+            PeanutBird matchingBird = GetChatBird(birdName);
+            if(matchingBird == null)
+            {
+                Debug.LogError("Could not show reaction for bird["+birdName.ToString()+"] because it does not exist in the chatBirdMap.");
+                return;
+            }
+            matchingBird.ShowReaction(reaction);
         }
 
         public void setSlideSpeed(float inSlideSpeed)
@@ -362,11 +412,27 @@ namespace ChickenScratch
         public void showPlayerRatingVisual(BirdName sender, BirdName receiver)
         {
             //Spawn liked object and initialize it
-            PeanutBird targetBird = allChatBirds.Single(pb => pb.birdName == receiver);
-            Vector3 startingPosition = allChatBirds.Single(pb => pb.birdName == sender).transform.position;
+            PeanutBird targetBird = GetChatBird(receiver);
+            if(targetBird == null)
+            {
+                Debug.LogError("Could not show player rating visual for receiver["+receiver.ToString()+"] because it doesn't exist in the chatBirdMap.");
+                return;
+            }
+            PeanutBird senderBird = GetChatBird(sender);
+            if(senderBird == null)
+            {
+                Debug.LogError("Could not show player rating visual for sender["+sender.ToString()+"] because it doesn't exist in the chatBirdMap.");
+                return;
+            }
+            Vector3 startingPosition = senderBird.transform.position;
             Vector3 endingPosition = targetBird.transform.position;
             GameObject playerRatingVisualObject = Instantiate(playerRatingVisualPrefab, playerRatingVisualParent);
             PlayerRatingVisual playerRatingVisual = playerRatingVisualObject.GetComponent<PlayerRatingVisual>();
+            if(playerRatingVisual == null)
+            {
+                Debug.LogError("Could not initialize the player rating visual because the component was missing from the instantiated object.");
+                return;
+            }
             playerRatingVisual.initialize(startingPosition, endingPosition, playerRatingMaxHeightTransform.position.y, targetBird);
 
         }
@@ -398,6 +464,16 @@ namespace ChickenScratch
 
         public void ShowDayResult()
         {
+            if(dayResultForm == null)
+            {
+                Debug.LogError("Could not show day result because day result form is missing.");
+                return;
+            }
+            if(finalResultManager == null)
+            {
+                Debug.LogError("Could not show day result because final result manager is missing.");
+                return;
+            }
             ResultData gameResult = SettingsManager.Instance.GetDayResult();
             ClearPreviousSlides();
             dayResultForm.resultMessageText.text = gameResult.bossMessage;

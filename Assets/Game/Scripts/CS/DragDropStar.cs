@@ -88,7 +88,12 @@ namespace ChickenScratch
                         if (currentGoldStarDetectionArea != null && currentGoldStarDetectionArea.GiveStar())
                         {
                             //Send the star to the target bird
-                            likedBird = slidesRound.allChatBirds.Single(pb => pb.birdName == currentGoldStarDetectionArea.birdName);
+                            likedBird = slidesRound.GetChatBird(currentGoldStarDetectionArea.birdName);
+                            if (likedBird == null)
+                            {
+                                Debug.LogError("Could not send star to target bird["+currentGoldStarDetectionArea.birdName.ToString()+"] because it doesn't exist as a chat bird in the slides round.");
+                                return;
+                            }
                             targetPosition = likedBird.transform.position;
                             snapbackPosition = transform.position;
                             currentState = State.award;
@@ -161,7 +166,7 @@ namespace ChickenScratch
 
         }
 
-        public bool restock()
+        public bool Restock()
         {
             if (currentState != State.inactive)
             {

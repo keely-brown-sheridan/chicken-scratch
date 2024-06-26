@@ -467,17 +467,35 @@ namespace ChickenScratch
 
         public int GetCurrentGoal()
         {
-            return gameMode.days[GameManager.Instance.playerFlowManager.currentDay].goalPerPlayer * GetPlayerNameCount();
+            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            if(gameMode.days.Count <= currentDay)
+            {
+                Debug.LogError("Could not access current goal for day["+currentDay.ToString()+"] because game mode only has days["+gameMode.days.Count.ToString()+"].");
+                return -1;
+            }
+            return gameMode.days[currentDay].goalPerPlayer * GetPlayerNameCount();
         }
 
         public int GetCaseCountForDay()
         {
+            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            if (gameMode.days.Count <= currentDay)
+            {
+                Debug.LogError("Could not access case count for day[" + currentDay.ToString() + "] because game mode only has days[" + gameMode.days.Count.ToString() + "].");
+                return -1;
+            }
             return (int)(gameMode.days[GameManager.Instance.playerFlowManager.currentDay].casesPerPlayer * GetPlayerNameCount());
         }
 
         public ResultData GetDayResult()
         {
-            DayData currentDayData = gameMode.days[GameManager.Instance.playerFlowManager.currentDay];
+            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            if (gameMode.days.Count <= currentDay)
+            {
+                Debug.LogError("Could not get day result for day["+currentDay.ToString()+"] because game mode only contains days["+gameMode.days.Count.ToString()+"].");
+                return null;
+            }
+            DayData currentDayData = gameMode.days[currentDay];
             if(DidPlayersPassDay())
             {
                 return currentDayData.winResult;

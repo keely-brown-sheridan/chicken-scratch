@@ -13,7 +13,7 @@ namespace ChickenScratch
         }
 
 
-        public Dictionary<BirdName, Bird> birdMap = new Dictionary<BirdName, Bird>();
+        private Dictionary<BirdName, Bird> birdMap = new Dictionary<BirdName, Bird>();
         public List<Bird> allBirds = new List<Bird>();
 
         public List<DrawingSizeData> allDrawingSizeData = new List<DrawingSizeData>();
@@ -28,6 +28,15 @@ namespace ChickenScratch
         public Material baseLineMaterial;
         public Material stampBorderGhostMaterial;
         public Material eraseGhostMaterial;
+
+        public Bird GetBird(BirdName birdName)
+        {
+            if(birdMap.ContainsKey(birdName))
+            {
+                return birdMap[birdName];
+            }
+            return null;
+        }
 
         void Awake()
         {

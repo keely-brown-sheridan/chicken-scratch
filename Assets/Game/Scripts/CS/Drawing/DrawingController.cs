@@ -86,13 +86,13 @@ namespace ChickenScratch
         private void OnEnable()
         {
             initialize();
-            //test();
+            test();
             open();
         }
 
         private void test()
         {
-            StoreItemData storeItem = new MarkerStoreItemData() { itemType = StoreItem.StoreItemType.highlighter, markerColour = new Color(1f, 1f, 0f, 0.4f) };
+            StoreItemData storeItem = new MarkerStoreItemData() { itemType = StoreItem.StoreItemType.highlighter, markerColour = new Color(1f, 1f, 0f, 0.1f) };
             GameManager.Instance.playerFlowManager.AddStoreItem(storeItem);
         }
 
@@ -219,7 +219,13 @@ namespace ChickenScratch
                 case DrawingToolType.colour_marker:
                     //Initialize the colour
                     MarkerTool colourMarkerTool = (MarkerTool)newTool;
-                    toolColour = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].colour;
+                    Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+                    if(playerBird == null)
+                    {
+                        Debug.LogError("Could not set tool colour because playerBird["+SettingsManager.Instance.birdName.ToString()+"] has not been mapped in the ColourManager.");
+                        break;
+                    }    
+                    toolColour = playerBird.colour;
                     colourMarkerTool.setColour(toolColour);
                     heldTool.SetColour(toolColour);
                     break;

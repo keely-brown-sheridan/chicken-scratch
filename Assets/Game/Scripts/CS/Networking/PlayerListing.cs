@@ -23,9 +23,9 @@ namespace ChickenScratch
         [SerializeField]
         private GameObject kickButtonObject;
 
-        public ColourManager.BirdName SelectedBird => selectedBird;
+        public ColourManager.BirdName SelectedBirdName => selectedBirdName;
 
-        private ColourManager.BirdName selectedBird = ColourManager.BirdName.none;
+        private ColourManager.BirdName selectedBirdName = ColourManager.BirdName.none;
 
         public void ApplyPlayer(string playerID, string name, bool isHost)
         {
@@ -38,9 +38,15 @@ namespace ChickenScratch
 
         public void ChangePlayerBird(ColourManager.BirdName inBirdName)
         {
-            selectedBird = inBirdName;
+            selectedBirdName = inBirdName;
             if (inBirdName == ColourManager.BirdName.none) return;
-            PlayerImage.sprite = ColourManager.Instance.birdMap[inBirdName].scannerFaceSprite;
+            Bird selectedBird = ColourManager.Instance.GetBird(inBirdName);
+            if(selectedBird == null)
+            {
+                Debug.LogError("Could not change player bird for listing because selected bird[] is not mapped in the ColourManager.");
+                return;
+            }
+            PlayerImage.sprite = selectedBird.scannerFaceSprite;
             //PlayerName.color = ColourManager.Instance.birdMap[inBirdName].colour;
             PlayerImage.gameObject.SetActive(true);
         }

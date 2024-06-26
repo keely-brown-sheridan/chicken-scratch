@@ -29,11 +29,19 @@ namespace ChickenScratch
         {
             _cardBirdName = inBirdName;
             _playerName = inPlayerName;
-            Bird playerBird = ColourManager.Instance.birdMap[_cardBirdName];
-            cardFaceImage.sprite = playerBird.faceSprite;
-            cardColouredSectionImage.color = playerBird.colour;
+            Bird playerBird = ColourManager.Instance.GetBird(_cardBirdName);
+            if(playerBird == null)
+            {
+                Debug.LogError("Could not initialize the selected player identification because the player bird["+_cardBirdName.ToString()+"] has not been mapped in the Colour Manager.");
+            }
+            else
+            {
+                cardFaceImage.sprite = playerBird.faceSprite;
+                cardColouredSectionImage.color = playerBird.colour;
+                cardNameText.color = playerBird.colour;
+            }
+            
             cardNameText.text = _playerName;
-            cardNameText.color = playerBird.colour;
         }
     }
 }

@@ -319,7 +319,8 @@ namespace ChickenScratch
             newChain.SetWordsFromChoice(choiceNetData);
             tempPromptData.text = newChain.correctPrompt;
             newChain.prompts.Add(1, tempPromptData);
-            newChain.currentScoreModifier = selectedCase.startingScoreModifier;
+            newChain.currentScoreModifier = selectedCase.startingScoreModifier + choiceNetData.modifierIncreaseValue;
+            newChain.scoreModifierDecrement = choiceNetData.scoreModifierDecrement;
             newChain.maxScoreModifier = choiceNetData.maxScoreModifier;
             if (!GameManager.Instance.playerFlowManager.drawingRound.caseMap.ContainsKey(newChain.identifier))
             {

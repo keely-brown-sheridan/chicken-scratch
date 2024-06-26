@@ -39,7 +39,12 @@ namespace ChickenScratch
         {
             duration = inDuration;
             timeActive = 0f;
-            Bird authorBird = ColourManager.Instance.birdMap[promptData.author];
+            Bird authorBird = ColourManager.Instance.GetBird(promptData.author);
+            if(authorBird == null)
+            {
+                Debug.LogError("Could not initialize prompt slide contents because prompt bird["+promptData.author.ToString()+"] was not mapped in the Colour Manager.");
+                return;
+            }
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(promptData.author);
             authorNameText.color = authorBird.colour;

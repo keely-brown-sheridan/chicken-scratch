@@ -48,10 +48,20 @@ namespace ChickenScratch
             {
                 drawingFolderRenderer.color = inFolderColour;
             }
-            foreach (SpriteRenderer drawingFolderRenderer in outFolderRenderers)
+            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            if(playerBird == null)
             {
-                drawingFolderRenderer.color = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].folderColour;
+                Debug.LogError("Could not map colours for the folder renderers because bird["+SettingsManager.Instance.birdName+"] does not exist in the ColourManager.");
             }
+            else
+            {
+                Color folderColour = playerBird.folderColour;
+                foreach (SpriteRenderer drawingFolderRenderer in outFolderRenderers)
+                {
+                    drawingFolderRenderer.color = folderColour;
+                }
+            }
+
 
             formAnimator.SetBool("Slide", true);
             caseModifierVisual.Initialize(timeForTask, currentModifierValue, maxModifierValue, modifierDecrement);

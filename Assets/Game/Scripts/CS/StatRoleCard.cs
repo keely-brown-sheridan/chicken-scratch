@@ -15,8 +15,17 @@ namespace ChickenScratch
 
         public void SetValues(BirdName bird, string roleName)
         {
-            faceImage.sprite = ColourManager.Instance.birdMap[bird].faceSprite;
-            roleText.color = ColourManager.Instance.birdMap[bird].colour;
+            Bird roleBird = ColourManager.Instance.GetBird(bird);
+            if(roleBird == null)
+            {
+                Debug.LogError("Could not set values for stat role card because role bird["+bird.ToString()+"] has not been mapped in the Colour Manager.");
+            }
+            else
+            {
+                faceImage.sprite = roleBird.faceSprite;
+                roleText.color = roleBird.colour;
+            }
+            
             roleText.text = roleName;
         }
     }

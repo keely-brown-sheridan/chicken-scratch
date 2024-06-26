@@ -51,7 +51,15 @@ namespace ChickenScratch
                 PlaceStartingStickies(false);
             }
 
-            GameManager.Instance.playerFlowManager.drawingRound.deskRenderer.color = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].bgColour;
+            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            if(playerBird == null)
+            {
+                Debug.LogError("Could not set the colour of the desk renderer because the playerBird["+SettingsManager.Instance.birdName.ToString()+"] has not been mapped to the ColourManager.");
+            }
+            else
+            {
+                GameManager.Instance.playerFlowManager.drawingRound.deskRenderer.color = playerBird.bgColour;
+            }
 
             int currentDay = GameManager.Instance.playerFlowManager.currentDay;
             int currentGoal = SettingsManager.Instance.GetCurrentGoal();

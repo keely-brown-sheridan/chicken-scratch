@@ -15,6 +15,7 @@ namespace ChickenScratch
         public CaseState currentState;
         public float taskTime;
         public float currentScoreModifier;
+        public float scoreModifierDecrement;
         public float maxScoreModifier;
         public int roundNumber;
         public int caseID;

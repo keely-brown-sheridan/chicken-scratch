@@ -99,10 +99,19 @@ namespace ChickenScratch
             foreach(GameObject summarySectionPrefab in summarySectionPrefabs)
             {
                 SummarySlideSection summarySlideSection = summarySectionPrefab.GetComponent<SummarySlideSection>();
+                if(summarySectionPrefabMap.ContainsKey(summarySlideSection.slideType))
+                {
+                    Debug.LogError("Could not add summary section prefab["+summarySlideSection.slideType.ToString()+"] because it already exists in the prefab map.");
+                }
                 summarySectionPrefabMap.Add(summarySlideSection.slideType, summarySectionPrefab);
             }
             
             originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
+            if(!GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.ContainsKey(caseID))
+            {
+                Debug.LogError("ERROR[Initialize]: Could not initialize summary slide contents because case data map did not contain case ID["+caseID.ToString()+"]");
+                return;
+            }
             EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
             caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
             finalScoreText.text = "Birdbucks: " + finalScore.ToString();

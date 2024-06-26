@@ -9,11 +9,11 @@ namespace ChickenScratch
         [SerializeField]
         private List<DragDropStar> goldStars = new List<DragDropStar>();
 
-        public void restock()
+        public void Restock()
         {
             foreach (DragDropStar goldStar in goldStars)
             {
-                if (goldStar.restock())
+                if (goldStar.Restock())
                 {
                     break;
                 }

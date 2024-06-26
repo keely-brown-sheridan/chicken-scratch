@@ -37,9 +37,15 @@ namespace ChickenScratch
             {
                 lineDetails.SetPosition(i, positions[i]);
             }
-            lineDetails.material = ColourManager.Instance.birdMap[author].material;
-            lineDetails.startColor = ColourManager.Instance.birdMap[author].colour;
-            lineDetails.endColor = ColourManager.Instance.birdMap[author].colour;
+            Bird authorBird = ColourManager.Instance.GetBird(author);
+            if (authorBird == null)
+            {
+                Debug.LogError("Could not add new line because author["+author.ToString()+"] was not mapped in the Colour Manager.");
+                return;
+            }
+            lineDetails.material = authorBird.material;
+            lineDetails.startColor = authorBird.colour;
+            lineDetails.endColor = authorBird.colour;
             lineDetails.sortingOrder = 100;
             linesFromPresentor.Add(identifier, lineDetails);
         }

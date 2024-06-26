@@ -107,20 +107,37 @@ namespace ChickenScratch
         public void setCabinetOwner(BirdName cabinetOwner)
         {
             currentPlayer = cabinetOwner;
-            playerColour = ColourManager.Instance.birdMap[currentPlayer].folderColour;
+            Bird cabinetBird = ColourManager.Instance.GetBird(cabinetOwner);
+            if (cabinetBird == null)
+            {
+                Debug.LogError("Could not update colour and image of cabinet because cabinet owner["+cabinetOwner.ToString()+"] is not mapped in the Colour Manager.");
+            }
+            else
+            {
+                playerColour = cabinetBird.folderColour;
+                ownerImageRenderer.sprite = cabinetBird.cabinetFaceSprite;
+            }
+            
             GameManager.Instance.playerFlowManager.cabinetHourglasses[id - 1].gameObject.SetActive(false);
-            ownerImageRenderer.sprite = ColourManager.Instance.birdMap[currentPlayer].cabinetFaceSprite;
+            
             ownerImageObject.SetActive(true);
         }
 
         public void setDrawerVisuals(BirdName inCurrentPlayer)
         {
+            Bird cabinetBird = ColourManager.Instance.GetBird(inCurrentPlayer);
+            if(cabinetBird == null)
+            {
+                Debug.LogError("Could not set colour for the drawer because the bird map does not contain currentplayer["+inCurrentPlayer.ToString()+"].");
+                return;
+            }
+
             if (inCurrentPlayer == SettingsManager.Instance.birdName)
             {
                 animator.SetBool("PlayerCabinet", true);
             }
             currentPlayer = inCurrentPlayer;
-            playerColour = ColourManager.Instance.birdMap[currentPlayer].folderColour;
+            playerColour = cabinetBird.folderColour;
         }
 
 
@@ -184,20 +201,41 @@ namespace ChickenScratch
             Color currentColour;
             if (queuedFolderEntries.Count > 0)
             {
-                currentColour = queuedFolderEntries[0] == BirdName.none ? playerColour : ColourManager.Instance.birdMap[queuedFolderEntries[0]].folderColour;
-                folderRenderer.color = currentColour;
+                Bird queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[0]);
+                if(queuedBird != null)
+                {
+                    folderRenderer.color = queuedBird.folderColour;
+                }
+                else
+                {
+                    folderRenderer.color = playerColour;
+                }
                 folderRenderer.gameObject.SetActive(true);
 
                 if (queuedFolderEntries.Count > 1)
                 {
-                    currentColour = queuedFolderEntries[1] == BirdName.none ? playerColour : ColourManager.Instance.birdMap[queuedFolderEntries[1]].folderColour;
-                    folderRenderer2.color = currentColour;
+                    queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[1]);
+                    if (queuedBird != null)
+                    {
+                        folderRenderer2.color = queuedBird.folderColour;
+                    }
+                    else
+                    {
+                        folderRenderer2.color = playerColour;
+                    }
                     folderRenderer2.gameObject.SetActive(true);
 
                     if (queuedFolderEntries.Count > 2)
                     {
-                        currentColour = queuedFolderEntries[2] == BirdName.none ? playerColour : ColourManager.Instance.birdMap[queuedFolderEntries[2]].folderColour;
-                        folderRenderer3.color = currentColour;
+                        queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[2]);
+                        if (queuedBird != null)
+                        {
+                            folderRenderer3.color = queuedBird.folderColour;
+                        }
+                        else
+                        {
+                            folderRenderer3.color = playerColour;
+                        }
                         folderRenderer3.gameObject.SetActive(true);
                     }
                     else
@@ -208,8 +246,15 @@ namespace ChickenScratch
 
                     if (queuedFolderEntries.Count > 3)
                     {
-                        currentColour = queuedFolderEntries[3] == BirdName.none ? playerColour : ColourManager.Instance.birdMap[queuedFolderEntries[3]].folderColour;
-                        folderRenderer4.color = currentColour;
+                        queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[3]);
+                        if (queuedBird != null)
+                        {
+                            folderRenderer4.color = queuedBird.folderColour;
+                        }
+                        else
+                        {
+                            folderRenderer4.color = playerColour;
+                        }
                         folderRenderer4.gameObject.SetActive(true);
                     }
                     else
@@ -239,14 +284,10 @@ namespace ChickenScratch
             GameManager.Instance.playerFlowManager.hasRunOutOfTime = false;
             ready = true;
             currentPlayer = queuedPlayer;
-
-            if (!playerFlowManager)
-            {
-                playerFlowManager = GameManager.Instance.playerFlowManager;
-            }
+            bool playerQueuedIsMe = SettingsManager.Instance.birdName == currentPlayer;
             if (SettingsManager.Instance.GetSetting("stickies"))
             {
-                playerFlowManager.instructionRound.handleCabinetOpening(id, SettingsManager.Instance.birdName == currentPlayer);
+                GameManager.Instance.playerFlowManager.instructionRound.handleCabinetOpening(id, playerQueuedIsMe);
             }
 
             setDrawerVisuals(currentPlayer);
@@ -255,7 +296,7 @@ namespace ChickenScratch
             animator.SetBool("Open", true);
             AudioManager.Instance.PlaySoundVariant("sfx_game_env_drawer_open");
 
-            if (currentPlayer == SettingsManager.Instance.birdName)
+            if (playerQueuedIsMe)
             {
                 //Initialize the drawer glow
                 glowObject.SetActive(true);

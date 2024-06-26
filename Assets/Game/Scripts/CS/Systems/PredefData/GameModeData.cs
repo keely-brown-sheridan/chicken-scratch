@@ -26,7 +26,6 @@ namespace ChickenScratch
 
         public CaseTemplateData baseTemplateData;
         public List<string> caseChoiceIdentifiers = new List<string>();
-        public float scoreModifierDecrement;
 
         public int casesRemaining;
         public float contributionTaskRatio;

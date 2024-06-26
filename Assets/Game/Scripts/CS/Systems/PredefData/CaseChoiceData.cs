@@ -21,6 +21,7 @@ namespace ChickenScratch
         public int penalty;
         public float startingScoreModifier;
         public float maxScoreModifier;
+        public float modifierDecrement;
         public float taskFalloff;
         public Color colour;
         public List<string> startingWordIdentifiers = new List<string>();

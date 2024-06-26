@@ -21,18 +21,39 @@ public class CaseChoicePanel : MonoBehaviour
 
     public void SetChoices(CaseChoiceNetData inChoice1, CaseChoiceNetData inChoice2, CaseChoiceNetData inChoice3)
     {
-        if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.reroll) && !hasRerolled)
-        {
-            caseChoiceRerollerObject.SetActive(true);
-        }
-
         choiceData1 = inChoice1;
         choiceData2 = inChoice2;
         choiceData3 = inChoice3;
         choice1.Initialize(choiceData1);
         choice2.Initialize(choiceData2);
         choice3.Initialize(choiceData3);
-        
+
+        if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.reroll) && !hasRerolled)
+        {
+            caseChoiceRerollerObject.SetActive(true);
+        }
+        if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.case_tab))
+        {
+            float modifierIncreaseValue = GameManager.Instance.playerFlowManager.GetStoreItemValue(StoreItem.StoreItemType.case_tab);
+            //Randomly choose one of the three choices
+            int randomChoice = Random.Range(0, 3);
+            switch(randomChoice)
+            {
+                case 0:
+                    inChoice1.modifierIncreaseValue = modifierIncreaseValue;
+                    choice1.SetCaseTab(inChoice1.modifierIncreaseValue);
+                    break;
+                case 1:
+                    inChoice2.modifierIncreaseValue = modifierIncreaseValue;
+                    choice2.SetCaseTab(inChoice2.modifierIncreaseValue);
+                    break;
+                case 2:
+                    inChoice3.modifierIncreaseValue = modifierIncreaseValue;
+                    choice3.SetCaseTab(inChoice3.modifierIncreaseValue);
+                    break;
+            }
+        }
+
         gameObject.SetActive(true);
         hasRerolled = false;
     }

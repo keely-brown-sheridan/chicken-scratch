@@ -28,6 +28,10 @@ namespace ChickenScratch
             duration = inDuration;
             timeActive = 0f;
             originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
+            if(!GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.ContainsKey(caseID))
+            {
+                Debug.LogError("ERROR[Initialize]: Could not initialize case type slide visualizer because caseDataMap did not contain caseID["+caseID.ToString()+"]");
+            }
             EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
             caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
         }

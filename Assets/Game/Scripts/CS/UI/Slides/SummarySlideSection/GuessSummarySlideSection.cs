@@ -24,7 +24,12 @@ namespace ChickenScratch
         public void Initialize(GuessData guessData, Dictionary<int,string> correctWordIdentifiersMap, int round, int caseID, float timeModifierDecrement)
         {
             
-            Bird authorBird = ColourManager.Instance.birdMap[guessData.author];
+            Bird authorBird = ColourManager.Instance.GetBird(guessData.author);
+            if(authorBird == null)
+            {
+                Debug.LogError("Could not initialize guess sumamry slide section because guess bird["+guessData.author.ToString()+"] was not mapped in the Colour Manager.");
+                return;
+            }
             _author = guessData.author;
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;

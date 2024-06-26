@@ -131,21 +131,19 @@ namespace ChickenScratch
                 {
                     //Generate a colour and set the value for the BG colour and the marker colour
                     Color randomColour = new Color(Random.Range(0.4f, 1f), Random.Range(0.4f, 1f), Random.Range(0.4f, 1f));
-                    ((MarkerStoreItemData)storeItemData).markerColour = randomColour;
+                    
                     float red = randomColour.r;
                     float green = randomColour.g;
                     float blue = randomColour.b;
                     red = (1 - red) * 0.5f + red;
                     green = (1 - green) * 0.5f + green;
                     blue = (1 - blue) * 0.5f + blue;
-                    if(storeItemData.itemType == StoreItem.StoreItemType.highlighter)
+                    storeItemData.storeBGColour = new Color(red, green, blue, 0.4f);
+                    if (storeItemData.itemType == StoreItem.StoreItemType.highlighter)
                     {
-                        storeItemData.storeBGColour = new Color(red, green, blue, 0.4f);
+                        randomColour = new Color(randomColour.r, randomColour.g, randomColour.b, 0.4f);
                     }
-                    else
-                    {
-                        storeItemData.storeBGColour = new Color(red, green, blue);
-                    }
+                    ((MarkerStoreItemData)storeItemData).markerColour = randomColour;
                 }
                 storeItem.Initialize(storeItemData);
                 shownStoreItems.Add(storeItemData.itemType);

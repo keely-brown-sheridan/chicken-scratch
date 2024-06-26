@@ -246,9 +246,18 @@ namespace ChickenScratch
             _currentCaseIndex++;
             if (_pointsPerCase.Count > _currentCaseIndex)
             {
-                Bird currentBird = ColourManager.Instance.birdMap[_pointsPerCase[_currentCaseIndex].player];
+                BirdName nextPlayer = _pointsPerCase[_currentCaseIndex].player;
+                Bird currentBird = ColourManager.Instance.GetBird(nextPlayer);
                 currentLineRenderer = Instantiate(linePrefab, resizableObjectsHolder.transform).GetComponent<LineRenderer>();
-                currentLineRenderer.material = currentBird.material;
+                if(currentBird == null)
+                {
+                    Debug.LogError("Could not map material for the line renderer made for the next round of points because the player["+ nextPlayer.ToString()+ "] is not mapped in the Colour Manager.");
+                }
+                else
+                {
+                    currentLineRenderer.material = currentBird.material;
+                }
+                
 
                 _heightReached += heightPerSegment * _pointsPerCase[_currentCaseIndex - 1].points;
                 Vector3 endPoint = new Vector3(startingPosition.x + widthPerSegment * _currentCaseIndex, _heightReached, -2);
@@ -627,7 +636,12 @@ namespace ChickenScratch
         {
             _timeShowingPoint = 0.0f;
             
-            Bird currentBird = ColourManager.Instance.birdMap[_pointsPerCase[0].player];
+            Bird currentBird = ColourManager.Instance.GetBird(_pointsPerCase[0].player);
+            if(currentBird == null)
+            {
+                Debug.LogError("Could not initialize the graphing line because the first player[" + _pointsPerCase[0].player.ToString() +"] is not mapped in the Colour Manager.");
+                return;
+            }    
             currentLineRenderer = Instantiate(linePrefab, resizableObjectsHolder.transform).GetComponent<LineRenderer>();
             currentLineRenderer.material = currentBird.material;
             currentLineRenderer.SetPosition(0, startingPosition);

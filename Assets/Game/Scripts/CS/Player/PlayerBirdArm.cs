@@ -52,8 +52,17 @@ namespace ChickenScratch
         {
             birdName = SettingsManager.Instance.birdName;
             GameManager.Instance.playerFlowManager.drawingRound.GetBirdArm(birdName).gameObject.SetActive(false);
-            sprite.sprite = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].armSprite;
-            outlineSprite.sprite = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].armOutlineSprite;
+            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            if(playerBird == null)
+            {
+                Debug.LogError("Could not set sprites for the player bird arm because the player bird["+SettingsManager.Instance.birdName.ToString()+"] has not been mapped in the Colour Manager.");
+            }
+            else
+            {
+                sprite.sprite = playerBird.armSprite;
+                outlineSprite.sprite = playerBird.armOutlineSprite;
+            }
+            
             gameObject.SetActive(true);
         }
 

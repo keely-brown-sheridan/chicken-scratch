@@ -86,7 +86,12 @@ namespace ChickenScratch
             CaseWordData prefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]);
             CaseWordData noun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]);
             timeWaiting = 0f;
-            Bird authorBird = ColourManager.Instance.birdMap[guessData.author];
+            Bird authorBird = ColourManager.Instance.GetBird(guessData.author);
+            if(authorBird == null)
+            {
+                Debug.LogError("Could not initialize guess slide contents because guess bird["+guessData.author.ToString()+"] was not mapped in the Colour Manager.");
+                return;
+            }
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);

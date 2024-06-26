@@ -20,8 +20,9 @@ MonoBehaviour:
   cost: 0
   difficulty: 2
   penalty: 0
-  startingScoreModifier: 1.5
-  maxScoreModifier: 1.5
+  startingScoreModifier: 2
+  maxScoreModifier: 2
+  modifierDecrement: 0.4
   taskFalloff: 0
   colour: {r: 0.6117647, g: 0.7254902, b: 0.69803923, a: 1}
   startingWordIdentifiers:

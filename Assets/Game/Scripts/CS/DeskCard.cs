@@ -22,7 +22,12 @@ namespace ChickenScratch
 
         public void Initialize(string playerName, BirdName birdName, string roleName, Color roleColour)
         {
-            Bird playerBird = ColourManager.Instance.birdMap[birdName];
+            Bird playerBird = ColourManager.Instance.GetBird(birdName);
+            if(playerBird == null)
+            {
+                Debug.LogError("Could not initialize desk card because player bird["+birdName.ToString()+"] is not mapped to the ColourManager.");
+                return;
+            }
             playerNameText.text = playerName;
             playerNameText.color = playerBird.colour;
             roleNameText.text = roleName;

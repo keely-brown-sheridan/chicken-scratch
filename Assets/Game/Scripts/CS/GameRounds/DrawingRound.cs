@@ -34,7 +34,7 @@ namespace ChickenScratch
         public bool hasRequestedCaseDetails = false;
         public bool hasSentCaseDetails = false;
         public Dictionary<int,QueuedFolderData> queuedFolderMap = new Dictionary<int, QueuedFolderData>();
-        private List<int> queuedCaseFolders = new List<int>();
+        private List<int> queuedCaseFolderIdentifiers = new List<int>();
         public int playerCabinetIndex = -1;
 
         public UnityEvent onPlayerSubmitTask;
@@ -131,7 +131,7 @@ namespace ChickenScratch
             {
                 Initialize();
             }
-            queuedCaseFolders.Clear();
+            queuedCaseFolderIdentifiers.Clear();
             queuedFolderMap.Clear();
             
             if (SettingsManager.Instance.isHost)
@@ -189,6 +189,7 @@ namespace ChickenScratch
                         player = currentBird,
                         taskTime = currentChainData.taskQueue[0].duration,
                         currentScoreModifier = currentChainData.currentScoreModifier,
+                        scoreModifierDecrement = currentChainData.scoreModifierDecrement,
                         maxScoreModifier = currentChainData.maxScoreModifier,
                         wordCategory = wordCategory
                     };
@@ -199,6 +200,11 @@ namespace ChickenScratch
 
         public void SetDrawerAsClosed(int cabinetIndex)
         {
+            if(!cabinetDrawerMap.ContainsKey(cabinetIndex))
+            {
+                Debug.LogError("Could not set drawer as closed because cabinetDrawerMap does not contain cabinetIndex["+cabinetIndex.ToString()+"]");
+                return;
+            }
             CabinetDrawer selectedCabinet = cabinetDrawerMap[cabinetIndex];
             selectedCabinet.close();
             if (selectedCabinet.ready)
@@ -210,14 +216,14 @@ namespace ChickenScratch
 
         public void UpdateToNewFolderState()
         {
-            if(queuedCaseFolders.Count == 0)
+            if(queuedCaseFolderIdentifiers.Count == 0)
             {
                 Debug.LogError("ERROR: Cannot select and update to a new folder state while there are no queued cases.");
                 return;
             }
 
-            int queuedCaseIndex = queuedCaseFolders[0];
-            queuedCaseFolders.RemoveAt(0);
+            int queuedCaseIndex = queuedCaseFolderIdentifiers[0];
+            queuedCaseFolderIdentifiers.RemoveAt(0);
 
             if(!caseMap.ContainsKey(queuedCaseIndex))
             {
@@ -236,7 +242,7 @@ namespace ChickenScratch
 
             ChainData chainData = cabinetDrawerMap[playerCabinetIndex].currentChainData;
             float currentTaskTime = chainData.currentTaskDuration;
-            float scoreDecrement = SettingsManager.Instance.gameMode.scoreModifierDecrement;
+            float scoreDecrement = chainData.scoreModifierDecrement;
             Color inFolderColour = Color.white;
             SetCurrentDrawingRound(queuedFolderMap[queuedCaseIndex]);
             int lastRoundIndex = currentRound-1;
@@ -246,13 +252,24 @@ namespace ChickenScratch
                 Debug.LogError("ERROR[UpdateToNewFolderState]: Last round index could not be set for case[" + chainData.identifier + "].");
             }
             stampIsActive = false;
-
+            BirdName lastDrawer;
+            Bird lastDrawerBird;
             switch (currentState)
             {
                 case CaseState.prompting:
                     if (chainData.drawings.ContainsKey(lastRoundIndex))
                     {
-                        inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
+                        BirdName drawingAuthor = chainData.drawings[lastRoundIndex].author;
+                        Bird drawingBird = ColourManager.Instance.GetBird(drawingAuthor);
+                        if(drawingBird == null)
+                        {
+                            Debug.LogError("Could not set folder colour because the drawing author["+drawingAuthor.ToString()+"] was not mapped in the Colour Manager.");
+                        }
+                        else
+                        {
+                            inFolderColour = drawingBird.folderColour;
+                        }
+                        
                     }
                     promptingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], ForceCaseExpirySubmit);
                     if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
@@ -273,11 +290,29 @@ namespace ChickenScratch
                         {
                             lastAuthor = chainData.playerOrder[lastRoundIndex];
                         }
-                        inFolderColour = ColourManager.Instance.birdMap[lastAuthor].folderColour;
+                        Bird lastBird = ColourManager.Instance.GetBird(lastAuthor);
+                        if (lastBird == null)
+                        {
+                            Debug.LogError("Could not update folder colour because last bird["+lastBird.ToString()+"] was not mapped in the Colour Manager.");
+                        }
+                        else
+                        {
+                            inFolderColour = lastBird.folderColour;
+                        }
+                        
                     }
                     else
                     {
-                        inFolderColour = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].folderColour;
+                        Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+                        if(playerBird == null)
+                        {
+                            Debug.LogError("Could not update folder colour because player bird["+SettingsManager.Instance.birdName.ToString()+"] was not mapped in the Colour Manager.");
+                        }
+                        else
+                        {
+                            inFolderColour = playerBird.folderColour;
+                        }
+                        
                         prompt = chainData.correctPrompt;
                     }
                     foreach(TaskModifier modifier in chainData.currentTaskModifiers)
@@ -309,7 +344,17 @@ namespace ChickenScratch
                 case CaseState.copy_drawing:
                     if (chainData.drawings.ContainsKey(lastRoundIndex))
                     {
-                        inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
+                        lastDrawer = chainData.drawings[lastRoundIndex].author;
+                        lastDrawerBird = ColourManager.Instance.GetBird(lastDrawer);
+                        if(lastDrawerBird == null)
+                        {
+                            Debug.LogError("Could not update folder colour because last drawer bird["+lastDrawer.ToString()+"] was not mapped in the Colour Manager.");
+                        }
+                        else
+                        {
+                            inFolderColour = lastDrawerBird.folderColour;
+                        }
+                        
                     }
                     if(!chainData.drawings.ContainsKey(lastRoundIndex))
                     {
@@ -348,7 +393,16 @@ namespace ChickenScratch
                     }
                     if (chainData.drawings.ContainsKey(lastRoundIndex))
                     {
-                        inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
+                        lastDrawer = chainData.drawings[lastRoundIndex].author;
+                        lastDrawerBird = ColourManager.Instance.GetBird(lastDrawer);
+                        if (lastDrawerBird == null)
+                        {
+                            Debug.LogError("Could not update folder colour because last drawer bird[" + lastDrawer.ToString() + "] was not mapped in the Colour Manager.");
+                        }
+                        else
+                        {
+                            inFolderColour = lastDrawerBird.folderColour;
+                        }
                     }
                     foreach (TaskModifier modifier in chainData.currentTaskModifiers)
                     {
@@ -381,7 +435,16 @@ namespace ChickenScratch
                     {
                         guessingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
                     }
-                    inFolderColour = ColourManager.Instance.birdMap[chainData.drawings[lastRoundIndex].author].folderColour;
+                    lastDrawer = chainData.drawings[lastRoundIndex].author;
+                    lastDrawerBird = ColourManager.Instance.GetBird(lastDrawer);
+                    if (lastDrawerBird == null)
+                    {
+                        Debug.LogError("Could not update folder colour because last drawer bird[" + lastDrawer.ToString() + "] was not mapped in the Colour Manager.");
+                    }
+                    else
+                    {
+                        inFolderColour = lastDrawerBird.folderColour;
+                    }
 
                     guessingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     break;
@@ -397,7 +460,11 @@ namespace ChickenScratch
 
         public CabinetDrawer GetCabinet(int inIndex)
         {
-            return cabinetDrawerMap[inIndex];
+            if(cabinetDrawerMap.ContainsKey(inIndex))
+            {
+                return cabinetDrawerMap[inIndex];
+            }
+            return null;
         }
 
         public BirdArm GetBirdArm(BirdName inBirdName)
@@ -829,6 +896,7 @@ namespace ChickenScratch
                     player = birdToSendTo,
                     taskTime = queuedTaskData.duration,
                     currentScoreModifier = currentCase.currentScoreModifier,
+                    scoreModifierDecrement = currentCase.scoreModifierDecrement,
                     maxScoreModifier = currentCase.maxScoreModifier,
                     taskModifiers = currentCase.taskQueue[currentRound-1].modifiers,
                     lastPlayer = lastBird,
@@ -859,7 +927,13 @@ namespace ChickenScratch
             }
             newChain.identifier = caseID;
             cabinetDrawerMap[cabinetIndex].currentChainData = newChain;
-            Color folderColour = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].folderColour;
+            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            if(playerBird == null)
+            {
+                Debug.LogError("Could not start choice case drawing because player bird["+SettingsManager.Instance.birdName.ToString()+"] has not been mapped in the Colour Manager.");
+                return;
+            }
+            Color folderColour = playerBird.folderColour;
             SetCurrentDrawingRound(1);
             drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
             drawingCaseFolder.Show(folderColour, taskTime, currentModifierValue, maxModifierValue, modifierDecrement);
@@ -1066,9 +1140,9 @@ namespace ChickenScratch
             {
                 queuedFolderMap[caseID] = queuedFolderData;
             }
-            if(!queuedCaseFolders.Contains(caseID))
+            if(!queuedCaseFolderIdentifiers.Contains(caseID))
             {
-                queuedCaseFolders.Add(caseID);
+                queuedCaseFolderIdentifiers.Add(caseID);
             }
         }
 

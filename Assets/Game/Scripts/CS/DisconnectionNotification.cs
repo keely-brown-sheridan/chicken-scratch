@@ -108,16 +108,22 @@ namespace ChickenScratch
 
         private void ShowNextBird()
         {
-            BirdName nextBird = disconnectedBirds[0];
-            string nextPlayerName = disconnectedBirdMap[nextBird];
+            BirdName nextBirdName = disconnectedBirds[0];
+            string nextPlayerName = disconnectedBirdMap[nextBirdName];
 
             disconnectedBirds.RemoveAt(0);
-            disconnectedBirdMap.Remove(nextBird);
+            disconnectedBirdMap.Remove(nextBirdName);
 
             disconnectionText.text = nextPlayerName + "\nhas been disconnected.";
-            disconnectionText.color = ColourManager.Instance.birdMap[nextBird].colour;
+            Bird nextBird = ColourManager.Instance.GetBird(nextBirdName);
+            if(nextBird == null)
+            {
+                Debug.LogError("Could not show next bird["+nextBirdName.ToString()+"] because it is not mapped in the ColourManager.");
+                return;
+            }
+            disconnectionText.color = nextBird.colour;
 
-            disconnectedBirdImage.sprite = ColourManager.Instance.birdMap[nextBird].faceSprite;
+            disconnectedBirdImage.sprite = nextBird.faceSprite;
         }
     }
 }

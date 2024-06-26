@@ -21,10 +21,15 @@ namespace ChickenScratch
         private Color correctColour, incorrectColour;
         public void Initialize(Dictionary<int,string> correctWordIdentifiersMap, GuessData guessData, PlayerRatingData ratingData)
         {
-            Bird drawingBird = ColourManager.Instance.birdMap[guessData.author];
-            playerImage.sprite = drawingBird.faceSprite;
+            Bird guessingBird = ColourManager.Instance.GetBird(guessData.author);
+            if(guessingBird == null)
+            {
+                Debug.LogError("Could not initialize the guess case email section because the guess bird["+ guessData.author.ToString()+"] was not mapped in the Colour Manager.");
+                return;
+            }
+            playerImage.sprite = guessingBird.faceSprite;
             playerNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);
-            playerNameText.color = drawingBird.colour;
+            playerNameText.color = guessingBird.colour;
 
             prefixText.text = guessData.prefix;
             CaseWordData correctPrefix = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[1]);

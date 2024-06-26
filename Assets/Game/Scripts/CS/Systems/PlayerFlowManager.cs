@@ -61,6 +61,17 @@ namespace ChickenScratch
             {
                 initialize();
             }
+            //Test();
+        }
+
+        private void Test()
+        {
+            MarkerStoreItemData markerData = new MarkerStoreItemData() { markerColour = new Color(1f, 1f, 0f, 0.4f), itemType = StoreItem.StoreItemType.highlighter };
+            ChargedStoreItemData stopwatchData = new ChargedStoreItemData() { itemType = StoreItem.StoreItemType.stopwatch, numberOfUses = 1 };
+            ValueStoreItemData tabData = new ValueStoreItemData() { itemType = StoreItem.StoreItemType.case_tab, value = 0.5f };
+            storeItemDataMap.Add(StoreItem.StoreItemType.highlighter, markerData);
+            storeItemDataMap.Add(StoreItem.StoreItemType.stopwatch, stopwatchData);
+            storeItemDataMap.Add(StoreItem.StoreItemType.case_tab, tabData);
         }
 
         private void initialize()
@@ -85,7 +96,7 @@ namespace ChickenScratch
             {
                 int iterator = 0;
                 List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
-                foreach (BirdName playerBird in allPlayerBirds)
+                foreach (BirdName bird in allPlayerBirds)
                 {
                     if (drawingRound.cabinetDrawerMap[iterator + 1].currentPlayer == BirdName.none)
                     {
@@ -96,9 +107,17 @@ namespace ChickenScratch
                 }
             }
 
-
-            Texture2D selectedCursor = ColourManager.Instance.birdMap[SettingsManager.Instance.birdName].cursor;
-            Cursor.SetCursor(selectedCursor, new Vector2(10, 80), CursorMode.Auto);
+            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            if(playerBird == null)
+            {
+                Debug.LogError("Could not update cursor for player because player bird["+SettingsManager.Instance.birdName.ToString()+"] is not mapped in the Colour Manager.");
+            }
+            else
+            {
+                Texture2D selectedCursor = playerBird.cursor;
+                Cursor.SetCursor(selectedCursor, new Vector2(10, 80), CursorMode.Auto);
+            }
+            
 
             drawingVisualPackageQueue = new Dictionary<string, DrawingVisualsPackage>();
             isInitialized = true;
@@ -253,6 +272,7 @@ namespace ChickenScratch
 
                     break;
                 default:
+                    Debug.LogError("Could not update game phase to new phase["+inPhaseName.ToString()+"] because it has not been set up in the player flow manager.");
                     return;
             }
         }
@@ -480,6 +500,11 @@ namespace ChickenScratch
         public void UseChargedItem(StoreItem.StoreItemType itemType)
         {
             ((ChargedStoreItemData)(storeItemDataMap[itemType])).numberOfUses--;
+        }
+
+        public float GetStoreItemValue(StoreItem.StoreItemType itemType)
+        {
+            return ((ValueStoreItemData)storeItemDataMap[itemType]).value;
         }
     }
 }

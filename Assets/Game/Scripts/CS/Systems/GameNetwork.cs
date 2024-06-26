@@ -41,20 +41,6 @@ namespace ChickenScratch
             return ColourManager.BirdName.none;
         }
 
-        public void GameOver_ReturnToLobby()
-        {
-
-            SettingsManager.Instance.disconnected = false;
-            if (SettingsManager.Instance.isHost)
-            {
-                GameManager.Instance.gameDataHandler.RpcHostJoiningLobby();
-            }
-            SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_lobby_room;
-            Cursor.visible = true;
-            SceneManager.LoadScene(0);
-            
-        }
-
         public void Disconnected_ReturnToLobby()
         {
             if (SettingsManager.Instance.isHost)

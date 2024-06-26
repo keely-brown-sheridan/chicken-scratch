@@ -58,8 +58,14 @@ namespace ChickenScratch
             drawingData = inDrawingData;
             duration = inDuration;
             timeActive = 0f;
-            
-            Bird authorBird = ColourManager.Instance.birdMap[inDrawingData.author];
+
+            Bird authorBird = ColourManager.Instance.GetBird(drawingData.author);
+            if (authorBird == null)
+            {
+                Debug.LogError("Could not initialize drawing slide contents because drawing bird["+drawingData.author.ToString()+"] was not mapped in the Colour Manager.");
+                return;
+            }
+           
             authorImage.sprite = authorBird.faceSprite;
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(inDrawingData.author);

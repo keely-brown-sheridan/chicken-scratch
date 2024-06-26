@@ -16,7 +16,13 @@ namespace ChickenScratch
         public void setBird(BirdName inBirdName)
         {
             birdName = inBirdName;
-            birdFaceImage.sprite = ColourManager.Instance.birdMap[birdName].faceSprite;
+            Bird drafteeBird = ColourManager.Instance.GetBird(inBirdName);
+            if (drafteeBird == null)
+            {
+                Debug.LogError("Could not set draftee indicator bird["+inBirdName.ToString()+"] because it is not mapped in the ColourManager.");
+                return;
+            }
+            birdFaceImage.sprite = drafteeBird.faceSprite;
         }
     }
 }

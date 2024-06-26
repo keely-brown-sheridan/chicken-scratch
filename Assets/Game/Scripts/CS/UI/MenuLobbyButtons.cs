@@ -730,7 +730,16 @@ namespace ChickenScratch
             //If this is the current player's bird
             if (playerName == SettingsManager.Instance.playerName)
             {
-                selectedBirdImage.sprite = ColourManager.Instance.birdMap[birdName].faceSprite;
+                Bird selectedBird = ColourManager.Instance.GetBird(birdName);
+                if(selectedBird == null)
+                {
+                    Debug.LogError("Could not set face sprite for selected bird because player bird["+birdName.ToString()+"] is not mapped in the Colour Manager.");
+                }
+                else
+                {
+                    selectedBirdImage.sprite = selectedBird.faceSprite;
+                }
+                
                 selectedBirdParentObject.SetActive(true);
                 selectionInstructionsObject.SetActive(false);
                 SettingsManager.Instance.birdName = birdName;

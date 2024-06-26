@@ -37,6 +37,7 @@ namespace ChickenScratch
         public int pointsPerCorrectWord;
         public float currentScoreModifier;
         public float maxScoreModifier;
+        public float scoreModifierDecrement;
         public int penalty;
         public float currentTaskDuration;
         public List<TaskData.TaskModifier> currentTaskModifiers;
@@ -69,6 +70,25 @@ namespace ChickenScratch
             else
             {
                 drawings.Add(round, drawing);
+            }
+        }
+
+        public void PopulateFromFolderUpdateData(FolderUpdateData folderData)
+        {
+            identifier = folderData.caseID;
+            currentScoreModifier = folderData.currentScoreModifier;
+            scoreModifierDecrement = folderData.scoreModifierDecrement;
+            maxScoreModifier = folderData.maxScoreModifier;
+            currentTaskDuration = folderData.taskTime;
+            currentTaskModifiers = folderData.taskModifiers;
+
+            if (!playerOrder.ContainsKey(folderData.roundNumber - 1))
+            {
+                playerOrder.Add(folderData.roundNumber - 1, folderData.lastPlayer);
+            }
+            else
+            {
+                playerOrder[folderData.roundNumber - 1] = folderData.lastPlayer;
             }
         }
 

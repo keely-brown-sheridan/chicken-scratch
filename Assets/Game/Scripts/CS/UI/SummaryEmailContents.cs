@@ -32,7 +32,16 @@ namespace ChickenScratch
 
         public void setSummaryContents()
         {
-            mostLikedImage.sprite = ColourManager.Instance.birdMap[PlayerFlowManager.employeeOfTheMonth].faceSprite;
+            Bird bestBird = ColourManager.Instance.GetBird(PlayerFlowManager.employeeOfTheMonth);
+            if (bestBird == null)
+            {
+                Debug.LogError("Could not map employee of the month image because best bird["+PlayerFlowManager.employeeOfTheMonth.ToString()+"] was not mapped in the Colour Manager.");
+            }
+            else
+            {
+                mostLikedImage.sprite = bestBird.faceSprite;
+            }
+            
             Dictionary<BirdName, float> pointsMap = new Dictionary<BirdName, float>();
             Dictionary<BirdName, float> timeMap = new Dictionary<BirdName, float>();
 

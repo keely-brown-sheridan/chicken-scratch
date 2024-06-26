@@ -52,7 +52,7 @@ public class CaseModifierVisual : MonoBehaviour
         gameObject.SetActive(true);
 
         if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.stopwatch) &&
-            !GameManager.Instance.playerFlowManager.StoreItemHasCharges(StoreItem.StoreItemType.stopwatch))
+            GameManager.Instance.playerFlowManager.StoreItemHasCharges(StoreItem.StoreItemType.stopwatch))
         {
             stopWatchObject.SetActive(true);
         }

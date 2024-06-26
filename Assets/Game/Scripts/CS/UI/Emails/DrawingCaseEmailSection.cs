@@ -18,7 +18,12 @@ namespace ChickenScratch
 
         public void Initialize(DrawingData drawingData, PlayerRatingData ratingData, float drawingRatio)
         {
-            Bird drawingBird = ColourManager.Instance.birdMap[drawingData.author];
+            Bird drawingBird = ColourManager.Instance.GetBird(drawingData.author);
+            if(drawingBird == null)
+            {
+                Debug.LogError("Could not initialize drawing case email section because drawing bird["+drawingData.author.ToString()+"] has not been mapped in the Colour Manager.");
+                return;
+            }
             playerImage.sprite = drawingBird.faceSprite;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(drawingParent.position);
             worldPosition = new Vector3(worldPosition.x, worldPosition.y, 0f);

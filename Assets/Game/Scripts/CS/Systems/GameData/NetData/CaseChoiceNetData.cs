@@ -15,5 +15,7 @@ namespace ChickenScratch
         public string correctPrompt;
         public string caseChoiceIdentifier;
         public float maxScoreModifier;
+        public float scoreModifierDecrement;
+        public float modifierIncreaseValue;
     }
 }

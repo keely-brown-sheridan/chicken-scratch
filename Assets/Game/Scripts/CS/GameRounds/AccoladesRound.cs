@@ -156,8 +156,17 @@ namespace ChickenScratch
         public void initializeAccoladeBirdRow(int index, BirdName birdName)
         {
             allAccoladeBirdRows[index].birdName = birdName;
-            allAccoladeBirdRows[index].pinImage.color = ColourManager.Instance.birdMap[birdName].colour;
-            allAccoladeBirdRows[index].birdHeadImage.sprite = ColourManager.Instance.birdMap[birdName].faceSprite;
+            Bird accoladeBird = ColourManager.Instance.GetBird(birdName);
+            if(accoladeBird == null)
+            {
+                Debug.LogError("Could not initialize accolade bird row colours because bird[] has not been mapped in the ColourManager.");
+            }
+            else
+            {
+                allAccoladeBirdRows[index].pinImage.color = accoladeBird.colour;
+                allAccoladeBirdRows[index].birdHeadImage.sprite = accoladeBird.faceSprite;
+            }
+            
             allAccoladeBirdRows[index].gameObject.SetActive(true);
             allAccoladeBirdRows[index].isInitialized = true;
         }
@@ -248,8 +257,16 @@ namespace ChickenScratch
 
                     //Set the stats for the corkboard
                     currentRow.gameObject.SetActive(true);
-                    currentBird = ColourManager.Instance.birdMap[playerReviewStatus.Key];
-                    currentRow.playerNameText.color = currentBird.colour;
+                    currentBird = ColourManager.Instance.GetBird(playerReviewStatus.Key);
+                    if(currentBird == null)
+                    {
+                        Debug.LogError("Could not set stats for the review bird[" + playerReviewStatus.Key.ToString() + "] because it has not been mapped in the Colour Manager.");
+                    }
+                    else
+                    {
+                        currentRow.playerNameText.color = currentBird.colour;
+                    }
+                    
                     currentRow.playerNameText.text = playerReviewStatus.Value.playerName;
                     float randomizedPlacementWait = Random.Range(0, cardPlacementWaitVariance);
 
@@ -263,12 +280,21 @@ namespace ChickenScratch
         }
 
 
-        public void setAccolades(ColourManager.BirdName bestBird, string bestPlayerName)
+        public void setAccolades(ColourManager.BirdName bestBirdName, string bestPlayerName)
         {
-            PlayerFlowManager.employeeOfTheMonth = bestBird;
+            PlayerFlowManager.employeeOfTheMonth = bestBirdName;
             employeeOfTheMonthPlayerText.text = bestPlayerName;
-            employeeOfTheMonthPlayerText.color = ColourManager.Instance.birdMap[bestBird].colour;
-            employeeOfTheMonthPlayerImage.sprite = ColourManager.Instance.birdMap[bestBird].faceSprite;
+            Bird bestBird = ColourManager.Instance.GetBird(bestBirdName);
+            if(bestBird == null)
+            {
+                Debug.LogError("Could not map colour for the best bird[] because it has not been initialized in the Colour Manager.");
+            }
+            else
+            {
+                employeeOfTheMonthPlayerText.color = bestBird.colour;
+                employeeOfTheMonthPlayerImage.sprite = bestBird.faceSprite;
+            }
+            
 
             //Choose a random bird for the bird arms lifting the award
             int birdIndex = UnityEngine.Random.Range(0, ColourManager.Instance.allBirds.Count);

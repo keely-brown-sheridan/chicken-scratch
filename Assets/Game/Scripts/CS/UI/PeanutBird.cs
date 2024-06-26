@@ -63,8 +63,14 @@ namespace ChickenScratch
         public void Initialize(BirdName inBirdName)
         {
             gameObject.SetActive(true);
-            Instantiate(ColourManager.Instance.birdMap[inBirdName].slidesBirdPrefab, birdImageHolder);
-            colourizer.Colourize(ColourManager.Instance.birdMap[inBirdName].colour);
+            Bird chatBird = ColourManager.Instance.GetBird(inBirdName);
+            if(chatBird == null)
+            {
+                Debug.LogError("Could not initialize chat bird["+inBirdName.ToString()+"] because it was not mapped in the Colour Manager.");
+                return;
+            }
+            Instantiate(chatBird.slidesBirdPrefab, birdImageHolder);
+            colourizer.Colourize(chatBird.colour);
             birdName = inBirdName;
             isInitialized = true;
         }
