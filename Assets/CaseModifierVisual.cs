@@ -74,7 +74,7 @@ public class CaseModifierVisual : MonoBehaviour
         {
             AudioManager.Instance.PlaySound(thresholdCrossSFXName);
             currentModifierValue -= modifierDecrement;
-            modifierText.text = currentModifierValue.ToString() + "x";
+            modifierText.text = currentModifierValue.ToString("F2") + "x";
             hasCrossedThreshold = true;
             Color currentModifierColour = SettingsManager.Instance.GetModifierColour(currentModifierValue / maxModifierValue);
             modifierImage.color = currentModifierColour;
@@ -98,7 +98,7 @@ public class CaseModifierVisual : MonoBehaviour
         modifierImage.color = currentModifierColour;
         scoreFillImage.color = currentModifierColour;
         hasCrossedThreshold = false;
-        modifierText.text = currentModifierValue.ToString() + "x";
+        modifierText.text = currentModifierValue.ToString("F2") + "x";
 
         GameManager.Instance.playerFlowManager.UseChargedItem(StoreItem.StoreItemType.stopwatch);
     }

@@ -22,7 +22,7 @@ MonoBehaviour:
   penalty: 0
   startingScoreModifier: 2
   maxScoreModifier: 2
-  modifierDecrement: 0.4
+  modifierDecrement: 0.3
   taskFalloff: 0
   colour: {r: 0.6117647, g: 0.7254902, b: 0.69803923, a: 1}
   startingWordIdentifiers:
@@ -38,5 +38,4 @@ MonoBehaviour:
     duration: 60
   - taskType: 5
     duration: 60
-  queuedTaskSprites: 00000000010000000000000002000000
   description: A standard telephone case. You will have less space to draw in.

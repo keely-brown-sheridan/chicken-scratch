@@ -86,7 +86,7 @@ namespace ChickenScratch
         private void OnEnable()
         {
             initialize();
-            test();
+            //test();
             open();
         }
 
@@ -219,7 +219,7 @@ namespace ChickenScratch
                 case DrawingToolType.colour_marker:
                     //Initialize the colour
                     MarkerTool colourMarkerTool = (MarkerTool)newTool;
-                    Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+                    BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
                     if(playerBird == null)
                     {
                         Debug.LogError("Could not set tool colour because playerBird["+SettingsManager.Instance.birdName.ToString()+"] has not been mapped in the ColourManager.");
@@ -543,31 +543,31 @@ namespace ChickenScratch
         public void clearVisualsFromButton()
         {
             AudioManager.Instance.PlaySound("trash");
-            clearVisuals();
+            clearVisuals(false);
         }
 
-        public void clearVisuals()
+        public void clearVisuals(bool finishedDrawing)
         {
             if (currentDrawing != null)
             {
-                currentDrawing.Clear();
+                currentDrawing.Clear(finishedDrawing);
             }
 
             for (int i = drawingLines.Count - 1; i >= 0; i--)
             {
-                Destroy(drawingLines[i].gameObject);
-            }
-            for (int i = drawingSquares.Count - 1; i >= 0; i--)
-            {
-                for (int j = drawingSquares[i].lineObjects.Count - 1; j >= 0; j--)
+                if(!finishedDrawing)
                 {
-                    Destroy(drawingSquares[i].lineObjects[j]);
+                    DrawingLine line = drawingLines[i].GetComponent<DrawingLine>();
+                    if (line.drawingLineData.locked)
+                    {
+                        continue;
+                    }
                 }
-                Destroy(drawingSquares[i].gameObject);
+
+                Destroy(drawingLines[i].gameObject);
+                drawingLines.RemoveAt(i);
             }
 
-            drawingLines.Clear();
-            drawingSquares.Clear();
             playerDrawingActions.Clear();
             currentSortingOrder = 1;
         }

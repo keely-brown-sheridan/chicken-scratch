@@ -33,7 +33,7 @@ namespace ChickenScratch
             drawingData = inDrawingData;
             summarySlideTransform = inSummarySlideTransform;
 
-            Bird authorBird = ColourManager.Instance.GetBird(drawingData.author);
+            BirdData authorBird = GameDataManager.Instance.GetBird(drawingData.author);
             if(authorBird == null)
             {
                 Debug.LogError("Could not initialize drawing summary section because drawing bird["+drawingData.author.ToString()+"] was not mapped in Colour Manager.");

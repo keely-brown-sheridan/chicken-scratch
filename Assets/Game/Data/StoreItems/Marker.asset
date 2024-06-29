@@ -16,7 +16,9 @@ MonoBehaviour:
   itemName: Marker
   itemDescription: Draw with a new colour.
   storeBGColour: {r: 0.82787764, g: 0.974329, b: 0.7936456, a: 1}
-  cost: 20
+  cost: 8
   itemImagePrefab: {fileID: 3501943719765595536, guid: 24bb95dc51da7964b814db38d59714cb,
     type: 3}
+  isSinglePurchase: 0
+  index: 0
   markerColour: {r: 0.6557553, g: 0.94865793, b: 0.5872912, a: 1}

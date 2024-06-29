@@ -18,7 +18,7 @@ namespace ChickenScratch
             playerPromptText.text = promptData.text;
             playerNameText.text = SettingsManager.Instance.GetPlayerName(promptData.author);
             
-            Bird promptBird = ColourManager.Instance.GetBird(promptData.author);
+            BirdData promptBird = GameDataManager.Instance.GetBird(promptData.author);
             if(promptBird == null)
             {
                 Debug.LogError("Could not initialize the prompt case email section because the prompt bird["+promptData.author.ToString()+"] was not mapped in the Colour Manager.");

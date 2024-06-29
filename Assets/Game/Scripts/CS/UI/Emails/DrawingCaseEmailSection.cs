@@ -18,7 +18,7 @@ namespace ChickenScratch
 
         public void Initialize(DrawingData drawingData, PlayerRatingData ratingData, float drawingRatio)
         {
-            Bird drawingBird = ColourManager.Instance.GetBird(drawingData.author);
+            BirdData drawingBird = GameDataManager.Instance.GetBird(drawingData.author);
             if(drawingBird == null)
             {
                 Debug.LogError("Could not initialize drawing case email section because drawing bird["+drawingData.author.ToString()+"] has not been mapped in the Colour Manager.");

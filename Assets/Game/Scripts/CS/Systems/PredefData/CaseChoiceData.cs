@@ -30,12 +30,6 @@ namespace ChickenScratch
 
         [SerializeField]
         private List<TaskTimingData> taskTimingData = new List<TaskTimingData>();
-
-        public enum TaskSprite
-        {
-            drawing, prompt, guess
-        }
-        public List<TaskSprite> queuedTaskSprites;
         public string description;
 
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static ChickenScratch.CaseWordTemplateData;
+using static ChickenScratch.ColourManager;
 using static ChickenScratch.WordGroupData;
 
 public class GameDataManager : Singleton<GameDataManager>
@@ -26,6 +27,21 @@ public class GameDataManager : Singleton<GameDataManager>
 
     [SerializeField]
     private List<StoreItemData> storeItems = new List<StoreItemData>();
+    private Dictionary<StoreItem.StoreItemType, StoreItemData> storeItemMap = new Dictionary<StoreItem.StoreItemType, StoreItemData>();
+
+    [SerializeField]
+    private List<CaseUpgradeStoreItemData> upgradeStoreItems = new List<CaseUpgradeStoreItemData>();
+
+    [SerializeField]
+    private List<CaseUnlockStoreItemData> unlockStoreItems = new List<CaseUnlockStoreItemData>();
+
+    [SerializeField]
+    private List<BirdData> birdDatas = new List<BirdData>();
+    private Dictionary<BirdName, BirdData> birdDataMap = new Dictionary<BirdName, BirdData>();
+
+    [SerializeField]
+    private List<RoleData> roles = new List<RoleData>();
+    private Dictionary<RoleData.RoleType, RoleData> roleMap = new Dictionary<RoleData.RoleType, RoleData>();
 
     // Start is called before the first frame update
     void Awake()
@@ -41,6 +57,24 @@ public class GameDataManager : Singleton<GameDataManager>
         {
             caseWordTemplateMap.Add(caseWordTemplate.identifier, caseWordTemplate);
         }
+
+        storeItemMap.Clear();
+        foreach(StoreItemData storeItem in storeItems)
+        {
+            storeItemMap.Add(storeItem.itemType, storeItem);
+        }
+
+        birdDataMap.Clear();
+        foreach(BirdData bird in birdDatas)
+        {
+            birdDataMap.Add(bird.birdName, bird);
+        }
+
+        roleMap.Clear();
+        foreach(RoleData role in roles)
+        {
+            roleMap.Add(role.roleType, role);
+        }
         //RefreshWords(new List<CaseWordData>());
     }
 
@@ -49,10 +83,18 @@ public class GameDataManager : Singleton<GameDataManager>
         caseWordMap.Clear();
         foreach (CaseWordData caseWord in wordDataList.allWords)
         {
+            if(caseWordMap.ContainsKey(caseWord.identifier))
+            {
+                continue;
+            }
             caseWordMap.Add(caseWord.identifier, caseWord);
         }
         foreach(CaseWordData otherWord in otherWords)
         {
+            if(caseWordMap.ContainsKey(otherWord.identifier))
+            {
+                continue;
+            }
             caseWordMap.Add(otherWord.identifier, otherWord);
         }
     }
@@ -142,11 +184,50 @@ public class GameDataManager : Singleton<GameDataManager>
         return wordGroups;
     }
 
-    public StoreItemData GetUnusedStoreItem(List<StoreItem.StoreItemType> usedTypes)
+    public CaseUnlockStoreItemData GetUnlockStoreItem()
+    {
+        List<CaseUnlockStoreItemData> randomizedUnlocks = unlockStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
+
+        foreach (CaseUnlockStoreItemData unlockStoreItem in randomizedUnlocks)
+        {
+            CaseChoiceData caseChoice = GetCaseChoice(unlockStoreItem.caseChoiceIdentifier);
+            if(caseChoice != null)
+            {
+                int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
+                if (caseChoice.numberOfTasks <= numberOfPlayers)
+                {
+                    return unlockStoreItem;
+                }
+            }
+        }
+        return null;
+    }
+
+    public CaseUpgradeStoreItemData GetUpgradeStoreItem()
+    {
+        List<CaseUpgradeStoreItemData> randomizedUpgrades = upgradeStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
+
+        foreach (CaseUpgradeStoreItemData upgradeStoreItem in randomizedUpgrades)
+        {
+            CaseChoiceData caseChoice = GetCaseChoice(upgradeStoreItem.caseChoiceIdentifier);
+            if(caseChoice != null)
+            {
+                int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
+                if (caseChoice.numberOfTasks <= numberOfPlayers)
+                {
+                    return upgradeStoreItem;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public StoreItemData GetStoreItem(List<StoreItem.StoreItemType> usedTypes)
     {
         StoreItemData chosenStoreItem = null;
 
-        List<StoreItemData> validItems = storeItems.Where(i => !usedTypes.Contains(i.itemType)).OrderBy(cp => Guid.NewGuid()).ToList();
+        List<StoreItemData> validItems = storeItems.Where(i => !i.isSinglePurchase || !usedTypes.Contains(i.itemType)).OrderBy(cp => Guid.NewGuid()).ToList();
 
         if(validItems.Count > 0)
         {
@@ -154,5 +235,77 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         return chosenStoreItem;
+    }
+
+    public StoreItemData GetMatchingStoreItem(StoreItem.StoreItemType type)
+    {
+        if (storeItemMap.ContainsKey(type))
+        {
+            return storeItemMap[type];
+        }
+
+        return null;
+    }
+
+    public CaseUpgradeStoreItemData GetMatchingCaseUpgradeStoreItem(string itemName)
+    {
+        foreach(CaseUpgradeStoreItemData caseUpgrade in upgradeStoreItems)
+        {
+            if(caseUpgrade.itemName == itemName)
+            {
+                return caseUpgrade;
+            }
+        }
+        return null;
+    }
+
+    public CaseUnlockStoreItemData GetMatchingCaseUnlockStoreItem(string caseChoiceIdentifier)
+    {
+        foreach (CaseUnlockStoreItemData caseUnlockItem in unlockStoreItems)
+        {
+            if(caseUnlockItem.caseChoiceIdentifier == caseChoiceIdentifier)
+            {
+                return caseUnlockItem;
+            }
+        }
+        return null;
+    }
+
+    public BirdData GetBird(BirdName birdName)
+    {
+        if (birdDataMap.ContainsKey(birdName))
+        {
+            return birdDataMap[birdName];
+        }
+        return null;
+    }
+
+    public void UnlockCaseChoice(CaseUnlockStoreItemData unlockData)
+    {
+        SettingsManager.Instance.gameMode.caseChoiceIdentifiers.Add(unlockData.caseChoiceIdentifier);
+        unlockStoreItems.Remove(unlockData);
+    }
+
+    public void UpgradeCaseChoice(CaseUpgradeStoreItemData upgradeData)
+    {
+        CaseChoiceData upgradingCaseChoice = caseChoiceMap[upgradeData.caseChoiceIdentifier];
+        if (upgradingCaseChoice != null)
+        {
+            upgradingCaseChoice.bonusPoints += upgradeData.bonusPointIncrease;
+            upgradingCaseChoice.modifierDecrement += upgradeData.modifierDecrementDecrease;
+            upgradingCaseChoice.pointsPerCorrectWord += upgradeData.correctWordPointIncrease;
+            upgradingCaseChoice.maxScoreModifier += upgradeData.startingModifierIncrease;
+            upgradingCaseChoice.startingScoreModifier += upgradeData.startingModifierIncrease;
+            upgradeStoreItems.Remove(upgradeData);
+        }
+    }
+
+    public RoleData GetRole(RoleData.RoleType roleType)
+    {
+        if(roleMap.ContainsKey(roleType))
+        {
+            return roleMap[roleType];
+        }
+        return null;
     }
 }

@@ -11719,142 +11719,8 @@ MonoBehaviour:
   winningThreshold: 1
   correctCabinetThreshold: 1
   allGameModes:
-  - name: Deadline
-    minimumNumberOfPlayers: 2
-    wordDistributionMode: 0
-    caseDeliveryMode: 1
-    baseTemplateData:
-      name: Standard
-      format: 0
-      queuedTasks: []
-      startingWordIdentifiers: []
-      baseCost: 0
-      basePointsPerCorrectWord: 0
-      baseBonusPoints: 0
-      penalty: 0
-      caseTypeName: 
-      caseTypeColour: {r: 0, g: 0, b: 0, a: 0}
-      taskFalloff: 0
-      startingScoreModifier: 1.5
-    caseChoiceIdentifiers:
-    - Corners
-    - Easy Thirds
-    - Long Copy
-    - One-Off
-    - Quick Copy
-    - Shrunk Telephone
-    - Telephone
-    - Shrunk One-Off
-    - Top Bottom
-    - Quick Add
-    taskTimingData:
-    - taskType: 0
-      duration: 120
-    - taskType: 1
-      duration: 60
-    - taskType: 2
-      duration: 120
-    - taskType: 3
-      duration: 60
-    - taskType: 4
-      duration: 120
-    - taskType: 5
-      duration: 60
-    scoreModifierDecrement: 0.25
-    casesPerPlayer: 2
-    casesRemaining: 0
-    contributionTaskRatio: 0.5
-    description: 
-    goalPointsPerCharacter: 20
-    baseTimeInDrawingRound: 45
-    totalGameTime: 300
-  - name: Standard4
-    minimumNumberOfPlayers: 2
-    wordDistributionMode: 0
-    caseDeliveryMode: 0
-    baseTemplateData:
-      name: Standard
-      format: 0
-      queuedTasks: []
-      startingWordIdentifiers: []
-      baseCost: 0
-      basePointsPerCorrectWord: 0
-      baseBonusPoints: 0
-      penalty: 0
-      caseTypeName: 
-      caseTypeColour: {r: 0, g: 0, b: 0, a: 0}
-      taskFalloff: 0
-      startingScoreModifier: 0
-    caseChoiceIdentifiers:
-    - Corners
-    - Easy Thirds
-    - Long Copy
-    - One-Off
-    - Quick Copy
-    - Shrunk Telephone
-    - Telephone
-    - Shrunk One-Off
-    - Top Bottom
-    - Quick Add
-    taskTimingData: []
-    scoreModifierDecrement: 0
-    casesPerPlayer: 0
-    casesRemaining: 0
-    contributionTaskRatio: 0
-    description: 
-    goalPointsPerCharacter: 10
-    baseTimeInDrawingRound: 120
-    totalGameTime: 0
-  gameMode:
-    name: Deadline
-    minimumNumberOfPlayers: 2
-    wordDistributionMode: 0
-    caseDeliveryMode: 1
-    baseTemplateData:
-      name: Standard
-      format: 0
-      queuedTasks: []
-      startingWordIdentifiers: []
-      baseCost: 0
-      basePointsPerCorrectWord: 0
-      baseBonusPoints: 0
-      penalty: 0
-      caseTypeName: 
-      caseTypeColour: {r: 0, g: 0, b: 0, a: 0}
-      taskFalloff: 0
-      startingScoreModifier: 1.5
-    caseChoiceIdentifiers:
-    - Corners
-    - Easy Thirds
-    - Long Copy
-    - One-Off
-    - Quick Copy
-    - Shrunk Telephone
-    - Telephone
-    - Shrunk One-Off
-    - Top Bottom
-    - Quick Add
-    taskTimingData:
-    - taskType: 0
-      duration: 120
-    - taskType: 1
-      duration: 60
-    - taskType: 2
-      duration: 120
-    - taskType: 3
-      duration: 60
-    - taskType: 4
-      duration: 120
-    - taskType: 5
-      duration: 60
-    scoreModifierDecrement: 0.25
-    casesPerPlayer: 2
-    casesRemaining: 0
-    contributionTaskRatio: 0.5
-    description: 
-    goalPointsPerCharacter: 20
-    baseTimeInDrawingRound: 45
-    totalGameTime: 120
+  - {fileID: 11400000, guid: c4e6258466bf8a540aa10ebdbaebae3c, type: 2}
+  gameMode: {fileID: 0}
   showFastResults: 0
   playerID: 
   wordGroupNames: []
@@ -11875,8 +11741,39 @@ MonoBehaviour:
   prefixFontColour: {r: 0.43953058, g: 0.2509804, b: 0.4509804, a: 1}
   nounBGColour: {r: 0.7764706, g: 0.81559885, b: 1, a: 1}
   nounFontColour: {r: 0.24991101, g: 0.28373083, b: 0.4528302, a: 1}
+  scoreModifierGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.01919148, b: 0, a: 1}
+    key1: {r: 1, g: 0.6137625, b: 0.3160377, a: 1}
+    key2: {r: 0.9811321, g: 0.920244, b: 0.45817015, a: 0}
+    key3: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 0}
+    key4: {r: 0.3537736, g: 0.80646443, b: 1, a: 0}
+    key5: {r: 0.2028302, g: 0.4672127, b: 1, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 9830
+    ctime2: 20046
+    ctime3: 35081
+    ctime4: 51657
+    ctime5: 65535
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 6
+    m_NumAlphaKeys: 2
   currentRoomID:
     m_SteamID: 0
+  playerRole: {fileID: 0}
+  botcherCoins: 0
 --- !u!1 &334470009
 GameObject:
   m_ObjectHideFlags: 0
@@ -14986,6 +14883,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46063626065cada448aa31f03efda26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &443969644
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 564964555}
+    m_Modifications:
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5557438014329615895, guid: 97700d5d4ab09754c9e69f8abad9713f,
+        type: 3}
+      propertyPath: m_Name
+      value: GameDataManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 97700d5d4ab09754c9e69f8abad9713f, type: 3}
+--- !u!4 &443969645 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5557438014329615894, guid: 97700d5d4ab09754c9e69f8abad9713f,
+    type: 3}
+  m_PrefabInstance: {fileID: 443969644}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &446624283
 GameObject:
   m_ObjectHideFlags: 0
@@ -18700,12 +18672,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 739353216}
+  - {fileID: 443969645}
   - {fileID: 969705537}
   - {fileID: 1781071160}
   - {fileID: 994735882}
   - {fileID: 1258523680}
   - {fileID: 595274162}
-  - {fileID: 1351106502}
   m_Father: {fileID: 288981352}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19379,7 +19351,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 564964555}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &595274163
 MonoBehaviour:
@@ -30265,7 +30237,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 564964555}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &974374791
 GameObject:
@@ -31080,7 +31052,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 564964555}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &994735883
 MonoBehaviour:
@@ -39737,7 +39709,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 564964555}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1258523681
 MonoBehaviour:
@@ -39778,6 +39750,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 6238422269408543708, guid: a249f93c58ec5aa4a92020b5e9138015,
       type: 3}
@@ -39805,6 +39779,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 1147357669173392746, guid: a249f93c58ec5aa4a92020b5e9138015,
       type: 3}
@@ -39832,6 +39808,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 3581834219197952307, guid: a249f93c58ec5aa4a92020b5e9138015,
       type: 3}
@@ -39859,6 +39837,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 9114337831661443515, guid: a249f93c58ec5aa4a92020b5e9138015,
       type: 3}
@@ -39886,6 +39866,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 8428085253750620841, guid: a249f93c58ec5aa4a92020b5e9138015,
       type: 3}
@@ -39913,6 +39895,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 2203311982004508989, guid: a249f93c58ec5aa4a92020b5e9138015,
       type: 3}
@@ -39940,6 +39924,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 5633562286563717163, guid: a249f93c58ec5aa4a92020b5e9138015,
       type: 3}
@@ -39967,6 +39953,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 529044511, guid: 8dba1aeadd19fa5448295cd7296d6be2, type: 3}
     borderedFaceSprite: {fileID: 0}
@@ -39993,6 +39981,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: -897814334, guid: 8dba1aeadd19fa5448295cd7296d6be2, type: 3}
     borderedFaceSprite: {fileID: 0}
@@ -40019,6 +40009,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: 2040638065, guid: 8dba1aeadd19fa5448295cd7296d6be2, type: 3}
     borderedFaceSprite: {fileID: 0}
@@ -40045,6 +40037,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   - faceSprite: {fileID: -1557474362, guid: 8dba1aeadd19fa5448295cd7296d6be2, type: 3}
     borderedFaceSprite: {fileID: 0}
@@ -40071,6 +40065,8 @@ MonoBehaviour:
     birdHandWidthScaling: {x: 0, y: 0, z: 0}
     birdHandRotationAdjustment: 0
     slidesBirdPrefab: {fileID: 0}
+    storePlayerBirdArmPrefab: {fileID: 0}
+    storeBirdArmPrefab: {fileID: 0}
     birdSoundName: 
   allDrawingSizeData: []
   allDrawingColourData: []
@@ -43128,65 +43124,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &1351106501
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1351106502}
-  - component: {fileID: 1351106503}
-  m_Layer: 0
-  m_Name: GameDataManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1351106502
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351106501}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 564964555}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1351106503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351106501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 267b8e8f0de9c8c40a4739f9a1bdb72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  caseChoices:
-  - {fileID: 11400000, guid: 7606abf870e4cd749b8ce619d1883af5, type: 2}
-  - {fileID: 11400000, guid: 38aa6a10fd2702c41a93162ee424737b, type: 2}
-  - {fileID: 11400000, guid: 0b2d687937feee3479bbfb3a7f7b9879, type: 2}
-  - {fileID: 11400000, guid: db7e4ff4bc1296e42bc18e190d742abe, type: 2}
-  - {fileID: 11400000, guid: 94b3f7a96f817ee40a971d4b63fd3351, type: 2}
-  - {fileID: 11400000, guid: 5037270635774994ea0eb78985bbbbee, type: 2}
-  - {fileID: 11400000, guid: ee5461152ddbfe846befadfe7da3e1eb, type: 2}
-  - {fileID: 11400000, guid: 11b8ad536f6debe48822129fd7f71526, type: 2}
-  - {fileID: 11400000, guid: d51d203853b51f94497b1e7a3223e840, type: 2}
-  - {fileID: 11400000, guid: 3c7ad188ddcbb6e41a0267290a9e0b2e, type: 2}
-  caseWordTemplateDatas:
-  - {fileID: 11400000, guid: 4cef8c0cbb6cec945a7f5a5a808f6190, type: 2}
-  - {fileID: 11400000, guid: 5440e0271bbe8284b93c7b0efc5700ff, type: 2}
-  wordDataList: {fileID: 11400000, guid: a8c8d53a4059c3947b7646776556688a, type: 2}
 --- !u!1 &1351832296
 GameObject:
   m_ObjectHideFlags: 0
@@ -57049,7 +56986,7 @@ Transform:
   m_Children:
   - {fileID: 49998432}
   m_Father: {fileID: 564964555}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1781071161
 MonoBehaviour:

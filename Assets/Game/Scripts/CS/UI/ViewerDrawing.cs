@@ -37,7 +37,7 @@ namespace ChickenScratch
             {
                 lineDetails.SetPosition(i, positions[i]);
             }
-            Bird authorBird = ColourManager.Instance.GetBird(author);
+            BirdData authorBird = GameDataManager.Instance.GetBird(author);
             if (authorBird == null)
             {
                 Debug.LogError("Could not add new line because author["+author.ToString()+"] was not mapped in the Colour Manager.");

@@ -106,14 +106,21 @@ namespace ChickenScratch
             return drawingObjects.Count > 0;
         }
 
-        public void Clear()
+        public void Clear(bool isFinished)
         {
-            Debug.LogError("Clearing drawing.");
             for (int i = drawingObjects.Count - 1; i >= 0; i--)
             {
+                if (!isFinished)
+                {
+                    DrawingLine line = drawingObjects[i].GetComponent<DrawingLine>();
+                    if (line.drawingLineData.locked)
+                    {
+                        continue;
+                    }
+                }
                 Destroy(drawingObjects[i].gameObject);
+                drawingObjects.RemoveAt(i);
             }
-            drawingObjects.Clear();
         }
     }
 }

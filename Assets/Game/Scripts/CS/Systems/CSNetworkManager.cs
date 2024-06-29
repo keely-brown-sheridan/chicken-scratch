@@ -75,6 +75,7 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnClientDisconnect()
     {
+        Debug.LogError("Client disconnect.");
         base.OnClientDisconnect();
         switch(currentState)
         {
@@ -159,6 +160,7 @@ public class CSNetworkManager : NetworkManager
                     List<BirdName> allPlayers = SettingsManager.Instance.GetAllActiveBirds();
                     foreach (BirdName player in allPlayers)
                     {
+                        
                         SettingsManager.Instance.SetBirdForPlayerID(SettingsManager.Instance.GetConnection(player), player);
                     }
 
@@ -172,9 +174,11 @@ public class CSNetworkManager : NetworkManager
                         SettingsManager.Instance.ServerRefreshBirds();
                         SettingsManager.Instance.waitingForPlayers = false;
                     }
+                    
                 }
                 else
                 {
+                    SettingsManager.Instance.BroadcastBirdAssignmentInLobby();
                     LobbyNetwork.Instance.lobbyDataHandler.TargetOpenLobby(conn);
                 }
                 LobbyNetwork.Instance.lobbyDataHandler.TargetRequestSteamID(conn);
@@ -242,6 +246,7 @@ public class CSNetworkManager : NetworkManager
                 currentState = NetworkState.lobby;
                 break;
             case "Game":
+                Debug.LogError("Changing scene and setting currentState for network manager.");
                 SettingsManager.Instance.isHostInLobby = false;
                 currentState = NetworkState.ingame;
                 break;

@@ -53,6 +53,10 @@ public class CasePile : MonoBehaviour
         {
             foreach (GameObject objectToShow in objectsToShowOnActivate)
             {
+                if(objectToShow == null)
+                {
+                    continue;
+                }
                 objectToShow.SetActive(true);
             }
             selectable = true;
@@ -63,6 +67,10 @@ public class CasePile : MonoBehaviour
     {
         foreach (GameObject objectToShow in objectsToShowOnActivate)
         {
+            if(objectToShow == null)
+            {
+                continue;
+            }
             objectToShow.SetActive(false);
         }
         selectable = false;

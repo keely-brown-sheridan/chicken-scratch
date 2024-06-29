@@ -12,5 +12,27 @@ namespace ChickenScratch
         public Color storeBGColour;
         public int cost;
         public GameObject itemImagePrefab;
+        public bool isSinglePurchase = false;
+        public int index;
+
+        public StoreItemData()
+        {
+
+        }
+
+        public StoreItemData(StoreItemNetData netData)
+        {
+            StoreItemData gameData = GameDataManager.Instance.GetMatchingStoreItem(netData.itemType);
+            if(gameData != null)
+            {
+                itemType = gameData.itemType;
+                itemDescription = gameData.itemDescription;
+                cost = gameData.cost;
+                itemImagePrefab = gameData.itemImagePrefab;
+                storeBGColour = gameData.storeBGColour;
+                itemName = gameData.itemName;
+                index = netData.index;
+            }
+        }
     }
 }

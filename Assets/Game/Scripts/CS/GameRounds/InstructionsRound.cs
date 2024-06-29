@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static ChickenScratch.RoleData;
 
 namespace ChickenScratch
 {
@@ -51,7 +52,7 @@ namespace ChickenScratch
                 PlaceStartingStickies(false);
             }
 
-            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
             if(playerBird == null)
             {
                 Debug.LogError("Could not set the colour of the desk renderer because the playerBird["+SettingsManager.Instance.birdName.ToString()+"] has not been mapped to the ColourManager.");
@@ -68,38 +69,18 @@ namespace ChickenScratch
 
         private void initializeInstructionsRound()
         {
-
-            //Distribute the alignments
-            foreach (KeyValuePair<ColourManager.BirdName, PlayerData> player in GameManager.Instance.gameFlowManager.gamePlayers)
-            {
-                if (GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(player.Key))
-                {
-                    continue;
-                }
-                
-                if (SettingsManager.Instance.birdName == player.Key)
-                {
-                    InitializePlayer(player.Key, player.Value);
-                }
-                else
-                {
-                    GameManager.Instance.gameDataHandler.TargetInitializePlayer(SettingsManager.Instance.GetConnection(player.Key), player.Key, player.Value);
-                    //GameNetwork.Instance.addToPlayerQueue(player.Key.ToString() + GameDelim.BASE + "role_distribution" + GameDelim.BASE + player.Value.playerRole.ToString());
-                }
-            }
             active = true;
         }
 
-        public void InitializePlayer(ColourManager.BirdName playerName, PlayerData player)
+        public void InitializePlayer(ColourManager.BirdName birdName, string playerName, RoleData.RoleType roleType)
         {
-            string roleName = "WORKER";
-            Color roleColour = alignmentText.color = GameManager.Instance.workerColour;
-            lanyardCard.Initialize(player.playerName, playerName, roleName, roleColour);
+            SettingsManager.Instance.playerRole = GameDataManager.Instance.GetRole(roleType);
+            string roleName = SettingsManager.Instance.playerRole.roleName;
+            Color roleColour = alignmentText.color = SettingsManager.Instance.playerRole.roleColour;
+            lanyardCard.Initialize(playerName, birdName, roleName, roleColour);
             lanyardCard.transform.parent.gameObject.SetActive(true);
             GameManager.Instance.playerFlowManager.drawingRound.playerBirdArm.Initialize();
             AudioManager.Instance.PlaySound("sfx_game_env_worker_card_start");
-
-            GameManager.Instance.playerFlowManager.playerRole = player.playerRole;
         }
 
         private void PlaceStartingStickies(bool playerIsBotcher)

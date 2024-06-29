@@ -23,7 +23,7 @@ namespace ChickenScratch
             {
                 GameObject sliceObject = Instantiate(barPrefab, barParent);
                 Image sliceImage = sliceObject.GetComponent<Image>();
-                Bird timeBird = ColourManager.Instance.GetBird(birdTime.Key);
+                BirdData timeBird = GameDataManager.Instance.GetBird(birdTime.Key);
                 if(timeBird == null)
                 {
                     Debug.LogError("Could not map colour for the slice because time bird["+ birdTime.Key.ToString()+"] has not been mapped in the Colour Manager.");

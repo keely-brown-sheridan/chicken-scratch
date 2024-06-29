@@ -26,6 +26,12 @@ public class AddingCaseFolder : CaseFolder
     public void Initialize(DrawingData drawingData, string prompt, TaskData.TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
     {
         drawingBoxModifier = inDrawingBoxModifier;
+
+        foreach(DrawingLineData line in drawingData.visuals)
+        {
+            line.locked = true;
+        }
+
         //Add the drawing lines from the drawing data to the drawingBoard
         drawingBoard.AddDrawingLines(drawingData);
 
@@ -46,7 +52,7 @@ public class AddingCaseFolder : CaseFolder
     public override void Hide()
     {
         base.Hide();
-        drawingBoard.clearVisuals();
+        drawingBoard.clearVisuals(true);
         caseWordCategoryVisual.Hide();
     }
 

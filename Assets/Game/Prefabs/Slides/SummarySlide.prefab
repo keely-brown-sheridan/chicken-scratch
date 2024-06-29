@@ -247,8 +247,8 @@ MonoBehaviour:
     type: 3}
   birdBucksRemainingImageTransform: {fileID: 2079057924}
   birdBucksRemainingText: {fileID: 1416905525}
-  distributionTime: 5
-  delayTime: 1
+  distributionTime: 4
+  delayTime: 0.5
   stealReachingTime: 0.75
   stealPullingTime: 0.75
   distributeSFX: birdbuck

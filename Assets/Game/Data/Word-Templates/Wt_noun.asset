@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 1
   identifier: noun
   difficultyMinimum: 1
-  difficultyMaximum: 5
+  difficultyMaximum: 4
   cost: 0
   reward: 0
   numberOfOptionsForGuessing: 6

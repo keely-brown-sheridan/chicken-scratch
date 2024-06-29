@@ -23,12 +23,6 @@ namespace ChickenScratch
         private Image bgImage;
 
         [SerializeField]
-        private Transform taskHolder;
-
-        [SerializeField]
-        private GameObject taskPrefab;
-
-        [SerializeField]
         private TMPro.TMP_Text rewardText;
 
         [SerializeField]
@@ -45,6 +39,11 @@ namespace ChickenScratch
         public void Initialize(CaseChoiceNetData inCaseChoiceData)
         {
             caseChoiceData = GameDataManager.Instance.GetCaseChoice(inCaseChoiceData.caseChoiceIdentifier);
+            if(caseChoiceData == null)
+            {
+                Debug.LogError("Could not initialize case choice because identifier["+inCaseChoiceData.caseChoiceIdentifier.ToString()+"] did not exist in the Game Data Manager.");
+                return;
+            }
             titleText.text = caseChoiceData.identifier;
             descriptionText.text = caseChoiceData.description;
             int totalReward = 0;
@@ -63,39 +62,22 @@ namespace ChickenScratch
             
             nounText.text = "";
             bgImage.color = caseChoiceData.colour;
-
-            List<Transform> existingTaskTransforms = new List<Transform>();
-            //delete existing task objects
-            foreach (Transform child in taskHolder)
-            {
-                existingTaskTransforms.Add(child);
-            }
-            for(int i = existingTaskTransforms.Count - 1; i >= 0; i--) 
-            {
-                Destroy(existingTaskTransforms[i].gameObject);
-            }
-
-            foreach(CaseChoiceData.TaskSprite queuedTaskSprite in caseChoiceData.queuedTaskSprites)
-            {
-                GameObject spawnedTaskImageObject = Instantiate(taskPrefab, taskHolder);
-                spawnedTaskImageObject.GetComponent<Image>().sprite = SettingsManager.Instance.GetTaskSprite(queuedTaskSprite);
-            }
             totalReward += caseChoiceData.pointsPerCorrectWord * 2 + caseChoiceData.bonusPoints;
 
             rewardText.text = totalReward.ToString();
-            modifierText.text = caseChoiceData.startingScoreModifier.ToString();
+            modifierText.text = caseChoiceData.startingScoreModifier.ToString("F2");
         }
 
         public void SetCaseTab(float caseTabModifierValue)
         {
             caseTabObject.SetActive(true);
-            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
             if(playerBird == null)
             {
                 Debug.LogError("ERROR[SetCaseTab]: Could not get player bird["+SettingsManager.Instance.birdName.ToString()+"] because it doesn't exist in the ColourManager.");
             }
             caseTabFillImage.color = playerBird.colour;
-            modifierText.text = (caseChoiceData.startingScoreModifier + caseTabModifierValue).ToString();
+            modifierText.text = (caseChoiceData.startingScoreModifier + caseTabModifierValue).ToString("F2");
         }
     }
 }

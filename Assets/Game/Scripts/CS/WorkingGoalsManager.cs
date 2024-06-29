@@ -247,7 +247,7 @@ namespace ChickenScratch
             if (_pointsPerCase.Count > _currentCaseIndex)
             {
                 BirdName nextPlayer = _pointsPerCase[_currentCaseIndex].player;
-                Bird currentBird = ColourManager.Instance.GetBird(nextPlayer);
+                BirdData currentBird = GameDataManager.Instance.GetBird(nextPlayer);
                 currentLineRenderer = Instantiate(linePrefab, resizableObjectsHolder.transform).GetComponent<LineRenderer>();
                 if(currentBird == null)
                 {
@@ -356,7 +356,7 @@ namespace ChickenScratch
             }
         }
 
-        private void setCurrentCaseWords(Bird currentBird)
+        private void setCurrentCaseWords(BirdData currentBird)
         {
             EndgameCaseData currentCaseData = _pointsPerCase[_currentCaseIndex].caseData;
             foreach (KeyValuePair<int, string> correctWordIdentifier in currentCaseData.correctWordIdentifierMap)
@@ -636,7 +636,7 @@ namespace ChickenScratch
         {
             _timeShowingPoint = 0.0f;
             
-            Bird currentBird = ColourManager.Instance.GetBird(_pointsPerCase[0].player);
+            BirdData currentBird = GameDataManager.Instance.GetBird(_pointsPerCase[0].player);
             if(currentBird == null)
             {
                 Debug.LogError("Could not initialize the graphing line because the first player[" + _pointsPerCase[0].player.ToString() +"] is not mapped in the Colour Manager.");

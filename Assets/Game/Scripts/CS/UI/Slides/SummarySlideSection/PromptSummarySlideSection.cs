@@ -13,7 +13,7 @@ namespace ChickenScratch
 
         public void Initialize(PlayerTextInputData promptData, int round, int caseID, float timeModifierDecrement)
         {
-            Bird authorBird = ColourManager.Instance.GetBird(promptData.author);
+            BirdData authorBird = GameDataManager.Instance.GetBird(promptData.author);
             if(authorBird == null)
             {
                 Debug.LogError("Could not initialize prompt summary slide section because prompt bird["+promptData.author.ToString()+"] was not mapped in the Colour Manager.");

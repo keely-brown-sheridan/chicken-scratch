@@ -209,7 +209,7 @@ namespace ChickenScratch
             }
 
             //Set the employee of the month
-            Bird bestBird = ColourManager.Instance.GetBird(bestEmployeeCandidate.birdName);
+            BirdData bestBird = GameDataManager.Instance.GetBird(bestEmployeeCandidate.birdName);
             if (bestBird == null)
             {
                 Debug.LogError("Could not set employee of the month details because the bird["+bestEmployeeCandidate.birdName.ToString()+"] has not been mapped in the Colour Manager.");

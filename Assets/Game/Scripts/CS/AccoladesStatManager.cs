@@ -96,7 +96,7 @@ namespace ChickenScratch
                     {
                         pointsCountMap.Add(currentTask.assignedPlayer, 0);
                     }
-                    pointsCountMap[currentTask.assignedPlayer] += currentCase.scoringData.GetTotalPoints();
+                    pointsCountMap[currentTask.assignedPlayer] += currentCase.scoringData.GetTotalPoints() / currentCase.taskDataMap.Count;
                     switch (currentTask.taskType)
                     {
                         case TaskData.TaskType.prompt_drawing:

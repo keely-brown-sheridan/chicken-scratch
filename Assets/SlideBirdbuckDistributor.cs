@@ -62,15 +62,19 @@ namespace ChickenScratch
         private int birdBucksToSteal = 0;
         private Vector3 stealingArmStartingPosition;
 
+        private void OnEnable()
+        {
+            stealingArmStartingPosition = stealingBirdArmTransform.position;
+        }
+
         public void Initialize(CaseScoringData inCaseScoringData, List<SummarySlideSection> inSummarySlideSections)
         {
-            
             caseScoringData = inCaseScoringData;
             sections = inSummarySlideSections;
             totalBirdBucksToDistribute = caseScoringData.GetTotalPoints();
             birdBucksRemaining = totalBirdBucksToDistribute;
             birdBucksToSteal = birdBucksRemaining % inSummarySlideSections.Count;
-            distributionFrequency = (distributionTime - delayTime) / birdBucksRemaining * inSummarySlideSections.Count;
+            distributionFrequency = Mathf.Min((distributionTime - delayTime) / birdBucksRemaining * inSummarySlideSections.Count, 0.25f);
             birdBucksRemainingText.text = birdBucksRemaining.ToString();
 
             if(birdBucksToSteal > 0)
@@ -95,11 +99,6 @@ namespace ChickenScratch
             switch (currentState)
             {
                 case State.stealing_reach:
-                    if(timeActive == 0)
-                    {
-                        stealingArmStartingPosition = stealingBirdArmTransform.position;
-                    }
-                    
                     if(timeActive > stealReachingTime)
                     {
                         timeActive = 0f;

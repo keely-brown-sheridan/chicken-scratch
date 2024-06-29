@@ -11,7 +11,7 @@ namespace ChickenScratch
         public void Initialize(string correctPrefix, string correctNoun)
         {
             originalPrefixText.text = SettingsManager.Instance.CreatePrefixText(correctPrefix);
-            originalNounText.text = SettingsManager.Instance.CreateNounText(correctPrefix);
+            originalNounText.text = SettingsManager.Instance.CreateNounText(correctNoun);
         }
     }
 }

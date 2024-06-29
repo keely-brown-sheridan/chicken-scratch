@@ -16,7 +16,7 @@ namespace ChickenScratch
         public void setBird(BirdName inBirdName)
         {
             birdName = inBirdName;
-            Bird drafteeBird = ColourManager.Instance.GetBird(inBirdName);
+            BirdData drafteeBird = GameDataManager.Instance.GetBird(inBirdName);
             if (drafteeBird == null)
             {
                 Debug.LogError("Could not set draftee indicator bird["+inBirdName.ToString()+"] because it is not mapped in the ColourManager.");

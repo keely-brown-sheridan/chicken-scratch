@@ -63,7 +63,7 @@ namespace ChickenScratch
         public void Initialize(BirdName inBirdName)
         {
             gameObject.SetActive(true);
-            Bird chatBird = ColourManager.Instance.GetBird(inBirdName);
+            BirdData chatBird = GameDataManager.Instance.GetBird(inBirdName);
             if(chatBird == null)
             {
                 Debug.LogError("Could not initialize chat bird["+inBirdName.ToString()+"] because it was not mapped in the Colour Manager.");
@@ -86,6 +86,11 @@ namespace ChickenScratch
             {
                 if (currentReaction != Reaction.invalid)
                 {
+                    if (!reactionMap.ContainsKey(currentReaction))
+                    {
+                        Debug.LogError("Could not update reaction because current reaction[" + currentReaction.ToString() + "] is not mapped in the reactionMap.");
+                        return;
+                    }
                     reactionMap[currentReaction].SetActive(false);
                 }
 

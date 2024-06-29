@@ -3,6 +3,7 @@ using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static ChickenScratch.ColourManager;
 
 public class LobbyDataHandler : NetworkBehaviour
 {
@@ -45,6 +46,12 @@ public class LobbyDataHandler : NetworkBehaviour
     {
         MenuLobbyButtons.Instance.SelectPlayerBird(selectedBird, playerName);
         
+    }
+
+    [ClientRpc]
+    public void RpcSetPlayerBird(string playerID, BirdName birdName )
+    {
+        SettingsManager.Instance.AssignBirdToPlayer(birdName, playerID);
     }
 
     [ClientRpc]

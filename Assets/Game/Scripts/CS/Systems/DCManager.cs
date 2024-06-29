@@ -68,6 +68,7 @@ namespace ChickenScratch
 
         public void handleHostDisconnection()
         {
+            Debug.LogError("Handling host disconnection.");
             switch (currentGameScene)
             {
                 case GameScene.theater:
@@ -98,10 +99,13 @@ namespace ChickenScratch
                     //GameManager.Instance.playerFlowManager.playerNameMap.Remove(disconnectingBird);
                     if (SettingsManager.Instance.isHost)
                     {
-                        GameManager.Instance.gameFlowManager.disconnectedPlayers.Add(disconnectedPlayer);
-                        SettingsManager.Instance.DeassignBirdToPlayer(disconnectedPlayer);
-                        GameManager.Instance.gameFlowManager.clearPlayerTransitionConditions(disconnectedPlayer);
-
+                        if(!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(disconnectedPlayer))
+                        {
+                            GameManager.Instance.gameFlowManager.disconnectedPlayers.Add(disconnectedPlayer);
+                            SettingsManager.Instance.DeassignBirdToPlayer(disconnectedPlayer);
+                            GameManager.Instance.gameFlowManager.clearPlayerTransitionConditions(disconnectedPlayer);
+                        }
+                        
                         if (SettingsManager.Instance.GetPlayerNameCount() == 1)
                         {
                             DCPrompt.promptText.text = "There are not enough players to continue the game.";
@@ -113,7 +117,12 @@ namespace ChickenScratch
 
 
                     //Show a notification saying that the player has disconnected
-                    disconnectionNotification.QueueDisconnection(disconnectedPlayer, GameManager.Instance.playerFlowManager.playerNameMap[disconnectedPlayer]);
+                    string disconnectedPlayerName = "";
+                    if(GameManager.Instance.playerFlowManager.playerNameMap.ContainsKey(disconnectedPlayer))
+                    {
+                        disconnectedPlayerName = GameManager.Instance.playerFlowManager.playerNameMap[disconnectedPlayer];
+                    }
+                    disconnectionNotification.QueueDisconnection(disconnectedPlayer, disconnectedPlayerName);
 
                     if (masterClientHasSwitched)
                     {
@@ -157,9 +166,15 @@ namespace ChickenScratch
                                     case GameModeData.CaseDeliveryMode.queue:
 
                                         //Close their cabinet
-                                        int disconnectedCabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[disconnectedPlayer];
-                                        GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[disconnectedCabinetIndex].close();
-                                        GameManager.Instance.gameDataHandler.RpcCloseCabinetDrawer(disconnectedCabinetIndex);
+                                        if(GameManager.Instance.gameFlowManager.playerCabinetMap.ContainsKey(disconnectedPlayer))
+                                        {
+                                            int disconnectedCabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[disconnectedPlayer];
+                                            if (GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap.ContainsKey(disconnectedCabinetIndex))
+                                            {
+                                                GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[disconnectedCabinetIndex].close();
+                                                GameManager.Instance.gameDataHandler.RpcCloseCabinetDrawer(disconnectedCabinetIndex);
+                                            }
+                                        }
 
                                         //If it's the first round and there's enough players to make enough rounds with 1 less player,
                                         //then remake the player order

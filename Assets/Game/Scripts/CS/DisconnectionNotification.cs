@@ -115,7 +115,7 @@ namespace ChickenScratch
             disconnectedBirdMap.Remove(nextBirdName);
 
             disconnectionText.text = nextPlayerName + "\nhas been disconnected.";
-            Bird nextBird = ColourManager.Instance.GetBird(nextBirdName);
+            BirdData nextBird = GameDataManager.Instance.GetBird(nextBirdName);
             if(nextBird == null)
             {
                 Debug.LogError("Could not show next bird["+nextBirdName.ToString()+"] because it is not mapped in the ColourManager.");

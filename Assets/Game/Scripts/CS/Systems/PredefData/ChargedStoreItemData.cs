@@ -11,5 +11,26 @@ namespace ChickenScratch
     public class ChargedStoreItemData : StoreItemData
     {
         public int numberOfUses;
+
+        public ChargedStoreItemData()
+        {
+
+        }
+
+        public ChargedStoreItemData(ChargeStoreItemNetData netData)
+        {
+            ChargedStoreItemData gameData = (ChargedStoreItemData)GameDataManager.Instance.GetMatchingStoreItem(netData.itemType);
+            if(gameData != null)
+            {
+                numberOfUses = netData.charge;
+                itemType = gameData.itemType;
+                itemDescription = gameData.itemDescription;
+                itemName = gameData.itemName;
+                cost = gameData.cost;
+                itemImagePrefab = gameData.itemImagePrefab;
+                storeBGColour = gameData.storeBGColour;
+                index = netData.index;
+            }
+        }
     }
 }

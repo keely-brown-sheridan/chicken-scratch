@@ -22,7 +22,7 @@ MonoBehaviour:
   penalty: 0
   startingScoreModifier: 2
   maxScoreModifier: 2
-  modifierDecrement: 0.4
+  modifierDecrement: 0.3
   taskFalloff: 0.75
   colour: {r: 1, g: 0.5529412, b: 0.5529412, a: 1}
   startingWordIdentifiers:
@@ -36,5 +36,4 @@ MonoBehaviour:
     duration: 60
   - taskType: 5
     duration: 60
-  queuedTaskSprites: 0000000000000000000000000000000002000000
   description: Players will have to copy your drawing. The prompt may be more challenging.

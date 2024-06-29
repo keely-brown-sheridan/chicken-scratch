@@ -51,9 +51,10 @@ public class SlideCaseScoreVisualization : MonoBehaviour
         startingScore = GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
         currentScore = startingScore;
         lastScore = (int)startingScore;
-        
+        currentScoreText.text = "Current Total:\n" + ((int)currentScore).ToString() + " Birdbucks";
+
         scoreModifier = inScoreModifier;
-        scoreModifierText.text = inScoreModifier.ToString() + "x";
+        scoreModifierText.text = inScoreModifier.ToString("F2") + "x";
 
         scoreModifierImage.color = SettingsManager.Instance.GetModifierColour(inScoreModifier / maxScoreModifier);
 

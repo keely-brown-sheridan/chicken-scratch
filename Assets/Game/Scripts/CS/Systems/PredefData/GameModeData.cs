@@ -34,5 +34,7 @@ namespace ChickenScratch
         public float totalGameTime;
         public int maxDays;
 
+        public bool hasAccusationRound;
+        public List<RoleData> rolesToDistribute = new List<RoleData>();
     }
 }

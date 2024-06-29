@@ -15,7 +15,7 @@ namespace ChickenScratch
 
         public void Initialize()
         {
-            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
             if(playerBird == null)
             {
                 Debug.LogError("Could not map reaction button colour because player bird["+SettingsManager.Instance.birdName.ToString() +"] is not mapped in the Colour Manager.");

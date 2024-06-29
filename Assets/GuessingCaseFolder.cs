@@ -153,6 +153,11 @@ namespace ChickenScratch
             guessData.author = SettingsManager.Instance.birdName;
             guessData.prefix = guessWords.ContainsKey(1) ? guessWords[1] : "";
             guessData.noun = guessWords.ContainsKey(2) ? guessWords[2] : "";
+            if(!GameManager.Instance.playerFlowManager.drawingRound.queuedFolderMap.ContainsKey(caseID))
+            {
+                Debug.LogError("ERROR[ForceGuess]: Queued folder map does not contain caseID["+caseID.ToString()+"]");
+                return;
+            }
             guessData.round = GameManager.Instance.playerFlowManager.drawingRound.queuedFolderMap[caseID].round;
             GameManager.Instance.gameDataHandler.CmdPromptGuess(guessData, currentCaseIndex, timeTaken);
 

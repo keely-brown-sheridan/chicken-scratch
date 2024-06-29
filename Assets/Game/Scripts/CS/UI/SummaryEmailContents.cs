@@ -32,7 +32,7 @@ namespace ChickenScratch
 
         public void setSummaryContents()
         {
-            Bird bestBird = ColourManager.Instance.GetBird(PlayerFlowManager.employeeOfTheMonth);
+            BirdData bestBird = GameDataManager.Instance.GetBird(PlayerFlowManager.employeeOfTheMonth);
             if (bestBird == null)
             {
                 Debug.LogError("Could not map employee of the month image because best bird["+PlayerFlowManager.employeeOfTheMonth.ToString()+"] was not mapped in the Colour Manager.");
@@ -54,7 +54,7 @@ namespace ChickenScratch
                     {
                         pointsMap.Add(guesser, 0);
                     }
-                    pointsMap[guesser] += currentCase.scoringData.GetTotalPoints();
+                    pointsMap[guesser] += currentCase.scoringData.GetTotalPoints()/ currentCase.taskDataMap.Count;
                 }
                 foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
                 {

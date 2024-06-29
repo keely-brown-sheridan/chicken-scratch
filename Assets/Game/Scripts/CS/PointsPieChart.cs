@@ -23,7 +23,7 @@ namespace ChickenScratch
             {
                 GameObject sliceObject = Instantiate(pieChartPrefab, pieChartParent);
                 Image sliceImage = sliceObject.GetComponent<Image>();
-                Bird pointBird = ColourManager.Instance.GetBird(birdPoint.Key);
+                BirdData pointBird = GameDataManager.Instance.GetBird(birdPoint.Key);
                 if(pointBird == null)
                 {
                     Debug.LogError("Could not set colour for slice because point bird["+birdPoint.Key.ToString()+"] was not mapped in the Colour Manager.");

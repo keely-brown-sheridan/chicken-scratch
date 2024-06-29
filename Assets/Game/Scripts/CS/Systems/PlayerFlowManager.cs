@@ -15,6 +15,8 @@ namespace ChickenScratch
         public DrawingRound drawingRound;
         public SlidesRound slidesRound;
         public StoreRound storeRound;
+        public ReviewRound reviewRound;
+        public AccusationRound accusationRound;
         public AccoladesRound accoladesRound;
         public ResultsRound resultsRound;
        
@@ -29,7 +31,6 @@ namespace ChickenScratch
         public Dictionary<BirdName, string> playerNameMap = new Dictionary<BirdName, string>();
 
         public bool serverIsReady = false, analyticsAvailable = false;
-        public GameFlowManager.PlayerRole playerRole;
         public ScreenShotter screenshotter;
         public uGIF.ConvertToGif gifConverter;
         public static BirdName employeeOfTheMonth = BirdName.none;
@@ -107,7 +108,7 @@ namespace ChickenScratch
                 }
             }
 
-            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
             if(playerBird == null)
             {
                 Debug.LogError("Could not update cursor for player because player bird["+SettingsManager.Instance.birdName.ToString()+"] is not mapped in the Colour Manager.");
@@ -299,7 +300,19 @@ namespace ChickenScratch
 
         public void addToRating(int caseID, int tab, BirdName sender, BirdName receiver)
         {
+            if(!slidesRound.caseDataMap.ContainsKey(caseID))
+            {
+                Debug.LogError("ERROR[addToRating]: Could not isolate matching case["+caseID.ToString()+"]");
+                return;
+            }
+            
             EndgameCaseData selectedCase = slidesRound.caseDataMap[caseID];
+
+            if(!selectedCase.taskDataMap.ContainsKey(tab))
+            {
+                Debug.LogError("ERROR[addToRating]: Could not isolate matching task["+tab.ToString()+"] for case["+caseID.ToString()+"]");
+                return;
+            }
             selectedCase.taskDataMap[tab].ratingData.likeCount++;
             selectedCase.taskDataMap[tab].ratingData.target = receiver;
 
@@ -373,17 +386,21 @@ namespace ChickenScratch
 
         private IEnumerator AnimateDrawingVisual(LineRenderer newLineRenderer, DrawingLineData line, Vector3 position, Vector3 scale)
         {
-            for (int i = 1; i < line.positions.Count; i++)
+            for (int i = 0; i < line.positions.Count; i++)
             {
-                newLineRenderer.positionCount = i;
-                newLineRenderer.SetPositions(line.GetTransformedPositions(position, scale, i).ToArray());
-                yield return null;
+                newLineRenderer.positionCount = i+1;
+                newLineRenderer.SetPositions(line.GetTransformedPositions(position, scale, i+1).ToArray());
                 yield return null;
             }
         }
 
         public void addGuessPrompt(GuessData inGuessData, int caseID, float timeTaken)
         {
+            if(!drawingRound.caseMap.ContainsKey(caseID))
+            {
+                Debug.LogError("ERROR[addGuessPrompt]: Could not find matching case["+caseID.ToString()+"] in caseMap.");
+                return;
+            }
             ChainData chain = drawingRound.caseMap[caseID];
             chain.guessData = inGuessData;
 
@@ -469,6 +486,12 @@ namespace ChickenScratch
 
         public void AddStoreItem(StoreItemData inStoreItemData)
         {
+            if(inStoreItemData.itemType == StoreItem.StoreItemType.case_unlock ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.case_upgrade)
+            {
+                //These are handled on the server-side and propagated to everyone in the game
+                return;
+            }
             if(storeItemDataMap.ContainsKey(inStoreItemData.itemType))
             {
                 Debug.LogError("Player already has store item["+inStoreItemData.itemType.ToString()+"].");

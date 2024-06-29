@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20efd56eac21ae49bd60f78b9b56211, type: 3}
+  m_Name: Botcher
+  m_EditorClassIdentifier: 
+  title: Deadline
+  days:
+  - goalPerPlayer: 10
+    casesPerPlayer: 1
+    winResult: {fileID: 11400000, guid: ef990e2c1bbb114449760b118b1f7266, type: 2}
+    loseResult: {fileID: 11400000, guid: 961dc0b86e73c8a4590192ac0af3ced3, type: 2}
+  - goalPerPlayer: 25
+    casesPerPlayer: 2
+    winResult: {fileID: 11400000, guid: 3173dc4d4cb60d24f9b5a46e20565ce3, type: 2}
+    loseResult: {fileID: 11400000, guid: 961dc0b86e73c8a4590192ac0af3ced3, type: 2}
+  - goalPerPlayer: 40
+    casesPerPlayer: 3
+    winResult: {fileID: 11400000, guid: 015fafb42a44a054d88a177495ffd290, type: 2}
+    loseResult: {fileID: 11400000, guid: f1126f6783963cf4087a235ce41cc13e, type: 2}
+  minimumNumberOfPlayers: 3
+  wordDistributionMode: 0
+  caseDeliveryMode: 1
+  baseTemplateData:
+    name: 
+    format: 0
+    queuedTasks: []
+    startingWordIdentifiers: []
+    baseCost: 0
+    basePointsPerCorrectWord: 0
+    baseBonusPoints: 0
+    penalty: 0
+    caseTypeName: 
+    caseTypeColour: {r: 0, g: 0, b: 0, a: 0}
+    taskFalloff: 0
+    startingScoreModifier: 0
+  caseChoiceIdentifiers:
+  - Corners
+  - Easy Thirds
+  - Long Copy
+  - One-Off
+  - Quick Add
+  - Shrunk One-Off
+  - Shrunk Telephone
+  - Telephone
+  - TopBottom
+  - Quick Copy
+  casesRemaining: 3
+  contributionTaskRatio: 0.5
+  description: 
+  totalGameTime: 60
+  maxDays: 3
+  hasAccusationRound: 1
+  rolesToDistribute:
+  - {fileID: 11400000, guid: 4ca93ee9361669c4ab8afadbc17f6750, type: 2}

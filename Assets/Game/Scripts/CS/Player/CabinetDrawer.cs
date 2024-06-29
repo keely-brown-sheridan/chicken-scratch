@@ -107,7 +107,7 @@ namespace ChickenScratch
         public void setCabinetOwner(BirdName cabinetOwner)
         {
             currentPlayer = cabinetOwner;
-            Bird cabinetBird = ColourManager.Instance.GetBird(cabinetOwner);
+            BirdData cabinetBird = GameDataManager.Instance.GetBird(cabinetOwner);
             if (cabinetBird == null)
             {
                 Debug.LogError("Could not update colour and image of cabinet because cabinet owner["+cabinetOwner.ToString()+"] is not mapped in the Colour Manager.");
@@ -117,15 +117,23 @@ namespace ChickenScratch
                 playerColour = cabinetBird.folderColour;
                 ownerImageRenderer.sprite = cabinetBird.cabinetFaceSprite;
             }
+            List<Hourglass> hourglasses = GameManager.Instance.playerFlowManager.cabinetHourglasses;
+            if (hourglasses.Count <= (id - 1))
+            {
+                Debug.LogError("Could not show cabinet hourglass for id["+(id - 1).ToString()+"] because it was not in the range of cabinetHourglasses["+ hourglasses.Count.ToString()+ "]");
+            }
+            else
+            {
+                hourglasses[id - 1].gameObject.SetActive(false);
+            }
             
-            GameManager.Instance.playerFlowManager.cabinetHourglasses[id - 1].gameObject.SetActive(false);
             
             ownerImageObject.SetActive(true);
         }
 
         public void setDrawerVisuals(BirdName inCurrentPlayer)
         {
-            Bird cabinetBird = ColourManager.Instance.GetBird(inCurrentPlayer);
+            BirdData cabinetBird = GameDataManager.Instance.GetBird(inCurrentPlayer);
             if(cabinetBird == null)
             {
                 Debug.LogError("Could not set colour for the drawer because the bird map does not contain currentplayer["+inCurrentPlayer.ToString()+"].");
@@ -198,10 +206,9 @@ namespace ChickenScratch
 
         public void setQueuedFolders(List<BirdName> queuedFolderEntries)
         {
-            Color currentColour;
             if (queuedFolderEntries.Count > 0)
             {
-                Bird queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[0]);
+                BirdData queuedBird = GameDataManager.Instance.GetBird(queuedFolderEntries[0]);
                 if(queuedBird != null)
                 {
                     folderRenderer.color = queuedBird.folderColour;
@@ -214,7 +221,7 @@ namespace ChickenScratch
 
                 if (queuedFolderEntries.Count > 1)
                 {
-                    queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[1]);
+                    queuedBird = GameDataManager.Instance.GetBird(queuedFolderEntries[1]);
                     if (queuedBird != null)
                     {
                         folderRenderer2.color = queuedBird.folderColour;
@@ -227,7 +234,7 @@ namespace ChickenScratch
 
                     if (queuedFolderEntries.Count > 2)
                     {
-                        queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[2]);
+                        queuedBird = GameDataManager.Instance.GetBird(queuedFolderEntries[2]);
                         if (queuedBird != null)
                         {
                             folderRenderer3.color = queuedBird.folderColour;
@@ -246,7 +253,7 @@ namespace ChickenScratch
 
                     if (queuedFolderEntries.Count > 3)
                     {
-                        queuedBird = ColourManager.Instance.GetBird(queuedFolderEntries[3]);
+                        queuedBird = GameDataManager.Instance.GetBird(queuedFolderEntries[3]);
                         if (queuedBird != null)
                         {
                             folderRenderer4.color = queuedBird.folderColour;

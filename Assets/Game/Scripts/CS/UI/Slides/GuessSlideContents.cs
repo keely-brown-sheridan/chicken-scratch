@@ -14,13 +14,7 @@ namespace ChickenScratch
         [SerializeField]
         private GoldStarDetectionArea goldStarDetectionArea;
         [SerializeField]
-        private Image authorImage;
-        [SerializeField]
-        private TMP_Text authorNameText;
-        [SerializeField]
         private TMP_Text prefixText, nounText;
-        [SerializeField]
-        private TMP_Text originalPromptText;
 
         [SerializeField]
         private float prefixWaitDuration;
@@ -39,8 +33,6 @@ namespace ChickenScratch
         private Color correctColour, incorrectColour;
 
         [SerializeField]
-        private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
-        [SerializeField]
         private SlideTimeModifierDecrementVisual slideTimeModifierDecrementVisual;
 
         [SerializeField]
@@ -48,6 +40,12 @@ namespace ChickenScratch
 
         [SerializeField]
         private float timeToUpdatePrefixScore, timeToUpdateNounScore, timeToUpdateModifierScore;
+
+        [SerializeField]
+        private GameObject botcherCoinPrefab;
+
+        [SerializeField]
+        private Transform botcherCoinHolder;
 
         private bool hasShownModifier = false;
         private bool hasShownNoun = false;
@@ -57,6 +55,7 @@ namespace ChickenScratch
 
         private bool isPrefixCorrect, isNounCorrect;
         private float prefixScoreTarget, nounScoreTarget, modifierScoreTarget;
+        private ColourManager.BirdName author;
         
 
         private void Start()
@@ -86,15 +85,8 @@ namespace ChickenScratch
             CaseWordData prefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]);
             CaseWordData noun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]);
             timeWaiting = 0f;
-            Bird authorBird = ColourManager.Instance.GetBird(guessData.author);
-            if(authorBird == null)
-            {
-                Debug.LogError("Could not initialize guess slide contents because guess bird["+guessData.author.ToString()+"] was not mapped in the Colour Manager.");
-                return;
-            }
-            authorImage.sprite = authorBird.faceSprite;
-            authorNameText.color = authorBird.colour;
-            authorNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);
+            author = guessData.author;
+            
             prefixText.text = guessData.prefix;
             isPrefixCorrect = guessData.prefix == prefix.value;
             prefixText.color = isPrefixCorrect ? correctColour : incorrectColour;
@@ -102,14 +94,20 @@ namespace ChickenScratch
             isNounCorrect = guessData.noun == noun.value;
             nounText.color = isNounCorrect ? correctColour : incorrectColour;
             goldStarDetectionArea.Initialize(guessData.author, round, caseData.identifier);
-            caseTypeSlideVisualizer.Initialize(caseData.caseTypeColour, caseData.caseTypeName);
-            originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix.value, noun.value);
+            
             slideTimeModifierDecrementVisual.Initialize(taskData.timeModifierDecrement);
             slideCaseScoreVisualization.Initialize(caseData.scoreModifier, caseData.maxScoreModifier);
 
             prefixScoreTarget = caseData.scoringData.prefixBirdbucks + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
             nounScoreTarget = caseData.scoringData.bonusBirdbucks + caseData.scoringData.nounBirdbucks + prefixScoreTarget;
             modifierScoreTarget = caseData.scoringData.GetTotalPoints() + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
+        }
+
+        public override void Show()
+        {
+            GameManager.Instance.playerFlowManager.slidesRound.ShowCaseDetails();
+            GameManager.Instance.playerFlowManager.slidesRound.UpdatePreviewBird(author);
+            base.Show();
         }
 
         private void Update()
@@ -139,6 +137,11 @@ namespace ChickenScratch
                         failureDescriptorEffect.gameObject.SetActive(true);
                         failureDescriptorEffect.Play();
                         AudioManager.Instance.PlaySound("TimePenalty");
+                        if(SettingsManager.Instance.gameMode.hasAccusationRound)
+                        {
+                            AddBotcherCoin();
+                        }
+                        
                     }
                 }
                 else if (timeWaiting * GameManager.Instance.playerFlowManager.slidesRound.slideSpeed > nounWaitDuration &&
@@ -158,6 +161,15 @@ namespace ChickenScratch
                         failureNounEffect.gameObject.SetActive(true);
                         failureNounEffect.Play();
                         AudioManager.Instance.PlaySound("TimePenalty");
+                        if (SettingsManager.Instance.gameMode.hasAccusationRound)
+                        {
+                            AddBotcherCoin();
+                            if(!isPrefixCorrect)
+                            {
+                                AddBotcherCoin();
+                            }
+                        }
+                        
                     }
                 }
                 else if(timeWaiting * GameManager.Instance.playerFlowManager.slidesRound.slideSpeed > modifierWaitDuration &&
@@ -169,6 +181,15 @@ namespace ChickenScratch
                 }
             }
             
+        }
+
+        private void AddBotcherCoin()
+        {
+            Instantiate(botcherCoinPrefab, botcherCoinHolder);
+            if(SettingsManager.Instance.playerRole.team == RoleData.Team.botcher)
+            {
+                SettingsManager.Instance.botcherCoins++;
+            }
         }
     }
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 948172879922181591}
   - component: {fileID: 4526534355293785778}
   - component: {fileID: 4554238071583156313}
-  - component: {fileID: 2290243793480620498}
   m_Layer: 5
   m_Name: HONKHONK
   m_TagString: Untagged
@@ -29,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5265908213281426810}
   m_RootOrder: 1
@@ -61,6 +61,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -78,20 +80,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: HONK!
---- !u!114 &2290243793480620498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791263831547396275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5c57a414a0c020479581f0be7cb8860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHonk: 1
-  counterpart: {fileID: 0}
 --- !u!1 &2364088198541288403
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +91,6 @@ GameObject:
   - component: {fileID: 2775703813601647260}
   - component: {fileID: 6059738624326079687}
   - component: {fileID: 5340470863953404561}
-  - component: {fileID: 7815101329215679010}
   m_Layer: 5
   m_Name: HONKHONK
   m_TagString: Untagged
@@ -121,6 +108,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9215287552173563549}
   m_RootOrder: 2
@@ -153,6 +141,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -170,20 +160,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'HONK HONK: HONK!'
---- !u!114 &7815101329215679010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2364088198541288403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5c57a414a0c020479581f0be7cb8860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHonk: 1
-  counterpart: {fileID: 0}
 --- !u!1 &4549053767508953388
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,6 +189,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5265908213281426810}
   m_Father: {fileID: 9215287552173563549}
@@ -246,6 +223,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -261,7 +240,7 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 1
 --- !u!95 &1799078871752099974
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -274,6 +253,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -289,7 +269,6 @@ GameObject:
   - component: {fileID: 8778154108701385450}
   - component: {fileID: 3345445785728597155}
   - component: {fileID: 8228820122120492947}
-  - component: {fileID: 7723966134138550516}
   m_Layer: 5
   m_Name: UnreadText
   m_TagString: Untagged
@@ -307,6 +286,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5265908213281426810}
   m_RootOrder: 0
@@ -339,6 +319,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -356,20 +338,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: UNREAD
---- !u!114 &7723966134138550516
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5154975857988062333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5c57a414a0c020479581f0be7cb8860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHonk: 0
-  counterpart: {fileID: 0}
 --- !u!1 &8883681330581589381
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,6 +366,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8778154108701385450}
   - {fileID: 948172879922181591}
@@ -432,6 +401,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.2971698, b: 0.2971698, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -456,7 +427,6 @@ GameObject:
   - component: {fileID: 9215287551295297430}
   - component: {fileID: 9215287551295297424}
   - component: {fileID: 9215287551295297431}
-  - component: {fileID: 4749479710251858433}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -474,6 +444,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9215287552173563549}
   m_RootOrder: 0
@@ -506,6 +477,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -523,20 +496,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Today's Work Compilation
---- !u!114 &4749479710251858433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9215287551295297429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5c57a414a0c020479581f0be7cb8860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isHonk: 0
-  counterpart: {fileID: 0}
 --- !u!1 &9215287552173563548
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,6 +526,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9215287551295297430}
   - {fileID: 6446923350718066628}
@@ -602,11 +562,12 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1259408508766424310, guid: 6ff90f62ec7504445803934686a12945,
-    type: 3}
+  m_Sprite: {fileID: -525558699, guid: 6ff90f62ec7504445803934686a12945, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -649,6 +610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -679,6 +641,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 9215287552173563550}
+        m_TargetAssemblyTypeName: 
         m_MethodName: Click
         m_Mode: 1
         m_Arguments:

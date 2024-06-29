@@ -9,7 +9,7 @@ namespace ChickenScratch
     {
         public enum StoreItemType
         {
-            eraser, marker, white_out, reroll, category_preview, score_tracker, highlighter, stopwatch, case_tab
+            eraser, marker, white_out, reroll, category_preview, score_tracker, highlighter, stopwatch, case_tab, case_unlock, case_upgrade
         }
         [SerializeField]
         private TMPro.TMP_Text itemNameText;
@@ -38,8 +38,11 @@ namespace ChickenScratch
         [SerializeField]
         private string cantAffordSFX;
 
+        public int index => _index;
+
         private StoreItemData storeItemData;
         private int cost;
+        private int _index = -1;        
 
         public void Initialize(StoreItemData inStoreItemData)
         {
@@ -48,16 +51,40 @@ namespace ChickenScratch
             itemDescriptionText.text = inStoreItemData.itemDescription;
             itemCostText.text = inStoreItemData.cost.ToString();
             cost = inStoreItemData.cost;
+            _index = inStoreItemData.index;
             bgImage.color = inStoreItemData.storeBGColour;
             GameObject storeItemImageObject = Instantiate(inStoreItemData.itemImagePrefab, itemImageHolder);
             StoreImageItem storeItemImage = storeItemImageObject.GetComponent<StoreImageItem>();
             storeItemImage.Initialize(inStoreItemData);
         }
 
-        public void Purchase()
+        public void TryPurchase()
         {
             //Check if the player can afford it
             if(GameManager.Instance.playerFlowManager.storeRound.currentMoney >= cost)
+            {
+                if(GameManager.Instance.playerFlowManager.HasStoreItem(storeItemData.itemType))
+                {
+                    GameManager.Instance.playerFlowManager.storeRound.ShowAlreadyHaveNotification();
+                    AudioManager.Instance.PlaySound(cantAffordSFX, true);
+                }
+                else
+                {
+                    //Request to purchase from the server
+                    GameManager.Instance.gameDataHandler.CmdTryToPurchaseStoreItem(SettingsManager.Instance.birdName, storeItemData.index);
+                }
+                
+            }
+            else
+            {
+                GameManager.Instance.playerFlowManager.storeRound.ShowUnaffordableNotification();
+                AudioManager.Instance.PlaySound(cantAffordSFX, true);
+            }
+        }
+
+        public void Purchase(ColourManager.BirdName purchaser)
+        {
+            if(purchaser == SettingsManager.Instance.birdName)
             {
                 //Purchase it
                 GameManager.Instance.playerFlowManager.storeRound.DecreaseCurrentMoney(cost);
@@ -65,16 +92,11 @@ namespace ChickenScratch
 
                 //Play a sound effect
                 AudioManager.Instance.PlaySound(purchaseSFX);
+            }
 
-                //Cover up in the shop
-                activeContentsObject.SetActive(false);
-                inactiveContentsObject.SetActive(true);
-            }
-            else
-            {
-                GameManager.Instance.playerFlowManager.storeRound.ShowUnaffordableNotification();
-                AudioManager.Instance.PlaySound(cantAffordSFX, true);
-            }
+            //Cover up in the shop
+            activeContentsObject.SetActive(false);
+            inactiveContentsObject.SetActive(true);
         }
     }
 

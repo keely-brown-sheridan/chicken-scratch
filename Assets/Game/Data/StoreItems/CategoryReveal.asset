@@ -16,6 +16,8 @@ MonoBehaviour:
   itemName: Scanner
   itemDescription: Reveal the word categories on cases.
   storeBGColour: {r: 0.990566, g: 0.43454072, b: 0.46652007, a: 1}
-  cost: 12
+  cost: 4
   itemImagePrefab: {fileID: 8879813591086726707, guid: 2489185b1a5ba41439f51248104927bb,
     type: 3}
+  isSinglePurchase: 0
+  index: 0

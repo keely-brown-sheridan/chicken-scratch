@@ -10,16 +10,7 @@ namespace ChickenScratch
         private GoldStarDetectionArea goldStarDetectionArea;
 
         [SerializeField]
-        private TMP_Text originalPromptReminderText;
-
-        [SerializeField]
         private Transform drawingHolder;
-
-        [SerializeField]
-        private Image authorImage;
-
-        [SerializeField]
-        private TMP_Text authorNameText;
 
         [SerializeField]
         private Vector3 drawingOffset;
@@ -31,14 +22,12 @@ namespace ChickenScratch
         private float timeShowingDrawing;
 
         [SerializeField]
-        private CaseTypeSlideVisualizer caseTypeSlideVisualizer;
-
-        [SerializeField]
         private SlideTimeModifierDecrementVisual slideTimeModifierDecrementVisual;
 
         private float duration;
         private float timeActive = 0f;
         private DrawingData drawingData;
+        private ColourManager.BirdName author;
 
         private void Update()
         {
@@ -53,32 +42,28 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(DrawingData inDrawingData, string inPrefix, string inNoun, int inRound, int inCaseID, float inDuration, float inTimeModifierDecrement)
+        public void Initialize(DrawingData inDrawingData, int inRound, int inCaseID, float inDuration, float inTimeModifierDecrement)
         {
             drawingData = inDrawingData;
             duration = inDuration;
             timeActive = 0f;
 
-            Bird authorBird = ColourManager.Instance.GetBird(drawingData.author);
+            BirdData authorBird = GameDataManager.Instance.GetBird(drawingData.author);
             if (authorBird == null)
             {
                 Debug.LogError("Could not initialize drawing slide contents because drawing bird["+drawingData.author.ToString()+"] was not mapped in the Colour Manager.");
                 return;
             }
-           
-            authorImage.sprite = authorBird.faceSprite;
-            authorNameText.color = authorBird.colour;
-            authorNameText.text = SettingsManager.Instance.GetPlayerName(inDrawingData.author);
-            goldStarDetectionArea.Initialize(inDrawingData.author, inRound, inCaseID);
+            author = drawingData.author;
 
-            originalPromptReminderText.text = SettingsManager.Instance.CreatePromptText(inPrefix, inNoun);
+            goldStarDetectionArea.Initialize(inDrawingData.author, inRound, inCaseID);
             EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[inCaseID];
-            caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
             slideTimeModifierDecrementVisual.Initialize(inTimeModifierDecrement);
         }
-
         public override void Show()
         {
+            GameManager.Instance.playerFlowManager.slidesRound.ShowCaseDetails();
+            GameManager.Instance.playerFlowManager.slidesRound.UpdatePreviewBird(author);
             Vector3 drawingScale = new Vector3(drawingSize, drawingSize, 1f);
             GameManager.Instance.playerFlowManager.AnimateDrawingVisuals(drawingData, drawingHolder, drawingHolder.position + drawingOffset, drawingScale, drawingSize, timeShowingDrawing);
 

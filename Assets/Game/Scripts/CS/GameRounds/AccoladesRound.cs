@@ -118,7 +118,13 @@ namespace ChickenScratch
         {
             foreach (KeyValuePair<BirdName, AccoladesStatManager.StatRole> statRole in statRoleMap)
             {
-                AccoladesBirdRow currentCard = allAccoladeBirdRows.Where(br => br.birdName == statRole.Key).ToList()[0];
+                List<AccoladesBirdRow> matchingBirdRows = allAccoladeBirdRows.Where(br => br.birdName == statRole.Key).ToList();
+                if(matchingBirdRows.Count == 0)
+                {
+                    Debug.LogError("ERROR[SetPlayerAccoladeCards]: Could not find matching accolade bird row for player[" + statRole.Key.ToString() + "]");
+                    return;
+                }
+                AccoladesBirdRow currentCard = matchingBirdRows[0];
                 currentCard.statRoleText.text = statRole.Value.name;
                 currentCard.statDescriptionText.text = statRole.Value.description;
             }
@@ -155,20 +161,26 @@ namespace ChickenScratch
 
         public void initializeAccoladeBirdRow(int index, BirdName birdName)
         {
-            allAccoladeBirdRows[index].birdName = birdName;
-            Bird accoladeBird = ColourManager.Instance.GetBird(birdName);
+            if(allAccoladeBirdRows.Count <= index)
+            {
+                Debug.LogError("Could not initialize accolade bird row because index["+index.ToString()+"] is outside of the range of allAccoladeBirdRows["+allAccoladeBirdRows.Count.ToString()+"]");
+                return;
+            }
+            AccoladesBirdRow birdRow = allAccoladeBirdRows[index];
+            birdRow.birdName = birdName;
+            BirdData accoladeBird = GameDataManager.Instance.GetBird(birdName);
             if(accoladeBird == null)
             {
-                Debug.LogError("Could not initialize accolade bird row colours because bird[] has not been mapped in the ColourManager.");
+                Debug.LogError("Could not initialize accolade bird row colours because bird["+birdName.ToString()+"] has not been mapped in the ColourManager.");
             }
             else
             {
-                allAccoladeBirdRows[index].pinImage.color = accoladeBird.colour;
-                allAccoladeBirdRows[index].birdHeadImage.sprite = accoladeBird.faceSprite;
+                birdRow.pinImage.color = accoladeBird.colour;
+                birdRow.birdHeadImage.sprite = accoladeBird.faceSprite;
             }
             
-            allAccoladeBirdRows[index].gameObject.SetActive(true);
-            allAccoladeBirdRows[index].isInitialized = true;
+            birdRow.gameObject.SetActive(true);
+            birdRow.isInitialized = true;
         }
 
         private void initializeAccoladesRound()
@@ -227,7 +239,7 @@ namespace ChickenScratch
                 loseMarkerObject.SetActive(true);
             }
 
-            Bird currentBird;
+            BirdData currentBird;
             //Iterate over each player to determine candidates for eotm and ufr
             foreach (KeyValuePair<ColourManager.BirdName, PlayerReviewStatus> playerReviewStatus in playerReviewStatusMap)
             {
@@ -257,7 +269,7 @@ namespace ChickenScratch
 
                     //Set the stats for the corkboard
                     currentRow.gameObject.SetActive(true);
-                    currentBird = ColourManager.Instance.GetBird(playerReviewStatus.Key);
+                    currentBird = GameDataManager.Instance.GetBird(playerReviewStatus.Key);
                     if(currentBird == null)
                     {
                         Debug.LogError("Could not set stats for the review bird[" + playerReviewStatus.Key.ToString() + "] because it has not been mapped in the Colour Manager.");
@@ -284,7 +296,7 @@ namespace ChickenScratch
         {
             PlayerFlowManager.employeeOfTheMonth = bestBirdName;
             employeeOfTheMonthPlayerText.text = bestPlayerName;
-            Bird bestBird = ColourManager.Instance.GetBird(bestBirdName);
+            BirdData bestBird = GameDataManager.Instance.GetBird(bestBirdName);
             if(bestBird == null)
             {
                 Debug.LogError("Could not map colour for the best bird[] because it has not been initialized in the Colour Manager.");

@@ -18,7 +18,7 @@ namespace ChickenScratch
     {
         public enum GamePhase
         {
-            loading, game_tutorial, instructions, drawing, results, slides_tutorial, slides, accolades, store, invalid
+            loading, game_tutorial, instructions, drawing, results, slides_tutorial, slides, accolades, store, review, accusation, invalid
         }
         public GamePhase currentGamePhase = GamePhase.loading;
 
@@ -70,8 +70,12 @@ namespace ChickenScratch
 
         public WordManager wordManager = new WordManager();
 
+        [SerializeField]
+        private RoleData workerRole;
+
         public int totalCompletedCases = 0;
         private bool hasRequestedBirdClaim = false;
+        private bool triedToInitialize = false;
 
         // Start is called before the first frame update
         void Start()
@@ -107,6 +111,7 @@ namespace ChickenScratch
 
         private void Initialize()
         {
+            
             int playerCount = SettingsManager.Instance.GetPlayerNameCount();
             bool notAllPlayersHaveConnected = connectedPlayers.Count != playerCount;//allPlayersHaveReadied up
             if(notAllPlayersHaveConnected)
@@ -128,7 +133,8 @@ namespace ChickenScratch
             {
                 playerFlowManager = GameManager.Instance.playerFlowManager;
             }
-
+            if (triedToInitialize) return;
+            triedToInitialize = true;
             GameManager.Instance.gameDataHandler.RpcServerIsReady();
             GameManager.Instance.gameFlowManager.SetCabinetOwnership();
             InitializeGame();
@@ -146,18 +152,26 @@ namespace ChickenScratch
 
             //Initialize the players
             List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
-
+            List<RoleData> rolesToAssign = SettingsManager.Instance.gameMode.rolesToDistribute;
+            for(int i = rolesToAssign.Count; i < allPlayerBirds.Count; i++)
+            {
+                rolesToAssign.Add(workerRole);
+            }
+            rolesToAssign = rolesToAssign.OrderBy(r => Guid.NewGuid()).ToList();
+            int iterator = 0;
             foreach (BirdName playerBird in allPlayerBirds)
             {
                 string playerName = SettingsManager.Instance.GetPlayerName(playerBird);
                 activeBirdNames.Add(playerBird);
-                gamePlayers.Add(playerBird, new global::ChickenScratch.PlayerData() { birdName = playerBird, playerName = playerName, playerRole = PlayerRole.worker });
+                gamePlayers.Add(playerBird, new PlayerData() { birdName = playerBird, playerName = playerName, playerRoleType = rolesToAssign[iterator].roleType });
+                GameManager.Instance.gameDataHandler.TargetInitializePlayer(SettingsManager.Instance.GetConnection(playerBird), playerName, playerBird, rolesToAssign[iterator].roleType);
                 playerFlowManager.playerNameMap.Add(playerBird, playerName);
+                iterator++;
             }
             GameManager.Instance.gameDataHandler.RPCUpdatePlayerNameMapWrapper(playerFlowManager.playerNameMap);
 
             //Assign cabinets to each player
-            int iterator = 1;
+            iterator = 1;
             foreach(KeyValuePair<BirdName,PlayerData> player in gamePlayers)
             {
                 playerCabinetMap.Add(player.Key, iterator);
@@ -279,6 +293,11 @@ namespace ChickenScratch
         {
             //Pick the case that matches the choice
             CaseChoiceData choiceData = GameDataManager.Instance.GetCaseChoice(choiceNetData.caseChoiceIdentifier);
+            if(choiceData == null)
+            {
+                Debug.LogError("ERROR[CreateCaseFromChoice]: Could not find choice data for identifier["+choiceNetData.caseChoiceIdentifier+"]");
+                return - 1;
+            }
             CaseTemplateData selectedCase = new CaseTemplateData(choiceData);
 
             PlayerTextInputData tempPromptData = new PlayerTextInputData()
@@ -312,6 +331,11 @@ namespace ChickenScratch
                     newChain.playerOrder.Add(newChain.playerOrder.Count + 1, randomizedPlayers[j]);
                 }
             }
+            if(!newChain.playerOrder.ContainsKey(choiceData.numberOfTasks))
+            {
+                Debug.LogError("ERROR[CreateCaseFromChoice]: Player order is missing task["+choiceData.numberOfTasks.ToString()+"] for case["+newChain.identifier.ToString()+"]");
+                return -1;
+            }
 
             newChain.guessData.author = newChain.playerOrder[choiceData.numberOfTasks];
 
@@ -334,16 +358,23 @@ namespace ChickenScratch
 
         public void SendTaskToNextPlayer(int caseID)
         {
+            if(!GameManager.Instance.playerFlowManager.drawingRound.caseMap.ContainsKey(caseID))
+            {
+                Debug.LogError("ERROR[SendTaskToNextPlayer]: CaseMap does not contain case[" + caseID.ToString() + "]");
+                return;
+            }
             ChainData caseData = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
             
             caseData.currentRound++;
             
             if (caseData.taskQueue.Count <= caseData.currentRound-1)
             {
-                Debug.LogError("ERROR: Could not queued the next task["+caseData.currentRound.ToString()+"]. TaskQueue["+caseData.taskQueue.Count.ToString()+"] doesn't contain that task."); 
+                Debug.LogError("ERROR[SendTaskToNextPlayer]: Could not queue the next task["+caseData.currentRound.ToString()+"]. TaskQueue["+caseData.taskQueue.Count.ToString()+"] doesn't contain that task.");
+                return;
             }
-            if(!caseData.playerOrder.ContainsKey(caseData.currentRound))
+            if(!caseData.playerOrder.ContainsKey(caseData.currentRound) || !caseData.playerOrder.ContainsKey(caseData.currentRound-1))
             {
+                Debug.LogError("ERROR[SendTaskToNextPlayer]: Player order is either missing this round["+caseData.currentRound.ToString()+"] or last round["+(caseData.currentRound-1).ToString()+"]");
                 return;
             }
             
@@ -352,7 +383,8 @@ namespace ChickenScratch
             BirdName lastBird = caseData.playerOrder[caseData.currentRound - 1];
             if(lastBird == BirdName.none)
             {
-                Debug.LogError("Attempting to send task to next player but the last player is none.");
+                Debug.LogError("ERROR[SendTaskToNextPlayer]: Attempting to send task to next player but the last player is none.");
+                return;
             }
             AddCaseToQueue(nextBird, caseData, caseID, caseData.currentRound, lastBird);
             //If there's only one case queued then we need to open the cabinet drawer
@@ -360,7 +392,6 @@ namespace ChickenScratch
             {
                 GameManager.Instance.playerFlowManager.drawingRound.SendNextInQueue(nextBird);
             }
-            
         }
 
         public void dequeueFrontCase(BirdName birdName)
@@ -425,8 +456,8 @@ namespace ChickenScratch
             //Should there be a transition condition added here for each player for receiving the updates?
 
             //Remove the case of the disconnecting player
-            int disconnectingCabinetIndex = playerCabinetMap[disconnectingPlayer];
-            GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[disconnectingCabinetIndex].currentChainData = null;
+            //int disconnectingCabinetIndex = playerCabinetMap[disconnectingPlayer];
+            //GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[disconnectingCabinetIndex].currentChainData = null;
             playerCabinetMap.Remove(disconnectingPlayer);
 
             activeBirdNames.Remove(disconnectingPlayer);
@@ -616,16 +647,7 @@ namespace ChickenScratch
                         return;
                     }
                     currentGamePhase = GameManager.Instance.playerFlowManager.slidesRound.phaseToTransitionTo;
-                    if (SettingsManager.Instance.showFastResults)
-                    {
-                        if (!playerFlowManager.slidesRound.quickplaySummarySlide.isActive)
-                        {
-                            playerFlowManager.slidesRound.inProgress = false;
-                            GameManager.Instance.playerFlowManager.slidesRound.ShowFastResults();
-                            GameManager.Instance.gameDataHandler.RpcShowQuickResults();
-                        }
-                        return;
-                    }
+
                     break;
                 case GamePhase.accolades:
                     if (playerFlowManager.accoladesRound.isActive)
@@ -633,6 +655,34 @@ namespace ChickenScratch
                         return;
                     }
                     currentGamePhase = GamePhase.results;
+                    break;
+                case GamePhase.accusation:
+                    if (!isRoundOver())
+                    {
+                        return;
+                    }
+
+                    //Possible outcomes:
+                    //A tie
+                    //An elimination
+                        //Botcher is eliminated - game is over
+                        //Worker is eliminated 
+                            //There are more un-eliminated workers than
+
+                    break;
+                case GamePhase.review:
+                    if (!isRoundOver())
+                    {
+                        return;
+                    }
+                    if(playerFlowManager.reviewRound.accusedBird != BirdName.none)
+                    {
+                        currentGamePhase = GamePhase.accusation;
+                    }
+                    else
+                    {
+                        currentGamePhase = GamePhase.store;
+                    }
                     break;
                 case GamePhase.store:
                     foreach(BirdName bird in SettingsManager.Instance.GetAllActiveBirds())
@@ -645,6 +695,7 @@ namespace ChickenScratch
                     }
                     currentGamePhase = GamePhase.instructions;
                     break;
+                    
                 case GamePhase.results:
                     return;
             }
@@ -748,6 +799,9 @@ namespace ChickenScratch
 
                     }
                     break;
+                case GamePhase.store:
+                    GameManager.Instance.playerFlowManager.storeRound.UpdatePhase();
+                    break;
             }
         }
 
@@ -776,7 +830,7 @@ namespace ChickenScratch
             List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
             foreach (BirdName player in allPlayerBirds)
             {
-                GameManager.Instance.gameDataHandler.RpcRandomizedSetBirdPosition(playerOrder[iterator], player);
+                GameManager.Instance.gameDataHandler.RpcRandomizedSetBirdIndex(playerOrder[iterator], player);
                 GameManager.Instance.playerFlowManager.slidesRound.initializeGalleryBird(playerOrder[iterator], player);
                 GameManager.Instance.playerFlowManager.accoladesRound.initializeAccoladeBirdRow(playerOrder[iterator], player);
                 iterator++;
@@ -798,7 +852,17 @@ namespace ChickenScratch
 
         public void updateQueuedFolderVisuals(BirdName birdName)
         {
+            if (!playerCabinetMap.ContainsKey(birdName))
+            {
+                Debug.LogError("ERROR[updateQueuedFolderVisuals]: Could not isolate matching cabinet for player[" + birdName.ToString() + "]");
+                return;
+            }
             int cabinetID = playerCabinetMap[birdName];
+            if(!GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap.ContainsKey(cabinetID))
+            {
+                Debug.LogError("ERROR[updateQueuedFolderVisuals]: Could not isolate matching cabinet[" + cabinetID.ToString() + "]");
+                return;
+            }
             List<BirdName> queuedFolderColours = new List<BirdName>();
             if (queuedChains.ContainsKey(birdName))
             {
@@ -807,7 +871,7 @@ namespace ChickenScratch
                     queuedFolderColours.Add(queuedCase.Item4);
                 }
             }
-            playerFlowManager.drawingRound.cabinetDrawerMap[cabinetID].setQueuedFolders(queuedFolderColours);
+            GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[cabinetID].setQueuedFolders(queuedFolderColours);
             GameManager.Instance.gameDataHandler.RpcUpdateQueuedFolderVisuals(cabinetID, queuedFolderColours);
         }
 
@@ -821,6 +885,17 @@ namespace ChickenScratch
             {
                 birdArmPositionMap[inBirdName] = currentPosition;
             }
+        }
+
+        public void SetLongArmPosition(BirdName inBirdName, Vector3 currentPosition, PlayerStretchArm.Variant variant)
+        {
+            switch(variant)
+            {
+                case PlayerStretchArm.Variant.store:
+                    GameManager.Instance.playerFlowManager.storeRound.SetLongArmPosition(inBirdName, currentPosition);
+                    break;
+            }
+            
         }
 
         public void SendPossibleWordsToGuesser(ChainData caseData)
@@ -853,9 +928,10 @@ namespace ChickenScratch
     public class PlayerData
     {
         public BirdName birdName = BirdName.none;
-        public GameFlowManager.PlayerRole playerRole = GameFlowManager.PlayerRole.worker;
+        public RoleData.RoleType playerRoleType = RoleData.RoleType.worker;
         public BirdName nextInOrder = BirdName.none;
         public string playerName = "";
+        public bool isEliminated = false;
     }
 
     public class DrawingVisualsPackage

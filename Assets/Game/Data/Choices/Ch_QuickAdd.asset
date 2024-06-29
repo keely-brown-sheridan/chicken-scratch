@@ -26,8 +26,8 @@ MonoBehaviour:
   taskFalloff: 0
   colour: {r: 0.73147297, g: 1, b: 0.7311321, a: 1}
   startingWordIdentifiers:
-  - prefix
-  - noun
+  - easy-prefix
+  - easy-noun
   selectionFrequency: 2
   taskTimingData:
   - taskType: 0
@@ -36,5 +36,4 @@ MonoBehaviour:
     duration: 45
   - taskType: 5
     duration: 60
-  queuedTaskSprites: 00000000000000000000000002000000
   description: Players will add to your drawing.

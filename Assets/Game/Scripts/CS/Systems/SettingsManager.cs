@@ -47,8 +47,6 @@ namespace ChickenScratch
 
         public List<ResultData> resultPossibilities = new List<ResultData>();
 
-        [SerializeField]
-        private List<TaskSpriteData> taskSprites;
 
         public Color prefixBGColour, prefixFontColour;
         public Color nounBGColour, nounFontColour;
@@ -56,19 +54,15 @@ namespace ChickenScratch
 
         private Dictionary<ColourManager.BirdName, string> playerNameMap = new Dictionary<ColourManager.BirdName, string>();
         private Dictionary<ColourManager.BirdName, NetworkConnectionToClient> birdConnectionMap = new Dictionary<ColourManager.BirdName, NetworkConnectionToClient>();
-        private Dictionary<CaseChoiceData.TaskSprite, TaskSpriteData> taskSpriteDataMap = new Dictionary<CaseChoiceData.TaskSprite, TaskSpriteData>();
 
         private Dictionary<NetworkConnectionToClient, string> lobbyConnectionUsernameMap = new Dictionary<NetworkConnectionToClient, string>();
         private Dictionary<NetworkConnectionToClient, ColourManager.BirdName> lobbyConnectionBirdMap = new Dictionary<NetworkConnectionToClient, ColourManager.BirdName>();
 
         public CSteamID currentRoomID;
+        public RoleData playerRole;
+        public int botcherCoins;
 
-        [System.Serializable]
-        public class TaskSpriteData
-        {
-            public CaseChoiceData.TaskSprite taskSprite;
-            public Sprite sprite;
-        }
+
 
         private void Awake()
         {
@@ -128,10 +122,7 @@ namespace ChickenScratch
                 }
 
             }
-            foreach(TaskSpriteData taskSprite in taskSprites)
-            {
-                taskSpriteDataMap.Add(taskSprite.taskSprite, taskSprite);
-            }
+
             isInitialized = true;
         }
 
@@ -291,13 +282,21 @@ namespace ChickenScratch
             }
         }
 
-        public void BroadcastBirdAssignment()
+        public void BroadcastBirdAssignmentInGame()
         {
             foreach(KeyValuePair<ColourManager.BirdName,string> birdAssignment in playerNameMap)
             {
                 GameManager.Instance.gameDataHandler.RpcSetPlayerBird(birdAssignment.Value, birdAssignment.Key);
             }
             
+        }
+
+        public void BroadcastBirdAssignmentInLobby()
+        {
+            foreach (KeyValuePair<ColourManager.BirdName, string> birdAssignment in playerNameMap)
+            {
+                LobbyNetwork.Instance.lobbyDataHandler.RpcSetPlayerBird(birdAssignment.Value, birdAssignment.Key);
+            }
         }
 
         public bool IsBirdSelected(ColourManager.BirdName bird)
@@ -357,15 +356,6 @@ namespace ChickenScratch
         public void ServerBroadcastPlayerNames()
         {
             GameManager.Instance.gameDataHandler.RpcPlayerInitializationWrapper(SettingsManager.Instance.playerNameMap);
-        }
-
-        public Sprite GetTaskSprite(CaseChoiceData.TaskSprite inTaskSpriteType)
-        {
-            if(taskSpriteDataMap.ContainsKey(inTaskSpriteType))
-            {
-                return taskSpriteDataMap[inTaskSpriteType].sprite;
-            }
-            return null;
         }
 
         public void DisconnectFromLobby()

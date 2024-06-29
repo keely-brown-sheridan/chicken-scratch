@@ -253,14 +253,14 @@ namespace ChickenScratch
             }
             stampIsActive = false;
             BirdName lastDrawer;
-            Bird lastDrawerBird;
+            BirdData lastDrawerBird;
             switch (currentState)
             {
                 case CaseState.prompting:
                     if (chainData.drawings.ContainsKey(lastRoundIndex))
                     {
                         BirdName drawingAuthor = chainData.drawings[lastRoundIndex].author;
-                        Bird drawingBird = ColourManager.Instance.GetBird(drawingAuthor);
+                        BirdData drawingBird = GameDataManager.Instance.GetBird(drawingAuthor);
                         if(drawingBird == null)
                         {
                             Debug.LogError("Could not set folder colour because the drawing author["+drawingAuthor.ToString()+"] was not mapped in the Colour Manager.");
@@ -290,7 +290,7 @@ namespace ChickenScratch
                         {
                             lastAuthor = chainData.playerOrder[lastRoundIndex];
                         }
-                        Bird lastBird = ColourManager.Instance.GetBird(lastAuthor);
+                        BirdData lastBird = GameDataManager.Instance.GetBird(lastAuthor);
                         if (lastBird == null)
                         {
                             Debug.LogError("Could not update folder colour because last bird["+lastBird.ToString()+"] was not mapped in the Colour Manager.");
@@ -303,7 +303,7 @@ namespace ChickenScratch
                     }
                     else
                     {
-                        Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+                        BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
                         if(playerBird == null)
                         {
                             Debug.LogError("Could not update folder colour because player bird["+SettingsManager.Instance.birdName.ToString()+"] was not mapped in the Colour Manager.");
@@ -345,7 +345,7 @@ namespace ChickenScratch
                     if (chainData.drawings.ContainsKey(lastRoundIndex))
                     {
                         lastDrawer = chainData.drawings[lastRoundIndex].author;
-                        lastDrawerBird = ColourManager.Instance.GetBird(lastDrawer);
+                        lastDrawerBird = GameDataManager.Instance.GetBird(lastDrawer);
                         if(lastDrawerBird == null)
                         {
                             Debug.LogError("Could not update folder colour because last drawer bird["+lastDrawer.ToString()+"] was not mapped in the Colour Manager.");
@@ -394,7 +394,7 @@ namespace ChickenScratch
                     if (chainData.drawings.ContainsKey(lastRoundIndex))
                     {
                         lastDrawer = chainData.drawings[lastRoundIndex].author;
-                        lastDrawerBird = ColourManager.Instance.GetBird(lastDrawer);
+                        lastDrawerBird = GameDataManager.Instance.GetBird(lastDrawer);
                         if (lastDrawerBird == null)
                         {
                             Debug.LogError("Could not update folder colour because last drawer bird[" + lastDrawer.ToString() + "] was not mapped in the Colour Manager.");
@@ -436,7 +436,7 @@ namespace ChickenScratch
                         guessingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
                     }
                     lastDrawer = chainData.drawings[lastRoundIndex].author;
-                    lastDrawerBird = ColourManager.Instance.GetBird(lastDrawer);
+                    lastDrawerBird = GameDataManager.Instance.GetBird(lastDrawer);
                     if (lastDrawerBird == null)
                     {
                         Debug.LogError("Could not update folder colour because last drawer bird[" + lastDrawer.ToString() + "] was not mapped in the Colour Manager.");
@@ -469,7 +469,11 @@ namespace ChickenScratch
 
         public BirdArm GetBirdArm(BirdName inBirdName)
         {
-            return birdArmMap[inBirdName];
+            if(birdArmMap.ContainsKey(inBirdName))
+            {
+                return birdArmMap[inBirdName];
+            }
+            return null;
         }
 
         public void ReleaseDeskFolder()
@@ -827,7 +831,17 @@ namespace ChickenScratch
 
         public void SendNextInQueue(BirdName birdToSendTo)
         {
+            if(!GameManager.Instance.gameFlowManager.playerCabinetMap.ContainsKey(birdToSendTo))
+            {
+                Debug.LogError("ERROR[SendNextInQueue]: Could not find cabinet associated with player[" + birdToSendTo.ToString() + "]");
+                return;
+            }
             int cabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[birdToSendTo];
+            if(!cabinetDrawerMap.ContainsKey(cabinetIndex))
+            {
+                Debug.LogError("ERROR[SendNextInQueue]: Could not find cabinet with identifier[" + cabinetIndex.ToString() + "]");
+                return;
+            }
             Dictionary<BirdName, List<Tuple<ChainData, int, int, BirdName>>> queuedChains = GameManager.Instance.gameFlowManager.queuedChains;
             if (queuedChains.ContainsKey(birdToSendTo) &&
                 queuedChains[birdToSendTo].Count > 0)
@@ -841,7 +855,12 @@ namespace ChickenScratch
                 cabinetDrawerMap[cabinetIndex].setAsReady(birdToSendTo);
                 CaseState caseState = CaseState.invalid;
 
-                TaskData queuedTaskData = firstQueuedChain.Item1.taskQueue[firstQueuedChain.Item3-1];
+                if(currentCase.taskQueue.Count <= currentRound - 1)
+                {
+                    Debug.LogError("ERROR[SendNextInQueue]: Task queue["+ currentCase.taskQueue.Count.ToString()+"] is not big enough to access previous round["+(currentRound-1).ToString()+"]");
+                    return;
+                }
+                TaskData queuedTaskData = currentCase.taskQueue[currentRound-1];
                 NetworkConnectionToClient birdConnection = SettingsManager.Instance.GetConnection(birdToSendTo);
                 switch (queuedTaskData.taskType)
                 {
@@ -881,11 +900,38 @@ namespace ChickenScratch
                 {
                     lastBird = birdToSendTo;
                 }
+                if(lastBird == BirdName.none)
+                {
+                    Debug.LogError("ERROR[SendNextInQueue]: Previous bird has not been set.");
+                    return;
+                }
 
                 //Randomly pick between prefix and noun then create the word category for the scanner
+                if(!currentCase.correctWordIdentifierMap.ContainsKey(1))
+                {
+                    Debug.LogError("ERROR[SendNextInQueue]: Correct word identifier map did not contain a prefix.");
+                    return;
+                }
+                if(!currentCase.correctWordIdentifierMap.ContainsKey(2))
+                {
+                    Debug.LogError("ERROR[SendNextInQueue]: Correct word identifier map did not contain a noun.");
+                    return;
+                }
                 WordCategoryData wordCategory = new WordCategoryData();
-                wordCategory.prefixCategory = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[1]).category;
-                wordCategory.nounCategory = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[2]).category;
+                CaseWordData prefix = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[1]);
+                if(prefix == null)
+                {
+                    Debug.LogError("ERROR[SendNextInQueue]: Prefix could not be isolated for identifier[" + currentCase.correctWordIdentifierMap[1] + "]");
+                    return;
+                }
+                CaseWordData noun = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[2]);
+                if(noun == null)
+                {
+                    Debug.LogError("ERROR[SendNextInQueue]: Noun could not be isolated for identifier[" + currentCase.correctWordIdentifierMap[2] + "]");
+                    return;
+                }
+                wordCategory.prefixCategory = prefix.category;
+                wordCategory.nounCategory = noun.category;
 
                 FolderUpdateData folderUpdateData = new FolderUpdateData()
                 {
@@ -926,8 +972,14 @@ namespace ChickenScratch
                 newChain = caseMap[caseID];
             }
             newChain.identifier = caseID;
+
+            if(!cabinetDrawerMap.ContainsKey(cabinetIndex))
+            {
+                Debug.LogError("ERROR[StartChoiceCaseDrawing]: Could not isolate cabinet index["+cabinetIndex.ToString()+"]");
+                return;
+            }
             cabinetDrawerMap[cabinetIndex].currentChainData = newChain;
-            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
             if(playerBird == null)
             {
                 Debug.LogError("Could not start choice case drawing because player bird["+SettingsManager.Instance.birdName.ToString()+"] has not been mapped in the Colour Manager.");
@@ -947,6 +999,11 @@ namespace ChickenScratch
 
         private void SubmitDrawing()
         {
+            if(!cabinetDrawerMap.ContainsKey(playerCabinetIndex))
+            {
+                Debug.LogError("ERROR[SubmitDrawing]: Could not find matching cabinet["+playerCabinetIndex.ToString()+"]");
+                return;
+            }
             ChainData selectedCase = cabinetDrawerMap[playerCabinetIndex].currentChainData;
             DrawingData newDrawing;
             int currentRoundIndex = currentRound;
@@ -991,6 +1048,11 @@ namespace ChickenScratch
 
         public void ShowCaseChoices(List<CaseChoiceNetData> choices)
         {
+            if(choices.Count < 3)
+            {
+                Debug.LogError("ERROR[ShowCaseChoices]: Not enough choices["+choices.Count.ToString()+"] were provided.");
+                return;
+            }
             caseChoicePanel.SetChoices(choices[0], choices[1], choices[2]);
         }
 
@@ -1100,8 +1162,11 @@ namespace ChickenScratch
             {
                 return;
             }
-
-            GetBirdArm(inBirdName).targetPosition = inPosition;
+            BirdArm birdArm = GetBirdArm(inBirdName);
+            if(birdArm != null)
+            {
+                birdArm.targetPosition = inPosition;
+            }
         }
 
         public void SendEmptyDrawingToClient(int caseID, int round, BirdName nextPlayer, BirdName author)
@@ -1111,6 +1176,11 @@ namespace ChickenScratch
 
         public void SetInitialPrompt(int caseID, string prompt)
         {
+            if(!cabinetDrawerMap.ContainsKey(playerCabinetIndex))
+            {
+                Debug.LogError("ERROR[SetInitialPrompt]: Could not find matching cabinet["+playerCabinetIndex.ToString()+"]");
+                return;
+            }
             CabinetDrawer selectedCabinet = cabinetDrawerMap[playerCabinetIndex];
             ChainData selectedCabinetData = new ChainData();
 
@@ -1202,6 +1272,15 @@ namespace ChickenScratch
 
         public void HandleEmptyDrawingToServer( BirdName author, int caseID, int round)
         {
+            if(!caseMap.ContainsKey(caseID))
+            {
+                Debug.LogError("ERROR[HandleEmptyDrawingToServer]: Missing case["+caseID.ToString()+"] from case map.");
+                return;
+            }
+            if (caseMap[caseID].playerOrder.Count <= (round+1))
+            {
+                Debug.LogError("ERROR[HandleEmptyDrawingToServer]: Player order[" + caseMap[caseID].playerOrder.Count.ToString() +"] for case["+caseID.ToString()+"] is too small for round["+(round+1).ToString()+"]");
+            }
             BirdName nextInQueue = caseMap[caseID].playerOrder[round + 1];
             if (!caseMap[caseID].drawings.ContainsKey(round))
             {

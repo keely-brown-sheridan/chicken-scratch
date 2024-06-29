@@ -40,7 +40,7 @@ namespace ChickenScratch
             AudioManager.Instance.PlaySoundVariant("sfx_game_int_garbage_confirm");
             controller.canDraw = true;
             clearDrawingPrompt.SetActive(false);
-            controller.clearVisuals();
+            controller.clearVisuals(false);
         }
     }
 }

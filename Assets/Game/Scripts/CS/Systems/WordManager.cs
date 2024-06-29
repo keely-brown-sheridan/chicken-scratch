@@ -76,6 +76,10 @@ namespace ChickenScratch
                     wordGroupData.isBaseWordGroup = false;
                     if (wordGroupData.wordType == WordGroupData.WordType.prefixes)
                     {
+                        if(allPrefixes.ContainsKey(wordGroupData.name))
+                        {
+                            continue;
+                        }
                         prefixQueue.AddRange(wordGroupData.words);
                         allPrefixes.Add(wordGroupData.name, wordGroupData);
                         if (SettingsManager.Instance.wordGroupNames.Contains(wordGroupData.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
@@ -85,6 +89,10 @@ namespace ChickenScratch
                     }
                     else if (wordGroupData.wordType == WordGroupData.WordType.nouns)
                     {
+                        if(allNouns.ContainsKey(wordGroupData.name))
+                        {
+                            continue;
+                        }
                         nounQueue.AddRange(wordGroupData.words);
                         allNouns.Add(wordGroupData.name, wordGroupData);
                         if (SettingsManager.Instance.wordGroupNames.Contains(wordGroupData.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
@@ -130,6 +138,11 @@ namespace ChickenScratch
             Dictionary<int, string> correctWordsMap = new Dictionary<int, string>();
 
             string correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, startingWordIdentifiers);
+            if(correctPrompt == "")
+            {
+                Debug.LogError("ERROR[PopulateStandardCaseWords]: Could not generate a correct prompt for the case.");
+                return;
+            }
 
             caseData.possibleWordsMap = possibleWordsMap;
             caseData.correctWordIdentifierMap = correctWordsMap;
@@ -143,6 +156,11 @@ namespace ChickenScratch
             Dictionary<int, string> correctWordsMap = new Dictionary<int, string>();
 
             caseChoiceNetData.correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, choice.startingWordIdentifiers);
+            if (caseChoiceNetData.correctPrompt == "")
+            {
+                Debug.LogError("ERROR[PopulateChoiceWords]: Could not generate a correct prompt for the case.");
+                return null;
+            }
 
             List<List<string>> possibleWords = new List<List<string>>();
             List<string> correctWords = new List<string>();
@@ -188,7 +206,17 @@ namespace ChickenScratch
                 {
                     case CaseWordTemplateData.CaseWordType.descriptor:
                         allPrefixCategories = allPrefixCategories.OrderBy(a => Guid.NewGuid()).ToList();
+                        if(allPrefixCategories.Count == 0)
+                        {
+                            Debug.LogError("ERROR[PopulateWordMaps]: There were no valid prefix categories.");
+                            return "";
+                        }
                         category = allPrefixCategories[0];
+                        if(!allPrefixes.ContainsKey(category))
+                        {
+                            Debug.LogError("ERROR[PopulateWordMaps]: allPrefixes did not contain category[" + category + "]");
+                            return "";
+                        }
                         prefixGroupData = allPrefixes[category];
                         prefixGroupData.Randomize();
                         possibleWordsMap.Add(currentWordIndex, new List<string>());
@@ -198,6 +226,7 @@ namespace ChickenScratch
                             if (prefixGroupData.wordCount <= iterator)
                             {
                                 Debug.LogError("Not enough prefixes[" + iterator.ToString() + "] in category[" + category + "].");
+                                return "";
                             }
                             currentWord = prefixGroupData.GetWord(iterator);
                             if (!usedPrefixes.Contains(currentWord.text))
@@ -215,6 +244,7 @@ namespace ChickenScratch
                             if (prefixGroupData.wordCount <= iterator)
                             {
                                 Debug.LogError("Not enough prefixes[" + iterator.ToString() + "] in category[" + category + "].");
+                                return "";
                             }
                             currentWord = prefixGroupData.GetWord(iterator);
                             if (!usedPrefixes.Contains(currentWord.text) &&
@@ -238,7 +268,17 @@ namespace ChickenScratch
                         break;
                     case CaseWordTemplateData.CaseWordType.noun:
                         allNounCategories = allNounCategories.OrderBy(a => Guid.NewGuid()).ToList();
+                        if (allNounCategories.Count == 0)
+                        {
+                            Debug.LogError("ERROR[PopulateWordMaps]: There were no valid noun categories.");
+                            return "";
+                        }
                         category = allNounCategories[0];
+                        if (!allNouns.ContainsKey(category))
+                        {
+                            Debug.LogError("ERROR[PopulateWordMaps]: allNouns did not contain category[" + category + "]");
+                            return "";
+                        }
                         nounGroupData = allNouns[category];
                         nounGroupData.Randomize();
 
@@ -250,6 +290,7 @@ namespace ChickenScratch
                             if (nounGroupData.wordCount <= iterator)
                             {
                                 Debug.LogError("Could not map enough nouns from category: " + category + "[" + nounGroupData.wordCount.ToString() + "]");
+                                return "";
                             }
                             currentWord = nounGroupData.GetWord(iterator);
                             if (!usedNouns.Contains(currentWord.text))
@@ -280,7 +321,7 @@ namespace ChickenScratch
                             if (nounGroupData.wordCount <= iterator)
                             {
                                 Debug.LogError("Couldn't map a correct noun for a prompt, reached the end of possible options.");
-                                break;
+                                return "";
                             }
                         }
                         possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();
@@ -293,9 +334,31 @@ namespace ChickenScratch
 
                 currentWordIndex++;
             }
+            if(!correctWordIdentifiersMap.ContainsKey(1))
+            {
+                Debug.LogError("ERROR[PopulateWordMaps]: correctWordIdentifiersMap did not contain a prefix.");
+                return "";
+            }
+            if(!correctWordIdentifiersMap.ContainsKey(2))
+            {
+                Debug.LogError("ERROR[PopulateWordMaps]: correctWordIdentifiersMap did not contain a noun.");
+                return "";
+            }
+
             //Remove the last added white space from the correct prompt
             CaseWordData correctPrefix = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[1]);
             CaseWordData correctNoun = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[2]);
+            if(correctPrefix == null)
+            {
+                Debug.LogError("ERROR[PopulateWordMaps]: correctPrefix could not be found in the GameDataManager for identifier[" + correctWordIdentifiersMap[1] + "]");
+                return "";
+            }
+            if(correctNoun == null)
+            {
+                Debug.LogError("ERROR[PopulateWordMaps]: correctNoun could not be found in the GameDataManager for identifier[" + correctWordIdentifiersMap[2] + "]");
+                return "";
+            }
+
             correctPrompt = correctPrefix.value + " " + correctNoun.value;
             
 

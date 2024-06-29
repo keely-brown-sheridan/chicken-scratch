@@ -162,16 +162,24 @@ namespace ChickenScratch
 
             if (NetworkClient.isConnected && SettingsManager.Instance.currentSceneTransitionState == SettingsManager.SceneTransitionState.return_to_lobby_room)
             {
+                AudioManager.Instance.PlaySound("LobbyMusic");
+                roomListingsObject.SetActive(true);
                 //We're already connected to a game so we should load up the lobby page
                 LoadLobbyFromGame();
             }
             else if (SettingsManager.Instance.currentSceneTransitionState == SettingsManager.SceneTransitionState.return_to_room_listings)
             {
+                AudioManager.Instance.PlaySound("LobbyMusic");
                 SkipIntro();
                 roomListingsObject.SetActive(true);
                 RoomListingsPlayerNameText.text = "User: \n" + SettingsManager.Instance.playerName;
                 SettingsManager.Instance.UpdateSetting("user_name", SettingsManager.Instance.playerName);
                 SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.invalid;
+            }
+            else
+            {
+                AudioManager.Instance.PlaySound("SplashMusic");
+                AudioManager.Instance.PlaySound("sfx_lobby_amb_outdoor");
             }
 
             stickiesButton.Initialize(SettingsManager.Instance.GetSetting("stickies", true));
@@ -730,7 +738,7 @@ namespace ChickenScratch
             //If this is the current player's bird
             if (playerName == SettingsManager.Instance.playerName)
             {
-                Bird selectedBird = ColourManager.Instance.GetBird(birdName);
+                BirdData selectedBird = GameDataManager.Instance.GetBird(birdName);
                 if(selectedBird == null)
                 {
                     Debug.LogError("Could not set face sprite for selected bird because player bird["+birdName.ToString()+"] is not mapped in the Colour Manager.");

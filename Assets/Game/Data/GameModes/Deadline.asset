@@ -53,9 +53,10 @@ MonoBehaviour:
   - Telephone
   - TopBottom
   - Quick Copy
-  scoreModifierDecrement: 0.25
   casesRemaining: 3
   contributionTaskRatio: 0.5
   description: 
-  totalGameTime: 60
+  totalGameTime: 300
   maxDays: 3
+  hasAccusationRound: 0
+  rolesToDistribute: []

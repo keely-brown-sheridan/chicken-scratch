@@ -169,6 +169,8 @@ namespace ChickenScratch
 
         public override void Show()
         {
+            GameManager.Instance.playerFlowManager.slidesRound.UpdatePreviewBird(ColourManager.BirdName.none);
+            GameManager.Instance.playerFlowManager.slidesRound.ShowCaseDetails();
             base.Show();
             foreach(SummarySlideSection summarySection in summarySections)
             {

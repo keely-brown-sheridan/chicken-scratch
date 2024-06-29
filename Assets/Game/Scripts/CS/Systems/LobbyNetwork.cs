@@ -41,8 +41,8 @@ namespace ChickenScratch
         {
 
             //Screen.fullScreen = true;
-            AudioManager.Instance.PlaySound("SplashMusic");
-            AudioManager.Instance.PlaySound("sfx_lobby_amb_outdoor");
+            
+            
             if (SteamManager.Initialized)
             {
                 string name = SteamFriends.GetPersonaName();
@@ -119,7 +119,8 @@ namespace ChickenScratch
             MenuLobbyButtons.Instance.PlayerListings.Set(playerListingData);
             foreach(PlayerListingNetData playerListing in playerListingData)
             {
-                if(playerListing.selectedBird != ColourManager.BirdName.none)
+                if(playerListing.selectedBird != ColourManager.BirdName.none && 
+                    MenuLobbyButtons.Instance.PlayerIdentificationMap.ContainsKey(playerListing.selectedBird))
                 {
                     MenuLobbyButtons.Instance.PlayerIdentificationMap[playerListing.selectedBird].Select(playerListing.playerName);
                 }

@@ -16,6 +16,8 @@ MonoBehaviour:
   itemName: Calculator
   itemDescription: Track birdbucks earned by all players during the day..
   storeBGColour: {r: 0.6702583, g: 0.6367924, b: 1, a: 1}
-  cost: 12
+  cost: 4
   itemImagePrefab: {fileID: 8372909107816364492, guid: f8f4069e567f93d458ebc59ff4d35d1c,
     type: 3}
+  isSinglePurchase: 0
+  index: 0

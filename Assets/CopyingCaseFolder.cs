@@ -45,7 +45,7 @@ namespace ChickenScratch
         public override void Hide()
         {
             base.Hide();
-            drawingBoard.clearVisuals();
+            drawingBoard.clearVisuals(true);
             HidePreviousDrawings();
             caseWordCategoryVisual.Hide();
         }

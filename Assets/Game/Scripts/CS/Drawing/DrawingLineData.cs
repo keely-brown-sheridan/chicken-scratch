@@ -20,6 +20,7 @@ namespace ChickenScratch
         public float lineSize = 0.15f;
         public BirdName author = BirdName.none;
         public List<Vector3> positions = new List<Vector3>();
+        public bool locked = false;
 
         public List<Vector3> GetPositions()
         {

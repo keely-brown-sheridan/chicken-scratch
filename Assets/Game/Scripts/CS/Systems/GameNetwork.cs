@@ -53,6 +53,18 @@ namespace ChickenScratch
 
         public void Disconnected_ReturnToRooms()
         {
+            if(NetworkServer.active || NetworkClient.isConnected)
+            {
+                if (SettingsManager.Instance.isHost)
+                {
+                    NetworkManager.singleton.StopHost();
+                }
+                else
+                {
+                    NetworkManager.singleton.StopClient();
+                }
+            }
+
             SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_room_listings;
             SettingsManager.Instance.disconnected = true;
             Cursor.visible = true;

@@ -29,14 +29,7 @@ namespace ChickenScratch
         public Material stampBorderGhostMaterial;
         public Material eraseGhostMaterial;
 
-        public Bird GetBird(BirdName birdName)
-        {
-            if(birdMap.ContainsKey(birdName))
-            {
-                return birdMap[birdName];
-            }
-            return null;
-        }
+        
 
         void Awake()
         {
@@ -71,6 +64,8 @@ namespace ChickenScratch
         public Vector3 birdHandWidthScaling;
         public float birdHandRotationAdjustment;
         public GameObject slidesBirdPrefab;
+        public GameObject storePlayerBirdArmPrefab;
+        public GameObject storeBirdArmPrefab;
         public string birdSoundName;
     }
 

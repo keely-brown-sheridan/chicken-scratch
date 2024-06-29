@@ -48,7 +48,7 @@ namespace ChickenScratch
             {
                 drawingFolderRenderer.color = inFolderColour;
             }
-            Bird playerBird = ColourManager.Instance.GetBird(SettingsManager.Instance.birdName);
+            BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
             if(playerBird == null)
             {
                 Debug.LogError("Could not map colours for the folder renderers because bird["+SettingsManager.Instance.birdName+"] does not exist in the ColourManager.");

@@ -40,7 +40,7 @@ namespace ChickenScratch
         {
             selectedBirdName = inBirdName;
             if (inBirdName == ColourManager.BirdName.none) return;
-            Bird selectedBird = ColourManager.Instance.GetBird(inBirdName);
+            BirdData selectedBird = GameDataManager.Instance.GetBird(inBirdName);
             if(selectedBird == null)
             {
                 Debug.LogError("Could not change player bird for listing because selected bird[] is not mapped in the ColourManager.");

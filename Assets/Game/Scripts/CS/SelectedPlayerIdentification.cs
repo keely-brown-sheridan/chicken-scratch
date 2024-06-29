@@ -29,7 +29,7 @@ namespace ChickenScratch
         {
             _cardBirdName = inBirdName;
             _playerName = inPlayerName;
-            Bird playerBird = ColourManager.Instance.GetBird(_cardBirdName);
+            BirdData playerBird = GameDataManager.Instance.GetBird(_cardBirdName);
             if(playerBird == null)
             {
                 Debug.LogError("Could not initialize the selected player identification because the player bird["+_cardBirdName.ToString()+"] has not been mapped in the Colour Manager.");

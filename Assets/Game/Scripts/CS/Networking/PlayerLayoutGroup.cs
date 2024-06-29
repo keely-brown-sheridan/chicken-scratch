@@ -25,7 +25,13 @@ namespace ChickenScratch
 
         public void PlayerJoinedRoom(string playerID, string nickName, ColourManager.BirdName selectedBird = ColourManager.BirdName.none)
         {
+
             PlayerLeftRoom(playerID, nickName);
+            if (MenuLobbyButtons.Instance.PlayerListingMap.ContainsKey(playerID))
+            {
+                Debug.LogError("ERROR[PlayerJoinedRoom]: A player with identifier[" + playerID + "] has already joined the room.");
+                return;
+            }
 
             GameObject playerListingObj = GameObject.Instantiate(PlayerListingPrefab);
             playerListingObj.transform.SetParent(transform, false);
@@ -35,6 +41,7 @@ namespace ChickenScratch
             playerListing.ChangePlayerBird(selectedBird);
 
             PlayerListings.Add(playerListing);
+            
             MenuLobbyButtons.Instance.PlayerListingMap.Add(playerID, playerListing);
         }
 

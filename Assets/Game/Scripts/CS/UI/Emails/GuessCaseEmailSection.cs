@@ -21,7 +21,7 @@ namespace ChickenScratch
         private Color correctColour, incorrectColour;
         public void Initialize(Dictionary<int,string> correctWordIdentifiersMap, GuessData guessData, PlayerRatingData ratingData)
         {
-            Bird guessingBird = ColourManager.Instance.GetBird(guessData.author);
+            BirdData guessingBird = GameDataManager.Instance.GetBird(guessData.author);
             if(guessingBird == null)
             {
                 Debug.LogError("Could not initialize the guess case email section because the guess bird["+ guessData.author.ToString()+"] was not mapped in the Colour Manager.");

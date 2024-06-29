@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace ChickenScratch
 {
@@ -11,5 +12,26 @@ namespace ChickenScratch
     public class MarkerStoreItemData : StoreItemData
     {
         public Color markerColour;
+
+        public MarkerStoreItemData()
+        {
+
+        }
+
+        public MarkerStoreItemData(MarkerStoreItemNetData netData)
+        {
+            MarkerStoreItemData gameData = (MarkerStoreItemData)GameDataManager.Instance.GetMatchingStoreItem(netData.itemType);
+            if(gameData != null)
+            {
+                markerColour = netData.markerColour;
+                itemType = gameData.itemType;
+                itemDescription = gameData.itemDescription;
+                cost = gameData.cost;
+                itemImagePrefab = gameData.itemImagePrefab;
+                storeBGColour = netData.bgColour;
+                itemName = gameData.itemName;
+                index = netData.index;
+            }
+        }
     }
 }

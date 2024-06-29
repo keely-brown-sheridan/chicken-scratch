@@ -1343,7 +1343,7 @@ TextureImporter:
         width: 44
         height: 57
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1364,7 +1364,7 @@ TextureImporter:
         width: 44
         height: 57
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1385,7 +1385,7 @@ TextureImporter:
         width: 44
         height: 57
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1393,6 +1393,27 @@ TextureImporter:
       bones: []
       spriteID: 16a6457759b852149a7107627515df8d
       internalID: -1545905494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_box
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 843
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 7, z: 7, w: 2}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7453bd6cc4e88a24eb2bdb9b48cb413a
+      internalID: -525558699
       vertices: []
       indices: 
       edges: []
@@ -1426,6 +1447,7 @@ TextureImporter:
       emoji_joy: -912837065
       emoji_love: 1539307112
       spritesheet_23: 50173216
+      button_box: -525558699
       music: 5047685518959421019
       folder_fail: -4586674186610644965
       spritesheet_1: -1893928366

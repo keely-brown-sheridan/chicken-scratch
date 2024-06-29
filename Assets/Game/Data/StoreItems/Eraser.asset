@@ -16,6 +16,8 @@ MonoBehaviour:
   itemName: Eraser
   itemDescription: Cover up unwanted parts of your drawings.
   storeBGColour: {r: 1, g: 0.8352942, b: 0.8941177, a: 1}
-  cost: 15
+  cost: 8
   itemImagePrefab: {fileID: 3896667047171721903, guid: 5791d7ddb04611748a6f4ce2d5c7d898,
     type: 3}
+  isSinglePurchase: 0
+  index: 0

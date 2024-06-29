@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761df59f060da4b4eb7c2a4e7cfe968b, type: 3}
+  m_Name: Bi_Pink
+  m_EditorClassIdentifier: 
+  faceSprite: {fileID: 26889720, guid: 4fb1e33840ffdad43aa6e9fb94c63129, type: 3}
+  borderedFaceSprite: {fileID: 654402173, guid: 0de40ddce255c1849b91a3b9a96c6983,
+    type: 3}
+  cabinetFaceSprite: {fileID: 235414556, guid: 50b9a2a1d23b7444c8119d9166fe3ed8, type: 3}
+  scannerFaceSprite: {fileID: -317336227, guid: 0de40ddce255c1849b91a3b9a96c6983,
+    type: 3}
+  armSprite: {fileID: 21300000, guid: 3ffecc8a625ceb54b8c41b2a878bd70b, type: 3}
+  colour: {r: 1, g: 0.44705883, b: 0.6117647, a: 1}
+  bgColour: {r: 1, g: 0.7764706, b: 0.84313726, a: 1}
+  folderColour: {r: 1, g: 0.7764706, b: 0.84313726, a: 1}
+  birdName: 9
+  material: {fileID: 2100000, guid: 547024d869e3a5940a42295e9909da6a, type: 2}
+  bgLineMaterial: {fileID: 2100000, guid: ff6096fb32c33d04d930a6681a9c99f3, type: 2}
+  ghostMaterial: {fileID: 2100000, guid: 6a51d316855aec84e973ef8278ba7746, type: 2}
+  ghostBGMaterial: {fileID: 2100000, guid: 2679c9c0165db65448b154d8d46ed055, type: 2}
+  cursor: {fileID: 2800000, guid: c495594f9125a5442b4a862c6c9296fa, type: 3}
+  featherCursor: {fileID: 0}
+  handCursor: {fileID: 0}
+  armOutlineSprite: {fileID: 21300000, guid: 1b896cd3e49f17141ae29381279b4686, type: 3}
+  accusationBodySprite: {fileID: 1883719474505725102, guid: 44e3fe4171459724b97af2c4478b1dcb,
+    type: 3}
+  accusationArmSprite: {fileID: 694023135, guid: 0c6b0ebe825677b4685d6f07888ea739,
+    type: 3}
+  accusationHandSprite: {fileID: -1769078789, guid: 0c6b0ebe825677b4685d6f07888ea739,
+    type: 3}
+  peanutGallerySprite: {fileID: -1810609516, guid: 5c458994689b5724eb310690d025265d,
+    type: 3}
+  accuseBirdPrefab: {fileID: 2266899254682883751, guid: 487aaaa9ad7f2de4f923ebc802e7d4d7,
+    type: 3}
+  accuseArmPrefab: {fileID: 5683552191413973981, guid: 0336114bbd3117442be9308379effa67,
+    type: 3}
+  birdHandWidthScaling: {x: 1, y: 1, z: 1}
+  birdHandRotationAdjustment: -3.689
+  slidesBirdPrefab: {fileID: 3769704699711855340, guid: 3ade7bbcc810b554496105bc19989d43,
+    type: 3}
+  storePlayerBirdArmPrefab: {fileID: 6810546133748858195, guid: aad50c1db88a95b47931119c45077c50,
+    type: 3}
+  storeBirdArmPrefab: {fileID: 7588114742910814828, guid: 886a09844a2679a41a3776ae586546a8,
+    type: 3}
+  birdSoundName: sfx_scan_int_card_flamingo

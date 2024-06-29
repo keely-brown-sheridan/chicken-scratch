@@ -22,20 +22,19 @@ MonoBehaviour:
   penalty: 0
   startingScoreModifier: 1.5
   maxScoreModifier: 1.5
-  modifierDecrement: 0.25
+  modifierDecrement: 0.2
   taskFalloff: 0
   colour: {r: 1, g: 0.3915094, b: 0.3915094, a: 1}
   startingWordIdentifiers:
-  - prefix
-  - noun
+  - easy-prefix
+  - easy-noun
   selectionFrequency: 1
   taskTimingData:
   - taskType: 0
-    duration: 60
+    duration: 30
   - taskType: 3
-    duration: 60
+    duration: 30
   - taskType: 5
     duration: 60
-  queuedTaskSprites: 00000000000000000000000002000000
   description: Your canvas will only be a third of the space. Other players will
     add to it.
