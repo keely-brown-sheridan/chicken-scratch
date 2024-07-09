@@ -18,6 +18,17 @@ namespace ChickenScratch
         public bool guessRoundStarted = false;
         public bool wordIsGuessed = false;
         public float totalDistanceMoved = 0.0f;
+        public int totalSpent = 0;
+        public int totalItemsPurchased = 0;
+        public int totalCoffeeItemsPurchased = 0;
+        public float timeChoosing = 0f;
+        public int casesStarted = 0;
+        public bool alwaysChoseHighestDifficulty = true;
+        public bool alwaysChoseLowestDifficulty = true;
+        public int storeRestocks = 0;
+        public bool restockedEmptyShop = false;
+        public bool hasLostModifier = false;
+        public List<string> uniqueCaseChoiceIdentifiers = new List<string>();
 
         public List<BirdName> playersWhoSubmittedAnEmptyRound = new List<BirdName>();
 
@@ -53,17 +64,36 @@ namespace ChickenScratch
             {
                 Initialize();
             }
+            PlayerStatData statData = new PlayerStatData()
+            {
+                pencilUsed = drawingToolUsageMap[DrawingToolType.pencil], 
+                colourMarkerUsed = drawingToolUsageMap[DrawingToolType.colour_marker], 
+                lightMarkerUsed = drawingToolUsageMap[DrawingToolType.light_marker],                                               
+                eraserUsed = drawingToolUsageMap[DrawingToolType.eraser], 
+                birdName = SettingsManager.Instance.birdName, 
+                timeInCabinetArea = timeInBirdArea, 
+                guessingTime = timeInGuessingRound, 
+                stickyCount = stickyClickCount,
+                drawingsTrashed = drawingsTrashed, 
+                numberOfPlayersLiked = playersLiked.Count, 
+                numberOfLikesGiven = numberOfLikesGiven, 
+                usedStickies = SettingsManager.Instance.GetSetting("stickies", false), 
+                totalDistanceMoved = totalDistanceMoved,
+                totalSpent = totalSpent,
+                totalItemsPurchased = totalItemsPurchased,
+                totalUnspent = GameManager.Instance.playerFlowManager.storeRound.currentMoney,
+                totalCoffeeItemsPurchased = totalCoffeeItemsPurchased,
+                timeChoosing = timeChoosing,
+                casesStarted = casesStarted,
+                alwaysChoseHighestDifficulty = alwaysChoseHighestDifficulty,
+                alwaysChoseLowestDifficulty = alwaysChoseLowestDifficulty,
+                storeRestocks = storeRestocks,
+                restockedEmptyShop = restockedEmptyShop,
+                hasLostModifier = hasLostModifier,
+                numberOfUniqueCases = uniqueCaseChoiceIdentifiers.Count
+            };
 
-            GameManager.Instance.gameDataHandler.CmdPlayerStats(drawingToolUsageMap[DrawingToolType.pencil], drawingToolUsageMap[DrawingToolType.colour_marker], drawingToolUsageMap[DrawingToolType.light_marker],
-                                                                drawingToolUsageMap[DrawingToolType.eraser], SettingsManager.Instance.birdName, timeInBirdArea, timeInGuessingRound, stickyClickCount,
-                                                                drawingsTrashed, playersLiked.Count, numberOfLikesGiven, SettingsManager.Instance.GetSetting("stickies", false), totalDistanceMoved);
-        }
-
-        public void SetServerPlayerStats()
-        {
-            bool usedStickies = SettingsManager.Instance.GetSetting("stickies", false);
-            AccoladesStatManager statManager = GameManager.Instance.playerFlowManager.accoladesRound.playerStatsManager;
-            statManager.AddPlayersideStats(SettingsManager.Instance.birdName, timeInBirdArea, timeInGuessingRound, stickyClickCount, drawingsTrashed, drawingToolUsageMap, playersLiked.Count, numberOfLikesGiven, usedStickies, totalDistanceMoved);
+            GameManager.Instance.gameDataHandler.CmdPlayerStats(statData);
         }
 
         public void AddToReactionCounter(BirdName player, string reactionName, int round)

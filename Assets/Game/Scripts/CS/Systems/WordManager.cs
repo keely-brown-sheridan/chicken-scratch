@@ -243,8 +243,7 @@ namespace ChickenScratch
                         {
                             if (prefixGroupData.wordCount <= iterator)
                             {
-                                Debug.LogError("Not enough prefixes[" + iterator.ToString() + "] in category[" + category + "].");
-                                return "";
+                                break;
                             }
                             currentWord = prefixGroupData.GetWord(iterator);
                             if (!usedPrefixes.Contains(currentWord.text) &&
@@ -258,12 +257,33 @@ namespace ChickenScratch
                             }
 
                             iterator++;
-                            if (prefixGroupData.wordCount <= iterator)
+                        }
+
+                        
+                        if(correctWordIdentifiersMap[currentWordIndex] == "")
+                        {
+                            iterator = 0;
+                            //Try again without considering difficulty
+                            while (correctWordIdentifiersMap[currentWordIndex] == "")
                             {
-                                Debug.LogError("Couldn't map a correct prefix for a prompt, reached the end of possible options.");
-                                break;
+                                if (prefixGroupData.wordCount <= iterator)
+                                {
+                                    Debug.LogError("Failed to generate correct prefix before running out of options.");
+                                    break;
+                                }
+                                currentWord = prefixGroupData.GetWord(iterator);
+                                if (!usedPrefixes.Contains(currentWord.text))
+                                {
+                                    usedPrefixes.Add(currentWord.text);
+                                    totalDifficulty += currentWord.difficulty;
+                                    correctWordIdentifiersMap[currentWordIndex] = ("prefixes-" + category + "-" + currentWord.text);
+                                    possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                }
+
+                                iterator++;
                             }
                         }
+
                         possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();
                         break;
                     case CaseWordTemplateData.CaseWordType.noun:
@@ -318,10 +338,31 @@ namespace ChickenScratch
                             }
 
                             iterator++;
-                            if (nounGroupData.wordCount <= iterator)
+                            
+                        }
+                        if (correctWordIdentifiersMap[currentWordIndex] == "")
+                        {
+                            //Try again without considering difficulty
+                            iterator = 0;
+                            while (correctWordIdentifiersMap[currentWordIndex] == "")
                             {
-                                Debug.LogError("Couldn't map a correct noun for a prompt, reached the end of possible options.");
-                                return "";
+                                if (nounGroupData.wordCount <= iterator)
+                                {
+                                    Debug.LogError("Failed to generate correct noun before running out of options.");
+                                    break;
+                                }
+                                currentWord = nounGroupData.GetWord(iterator);
+                                bool isLastWord = caseWords[caseWords.Count - 1] == startingWord;
+                                if (!usedNouns.Contains(currentWord.text))
+                                {
+                                    usedNouns.Add(currentWord.text);
+                                    totalDifficulty += currentWord.difficulty;
+                                    correctWordIdentifiersMap[currentWordIndex] = ("nouns-" + category + "-" + currentWord.text);
+                                    possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                }
+
+                                iterator++;
+                                
                             }
                         }
                         possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();

@@ -68,9 +68,15 @@ namespace ChickenScratch
             
         }
 
+        public void Submit()
+        {
+            folderStamp.onStampComplete.AddListener(Hide);
+            folderStamp.StampFile();
+        }
+
         public virtual void Hide()
         {
-            folderStamp.SetAsResting();
+            folderStamp.onStampComplete.RemoveListener(Hide);
             formAnimator.SetBool("Slide", false);
             isActive = false;
             isStampActive = false;
@@ -95,6 +101,16 @@ namespace ChickenScratch
         public float GetScoreModifier()
         {
             return caseModifierVisual.GetFinalModifierValue();
+        }
+
+        public void RegisterToStampComplete(UnityAction action)
+        {
+            folderStamp.onStampComplete.AddListener(action);
+        }
+
+        public void DeregisterToStampComplete(UnityAction action)
+        {
+            folderStamp.onStampComplete.RemoveListener(action);
         }
     }
 }

@@ -25,14 +25,18 @@ namespace ChickenScratch
         public CaseDeliveryMode caseDeliveryMode = CaseDeliveryMode.queue;
 
         public CaseTemplateData baseTemplateData;
-        public List<string> caseChoiceIdentifiers = new List<string>();
+        public List<string> baseUnlockedChoiceIdentifiers = new List<string>();
+        public List<string> baseChoiceIdentifierPool = new List<string>();
 
         public int casesRemaining;
         public float contributionTaskRatio;
 
         public string description;
-        public float totalGameTime;
-        public int maxDays;
+        public float baseGameTime;
+        public float dailyGameTimeRamp;
+
+        public int baseRestockCost;
+        public int itemRestockCost;
 
         public bool hasAccusationRound;
         public List<RoleData> rolesToDistribute = new List<RoleData>();

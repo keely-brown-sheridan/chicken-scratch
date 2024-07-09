@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Steamworks;
 using Mirror;
+using static ChickenScratch.ColourManager;
 
 namespace ChickenScratch
 {
@@ -40,7 +41,7 @@ namespace ChickenScratch
         void Start()
         {
 
-            //Screen.fullScreen = true;
+            Screen.fullScreen = false;
             
             
             if (SteamManager.Initialized)
@@ -74,13 +75,18 @@ namespace ChickenScratch
         public void OnCreatedSteamRoom(LobbyCreated_t pCallback)
         {
             SettingsManager.Instance.currentRoomID = new CSteamID(pCallback.m_ulSteamIDLobby);
+            SteamMatchmaking.SetLobbyData(SettingsManager.Instance.currentRoomID, "isPrivate", MenuLobbyButtons.Instance.privacyToggle.isOn.ToString());
  
             SteamMatchmaking.SetLobbyData(SettingsManager.Instance.currentRoomID, "roomName", MenuLobbyButtons.Instance.createRoomInputField.text);
-            
+
+            SettingsManager.Instance.GenerateRoomCode();
+            SteamMatchmaking.SetLobbyData(SettingsManager.Instance.currentRoomID, "roomCode", SettingsManager.Instance.roomCode);
+
             CSteamID hostID = SteamMatchmaking.GetLobbyOwner(SettingsManager.Instance.currentRoomID);
             NetworkManager.singleton.networkAddress = hostID.ToString();
             CSNetworkManager.singleton.StartHost();
             SteamMatchmaking.SetLobbyData(new CSteamID(pCallback.m_ulSteamIDLobby), "HostAddress", SteamUser.GetSteamID().ToString());
+            
             inLobby = true;
 
         }
@@ -107,8 +113,8 @@ namespace ChickenScratch
             roomIDs = new List<CSteamID>();
             for (int i = 0; i < pCallback.m_nLobbiesMatching; i++)
             {
-                roomIDs.Add(Steamworks.SteamMatchmaking.GetLobbyByIndex(i));
-                
+                CSteamID lobbyIndex = Steamworks.SteamMatchmaking.GetLobbyByIndex(i);
+                roomIDs.Add(lobbyIndex);
             }
 
             MenuLobbyButtons.Instance.UpdateRoomListings(roomIDs);
@@ -117,12 +123,28 @@ namespace ChickenScratch
         public void UpdateClientPlayerListings(List<PlayerListingNetData> playerListingData)
         {
             MenuLobbyButtons.Instance.PlayerListings.Set(playerListingData);
+            List<ColourManager.BirdName> selectedBirds = new List<ColourManager.BirdName>();
             foreach(PlayerListingNetData playerListing in playerListingData)
             {
                 if(playerListing.selectedBird != ColourManager.BirdName.none && 
                     MenuLobbyButtons.Instance.PlayerIdentificationMap.ContainsKey(playerListing.selectedBird))
                 {
+                    if(playerListing.playerName == SettingsManager.Instance.playerName)
+                    {
+                        SettingsManager.Instance.birdName = playerListing.selectedBird;
+                        MenuLobbyButtons.Instance.selectionInstructionsObject.SetActive(false);
+                    }
+                    SettingsManager.Instance.AssignBirdToPlayer(playerListing.selectedBird, playerListing.playerName);
+                    selectedBirds.Add(playerListing.selectedBird);
                     MenuLobbyButtons.Instance.PlayerIdentificationMap[playerListing.selectedBird].Select(playerListing.playerName);
+                }
+            }
+            foreach(KeyValuePair<ColourManager.BirdName, PlayerIdentification> playerID in MenuLobbyButtons.Instance.PlayerIdentificationMap)
+            {
+                if(!selectedBirds.Contains(playerID.Key))
+                {
+                    SettingsManager.Instance.DeassignBirdToPlayer(playerID.Key);
+                    playerID.Value.Deselect();
                 }
             }
         }
@@ -144,23 +166,14 @@ namespace ChickenScratch
             MenuLobbyButtons.Instance.roomCodeText.gameObject.SetActive(true);
             MenuLobbyButtons.Instance.JoinedRoom();
 
-            if(!SettingsManager.Instance.isHost)
+            if (!SettingsManager.Instance.isHost)
             {
-                Text startGameButtonText = MenuLobbyButtons.Instance.LobbyStartGameBtn.GetComponentInChildren<Text>();
-                if (startGameButtonText)
-                {
-                    startGameButtonText.gameObject.SetActive(false);
-                }
+                
                 if (SteamManager.Initialized)
                 {
                     string currentCode = SteamMatchmaking.GetLobbyData(SettingsManager.Instance.currentRoomID, "roomCode");
                     SettingsManager.Instance.SetRoomCode(currentCode);
                 }
-            }
-            else
-            {
-                SettingsManager.Instance.GenerateRoomCode();
-                SteamMatchmaking.SetLobbyData(SettingsManager.Instance.currentRoomID, "roomCode", SettingsManager.Instance.roomCode);
             }
 
             inLobby = true;
@@ -172,7 +185,7 @@ namespace ChickenScratch
         public bool CreateRoom(string roomName, bool isPrivate)
         {
             Debug.Log("Creating room.");
-            ELobbyType lobbyType = isPrivate ? ELobbyType.k_ELobbyTypePrivate : ELobbyType.k_ELobbyTypePublic;
+            ELobbyType lobbyType = isPrivate ? ELobbyType.k_ELobbyTypePublic : ELobbyType.k_ELobbyTypePublic;
             //Number of players?
             SteamAPICall_t createLobbyResult = Steamworks.SteamMatchmaking.CreateLobby(lobbyType, 8);
 
@@ -187,7 +200,7 @@ namespace ChickenScratch
                 string currentCode = SteamMatchmaking.GetLobbyData(roomID, "roomCode");
                 if (currentCode == roomCode)
                 {
-                    Debug.Log("Trying to join lobby.");
+                    Debug.LogError("Trying to join lobby.");
                     SteamMatchmaking.JoinLobby(roomID);
                     return;
                 }

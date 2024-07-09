@@ -15,7 +15,7 @@ namespace ChickenScratch
         private Text roleNameText;
 
         [SerializeField]
-        private Image birdFaceImage;
+        private BirdImage birdFaceImage;
 
         [SerializeField]
         private Image cardBackgroundImage;
@@ -32,7 +32,8 @@ namespace ChickenScratch
             playerNameText.color = playerBird.colour;
             roleNameText.text = roleName;
             roleNameText.color = roleColour;
-            birdFaceImage.sprite = playerBird.borderedFaceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(birdName);
+            birdFaceImage.Initialize(birdName, birdHat);
             cardBackgroundImage.color = playerBird.colour;
         }
     }

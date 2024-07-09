@@ -72,6 +72,7 @@ public class CaseModifierVisual : MonoBehaviour
         }
         else if (ratio < 0.5f && !hasCrossedThreshold)
         {
+            StatTracker.Instance.hasLostModifier = true;
             AudioManager.Instance.PlaySound(thresholdCrossSFXName);
             currentModifierValue -= modifierDecrement;
             modifierText.text = currentModifierValue.ToString("F2") + "x";

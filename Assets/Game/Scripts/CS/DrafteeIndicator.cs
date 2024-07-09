@@ -9,7 +9,7 @@ namespace ChickenScratch
     public class DrafteeIndicator : MonoBehaviour
     {
         [SerializeField]
-        private Image birdFaceImage;
+        private BirdImage birdFaceImage;
 
         public BirdName birdName;
 
@@ -22,7 +22,8 @@ namespace ChickenScratch
                 Debug.LogError("Could not set draftee indicator bird["+inBirdName.ToString()+"] because it is not mapped in the ColourManager.");
                 return;
             }
-            birdFaceImage.sprite = drafteeBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(birdName);
+            birdFaceImage.Initialize(birdName, birdHat);
         }
     }
 }

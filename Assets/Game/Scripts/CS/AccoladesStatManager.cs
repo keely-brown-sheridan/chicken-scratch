@@ -17,7 +17,7 @@ namespace ChickenScratch
         // Start is called before the first frame update
         void Start()
         {
-
+            ResetStatRoles();
         }
 
         // Update is called once per frame
@@ -26,21 +26,38 @@ namespace ChickenScratch
 
         }
 
-        public void AddPlayersideStats(BirdName player, float inTimeInCabinetArea, float inTimeGuessing, int inStickiesClicked, int inDrawingsTrashed, Dictionary<DrawingToolType, bool> inToolsUsageMap, int numberOfPlayersLiked, int numberOfLikesGiven, bool inUsedTutorial, float inTotalDistanceMoved)
+        public void AddPlayersideStats(PlayerStatData statsData)
         {
-            if (!playerStatsMap.ContainsKey(player))
+            Dictionary<DrawingController.DrawingToolType, bool> toolUsageMap = new Dictionary<DrawingController.DrawingToolType, bool>();
+            toolUsageMap.Add(DrawingController.DrawingToolType.pencil, statsData.pencilUsed);
+            toolUsageMap.Add(DrawingController.DrawingToolType.colour_marker, statsData.colourMarkerUsed);
+            toolUsageMap.Add(DrawingController.DrawingToolType.light_marker, statsData.lightMarkerUsed);
+            toolUsageMap.Add(DrawingController.DrawingToolType.eraser, statsData.eraserUsed);
+            if (!playerStatsMap.ContainsKey(statsData.birdName))
             {
-                playerStatsMap.Add(player, new PlayerStats());
+                playerStatsMap.Add(statsData.birdName, new PlayerStats());
             }
-            playerStatsMap[player].timeInCabinetArea = inTimeInCabinetArea;
-            playerStatsMap[player].timeInGuessingRound = inTimeGuessing;
-            playerStatsMap[player].clickedStickies = inStickiesClicked;
-            playerStatsMap[player].trashedDrawings = inDrawingsTrashed;
-            playerStatsMap[player].toolUsageMap = inToolsUsageMap;
-            playerStatsMap[player].numberOfPlayersLiked = numberOfPlayersLiked;
-            playerStatsMap[player].numberOfLikesGiven = numberOfLikesGiven;
-            playerStatsMap[player].usedTutorial = inUsedTutorial;
-            playerStatsMap[player].totalDistanceMoved = inTotalDistanceMoved;
+            playerStatsMap[statsData.birdName].timeInCabinetArea = statsData.timeInCabinetArea;
+            playerStatsMap[statsData.birdName].timeInGuessingRound = statsData.guessingTime;
+            playerStatsMap[statsData.birdName].clickedStickies = statsData.stickyCount;
+            playerStatsMap[statsData.birdName].trashedDrawings = statsData.drawingsTrashed;
+            playerStatsMap[statsData.birdName].toolUsageMap = toolUsageMap;
+            playerStatsMap[statsData.birdName].numberOfPlayersLiked = statsData.numberOfPlayersLiked;
+            playerStatsMap[statsData.birdName].numberOfLikesGiven = statsData.numberOfLikesGiven;
+            playerStatsMap[statsData.birdName].usedTutorial = statsData.usedStickies;
+            playerStatsMap[statsData.birdName].totalDistanceMoved = statsData.totalDistanceMoved;
+            playerStatsMap[statsData.birdName].totalSpent = statsData.totalSpent;
+            playerStatsMap[statsData.birdName].totalItemsPurchased = statsData.totalItemsPurchased;
+            playerStatsMap[statsData.birdName].totalCoffeeItemsPurchased = statsData.totalCoffeeItemsPurchased;
+            playerStatsMap[statsData.birdName].timeChoosing = statsData.timeChoosing;
+            playerStatsMap[statsData.birdName].casesStarted = statsData.casesStarted;
+            playerStatsMap[statsData.birdName].alwaysChoseHighestDifficulty = statsData.alwaysChoseHighestDifficulty;
+            playerStatsMap[statsData.birdName].alwaysChoseLowestDifficulty = statsData.alwaysChoseLowestDifficulty;
+            playerStatsMap[statsData.birdName].storeRestocks = statsData.storeRestocks;
+            playerStatsMap[statsData.birdName].restockedEmptyShop = statsData.restockedEmptyShop;
+            playerStatsMap[statsData.birdName].hasLostModifier = statsData.hasLostModifier;
+            playerStatsMap[statsData.birdName].numberOfUniqueCases = statsData.numberOfUniqueCases;
+            playerStatsMap[statsData.birdName].totalUnspent = statsData.totalUnspent;
 
             if (playerStatsMap.Count == SettingsManager.Instance.GetPlayerNameCount())
             {
@@ -53,6 +70,11 @@ namespace ChickenScratch
             Dictionary<BirdName, StatRole> statRoles = GetPlayerStatRoles();
             GameManager.Instance.gameDataHandler.RpcPlayerStatRolesWrapper(statRoles);
 
+        }
+
+        public void ResetStatRoles()
+        {
+            playerStatsMap.Clear();
         }
 
         public void InitializeStatRoles()
@@ -268,8 +290,78 @@ namespace ChickenScratch
             BirdName lowestClicker = BirdName.none;
             float mostDistanceArmMoved = 0.0f;
             BirdName mostArmMover = BirdName.none;
+
+            int mostSpent = 0;
+            BirdName biggestSpender = BirdName.none;
+            int mostPurchased = 0;
+            BirdName mostPurchaser = BirdName.none;
+            int mostUnspent = 0;
+            BirdName mostUnspenter = BirdName.none;
+            int mostCasesStarted = 0;
+            BirdName mostStarter = BirdName.none;
+            List<BirdName> caseParticipators = new List<BirdName>();
+            List<BirdName> coffeePurchasers = new List<BirdName>();
+            List<BirdName> hardestChoosers = new List<BirdName>();
+            List<BirdName> easiestChoosers = new List<BirdName>();
+            float mostTimeChoosing = 0f;
+            BirdName longestChooser = BirdName.none;
+            int mostRestocks = 0;
+            BirdName mostRestocker = BirdName.none;
+            List<BirdName> fullRestockers = new List<BirdName>();
+
             foreach (KeyValuePair<BirdName, PlayerStats> playerStat in playerStatsMap)
             {
+                if(playerStat.Value.totalSpent > mostSpent)
+                {
+                    mostSpent = playerStat.Value.totalSpent;
+                    biggestSpender = playerStat.Key;
+                }
+                if(playerStat.Value.totalItemsPurchased > mostPurchased)
+                {
+                    mostPurchased = playerStat.Value.totalItemsPurchased;
+                    mostPurchaser = playerStat.Key;
+                }
+                if(playerStat.Value.totalUnspent > mostUnspent)
+                {
+                    mostUnspent = playerStat.Value.totalUnspent;
+                    mostUnspenter = playerStat.Key;
+                }
+                if(playerStat.Value.casesStarted > mostCasesStarted)
+                {
+                    mostCasesStarted = playerStat.Value.casesStarted;
+                    mostStarter = playerStat.Key;
+                }
+                if(playerStat.Value.timeChoosing > mostTimeChoosing)
+                {
+                    mostTimeChoosing = playerStat.Value.timeChoosing;
+                    longestChooser = playerStat.Key;
+                }
+                if(playerStat.Value.storeRestocks > mostRestocks)
+                {
+                    mostRestocks = playerStat.Value.storeRestocks;
+                    mostRestocker = playerStat.Key;
+                }
+                if (playerStat.Value.numberOfUniqueCases >= 10)
+                {
+                    caseParticipators.Add(playerStat.Key);
+                }
+                if(playerStat.Value.totalCoffeeItemsPurchased >= 3)
+                {
+                    coffeePurchasers.Add(playerStat.Key);
+                }
+                if(playerStat.Value.alwaysChoseHighestDifficulty)
+                {
+                    hardestChoosers.Add(playerStat.Key);
+                }
+                if(playerStat.Value.alwaysChoseLowestDifficulty)
+                {
+                    easiestChoosers.Add(playerStat.Key);
+                }
+                if(playerStat.Value.restockedEmptyShop)
+                {
+                    fullRestockers.Add(playerStat.Key);
+                }
+
                 if (playerStat.Value.timeInGuessingRound < fastestGuessTime)
                 {
                     fastestGuessTime = playerStat.Value.timeInGuessingRound;
@@ -484,6 +576,51 @@ namespace ChickenScratch
             {
                 allRolesMap[mostArmMover].Add(statRoleMap[StatRole.StatRoleType.moved_arm_most_distance]);
             }
+            if(biggestSpender != BirdName.none)
+            {
+                allRolesMap[biggestSpender].Add(statRoleMap[StatRole.StatRoleType.biggest_spender]);
+            }
+            if(mostPurchaser != BirdName.none)
+            {
+                allRolesMap[mostPurchaser].Add(statRoleMap[StatRole.StatRoleType.most_purchaser]);
+            }
+            if(mostUnspenter != BirdName.none)
+            {
+                allRolesMap[mostUnspenter].Add(statRoleMap[StatRole.StatRoleType.most_unspent]);
+            }
+            if(mostStarter != BirdName.none)
+            {
+                allRolesMap[mostStarter].Add(statRoleMap[StatRole.StatRoleType.most_started_cases]);
+            }
+            if(longestChooser != BirdName.none)
+            {
+                allRolesMap[longestChooser].Add(statRoleMap[StatRole.StatRoleType.longest_chooser]);
+            }
+            if(mostRestocker != BirdName.none)
+            {
+                allRolesMap[mostRestocker].Add(statRoleMap[StatRole.StatRoleType.most_restocks]);
+            }
+
+            foreach(BirdName fullRestocker in fullRestockers)
+            {
+                allRolesMap[fullRestocker].Add(statRoleMap[StatRole.StatRoleType.full_restocker]);
+            }
+            foreach(BirdName caseParticipator in caseParticipators)
+            {
+                allRolesMap[caseParticipator].Add(statRoleMap[StatRole.StatRoleType.many_cases_participator]);
+            }
+            foreach(BirdName coffeePurchaser in coffeePurchasers)
+            {
+                allRolesMap[coffeePurchaser].Add(statRoleMap[StatRole.StatRoleType.coffee_purchaser]);
+            }
+            foreach(BirdName hardestChooser in hardestChoosers)
+            {
+                allRolesMap[hardestChooser].Add(statRoleMap[StatRole.StatRoleType.hardest_chooser]);
+            }
+            foreach(BirdName easiestChooser in easiestChoosers)
+            {
+                allRolesMap[easiestChooser].Add(statRoleMap[StatRole.StatRoleType.easiest_chooser]);
+            }
 
             foreach (BirdName starSpreader in starSpreaders)
             {
@@ -555,7 +692,9 @@ namespace ChickenScratch
                 safeguard_1, safeguard_2, safeguard_3,
                 safeguard_4, safeguard_5, safeguard_6,
                 liked_nothing, did_not_react, moved_arm_most_distance,
-                empty_round,
+                empty_round, biggest_spender, most_purchaser, most_unspent,
+                most_started_cases, longest_chooser, most_restocks, full_restocker,
+                many_cases_participator, coffee_purchaser, hardest_chooser, easiest_chooser,
                 invalid
             }
             public string name = "";
@@ -563,6 +702,7 @@ namespace ChickenScratch
             public int weight = -1;
             public StatRoleType statRoleType;
         }
+
         public class PlayerStats
         {
             public float timeInCabinetArea = 0.0f;
@@ -574,6 +714,18 @@ namespace ChickenScratch
             public int numberOfLikesGiven = 0;
             public bool usedTutorial = false;
             public float totalDistanceMoved = 0.0f;
+            public int totalSpent = 0;
+            public int totalItemsPurchased = 0;
+            public int totalCoffeeItemsPurchased = 0;
+            public float timeChoosing = 0f;
+            public int casesStarted = 0;
+            public bool alwaysChoseHighestDifficulty = true;
+            public bool alwaysChoseLowestDifficulty = true;
+            public int storeRestocks = 0;
+            public bool restockedEmptyShop = false;
+            public bool hasLostModifier = false;
+            public int numberOfUniqueCases;
+            public int totalUnspent;
         }
     }
 }

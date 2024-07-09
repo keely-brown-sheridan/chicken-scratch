@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static ChickenScratch.ColourManager;
+using UnityEngine.UI;
 
 namespace ChickenScratch
 {
@@ -36,6 +37,19 @@ namespace ChickenScratch
         public List<TutorialSlide> slides;
 
         public bool active = false;
+
+        [SerializeField]
+        private Image progressCircleImage;
+
+        [SerializeField]
+        private GameObject waitingForPlayersVisualObject;
+
+        [SerializeField]
+        private string identifier;
+
+        public bool hasBeenShown => _hasBeenShown;
+        private bool _hasBeenShown = false;
+
         private float timeShowingCurrentSlide = 0.0f;
         private int currentSlideIndex = 0;
 
@@ -47,14 +61,15 @@ namespace ChickenScratch
 
         public void startSlides()
         {
+            _hasBeenShown = true;
             if (SettingsManager.Instance.isHost)
             {
                 foreach (BirdName bird in GameManager.Instance.gameFlowManager.gamePlayers.Keys)
                 {
-                    if (!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
+                    if (!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(bird))
                     {
                         //Debug.LogError("Adding tutorial_finished condition.");
-                        GameManager.Instance.gameFlowManager.addTransitionCondition("tutorial_finished:" + bird);
+                        GameManager.Instance.gameFlowManager.addTransitionCondition(identifier + "_tutorial_finished:" + bird);
                     }
                 }
             }
@@ -70,6 +85,7 @@ namespace ChickenScratch
 
             currentSlideIndex = 0;
             timeShowingCurrentSlide = 0.0f;
+            Cursor.visible = true;
 
             slides[currentSlideIndex].start();
             gameObject.SetActive(true);
@@ -83,24 +99,30 @@ namespace ChickenScratch
             if (active)
             {
                 timeShowingCurrentSlide += Time.deltaTime;
+                float timeRatio = timeShowingCurrentSlide / slides[currentSlideIndex].timeToShow;
+                progressCircleImage.fillAmount = 1-timeRatio;
                 if (timeShowingCurrentSlide > slides[currentSlideIndex].timeToShow)
                 {
-                    timeShowingCurrentSlide = 0.0f;
-                    currentSlideIndex++;
-                    if (slides.Count > currentSlideIndex)
-                    {
-                        slides[currentSlideIndex].start();
-                    }
-                    else
-                    {
-                        active = false;
-                        AudioManager.Instance.StopSound("Tutorial");
-                        if (!SettingsManager.Instance.isHost)
-                        {
-                            GameManager.Instance.gameDataHandler.CmdTransitionCondition("tutorial_finished:" + SettingsManager.Instance.birdName);
-                        }
-                    }
+                    NextSlide();
                 }
+            }
+        }
+
+        public void NextSlide()
+        {
+            timeShowingCurrentSlide = 0.0f;
+            currentSlideIndex++;
+            if (slides.Count > currentSlideIndex)
+            {
+                slides[currentSlideIndex].start();
+            }
+            else
+            {
+                active = false;
+                AudioManager.Instance.StopSound("Tutorial");
+                gameObject.SetActive(false);
+                waitingForPlayersVisualObject.SetActive(true);
+                GameManager.Instance.gameDataHandler.CmdTransitionCondition(identifier + "_tutorial_finished:" + SettingsManager.Instance.birdName);
             }
         }
     }

@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: White Out
   itemDescription: Undo the last thing that you drew.
   storeBGColour: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
-  cost: 10
+  cost: 3
   itemImagePrefab: {fileID: 4925032158819912725, guid: 828f05c421d508143afa334467fae10d,
     type: 3}
   isSinglePurchase: 0

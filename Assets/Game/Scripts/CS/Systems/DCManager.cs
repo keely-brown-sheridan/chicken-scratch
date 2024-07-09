@@ -45,6 +45,7 @@ namespace ChickenScratch
                     break;
                 case GameScene.game:
                 case GameScene.theater:
+                    handleHostDisconnection();
                     return;
                     //handleHostDisconnection();
                     //break;
@@ -68,17 +69,13 @@ namespace ChickenScratch
 
         public void handleHostDisconnection()
         {
-            Debug.LogError("Handling host disconnection.");
             switch (currentGameScene)
             {
                 case GameScene.theater:
                 case GameScene.game:
+                    SettingsManager.Instance.ClearAllPlayers();
+                    SettingsManager.Instance.birdName = BirdName.none;
                     GameFlowManager.GamePhase currentPhase = GameManager.Instance.playerFlowManager.currentPhaseName;
-                    if (currentPhase == GameFlowManager.GamePhase.results)
-                    {
-                        GameManager.Instance.playerFlowManager.resultsRound.HostHasReturnedToLobby();
-                        return;
-                    }
                     DCPrompt.gameObject.SetActive(true);
                     GameManager.Instance.playerFlowManager.active = false;
                     break;
@@ -105,8 +102,9 @@ namespace ChickenScratch
                             SettingsManager.Instance.DeassignBirdToPlayer(disconnectedPlayer);
                             GameManager.Instance.gameFlowManager.clearPlayerTransitionConditions(disconnectedPlayer);
                         }
-                        
-                        if (SettingsManager.Instance.GetPlayerNameCount() == 1)
+
+                        if (SettingsManager.Instance.GetPlayerNameCount() == 1 &&
+                            currentPhase != GameFlowManager.GamePhase.results)
                         {
                             DCPrompt.promptText.text = "There are not enough players to continue the game.";
                             DCPrompt.gameObject.SetActive(true);

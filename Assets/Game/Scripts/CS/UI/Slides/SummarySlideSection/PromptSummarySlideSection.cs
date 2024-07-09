@@ -21,7 +21,9 @@ namespace ChickenScratch
             }
             _author = promptData.author;
 
-            authorImage.sprite = authorBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(promptData.author);
+            authorImage.Initialize(promptData.author, birdHat);
+
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(promptData.author);
 

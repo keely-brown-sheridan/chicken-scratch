@@ -29,6 +29,8 @@ namespace ChickenScratch
 
         public GameDataHandler gameDataHandler;
 
+        public PauseModTools pauseModTools;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -49,10 +51,10 @@ namespace ChickenScratch
 
         public void GenerateTestingData()
         {
-            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.red, "beebodeebo");
-            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.blue, "beebodeebo");
-            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.teal, "beebodeebo");
-            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.green, "beebodeebo");
+            playerFlowManager.playerNameMap.Add(BirdName.red, "beebodeebo");
+            playerFlowManager.playerNameMap.Add(BirdName.blue, "beebodeebo");
+            playerFlowManager.playerNameMap.Add(BirdName.teal, "beebodeebo");
+            playerFlowManager.playerNameMap.Add(BirdName.green, "beebodeebo");
 
             SettingsManager.Instance.birdName = BirdName.red;
             SettingsManager.Instance.AssignBirdToPlayer(ColourManager.BirdName.red, "beebodeebo");
@@ -85,7 +87,7 @@ namespace ChickenScratch
             testCase.taskDataMap.Add(3, testTask4);
             testCase.taskDataMap.Add(4, testTask);
             testCase.correctWordIdentifierMap = new Dictionary<int, string>() { { 1, "prefixes-NEUTRAL-ATTACHED" }, { 2, "nouns-ANIMAL-AARDVARK" } };
-            GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Add(1, testCase);
+            playerFlowManager.slidesRound.caseDataMap.Add(1, testCase);
         }
     }
 }

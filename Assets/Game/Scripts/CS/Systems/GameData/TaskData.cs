@@ -17,9 +17,8 @@ namespace ChickenScratch
         }
         public enum TaskModifier
         {
-            standard, shrunk, thirds_first, thirds_second, thirds_third, top, bottom, top_left, top_right, bottom_left, bottom_right
-            //shrunk
-            //rush
+            standard, shrunk, thirds_first, thirds_second, thirds_third, top, bottom, top_left, top_right, bottom_left, bottom_right, hidden_prefix,
+            blind, invalid
         }
 
         public TaskType taskType;

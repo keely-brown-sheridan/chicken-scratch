@@ -1,13 +1,11 @@
 using ChickenScratch;
 using Mirror;
-using Org.BouncyCastle.Asn1.X500;
 using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static ChickenScratch.ColourManager;
@@ -16,7 +14,6 @@ using static ChickenScratch.GameFlowManager;
 using static ChickenScratch.GameModeData;
 using static ChickenScratch.ReactionIndex;
 using static ChickenScratch.TaskData;
-using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 public class GameDataHandler : NetworkBehaviour
 {
@@ -258,6 +255,7 @@ public class GameDataHandler : NetworkBehaviour
             Debug.LogError("ERROR[RpcDrawingPhasePositions]: Keys and Values do not have the same count.");
             return;
         }
+
         Dictionary<BirdName, Vector3> birdArmPositionMap = new Dictionary<BirdName, Vector3>();
         for(int i = 0; i <  birdArmPositionKeys.Count; i++)
         {
@@ -368,6 +366,19 @@ public class GameDataHandler : NetworkBehaviour
     {
         ChargedStoreItemData chargeData = new ChargedStoreItemData(netData);
         GameManager.Instance.playerFlowManager.storeRound.CreateStoreItem(chargeData);
+    }
+
+    public void RpcSendHatStoreItemWrapper(HatStoreItemData hatItemData)
+    {
+        HatStoreItemNetData hatNetData = new HatStoreItemNetData(hatItemData);
+        RpcSendHatStoreItem(hatNetData);
+    }
+
+    [ClientRpc]
+    public void RpcSendHatStoreItem(HatStoreItemNetData netData)
+    {
+        HatStoreItemData hatData = new HatStoreItemData(netData);
+        GameManager.Instance.playerFlowManager.storeRound.CreateStoreItem(hatData);
     }
 
     public void RpcSendMarkerStoreItemWrapper(MarkerStoreItemData markerItemData)
@@ -498,6 +509,7 @@ public class GameDataHandler : NetworkBehaviour
     public void RpcSendDisconnectionNotification(BirdName player)
     {
         GameManager.Instance.dcManager.OnPlayerLeftRoom(player);
+        GameManager.Instance.pauseModTools.DisconnectPlayer(player);
     }
 
     [ClientRpc]
@@ -574,6 +586,10 @@ public class GameDataHandler : NetworkBehaviour
         CaseUpgradeStoreItemData upgradeData = GameDataManager.Instance.GetMatchingCaseUpgradeStoreItem(itemName);
         if(upgradeData != null)
         {
+            foreach (CaseUpgradeStoreItemData upgrade in upgradeData.unlocks)
+            {
+                GameDataManager.Instance.AddUpgradeOption(upgrade);
+            }
             GameDataManager.Instance.UpgradeCaseChoice(upgradeData);
         }
         
@@ -653,6 +669,37 @@ public class GameDataHandler : NetworkBehaviour
         }
 
         GameManager.Instance.playerFlowManager.accusationRound.StartReveal(accuser, accused, voteMap, revealData);
+    }
+
+    [ClientRpc]
+    public void RpcUpdateSlidesCaseCount(int startingCaseIndex, int totalCases)
+    {
+        GameManager.Instance.playerFlowManager.slidesRound.startingCaseIndex = startingCaseIndex;
+        GameManager.Instance.playerFlowManager.slidesRound.totalCasesInSlidesRound = totalCases;
+    }
+
+    [ClientRpc]
+    public void RpcResetRestock()
+    {
+        GameManager.Instance.playerFlowManager.storeRound.ResetRestock();
+    }
+
+    [ClientRpc]
+    public void RpcInitializeStoreUnlock(List<string> optionAChoices, List<string> optionBChoices, BirdName unionRep, bool defaultChoiceA)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.ClientInitializeUnlocks(optionAChoices, optionBChoices, unionRep, defaultChoiceA);
+    }
+
+    [ClientRpc]
+    public void RpcInitializeStore()
+    {
+        GameManager.Instance.playerFlowManager.storeRound.ClientInitializeStore();
+    }
+
+    [ClientRpc]
+    public void RpcSetPlayerHat(BirdName player, BirdHatData.HatType birdHat)
+    {
+        GameManager.Instance.playerFlowManager.SetBirdHatType(player, birdHat);
     }
 
     //Target - initial_cabinet_prompt_contents
@@ -750,9 +797,9 @@ public class GameDataHandler : NetworkBehaviour
     }
 
     [TargetRpc]
-    public void TargetStartChoiceDrawing(NetworkConnectionToClient target, int cabinetIndex, int caseID, string prompt, TaskData taskData, float currentModifier, float maxScoreModifier, float modifierDecrement, TaskData.TaskModifier drawingBoxModifier)
+    public void TargetStartChoiceDrawing(NetworkConnectionToClient target, int cabinetIndex, int caseID, string prompt, TaskData taskData, float currentModifier, float maxScoreModifier, float modifierDecrement, List<TaskData.TaskModifier> taskModifiers)
     {
-        GameManager.Instance.playerFlowManager.drawingRound.StartChoiceCaseDrawing(cabinetIndex, caseID, prompt, taskData.duration, currentModifier, maxScoreModifier, modifierDecrement, drawingBoxModifier);
+        GameManager.Instance.playerFlowManager.drawingRound.StartChoiceCaseDrawing(cabinetIndex, caseID, prompt, taskData.duration, currentModifier, maxScoreModifier, modifierDecrement, taskModifiers);
     }
 
     [TargetRpc]
@@ -788,6 +835,12 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.instructionRound.InitializePlayer(bird, playerName, roleType);
     }
 
+    [TargetRpc]
+    public void TargetKickPlayer(NetworkConnectionToClient target)
+    {
+        NetworkManager.singleton.StopClient();
+    }
+
     //Command - transition_condition
     [Command(requiresAuthority = false)]
     public void CmdTransitionCondition(string transitionCondition)
@@ -813,6 +866,13 @@ public class GameDataHandler : NetworkBehaviour
     {
         GameManager.Instance.playerFlowManager.drawingRound.SetPrompt(caseID, tab, author, prompt, timeTaken);
         GameManager.Instance.gameFlowManager.resolveTransitionCondition("prompt_submitted:" + author);
+
+        if (SettingsManager.Instance.isHost && SettingsManager.Instance.saveAdminReviewData)
+        {
+            ChainData currentCase = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
+            bool isQueuedForPlayer = currentCase.playerOrder.ContainsKey(tab + 1) ? currentCase.playerOrder[tab + 1] == SettingsManager.Instance.birdName : false;
+            SettingsManager.Instance.SavePromptingData(caseID, tab, new PlayerTextInputData() { author = author, text = prompt, isQueuedForPlayer = isQueuedForPlayer });
+        }
     }
 
     //Command - access_drawer
@@ -882,15 +942,9 @@ public class GameDataHandler : NetworkBehaviour
 
     //Command - player_stats
     [Command(requiresAuthority = false)]
-    public void CmdPlayerStats(bool pencilUsed, bool colourMarkerUsed, bool lightMarkerUsed, bool eraserUsed, BirdName birdName, float timeInCabinetArea, float guessingTime, int stickyCount, int drawingsTrashed, int numberOfPlayersLiked, int numberOfLikesGiven, bool usedStickies, float totalDistanceMoved)
+    public void CmdPlayerStats(PlayerStatData statData)
     {
-        Dictionary<DrawingController.DrawingToolType, bool> toolUsageMap = new Dictionary<DrawingController.DrawingToolType, bool>();
-        toolUsageMap.Add(DrawingController.DrawingToolType.pencil, pencilUsed);
-        toolUsageMap.Add(DrawingController.DrawingToolType.colour_marker, colourMarkerUsed);
-        toolUsageMap.Add(DrawingController.DrawingToolType.light_marker, lightMarkerUsed);
-        toolUsageMap.Add(DrawingController.DrawingToolType.eraser, eraserUsed);
-
-        GameManager.Instance.playerFlowManager.accoladesRound.playerStatsManager.AddPlayersideStats(birdName, timeInCabinetArea, guessingTime, stickyCount, drawingsTrashed, toolUsageMap, numberOfPlayersLiked, numberOfLikesGiven, usedStickies, totalDistanceMoved);
+        GameManager.Instance.playerFlowManager.accoladesRound.playerStatsManager.AddPlayersideStats(statData);
 
     }
 
@@ -898,7 +952,7 @@ public class GameDataHandler : NetworkBehaviour
     public void CmdRequestCaseChoice(BirdName birdName)
     {
         
-        List<CaseChoiceData> allCaseChoices = GameDataManager.Instance.GetCaseChoices(SettingsManager.Instance.gameMode.caseChoiceIdentifiers);
+        List<CaseChoiceData> allCaseChoices = GameDataManager.Instance.GetCaseChoices(GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers);
         int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
         List<CaseChoiceData> validCaseChoices = new List<CaseChoiceData>();
         //Iterate over all case choices and add to the valid case choice list based on what is possible to complete and the frequency set in the choice
@@ -940,8 +994,8 @@ public class GameDataHandler : NetworkBehaviour
             }
         }
         TargetSendCaseChoices(SettingsManager.Instance.GetConnection(birdName), caseChoiceDatas);
-        SettingsManager.Instance.gameMode.casesRemaining--;
-        RpcUpdateNumberOfCases(SettingsManager.Instance.gameMode.casesRemaining);
+        GameManager.Instance.playerFlowManager.casesRemaining--;
+        RpcUpdateNumberOfCases(GameManager.Instance.playerFlowManager.casesRemaining);
         
 
     }
@@ -949,7 +1003,7 @@ public class GameDataHandler : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdRerollCaseChoice(BirdName birdName)
     {
-        List<CaseChoiceData> allCaseChoices = GameDataManager.Instance.GetCaseChoices(SettingsManager.Instance.gameMode.caseChoiceIdentifiers);
+        List<CaseChoiceData> allCaseChoices = GameDataManager.Instance.GetCaseChoices(GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers);
         int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
         List<CaseChoiceData> validCaseChoices = new List<CaseChoiceData>();
         //Iterate over all case choices and add to the valid case choice list based on what is possible to complete and the frequency set in the choice
@@ -1023,6 +1077,11 @@ public class GameDataHandler : NetworkBehaviour
         }
 
         RpcSendDrawing(drawingData);
+        if (SettingsManager.Instance.isHost && SettingsManager.Instance.saveAdminReviewData)
+        {
+            bool isQueuedForPlayer = currentCase.playerOrder.ContainsKey(drawingData.round + 1) ? currentCase.playerOrder[drawingData.round + 1] == SettingsManager.Instance.birdName : false;
+            SettingsManager.Instance.SaveDrawingData(drawingData, isQueuedForPlayer);
+        }
     }
 
     [Command(requiresAuthority =false)]
@@ -1047,32 +1106,26 @@ public class GameDataHandler : NetworkBehaviour
         TaskData baseTaskData = newCase.taskQueue[0];
 
         //Start the case immediately instead of queueing it?
-        TaskModifier drawingBoxModifier = TaskModifier.standard;
-        foreach (TaskModifier modifier in baseTaskData.modifiers)
-        {
-            switch (modifier)
-            {
-                case TaskModifier.shrunk:
-                case TaskModifier.thirds_first:
-                case TaskModifier.thirds_second:
-                case TaskModifier.thirds_third:
-                case TaskModifier.top:
-                case TaskModifier.bottom:
-                case TaskModifier.top_left:
-                case TaskModifier.top_right:
-                case TaskModifier.bottom_left:
-                case TaskModifier.bottom_right:
-                    drawingBoxModifier = modifier;
-                    break;
-            }
-        }
         if(!GameManager.Instance.gameFlowManager.playerCabinetMap.ContainsKey(birdName))
         {
             Debug.LogError("ERROR[CmdChooseCase]: Could not find matching cabinet for player["+birdName.ToString()+"]");
             return;
         }
         int birdCabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[birdName];
-        TargetStartChoiceDrawing(SettingsManager.Instance.GetConnection(birdName), birdCabinetIndex, caseID, choiceData.correctPrompt, baseTaskData, newCase.currentScoreModifier, choiceData.maxScoreModifier, choiceData.scoreModifierDecrement, drawingBoxModifier);
+        string promptText = "";
+        if(baseTaskData.modifiers.Contains(TaskModifier.hidden_prefix))
+        {
+            CaseWordData promptWord = GameDataManager.Instance.GetWord(newCase.correctWordIdentifierMap[2]);
+            if (promptWord != null)
+            {
+                promptText = promptWord.value;
+            }
+        }
+        else
+        {
+            promptText = choiceData.correctPrompt;
+        }
+        TargetStartChoiceDrawing(SettingsManager.Instance.GetConnection(birdName), birdCabinetIndex, caseID, promptText, baseTaskData, newCase.currentScoreModifier, choiceData.maxScoreModifier, choiceData.scoreModifierDecrement, baseTaskData.modifiers);
         
     }
 
@@ -1158,6 +1211,27 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.accusationRound.AddVote(voter, target);
     }
 
+    [Command(requiresAuthority =false)]
+    public void CmdRequestRestock()
+    {
+        GameManager.Instance.playerFlowManager.storeRound.CreateRestockItems();
+        RpcResetRestock();
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdChooseStoreUnlockOption(List<string> unlockingIdentifiers, bool endRound)
+    {
+        foreach(string unlockingIdentifier in unlockingIdentifiers)
+        {
+            GameDataManager.Instance.UnlockCaseChoice(unlockingIdentifier);
+        }
+        if(endRound)
+        {
+            GameManager.Instance.gameFlowManager.timeRemainingInPhase = 0f;
+        }
+        
+    }
+
     [ClientRpc]
     public void RpcSendDrawing(DrawingData drawingData)
     {
@@ -1167,6 +1241,7 @@ public class GameDataHandler : NetworkBehaviour
             drawingRound.caseMap.Add(drawingData.caseID, new ChainData());
         }
         drawingRound.caseMap[drawingData.caseID].addDrawing(drawingData.round, drawingData);
+        
         GameManager.Instance.gameDataHandler.CmdTransitionCondition("drawing_receipt:" + SettingsManager.Instance.birdName.ToString() + ":" + drawingData.caseID.ToString());
 
     }

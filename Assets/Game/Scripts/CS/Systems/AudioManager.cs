@@ -10,6 +10,18 @@ namespace ChickenScratch
     /// </summary>
     public class AudioManager : Singleton<AudioManager>
     {
+        public int defaultMasterVolume => _defaultMasterVolume;
+        [SerializeField]
+        private int _defaultMasterVolume;
+
+        public int defaultMusicVolume => _defaultMusicVolume;
+        [SerializeField]
+        private int _defaultMusicVolume;
+
+        public int defaultEffectsVolume => _defaultEffectsVolume;
+        [SerializeField]
+        private int _defaultEffectsVolume;
+
         public List<Sound> Sounds = new List<Sound>();
         [SerializeField]
         private List<SoundVariant> SoundVariants = new List<SoundVariant>();

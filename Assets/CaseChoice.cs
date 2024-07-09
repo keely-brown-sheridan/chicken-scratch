@@ -35,6 +35,7 @@ namespace ChickenScratch
         private Image caseTabFillImage;
 
         private CaseChoiceData caseChoiceData;
+        private int difficulty = 0;
 
         public void Initialize(CaseChoiceNetData inCaseChoiceData)
         {
@@ -51,7 +52,17 @@ namespace ChickenScratch
             {
                 CaseWordData prefixWord = GameDataManager.Instance.GetWord(inCaseChoiceData.correctWordIdentifiersMap[0]);
                 CaseWordData nounWord = GameDataManager.Instance.GetWord(inCaseChoiceData.correctWordIdentifiersMap[1]);
-                prefixText.text = SettingsManager.Instance.CreatePromptText(prefixWord.value, nounWord.value);
+                difficulty = prefixWord.difficulty + nounWord.difficulty;
+                string prefixValue = "";
+                if(caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.curveball)
+                {
+                    prefixValue = SettingsManager.Instance.CreateNounText(nounWord.value);
+                }
+                else
+                {
+                    prefixValue = SettingsManager.Instance.CreatePromptText(prefixWord.value, nounWord.value);
+                }
+                prefixText.text = prefixValue;
                 totalReward += prefixWord.difficulty;
                 totalReward += nounWord.difficulty;
             }
@@ -78,6 +89,11 @@ namespace ChickenScratch
             }
             caseTabFillImage.color = playerBird.colour;
             modifierText.text = (caseChoiceData.startingScoreModifier + caseTabModifierValue).ToString("F2");
+        }
+
+        public int GetDifficulty()
+        {
+            return difficulty;
         }
     }
 }

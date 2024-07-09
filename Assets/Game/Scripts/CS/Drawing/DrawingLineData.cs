@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using static ChickenScratch.ColourManager;
 using System;
 using System.Globalization;
-using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace ChickenScratch
 {
@@ -15,11 +15,27 @@ namespace ChickenScratch
         {
             Freeform, Straight, Invalid
         }
+
+        public float r;
+        public float g;
+        public float b;
+
+        [XmlIgnore]
         public Color lineColour = Color.black;
+
+        [XmlIgnore]
         public LineType lineType = LineType.Invalid;
+
+        [XmlAttribute]
         public float lineSize = 0.15f;
+
+        [XmlIgnore]
         public BirdName author = BirdName.none;
+
+        [XmlArray("LinePositions"), XmlArrayItem("LinePosition")]
         public List<Vector3> positions = new List<Vector3>();
+
+        [XmlIgnore]
         public bool locked = false;
 
         public List<Vector3> GetPositions()
@@ -60,11 +76,14 @@ namespace ChickenScratch
             }
         }
 
+        [XmlIgnore]
         public bool isInitialized => _isInitialized;
+        [XmlIgnore]
         private bool _isInitialized = false;
 
+        [XmlIgnore]
         public int index = -1;
-
+        [XmlIgnore]
         public int subIndex = -1;
 
         public DrawingLineData()
@@ -133,6 +152,13 @@ namespace ChickenScratch
             identifier += sortingOrder.ToString() + GameDelim.SUBVISUAL;
 
             return identifier;
+        }
+
+        public void PrepareForXmlSave()
+        {
+            r = lineColour.r;
+            b = lineColour.b;
+            g = lineColour.g;
         }
 
         public string GetPointMessageSegment(int pointIndex)

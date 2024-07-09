@@ -20,7 +20,6 @@ namespace ChickenScratch
         public AccoladesRound accoladesRound;
         public ResultsRound resultsRound;
        
-
         public Text timeRemainingText;
         public GameObject failureNoticeBGObject, pointsTotalBGObject;
         public Text failureNoticeText, pointsTotalText, pointsModifierText;
@@ -51,12 +50,28 @@ namespace ChickenScratch
         private bool isInitialized = false;
         private Dictionary<StoreItem.StoreItemType, StoreItemData> storeItemDataMap = new Dictionary<StoreItem.StoreItemType, StoreItemData>();
 
+        private Dictionary<BirdName, List<GameObject>> lineObjectMap = new Dictionary<BirdName,List<GameObject>>();
+
+        public List<string> unlockedCaseChoiceIdentifiers = new List<string>();
+        public List<string> caseChoiceUnlockPool = new List<string>();
+
+        public float dailyTimeIncrease = 0f;
+        public float baseTimeIncrease = 0f;
+        public int baseCasesIncrease = 0;
+        public int baseQuotaDecrement = 0;
+        public int numberOfDrawingTools = 2;
+        public int casesRemaining;
+
+        public List<BirdImage> activeBirdImages = new List<BirdImage>();
+        private Dictionary<ColourManager.BirdName, BirdHatData.HatType> birdHatMap = new Dictionary<BirdName, BirdHatData.HatType>();
+
         private void Start()
         {
             if (NetworkClient.isConnected)
             {
                 NetworkClient.Ready();
             }
+            Screen.fullScreen = false;
 
             if (!isInitialized)
             {
@@ -93,20 +108,18 @@ namespace ChickenScratch
 
             active = true;
 
-            if (SettingsManager.Instance.gameMode.name != "Theater")
+            int iterator = 0;
+            List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
+            foreach (BirdName bird in allPlayerBirds)
             {
-                int iterator = 0;
-                List<BirdName> allPlayerBirds = SettingsManager.Instance.GetAllActiveBirds();
-                foreach (BirdName bird in allPlayerBirds)
+                if (drawingRound.cabinetDrawerMap[iterator + 1].currentPlayer == BirdName.none)
                 {
-                    if (drawingRound.cabinetDrawerMap[iterator + 1].currentPlayer == BirdName.none)
-                    {
-                        cabinetHourglasses[iterator + 1].gameObject.SetActive(true);
-                    }
-
-                    iterator++;
+                    cabinetHourglasses[iterator + 1].gameObject.SetActive(true);
                 }
+
+                iterator++;
             }
+            GameManager.Instance.pauseModTools.Initialize();
 
             BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
             if(playerBird == null)
@@ -121,6 +134,10 @@ namespace ChickenScratch
             
 
             drawingVisualPackageQueue = new Dictionary<string, DrawingVisualsPackage>();
+
+            unlockedCaseChoiceIdentifiers = SettingsManager.Instance.gameMode.baseUnlockedChoiceIdentifiers;
+            caseChoiceUnlockPool = SettingsManager.Instance.gameMode.baseChoiceIdentifierPool;
+
             isInitialized = true;
         }
 
@@ -249,13 +266,13 @@ namespace ChickenScratch
                     instructionRound.StartRound();
                     break;
                 case GameFlowManager.GamePhase.game_tutorial:
-                    GameManager.Instance.gameFlowManager.bossRushGameTutorialSequence.startSlides();
+                    GameManager.Instance.gameFlowManager.deadlineTutorialSequence.startSlides();
                     break;
                 case GameFlowManager.GamePhase.drawing:
                     drawingRound.StartRound();
                     break;
                 case GameFlowManager.GamePhase.slides_tutorial:
-                    GameManager.Instance.gameFlowManager.bossRushSlidesTutorialSequence.startSlides();
+                    GameManager.Instance.gameFlowManager.slideTutorialSequence.startSlides();
                     break;
                 case GameFlowManager.GamePhase.accolades:
                     accoladesRound.StartRound();
@@ -321,12 +338,15 @@ namespace ChickenScratch
 
         public void createDrawingVisuals(DrawingData drawingData, Transform drawingParent, Vector3 position, Vector3 scale, float lineThicknessReductionFactor)
         {
-
             GameObject drawingContainer = new GameObject();
             drawingContainer.transform.parent = drawingParent;
             drawingContainer.transform.position = drawingParent.position;
             Material drawingMaterial;
             GameObject drawingPrefab = ColourManager.Instance.linePrefab;
+            if(!lineObjectMap.ContainsKey(drawingData.author))
+            {
+                lineObjectMap.Add(drawingData.author, new List<GameObject>());
+            }
 
             foreach (DrawingVisualData visual in drawingData.visuals)
             {
@@ -338,6 +358,7 @@ namespace ChickenScratch
                     GameObject newLine = Instantiate(drawingPrefab, position, Quaternion.identity, drawingContainer.transform);
                     LineRenderer newLineRenderer = newLine.GetComponent<LineRenderer>();
 
+                    lineObjectMap[drawingData.author].Add(newLine);
                     newLineRenderer.material = drawingMaterial;
                     newLineRenderer.material.color = line.lineColour;
                     newLineRenderer.positionCount = line.positions.Count;
@@ -346,7 +367,7 @@ namespace ChickenScratch
                     newLine.transform.position = new Vector3(newLine.transform.position.x, newLine.transform.position.y, line.zDepth);
                     newLineRenderer.startWidth = line.lineSize * lineThicknessReductionFactor;
                     newLineRenderer.endWidth = line.lineSize * lineThicknessReductionFactor;
-
+                    newLine.SetActive(!SettingsManager.Instance.IsPlayerCovered(drawingData.author));
                 }
             }
 
@@ -355,13 +376,16 @@ namespace ChickenScratch
 
         public void AnimateDrawingVisuals(DrawingData drawingData, Transform drawingParent, Vector3 position, Vector3 scale, float lineThicknessReductionFactor, float duration)
         {
-
             GameObject drawingContainer = new GameObject();
             drawingContainer.transform.parent = drawingParent;
             drawingContainer.transform.position = drawingParent.position;
             Material drawingMaterial;
             GameObject drawingPrefab = ColourManager.Instance.linePrefab;
             drawingContainer.transform.localScale = scale;
+            if (!lineObjectMap.ContainsKey(drawingData.author))
+            {
+                lineObjectMap.Add(drawingData.author, new List<GameObject>());
+            }
 
             foreach (DrawingVisualData visual in drawingData.visuals)
             {
@@ -372,13 +396,13 @@ namespace ChickenScratch
                     
                     GameObject newLine = Instantiate(drawingPrefab, position, Quaternion.identity, drawingContainer.transform);
                     LineRenderer newLineRenderer = newLine.GetComponent<LineRenderer>();
-
+                    lineObjectMap[drawingData.author].Add(newLine);
                     newLineRenderer.material = drawingMaterial;
                     newLineRenderer.material.color = line.lineColour;
                     newLine.transform.position = new Vector3(newLine.transform.position.x, newLine.transform.position.y, line.zDepth);
                     newLineRenderer.startWidth = line.lineSize * lineThicknessReductionFactor;
                     newLineRenderer.endWidth = line.lineSize * lineThicknessReductionFactor;
-
+                    newLine.SetActive(!SettingsManager.Instance.IsPlayerCovered(drawingData.author));
                     StartCoroutine(AnimateDrawingVisual(newLineRenderer, line, position, scale));
                 }
             }       
@@ -417,6 +441,25 @@ namespace ChickenScratch
             string fileName = caseIndex.ToString() + "-" + slideIndex.ToString() + ".png";
             screenshotter.TakeScreenshot(folder, fileName);
 
+        }
+
+        public float GetTimeInDay()
+        {
+            float baseTimeInDay = SettingsManager.Instance.gameMode.baseGameTime;
+            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            float baseDailyRamp = SettingsManager.Instance.gameMode.dailyGameTimeRamp * currentDay;
+            baseTimeIncrease += dailyTimeIncrease;
+            return baseTimeInDay + baseDailyRamp + baseTimeIncrease;
+        }
+
+        public int GetCasesForDay()
+        {
+            return (int)(SettingsManager.Instance.GetCaseCountForDay()) + baseCasesIncrease;
+        }
+
+        public int GetCurrentGoal()
+        {
+            return SettingsManager.Instance.GetCurrentGoal() - baseQuotaDecrement;
         }
 
         public string MergeSlideImages(int caseIndex)
@@ -487,7 +530,11 @@ namespace ChickenScratch
         public void AddStoreItem(StoreItemData inStoreItemData)
         {
             if(inStoreItemData.itemType == StoreItem.StoreItemType.case_unlock ||
-                inStoreItemData.itemType == StoreItem.StoreItemType.case_upgrade)
+                inStoreItemData.itemType == StoreItem.StoreItemType.case_upgrade ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.coffee_pot ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.advertisement ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.nest_feathering ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.coffee_mug)
             {
                 //These are handled on the server-side and propagated to everyone in the game
                 return;
@@ -528,6 +575,92 @@ namespace ChickenScratch
         public float GetStoreItemValue(StoreItem.StoreItemType itemType)
         {
             return ((ValueStoreItemData)storeItemDataMap[itemType]).value;
+        }
+
+        public void HideAuthorDrawingLines(BirdName author)
+        {
+            if(lineObjectMap.ContainsKey(author))
+            {
+                //Clear null lines
+                ClearNullAuthorLines(author);
+
+                foreach (GameObject lineObject in lineObjectMap[author])
+                {
+                    if(lineObject)
+                    {
+                        lineObject.SetActive(false);
+                    }
+                    
+                }
+            }
+        }
+
+        public void ShowAuthorDrawingLines(BirdName author)
+        {
+            if (lineObjectMap.ContainsKey(author))
+            {
+                //Clear null lines
+                ClearNullAuthorLines(author);
+
+                foreach (GameObject lineObject in lineObjectMap[author])
+                {
+                    if(lineObject)
+                    {
+                        lineObject.SetActive(true);
+                    }
+                    
+                }
+            }
+        }
+
+        private void ClearNullAuthorLines(BirdName author)
+        {
+            for(int i = lineObjectMap[author].Count -1; i >= 0; i--)
+            {
+                if (lineObjectMap[author][i] == null)
+                {
+                    lineObjectMap[author].RemoveAt(i);
+                }
+                
+            }
+        }
+
+        public void AddAuthorDrawingLine(BirdName author, GameObject lineObject)
+        {
+            if(!lineObjectMap.ContainsKey(author))
+            {
+                lineObjectMap.Add(author, new List<GameObject>());
+            }
+            lineObjectMap[author].Add(lineObject);
+        }
+
+        public BirdHatData.HatType GetBirdHatType(BirdName bird)
+        {
+            if(birdHatMap.ContainsKey(bird))
+            {
+                return birdHatMap[bird];
+            }
+            return BirdHatData.HatType.none;
+        }
+
+        public void SetBirdHatType(BirdName bird, BirdHatData.HatType hat)
+        {
+            if(!birdHatMap.ContainsKey(bird))
+            {
+                birdHatMap.Add(bird, hat);
+            }
+            else
+            {
+                birdHatMap[bird] = hat;
+            }
+
+            foreach(BirdImage birdImage in activeBirdImages)
+            {
+                if(birdImage != null && birdImage.currentBird == bird)
+                {
+                    birdImage.UpdateImage(bird, hat);
+                }
+            }
         }
     }
 }

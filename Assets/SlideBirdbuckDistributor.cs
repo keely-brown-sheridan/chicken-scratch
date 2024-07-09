@@ -126,7 +126,15 @@ namespace ChickenScratch
                     if (timeActive > delayTime)
                     {
                         spawnPosition = birdBucksRemainingImageTransform.position;
-                        currentState = State.distribute;
+                        if(birdBucksRemaining == 0)
+                        {
+                            currentState = State.inactive;
+                        }
+                        else
+                        {
+                            currentState = State.distribute;
+                        }
+                        
                     }
                     break;
                 case State.distribute:

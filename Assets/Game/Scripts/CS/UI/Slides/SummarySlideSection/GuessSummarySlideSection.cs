@@ -31,7 +31,9 @@ namespace ChickenScratch
                 return;
             }
             _author = guessData.author;
-            authorImage.sprite = authorBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(guessData.author);
+            authorImage.Initialize(guessData.author, birdHat);
+
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);
 

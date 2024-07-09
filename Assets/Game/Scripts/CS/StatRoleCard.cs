@@ -9,7 +9,7 @@ namespace ChickenScratch
     public class StatRoleCard : MonoBehaviour
     {
         [SerializeField]
-        private Image faceImage;
+        private BirdImage faceImage;
         [SerializeField]
         private TMPro.TMP_Text roleText;
 
@@ -22,7 +22,8 @@ namespace ChickenScratch
             }
             else
             {
-                faceImage.sprite = roleBird.faceSprite;
+                BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(bird);
+                faceImage.Initialize(bird, birdHat);
                 roleText.color = roleBird.colour;
             }
             

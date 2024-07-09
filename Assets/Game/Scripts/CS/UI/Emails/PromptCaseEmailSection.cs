@@ -11,7 +11,7 @@ namespace ChickenScratch
         private TMPro.TMP_Text playerNameText;
 
         [SerializeField]
-        private Image playerImage;
+        private BirdImage playerImage;
 
         public void Initialize(PlayerTextInputData promptData, PlayerRatingData ratingData)
         {
@@ -25,7 +25,9 @@ namespace ChickenScratch
                 return;
             }
             playerNameText.color = promptBird.colour;
-            playerImage.sprite = promptBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(promptData.author);
+            playerImage.Initialize(promptData.author, birdHat);
+
             playerPromptText.color = promptBird.colour;
 
             SetRating(ratingData.likeCount);

@@ -25,7 +25,7 @@ namespace ChickenScratch
 
         public void PlayerJoinedRoom(string playerID, string nickName, ColourManager.BirdName selectedBird = ColourManager.BirdName.none)
         {
-
+            
             PlayerLeftRoom(playerID, nickName);
             if (MenuLobbyButtons.Instance.PlayerListingMap.ContainsKey(playerID))
             {
@@ -37,7 +37,7 @@ namespace ChickenScratch
             playerListingObj.transform.SetParent(transform, false);
 
             PlayerListing playerListing = playerListingObj.GetComponent<PlayerListing>();
-            playerListing.ApplyPlayer(playerID, nickName, false);
+            playerListing.ApplyPlayer(playerID, nickName, playerID == SettingsManager.Instance.hostID);
             playerListing.ChangePlayerBird(selectedBird);
 
             PlayerListings.Add(playerListing);

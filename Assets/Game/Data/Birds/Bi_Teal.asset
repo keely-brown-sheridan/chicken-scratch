@@ -52,3 +52,67 @@ MonoBehaviour:
   storeBirdArmPrefab: {fileID: 8822920804507749976, guid: 4d1141666b72442439c443b9a52071cd,
     type: 3}
   birdSoundName: sfx_scan_int_card_peacock
+  hats:
+  - hatType: 0
+    hatName: Crown
+    hatSprite: {fileID: -1530945818, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -0.9, y: 32.4, z: 0}
+    rotation: {x: 0, y: 0, z: 4.583}
+    width: 23.5
+    height: 17.75
+  - hatType: 1
+    hatName: Baseball Cap
+    hatSprite: {fileID: 60674070, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -12, y: 26, z: 0}
+    rotation: {x: 0, y: 0, z: 19.372}
+    width: 27
+    height: 17
+  - hatType: 2
+    hatName: Jester Hat
+    hatSprite: {fileID: -1059053478, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -11.1, y: 28, z: 0}
+    rotation: {x: 0, y: 0, z: 26.547}
+    width: 27.25
+    height: 17.75
+  - hatType: 3
+    hatName: Top Hat
+    hatSprite: {fileID: -400362027, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -1.6, y: 33, z: 0}
+    rotation: {x: 0, y: 0, z: 11.084}
+    width: 20
+    height: 20
+  - hatType: 4
+    hatName: Fez
+    hatSprite: {fileID: -511790863, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -11.1, y: 26.5, z: 0}
+    rotation: {x: 0, y: 0, z: 23.205}
+    width: 10
+    height: 10
+  - hatType: 5
+    hatName: Chefs Hat
+    hatSprite: {fileID: -767838121, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -4.5, y: 32.2, z: 0}
+    rotation: {x: 0, y: 0, z: 17.624}
+    width: 22
+    height: 16.5
+  - hatType: 6
+    hatName: Wizards Hat
+    hatSprite: {fileID: -897547993, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -13.3, y: 29.1, z: 0}
+    rotation: {x: 0, y: 0, z: 28.179}
+    width: 25
+    height: 25
+  - hatType: 7
+    hatName: Beret
+    hatSprite: {fileID: -481659573, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -6.6, y: 27.2, z: 0}
+    rotation: {x: 0, y: 0, z: 17.637}
+    width: 19
+    height: 9.5
+  - hatType: 8
+    hatName: Straw Hat
+    hatSprite: {fileID: 476127118, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -9.9, y: 24.4, z: 0}
+    rotation: {x: 0, y: 0, z: 21.055}
+    width: 35.25
+    height: 16.25

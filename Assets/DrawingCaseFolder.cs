@@ -18,10 +18,34 @@ namespace ChickenScratch
         private CaseWordCategoryVisual caseWordCategoryVisual;
 
         private TaskModifier drawingBoxModifier;
+        private TaskModifier drawingTypeModifier;
 
-        public void Initialize(string inPromptText, TaskData.TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
+        public void Initialize(string inPromptText, List<TaskData.TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
         {
-            drawingBoxModifier = inDrawingBoxModifier;
+            drawingTypeModifier = TaskModifier.invalid;
+            drawingBoxModifier = TaskModifier.standard;
+            foreach (TaskModifier modifier in taskModifiers)
+            {
+                switch (modifier)
+                {
+                    case TaskModifier.shrunk:
+                    case TaskModifier.thirds_first:
+                    case TaskModifier.thirds_second:
+                    case TaskModifier.thirds_third:
+                    case TaskModifier.top:
+                    case TaskModifier.bottom:
+                    case TaskModifier.top_left:
+                    case TaskModifier.top_right:
+                    case TaskModifier.bottom_left:
+                    case TaskModifier.bottom_right:
+                        drawingBoxModifier = modifier;
+                        break;
+                    case TaskModifier.blind:
+                        drawingTypeModifier = modifier;
+                        break;
+                }
+            }
+
             promptText.text = inPromptText;
             promptText.gameObject.SetActive(true);
             timeCompleteAction = inTimeCompleteAction;
@@ -45,10 +69,12 @@ namespace ChickenScratch
                     drawingToolsSticky2.Queue(true);
                 }
             }
+            drawingBoard.SetDrawingBoxType(drawingBoxModifier);
+            drawingBoard.SetDrawingType(drawingTypeModifier);
             drawingBoard.gameObject.SetActive(true);
             //drawingBoard.initialize();
             
-            drawingBoard.SetDrawingBoxType(drawingBoxModifier);
+            
         }
 
         public override void Hide()

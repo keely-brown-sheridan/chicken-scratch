@@ -25,7 +25,7 @@ namespace ChickenScratch
 
         private void Start()
         {
-            Show();
+
         }
 
         public void Initialize(DrawingData inDrawingData, Transform inSummarySlideTransform, int round, int caseID, float timeModifierDecrement)
@@ -40,7 +40,8 @@ namespace ChickenScratch
                 return;
             }
             _author = drawingData.author;
-            authorImage.sprite = authorBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(drawingData.author);
+            authorImage.Initialize(drawingData.author, birdHat);
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(inDrawingData.author);
 

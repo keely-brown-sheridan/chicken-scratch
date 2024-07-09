@@ -61,7 +61,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1041961064882571865}
+  - component: {fileID: 4639791940908916823}
   m_Layer: 5
   m_Name: DrawingHolder
   m_TagString: Untagged
@@ -69,26 +69,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1041961064882571865
-RectTransform:
+--- !u!4 &4639791940908916823
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3006992693254605484}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 961.39, y: 532.43, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4239422290015873504}
+  m_Father: {fileID: 8866675660627183006}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -482.9, y: -278}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4239422290015873505
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +92,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4239422290015873504}
+  - component: {fileID: 8866675660627183006}
   - component: {fileID: 129533826720374444}
   m_Layer: 5
   m_Name: DrawingSlide
@@ -106,28 +101,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!224 &4239422290015873504
-RectTransform:
+--- !u!4 &8866675660627183006
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4239422290015873505}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -641.7867, y: -357.6867, z: 0}
   m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0.6666667}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1041961064882571865}
+  - {fileID: 4639791940908916823}
   - {fileID: 4239422290230803853}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -641.7867, y: -357.6867}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &129533826720374444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,14 +134,10 @@ MonoBehaviour:
   isComplete: 0
   currentSpeedupFactor: 1
   goldStarDetectionArea: {fileID: 4239422291094234363}
-  originalPromptReminderText: {fileID: 0}
-  drawingHolder: {fileID: 1041961064882571865}
-  authorImage: {fileID: 0}
-  authorNameText: {fileID: 0}
+  drawingHolder: {fileID: 4639791940908916823}
   drawingOffset: {x: 0, y: 0, z: 0}
   drawingSize: 1.25
   timeShowingDrawing: 0
-  caseTypeSlideVisualizer: {fileID: 0}
   slideTimeModifierDecrementVisual: {fileID: 1378724850987628505}
 --- !u!1 &4239422290230803850
 GameObject:
@@ -186,7 +172,7 @@ RectTransform:
   m_Children:
   - {fileID: 4239422291094234360}
   - {fileID: 320562087768916950}
-  m_Father: {fileID: 4239422290015873504}
+  m_Father: {fileID: 8866675660627183006}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

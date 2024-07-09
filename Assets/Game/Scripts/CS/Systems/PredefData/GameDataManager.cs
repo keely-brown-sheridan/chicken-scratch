@@ -43,6 +43,10 @@ public class GameDataManager : Singleton<GameDataManager>
     private List<RoleData> roles = new List<RoleData>();
     private Dictionary<RoleData.RoleType, RoleData> roleMap = new Dictionary<RoleData.RoleType, RoleData>();
 
+    [SerializeField]
+    private List<HatData> hats = new List<HatData>();
+    private Dictionary<BirdHatData.HatType, HatData> hatMap = new Dictionary<BirdHatData.HatType, HatData>();
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -74,6 +78,12 @@ public class GameDataManager : Singleton<GameDataManager>
         foreach(RoleData role in roles)
         {
             roleMap.Add(role.roleType, role);
+        }
+
+        hatMap.Clear();
+        foreach(HatData hat in hats)
+        {
+            hatMap.Add(hat.hatType, hat);
         }
         //RefreshWords(new List<CaseWordData>());
     }
@@ -203,15 +213,29 @@ public class GameDataManager : Singleton<GameDataManager>
         return null;
     }
 
+    public void AddUpgradeOption(CaseUpgradeStoreItemData upgrade)
+    {
+        if(!upgradeStoreItems.Contains(upgrade))
+        {
+            upgradeStoreItems.Add(upgrade);
+        }
+    }
+
     public CaseUpgradeStoreItemData GetUpgradeStoreItem()
     {
         List<CaseUpgradeStoreItemData> randomizedUpgrades = upgradeStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
 
         foreach (CaseUpgradeStoreItemData upgradeStoreItem in randomizedUpgrades)
         {
+            //Skip if the upgrade's choice hasn't been unlocked
+            if (!GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Contains(upgradeStoreItem.caseChoiceIdentifier))
+            {
+                continue;
+            }
             CaseChoiceData caseChoice = GetCaseChoice(upgradeStoreItem.caseChoiceIdentifier);
             if(caseChoice != null)
             {
+                
                 int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
                 if (caseChoice.numberOfTasks <= numberOfPlayers)
                 {
@@ -280,10 +304,35 @@ public class GameDataManager : Singleton<GameDataManager>
         return null;
     }
 
-    public void UnlockCaseChoice(CaseUnlockStoreItemData unlockData)
+    public void UnlockCaseChoice(string unlockIdentifier)
     {
-        SettingsManager.Instance.gameMode.caseChoiceIdentifiers.Add(unlockData.caseChoiceIdentifier);
-        unlockStoreItems.Remove(unlockData);
+        if(GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.Contains(unlockIdentifier))
+        {
+            GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.Remove(unlockIdentifier);
+        }
+        
+        GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Add(unlockIdentifier);
+        for(int i = unlockStoreItems.Count - 1; i >= 0; i--)
+        {
+            if (unlockStoreItems[i].caseChoiceIdentifier == unlockIdentifier)
+            {
+                unlockStoreItems.RemoveAt(i);
+            }
+        }
+
+        CaseChoiceData caseChoice = GetCaseChoice(unlockIdentifier);
+        upgradeStoreItems.AddRange(caseChoice.upgrades);
+    }
+
+    public void RemoveStoreItemType(StoreItem.StoreItemType storeItemType)
+    {
+        for(int i = unlockStoreItems.Count - 1; i >= 0; i--)
+        {
+            if (unlockStoreItems[i].itemType == storeItemType)
+            {
+                unlockStoreItems.RemoveAt(i);
+            }
+        }
     }
 
     public void UpgradeCaseChoice(CaseUpgradeStoreItemData upgradeData)
@@ -291,12 +340,16 @@ public class GameDataManager : Singleton<GameDataManager>
         CaseChoiceData upgradingCaseChoice = caseChoiceMap[upgradeData.caseChoiceIdentifier];
         if (upgradingCaseChoice != null)
         {
-            upgradingCaseChoice.bonusPoints += upgradeData.bonusPointIncrease;
+            upgradingCaseChoice.bonusPoints += upgradeData.upgradeRampData.bonusPointsIncrease;
             upgradingCaseChoice.modifierDecrement += upgradeData.modifierDecrementDecrease;
-            upgradingCaseChoice.pointsPerCorrectWord += upgradeData.correctWordPointIncrease;
-            upgradingCaseChoice.maxScoreModifier += upgradeData.startingModifierIncrease;
-            upgradingCaseChoice.startingScoreModifier += upgradeData.startingModifierIncrease;
-            upgradeStoreItems.Remove(upgradeData);
+            upgradingCaseChoice.pointsPerCorrectWord += upgradeData.upgradeRampData.pointsPerCorrectWordIncrease;
+            upgradingCaseChoice.maxScoreModifier += upgradeData.upgradeRampData.modifierIncrease;
+            upgradingCaseChoice.startingScoreModifier += upgradeData.upgradeRampData.modifierIncrease;
+            if(upgradeStoreItems.Contains(upgradeData))
+            {
+                upgradeStoreItems.Remove(upgradeData);
+            }
+            
         }
     }
 
@@ -305,6 +358,15 @@ public class GameDataManager : Singleton<GameDataManager>
         if(roleMap.ContainsKey(roleType))
         {
             return roleMap[roleType];
+        }
+        return null;
+    }
+
+    public HatData GetHat(BirdHatData.HatType hatType)
+    {
+        if(hatMap.ContainsKey(hatType))
+        {
+            return hatMap[hatType];
         }
         return null;
     }

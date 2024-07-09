@@ -29,6 +29,10 @@ namespace ChickenScratch
         [SerializeField]
         private LobbyNotReadyManager lobbyNotReadyManager;
 
+        [SerializeField]
+        private GameObject editWordsStickyObject;
+
+
         private WordManager wordManager = new WordManager();
         private string editingGroupName = "";
 
@@ -45,6 +49,7 @@ namespace ChickenScratch
         {
             lastWordGroupUpdateTime = DateTime.MinValue;
             reviewWordGroupContainer.ClearWordGroups();
+            editWordsStickyObject.SetActive(isHost);
             mainWordGroupContainer.SetEditButtonActiveState(isHost);
             wordGroups.Clear();
             if (isHost)
@@ -133,6 +138,7 @@ namespace ChickenScratch
             //Add a new word group to the list
             reviewWordGroupContainer.CreateWordGroup(currentWordGroup.name, currentWordGroup.wordType, currentWordGroup.words, this, isHost);
 
+            addWordGroupContainer.ClearWords();
             addWordGroupContainer.gameObject.SetActive(false);
             editWordGroupContainer.gameObject.SetActive(false);
             reviewWordGroupContainer.gameObject.SetActive(true);
@@ -158,6 +164,7 @@ namespace ChickenScratch
                 return;
             }
             WordGroupData selectedWordGroup = editWordGroupContainer.Save(words, existingGroupData);
+            addWordGroupContainer.ClearWords();
             addWordGroupContainer.gameObject.SetActive(false);
             editWordGroupContainer.gameObject.SetActive(false);
             reviewWordGroupContainer.gameObject.SetActive(true);
@@ -176,6 +183,7 @@ namespace ChickenScratch
 
         public void CancelAddWordGroup()
         {
+            addWordGroupContainer.ClearWords();
             addWordGroupContainer.gameObject.SetActive(false);
             reviewWordGroupContainer.gameObject.SetActive(true);
         }
@@ -219,7 +227,7 @@ namespace ChickenScratch
         }
        
 
-        private void UpdateWordGroupList()
+        public void UpdateWordGroupList()
         {
             SettingsManager.Instance.wordGroupNames.Clear();
 
@@ -254,8 +262,12 @@ namespace ChickenScratch
                 }
             }
             lobbyNotReadyManager.enoughWordGroupsAreSelected = (numberOfPrefixGroups >= 3 && numberOfNounGroups >= 3);
-            //Send message to players about what word groups there are and are active
-            LobbyNetwork.Instance.lobbyDataHandler.RpcUpdateWordGroups(wordGroups);
+            if(LobbyNetwork.Instance != null && LobbyNetwork.Instance.lobbyDataHandler != null)
+            {
+                //Send message to players about what word groups there are and are active
+                LobbyNetwork.Instance.lobbyDataHandler.RpcUpdateWordGroups(wordGroups);
+            }
+            
             
         }
 

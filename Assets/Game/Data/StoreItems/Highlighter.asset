@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Highlighter
   itemDescription: Draw semi-transparent lines.
   storeBGColour: {r: 0.82787764, g: 0.974329, b: 0.7936456, a: 1}
-  cost: 5
+  cost: 2
   itemImagePrefab: {fileID: 7420641237869267671, guid: 0da36caf04e31db41a27b968796fde06,
     type: 3}
   isSinglePurchase: 0

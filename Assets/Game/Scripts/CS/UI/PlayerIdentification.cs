@@ -43,6 +43,10 @@ namespace ChickenScratch
             {
                 lobbyBirdArm.currentState = LobbyBirdArm.State.approach_card;
             }
+            else
+            {
+                Debug.LogError("Could not select because it was in an invalid state["+lobbyBirdArm.currentState.ToString()+"]");
+            }
 
         }
 

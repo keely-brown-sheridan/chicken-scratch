@@ -45,7 +45,7 @@ namespace ChickenScratch
             hasBeenPlaced = true;
             optionA.gameObject.SetActive(false);
             optionB.gameObject.SetActive(false);
-            tutorialManager.QueueSticky(this);
+            Place();
             if (useOptionA)
             {
                 optionA.gameObject.SetActive(true);

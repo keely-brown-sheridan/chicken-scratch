@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Jobs;
 using UnityEngine.UI;
 using UnityEngine.UIElements.Experimental;
 using static ChickenScratch.ColourManager;
@@ -10,55 +11,82 @@ namespace ChickenScratch
 {
     public class AccoladesRound : PlayerRound
     {
-        public TMPro.TextMeshProUGUI employeeOfTheMonthPlayerText, upForReviewPlayerText;
-        public Image employeeOfTheMonthPlayerImage, upForReviewPlayerImage;
-        public GameObject winMarkerObject, loseMarkerObject, resultsContainerObject, cabinetResultsObject;
+        public AccoladesStatManager playerStatsManager;
 
-        public RectTransform accoladesObjectRect;
-        public ColourManager.BirdName upForReview;
-        public List<AccoladesBirdRow> allAccoladeBirdRows;
-        public List<IndexMap> allSuccessTokens, allFailTokens;
-        public List<GameObject> leftTrashObjects, rightTrashObjects;
         public bool isActive = false;
 
-        public List<CameraDock> cameraDocks;
-        public CameraDock.CameraState currentCameraState;
-        public CameraDock currentCameraDock, nextCameraDock;
-
-        public GameObject accoladesSpriteContainer;
-        public Image accoladesBackground;
-        public Text workerWinText;
-        public GameObject extraVoteRewardTipObject;
-
         [SerializeField]
-        private Animator eotmAnimator;
+        private List<AccoladesBirdRow> allAccoladeBirdRows;
 
-        [SerializeField]
-        private Image eotmLeftBirdArm;
-        [SerializeField]
-        private Image eotmRightBirdArm;
+        private Dictionary<BirdName, AccoladesBirdRow> accoladeBirdRowMap = new Dictionary<BirdName, AccoladesBirdRow>();
 
         [SerializeField]
         private float cardPlacementWaitVariance;
 
-        private Dictionary<CameraDock.CameraState, CameraDock> cameraDockMap;
-        private Dictionary<int, GameObject> successTokenMap, failTokenMap;
-        private float timeSoFar = 0.0f, cameraStateTime = 0.0f;
-        public float timeShowingEOTM = 6.0f;
-        private bool hasShownResults = false, hasShownCabinetResults = false;
-        private int numberOfRoundResultsShown = 0, totalFails = 0, totalSuccesses = 0, totalPoints = 0;
-        private bool hasEOTMRisen = false;
+        [SerializeField]
+        private List<GameObject> awardPlaquePrefabs = new List<GameObject>();
 
-        public AccoladesStatManager playerStatsManager;
+        [SerializeField]
+        private GameObject mostLikedAwardPrefab;
+
+        [SerializeField]
+        private Transform awardsParent;
+
+        [SerializeField]
+        private float moveSpeed;
+
+        [SerializeField]
+        private float arrivalDistance;
+
+        [SerializeField]
+        private float placingCardsTime;
+        [SerializeField]
+        private float finishingTime;
+
+        [SerializeField]
+        private Transform accoladesUITransform;
+
+        private enum State
+        {
+            placing_cards, move_to_awards, finished
+        }
+        private State currentState = State.placing_cards;
+
+        
+
+        private Dictionary<int, GameObject> awardPlaquePrefabMap = new Dictionary<int, GameObject>();
+        private List<AccoladeBirdAward> spawnedAwards = new List<AccoladeBirdAward>();
+        private int currentAwardIndex = 0;
+        private Vector3 initialAccoladesUIPosition;
+        private float targetX;
+        private float timeWaiting = 0f;
+
+        
 
         private void Start()
         {
+            initialAccoladesUIPosition = accoladesUITransform.position;
+            foreach(GameObject awardPlaquePrefab in awardPlaquePrefabs)
+            {
+                AccoladeBirdAward award = awardPlaquePrefab.GetComponent<AccoladeBirdAward>();
+                awardPlaquePrefabMap.Add(award.rank, awardPlaquePrefab);
+            }
+
             //Test();
             
         }
 
         private void Test()
         {
+
+            initializeAccoladeBirdRow(0, BirdName.red);
+            initializeAccoladeBirdRow(1, BirdName.blue);
+            initializeAccoladeBirdRow(2, BirdName.green);
+            initializeAccoladeBirdRow(3, BirdName.teal);
+            initializeAccoladeBirdRow(4, BirdName.orange);
+            initializeAccoladeBirdRow(5, BirdName.yellow);
+            initializeAccoladeBirdRow(6, BirdName.pink);
+            initializeAccoladeBirdRow(7, BirdName.maroon);
             EndgameCaseData testCase = new EndgameCaseData();
 
             //create task queue
@@ -67,6 +95,21 @@ namespace ChickenScratch
             testTask.ratingData = new PlayerRatingData() { likeCount = 1, target = BirdName.red };
             testTask.assignedPlayer = BirdName.red;
             GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.red, "beebodeebo");
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.blue, "beebodeebo");
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.green, "beebodeebo");
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.teal, "beebodeebo");
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.orange, "beebodeebo");
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.yellow, "beebodeebo");
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.pink, "beebodeebo");
+            GameManager.Instance.playerFlowManager.playerNameMap.Add(BirdName.maroon, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.red, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.blue, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.green, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.teal, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.orange, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.yellow, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.pink, "beebodeebo");
+            SettingsManager.Instance.AssignBirdToPlayer(BirdName.maroon, "beebodeebo");
             testCase.taskDataMap.Add(1, testTask);
             testCase.correctWordIdentifierMap = new Dictionary<int, string>() { { 1, "prefixes-DRAGGING" },{ 2, "nouns-AARDVARK" } };
 
@@ -85,29 +128,42 @@ namespace ChickenScratch
         {
             if (isActive)
             {
-                if (currentCameraState != CameraDock.CameraState.reset &&
-                    currentCameraState != CameraDock.CameraState.accs_rest)
+                switch(currentState)
                 {
-                    cameraUpdate();
-                    if (currentCameraDock.state == CameraDock.CameraState.accs_rest && !currentCameraDock.restingFinished)
-                    {
-                        if (!hasEOTMRisen)
+                    case State.placing_cards:
+                        timeWaiting += Time.deltaTime;
+                        if(timeWaiting > placingCardsTime)
                         {
-                            AudioManager.Instance.PlaySound("sfx_vote_env_employee_react");
-                            eotmAnimator.SetTrigger("Rise");
-                            hasEOTMRisen = true;
+                            currentState = State.move_to_awards;
+                            timeWaiting = 0f;
+                        }
+                        break;
+                    case State.move_to_awards:
+                        accoladesUITransform.position -= Vector3.right* moveSpeed * Time.deltaTime;
+                        float distanceFromStart = Mathf.Abs(initialAccoladesUIPosition.x - accoladesUITransform.position.x);
+
+                        if(currentAwardIndex < spawnedAwards.Count)
+                        {
+                            if(distanceFromStart > spawnedAwards[currentAwardIndex].xOffset)
+                            {
+                                spawnedAwards[currentAwardIndex].Lift();
+                                currentAwardIndex++;
+                            }
                         }
 
-                    }
-                }
-                else
-                {
-                    timeSoFar += Time.deltaTime;
-
-                    if (timeSoFar > timeShowingEOTM)
-                    {
-                        isActive = false;
-                    }
+                        if (distanceFromStart > targetX)
+                        {
+                            currentState = State.finished;
+                        }
+                        break;
+                    case State.finished:
+                        timeWaiting += Time.deltaTime;
+                        if(timeWaiting > finishingTime)
+                        {
+                            isActive = false;
+                            timeWaiting = 0f;
+                        }
+                        break;
                 }
 
             }
@@ -130,38 +186,15 @@ namespace ChickenScratch
             }
         }
 
-        private void cameraUpdate()
-        {
-            cameraStateTime += Time.deltaTime;
-
-            if (!currentCameraDock.restingFinished)
-            {
-                if (currentCameraDock.restingTime < cameraStateTime)
-                {
-                    currentCameraDock.restingFinished = true;
-                    cameraStateTime = 0.0f;
-                }
-            }
-            else
-            {
-                //Transition
-                float transitionRatio = cameraStateTime / currentCameraDock.transitionDuration;
-                accoladesObjectRect.anchoredPosition = Vector3.Lerp(currentCameraDock.position, nextCameraDock.position, transitionRatio);
-                accoladesObjectRect.localScale = Vector3.Lerp(currentCameraDock.zoom, nextCameraDock.zoom, transitionRatio);
-
-                if (transitionRatio > 1)
-                {
-                    cameraStateTime = 0.0f;
-                    currentCameraState = currentCameraDock.nextState;
-                    currentCameraDock = cameraDockMap[currentCameraState];
-                    nextCameraDock = cameraDockMap[currentCameraDock.nextState];
-                }
-            }
-        }
+        
 
         public void initializeAccoladeBirdRow(int index, BirdName birdName)
         {
-            if(allAccoladeBirdRows.Count <= index)
+            if (accoladeBirdRowMap.ContainsKey(birdName))
+            {
+                return;
+            }
+            if (allAccoladeBirdRows.Count <= index)
             {
                 Debug.LogError("Could not initialize accolade bird row because index["+index.ToString()+"] is outside of the range of allAccoladeBirdRows["+allAccoladeBirdRows.Count.ToString()+"]");
                 return;
@@ -176,110 +209,83 @@ namespace ChickenScratch
             else
             {
                 birdRow.pinImage.color = accoladeBird.colour;
-                birdRow.birdHeadImage.sprite = accoladeBird.faceSprite;
+                BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(birdName);
+                birdRow.birdHeadImage.Initialize(birdName, birdHat);
             }
             
             birdRow.gameObject.SetActive(true);
+            accoladeBirdRowMap.Add(birdName, birdRow);
             birdRow.isInitialized = true;
         }
 
         private void initializeAccoladesRound()
         {
-            cameraDockMap = new Dictionary<CameraDock.CameraState, CameraDock>();
-            foreach (CameraDock cameraDock in cameraDocks)
-            {
-                cameraDockMap.Add(cameraDock.state, cameraDock);
-            }
-            currentCameraDock = cameraDockMap[currentCameraState];
-            nextCameraDock = cameraDockMap[currentCameraDock.nextState];
-
-            successTokenMap = new Dictionary<int, GameObject>();
-            failTokenMap = new Dictionary<int, GameObject>();
-
-            Dictionary<ColourManager.BirdName, PlayerReviewStatus> playerReviewStatusMap = new Dictionary<ColourManager.BirdName, PlayerReviewStatus>();
-            PlayerReviewStatus bestEmployeeCandidate = null;
-
-            foreach (IndexMap successToken in allSuccessTokens)
-            {
-                successTokenMap.Add(successToken.index, successToken.gameObject);
-            }
-            foreach (IndexMap failToken in allFailTokens)
-            {
-                failTokenMap.Add(failToken.index, failToken.gameObject);
-            }
+            Dictionary<BirdName, int> playerBirdbuckMap = new Dictionary<BirdName, int>();
+            Dictionary<BirdName, int> playerLikeMap = new Dictionary<BirdName, int>();
+            BirdName mostLikedPlayerCandidate = BirdName.none;
 
             foreach (KeyValuePair<ColourManager.BirdName, string> player in GameManager.Instance.playerFlowManager.playerNameMap)
             {
-                playerReviewStatusMap.Add(player.Key, new PlayerReviewStatus());
-                playerReviewStatusMap[player.Key].birdName = player.Key;
-                playerReviewStatusMap[player.Key].playerName = player.Value;
+                playerBirdbuckMap.Add(player.Key, 0);
+                playerLikeMap.Add(player.Key, 0);
 
             }
             foreach (EndgameCaseData currentCase in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
+                int birdBucksEarnedPerPlayer = currentCase.scoringData.GetTotalPoints() / currentCase.taskDataMap.Count;
                 foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
                 {
                     PlayerRatingData rating = currentTask.ratingData;
-                    if (playerReviewStatusMap.ContainsKey(rating.target))
+                    if (playerLikeMap.ContainsKey(rating.target))
                     {
-                        playerReviewStatusMap[rating.target].likeCount += rating.likeCount;
-                        playerReviewStatusMap[rating.target].netRating += rating.likeCount;
+                        playerLikeMap[rating.target] += rating.likeCount;
+                    }
+                    if(playerBirdbuckMap.ContainsKey(currentTask.assignedPlayer))
+                    {
+                        playerBirdbuckMap[currentTask.assignedPlayer] += birdBucksEarnedPerPlayer;
                     }
                 }
-            }
-
-            workerWinText.text = "\n" + (GameManager.Instance.playerFlowManager.playerNameMap.Count * 2) + " points";
-
-            if ((totalSuccesses) == GameManager.Instance.playerFlowManager.playerNameMap.Count)
-            {
-                winMarkerObject.SetActive(true);
-            }
-            else
-            {
-                loseMarkerObject.SetActive(true);
             }
 
             BirdData currentBird;
             //Iterate over each player to determine candidates for eotm and ufr
-            foreach (KeyValuePair<ColourManager.BirdName, PlayerReviewStatus> playerReviewStatus in playerReviewStatusMap)
+            foreach (KeyValuePair<BirdName, int> playerLikes in playerLikeMap)
             {
-                if (bestEmployeeCandidate == null)
+                if(mostLikedPlayerCandidate == BirdName.none)
                 {
-                    bestEmployeeCandidate = playerReviewStatus.Value;
+                    if (playerLikes.Value != 0)
+                    {
+                        mostLikedPlayerCandidate = playerLikes.Key;
+                        PlayerFlowManager.employeeOfTheMonth = mostLikedPlayerCandidate;
+                    }
                 }
                 else
                 {
-                    if (bestEmployeeCandidate.netRating == playerReviewStatus.Value.netRating)
+                    if (playerLikeMap[mostLikedPlayerCandidate] < playerLikes.Value)
                     {
-                        if (bestEmployeeCandidate.totalTimeTaken > playerReviewStatus.Value.totalTimeTaken)
-                        {
-                            bestEmployeeCandidate = playerReviewStatus.Value;
-                        }
-                    }
-                    else if (bestEmployeeCandidate.netRating < playerReviewStatus.Value.netRating)
-                    {
-                        bestEmployeeCandidate = playerReviewStatus.Value;
+                        mostLikedPlayerCandidate = playerLikes.Key;
+                        PlayerFlowManager.employeeOfTheMonth = mostLikedPlayerCandidate;
                     }
                 }
 
                 AccoladesBirdRow currentRow;
-                if (allAccoladeBirdRows.Where(abr => abr.isInitialized).Any(abr => abr.birdName == playerReviewStatus.Key))
+                if (accoladeBirdRowMap.ContainsKey(playerLikes.Key))
                 {
-                    currentRow = allAccoladeBirdRows.Where(abr => abr.isInitialized).Single(abr => abr.birdName == playerReviewStatus.Key);
+                    currentRow = accoladeBirdRowMap[playerLikes.Key];
 
                     //Set the stats for the corkboard
                     currentRow.gameObject.SetActive(true);
-                    currentBird = GameDataManager.Instance.GetBird(playerReviewStatus.Key);
+                    currentBird = GameDataManager.Instance.GetBird(playerLikes.Key);
                     if(currentBird == null)
                     {
-                        Debug.LogError("Could not set stats for the review bird[" + playerReviewStatus.Key.ToString() + "] because it has not been mapped in the Colour Manager.");
+                        Debug.LogError("Could not set stats for the review bird[" + playerLikes.Key.ToString() + "] because it has not been mapped in the Colour Manager.");
                     }
                     else
                     {
                         currentRow.playerNameText.color = currentBird.colour;
                     }
                     
-                    currentRow.playerNameText.text = playerReviewStatus.Value.playerName;
+                    currentRow.playerNameText.text = GameManager.Instance.playerFlowManager.playerNameMap[playerLikes.Key];
                     float randomizedPlacementWait = Random.Range(0, cardPlacementWaitVariance);
 
                     currentRow.StartPlacing(randomizedPlacementWait);
@@ -287,44 +293,69 @@ namespace ChickenScratch
             }
 
             //Set the accolades
-            setAccolades(bestEmployeeCandidate.birdName, bestEmployeeCandidate.playerName);
-            isActive = true;
-        }
-
-
-        public void setAccolades(ColourManager.BirdName bestBirdName, string bestPlayerName)
-        {
-            PlayerFlowManager.employeeOfTheMonth = bestBirdName;
-            employeeOfTheMonthPlayerText.text = bestPlayerName;
-            BirdData bestBird = GameDataManager.Instance.GetBird(bestBirdName);
-            if(bestBird == null)
+            List<BirdName> orderedBirds = SettingsManager.Instance.GetAllActiveBirds().OrderBy(b => playerBirdbuckMap[b]).ToList();
+            List<int> orderedEarnings = new List<int>();
+            List<GameObject> awardsToSpawn = new List<GameObject>();
+            foreach(BirdName bird in orderedBirds)
             {
-                Debug.LogError("Could not map colour for the best bird[] because it has not been initialized in the Colour Manager.");
+                orderedEarnings.Add(playerBirdbuckMap[bird]);
             }
-            else
+
+            int highestRank = 6;
+            if(SettingsManager.Instance.GetPlayerNameCount() > 6)
             {
-                employeeOfTheMonthPlayerText.color = bestBird.colour;
-                employeeOfTheMonthPlayerImage.sprite = bestBird.faceSprite;
+                highestRank = 8;
+            }
+            else if(SettingsManager.Instance.GetPlayerNameCount() > 4)
+            {
+                highestRank = 7;
+            }
+
+            //Work backwards down from the highest rank to determine what needs to be spawned
+            int currentRank = highestRank;
+            awardsToSpawn.Insert(0, awardPlaquePrefabMap[currentRank]);
+
+            //The top award should not be repeated
+            currentRank--;
+            awardsToSpawn.Insert(0, awardPlaquePrefabMap[currentRank]);
+
+            for (int i = orderedBirds.Count - 3; i >= 0; i--)
+            {
+                //Repeat the award if the birdbucks are equal to the previous bird's birdbucks
+                if (orderedEarnings[i] != orderedEarnings[i+1])
+                {
+                    currentRank--;
+                }
+                awardsToSpawn.Insert(0, awardPlaquePrefabMap[currentRank]);
+            }
+
+            //Iterate over the prefabs and spawn them at appropriate intervals in terms of their position
+            targetX = 0;
+            float spacingBetweenAwards = 10f;
+            GameObject spawnedAwardObject;
+            AccoladeBirdAward award;
+            for (int i = 0; i < awardsToSpawn.Count; i++)
+            {
+                spawnedAwardObject = Instantiate(awardsToSpawn[i], new Vector3(targetX + awardsParent.position.x, awardsParent.position.y, 0f), Quaternion.identity, awardsParent);
+
+                award = spawnedAwardObject.GetComponent<AccoladeBirdAward>();
+                award.Initialize(orderedBirds[i], GameManager.Instance.playerFlowManager.playerNameMap[orderedBirds[i]], orderedEarnings[i], targetX);
+                spawnedAwards.Add(award);
+                targetX += award.width + spacingBetweenAwards;
+            }
+            if(mostLikedPlayerCandidate != BirdName.none)
+            {
+                spawnedAwardObject = Instantiate(mostLikedAwardPrefab, new Vector3(targetX + awardsParent.position.x, awardsParent.position.y, 0f), Quaternion.identity, awardsParent);
+
+                award = spawnedAwardObject.GetComponent<AccoladeBirdAward>();
+                award.Initialize(mostLikedPlayerCandidate, GameManager.Instance.playerFlowManager.playerNameMap[mostLikedPlayerCandidate], playerLikeMap[mostLikedPlayerCandidate], targetX);
+                spawnedAwards.Add(award);
+                targetX += award.width + spacingBetweenAwards;
             }
             
 
-            //Choose a random bird for the bird arms lifting the award
-            int birdIndex = UnityEngine.Random.Range(0, ColourManager.Instance.allBirds.Count);
-            Bird randomBird = ColourManager.Instance.allBirds[birdIndex];
-
-            eotmLeftBirdArm.sprite = randomBird.armSprite;
-            eotmRightBirdArm.sprite = randomBird.armSprite;
+            isActive = true;
         }
-    }
-
-    class PlayerReviewStatus
-    {
-        public int netRating = 0;
-        public int likeCount = 0, dislikeCount = 0;
-        public float totalTimeTaken = 0.0f;
-        public int totalTimesFailed = 0;
-        public ColourManager.BirdName birdName = ColourManager.BirdName.none;
-        public string playerName = "";
     }
 
     [System.Serializable]

@@ -9,7 +9,7 @@ namespace ChickenScratch
     public class DisconnectionNotification : MonoBehaviour
     {
         [SerializeField] private TMPro.TMP_Text disconnectionText;
-        [SerializeField] private Image disconnectedBirdImage;
+        [SerializeField] private BirdImage disconnectedBirdImage;
         [SerializeField] private float showingDuration;
         [SerializeField] private Transform slidingTargetTransform;
         [SerializeField] private float slidingDuration;
@@ -123,7 +123,8 @@ namespace ChickenScratch
             }
             disconnectionText.color = nextBird.colour;
 
-            disconnectedBirdImage.sprite = nextBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(nextBirdName);
+            disconnectedBirdImage.Initialize(nextBirdName, birdHat);
         }
     }
 }

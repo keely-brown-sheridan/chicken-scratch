@@ -16,7 +16,9 @@ MonoBehaviour:
   itemName: Stopwatch
   itemDescription: Reset the timer for a case.
   storeBGColour: {r: 0.79607844, g: 0.73333335, b: 0.85882354, a: 1}
-  cost: 8
+  cost: 4
   itemImagePrefab: {fileID: 4092918515907121108, guid: 54fcbbda552e6cb48807ea585182d2f5,
     type: 3}
+  isSinglePurchase: 0
+  index: 0
   numberOfUses: 1

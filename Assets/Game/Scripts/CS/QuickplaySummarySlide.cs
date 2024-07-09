@@ -163,67 +163,7 @@ namespace ChickenScratch
 
         private void SetEmployeeOfTheMonth()
         {
-            Dictionary<ColourManager.BirdName, PlayerReviewStatus> playerReviewStatusMap = new Dictionary<ColourManager.BirdName, PlayerReviewStatus>();
-            PlayerReviewStatus bestEmployeeCandidate = null;
-            foreach (KeyValuePair<ColourManager.BirdName, string> player in GameManager.Instance.playerFlowManager.playerNameMap)
-            {
-                playerReviewStatusMap.Add(player.Key, new PlayerReviewStatus());
-                playerReviewStatusMap[player.Key].birdName = player.Key;
-                playerReviewStatusMap[player.Key].playerName = player.Value;
 
-            }
-            foreach (EndgameCaseData currentCase in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
-            {
-                foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
-                {
-                    PlayerRatingData rating = currentTask.ratingData;
-                    if (playerReviewStatusMap.ContainsKey(rating.target))
-                    {
-                        playerReviewStatusMap[rating.target].likeCount += rating.likeCount;
-                        playerReviewStatusMap[rating.target].netRating += rating.likeCount;
-                    }
-                }
-            }
-
-            //Iterate over each player to determine candidates for eotm
-            foreach (KeyValuePair<ColourManager.BirdName, PlayerReviewStatus> playerReviewStatus in playerReviewStatusMap)
-            {
-                if (bestEmployeeCandidate == null)
-                {
-                    bestEmployeeCandidate = playerReviewStatus.Value;
-                }
-                else
-                {
-                    if (bestEmployeeCandidate.netRating == playerReviewStatus.Value.netRating)
-                    {
-                        if (bestEmployeeCandidate.totalTimeTaken > playerReviewStatus.Value.totalTimeTaken)
-                        {
-                            bestEmployeeCandidate = playerReviewStatus.Value;
-                        }
-                    }
-                    else if (bestEmployeeCandidate.netRating < playerReviewStatus.Value.netRating)
-                    {
-                        bestEmployeeCandidate = playerReviewStatus.Value;
-                    }
-                }
-            }
-
-            //Set the employee of the month
-            BirdData bestBird = GameDataManager.Instance.GetBird(bestEmployeeCandidate.birdName);
-            if (bestBird == null)
-            {
-                Debug.LogError("Could not set employee of the month details because the bird["+bestEmployeeCandidate.birdName.ToString()+"] has not been mapped in the Colour Manager.");
-            }
-            else
-            {
-                eotmPlayerName.color = bestBird.colour;
-                eotmSFX = bestBird.birdSoundName;
-                eotmBirdFaceImage.sprite = bestBird.faceSprite;
-
-            }
-            
-            eotmPlayerName.text = bestEmployeeCandidate.playerName;
-            
         }
 
         private void SetEndgameButtons()

@@ -75,7 +75,6 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnClientDisconnect()
     {
-        Debug.LogError("Client disconnect.");
         base.OnClientDisconnect();
         switch(currentState)
         {
@@ -114,7 +113,6 @@ public class CSNetworkManager : NetworkManager
         }
         if (dcManager)
         {
-            Debug.LogError("Intentional disconnection?:[" + intentionalDisconnection.ToString() + "]");
             if (!intentionalDisconnection)
             {
                 dcManager.OnDisconnected();
@@ -180,8 +178,10 @@ public class CSNetworkManager : NetworkManager
                 {
                     SettingsManager.Instance.BroadcastBirdAssignmentInLobby();
                     LobbyNetwork.Instance.lobbyDataHandler.TargetOpenLobby(conn);
+                    
                 }
                 LobbyNetwork.Instance.lobbyDataHandler.TargetRequestSteamID(conn);
+                MenuLobbyButtons.Instance.wordGroupsController.UpdateWordGroupList();
                 LobbyNetwork.Instance.lobbyDataHandler.TargetSetPlayerID(conn, conn.connectionId.ToString());
                 break;
         }
@@ -190,7 +190,7 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
-        switch(currentState)
+        switch (currentState)
         {
             case NetworkState.lobby:
                 
@@ -198,6 +198,7 @@ public class CSNetworkManager : NetworkManager
             case NetworkState.ingame:
                 if (!GameManager.Instance.gameFlowManager.connectedPlayers.Contains(conn))
                 {
+                    
                     GameManager.Instance.gameFlowManager.connectedPlayers.Add(conn);
                 }
                 break;
@@ -209,11 +210,10 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        
+        SettingsManager.Instance.RemoveConnection(conn);
         switch (currentState)
         {
             case NetworkState.lobby:
-                SettingsManager.Instance.RemoveConnection(conn);
                 MenuLobbyButtons.Instance.UpdatePlayerCount();
                 SettingsManager.Instance.ServerRefreshBirds();
                 break;
@@ -244,11 +244,12 @@ public class CSNetworkManager : NetworkManager
         {
             case "MainMenu":
                 currentState = NetworkState.lobby;
+                Steamworks.SteamMatchmaking.SetLobbyJoinable(SettingsManager.Instance.currentRoomID, true);
                 break;
             case "Game":
-                Debug.LogError("Changing scene and setting currentState for network manager.");
                 SettingsManager.Instance.isHostInLobby = false;
                 currentState = NetworkState.ingame;
+                Steamworks.SteamMatchmaking.SetLobbyJoinable(SettingsManager.Instance.currentRoomID, false);
                 break;
         }
         

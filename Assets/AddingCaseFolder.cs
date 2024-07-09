@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static ChickenScratch.TaskData;
 
 public class AddingCaseFolder : CaseFolder
 {
@@ -22,10 +23,34 @@ public class AddingCaseFolder : CaseFolder
     private CaseWordCategoryVisual caseWordCategoryVisual;
 
     private TaskData.TaskModifier drawingBoxModifier;
+    private TaskData.TaskModifier drawingTypeModifier;
 
-    public void Initialize(DrawingData drawingData, string prompt, TaskData.TaskModifier inDrawingBoxModifier, UnityAction inTimeCompleteAction)
+    public void Initialize(DrawingData drawingData, string prompt, List<TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
     {
-        drawingBoxModifier = inDrawingBoxModifier;
+        drawingTypeModifier = TaskModifier.invalid;
+        drawingBoxModifier = TaskModifier.standard;
+        foreach (TaskModifier modifier in taskModifiers)
+        {
+            switch (modifier)
+            {
+                case TaskModifier.shrunk:
+                case TaskModifier.thirds_first:
+                case TaskModifier.thirds_second:
+                case TaskModifier.thirds_third:
+                case TaskModifier.top:
+                case TaskModifier.bottom:
+                case TaskModifier.top_left:
+                case TaskModifier.top_right:
+                case TaskModifier.bottom_left:
+                case TaskModifier.bottom_right:
+                    drawingBoxModifier = modifier;
+                    break;
+                case TaskModifier.blind:
+                    drawingTypeModifier = modifier;
+                    break;
+            }
+        }
+
 
         foreach(DrawingLineData line in drawingData.visuals)
         {
@@ -43,10 +68,12 @@ public class AddingCaseFolder : CaseFolder
     public override void Show(Color inFolderColour, float taskTime, float currentModifier, float maxModifierValue, float modifierDecrement)
     {
         base.Show(inFolderColour, taskTime, currentModifier, maxModifierValue, modifierDecrement);
+        drawingBoard.SetDrawingBoxType(drawingBoxModifier);
+        drawingBoard.SetDrawingType(drawingTypeModifier);
         drawingBoard.gameObject.SetActive(true);
         //drawingBoard.initialize();
         
-        drawingBoard.SetDrawingBoxType(drawingBoxModifier);
+        
     }
 
     public override void Hide()

@@ -17,6 +17,8 @@ namespace ChickenScratch
                                 corporateScoreSticky, corporateTimerSticky,
                                 drawingToolsSticky, drawingToolsSticky2, guessingSticky,
                                 draftingSticky, draftingSticky2;
+
+        public TutorialSticky choicesSticky2, choicesSticky3, modifierSticky, caseCabinetSticky;
         public bool hasSeenFirstCabinet = false, hasGottenFirstCabinet = false, hasClickedFirstCabinet = false;
         public DeskCard lanyardCard;
         public Animator bossNoteWorkerAnimator, bossNoteBotcherAnimator;
@@ -63,7 +65,7 @@ namespace ChickenScratch
             }
 
             int currentDay = GameManager.Instance.playerFlowManager.currentDay;
-            int currentGoal = SettingsManager.Instance.GetCurrentGoal();
+            int currentGoal = GameManager.Instance.playerFlowManager.GetCurrentGoal();
             dayInstructions.Show(currentDay, currentGoal);
         }
 

@@ -46,7 +46,7 @@ public class SlideCaseScoreVisualization : MonoBehaviour
 
     public void Initialize(float inScoreModifier, float maxScoreModifier)
     {
-        maximumPossibleScore = SettingsManager.Instance.GetCurrentGoal();
+        maximumPossibleScore = GameManager.Instance.playerFlowManager.GetCurrentGoal();
         goalScoreText.text = "Goal:\n" + maximumPossibleScore.ToString() + " Birdbucks";
         startingScore = GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
         currentScore = startingScore;

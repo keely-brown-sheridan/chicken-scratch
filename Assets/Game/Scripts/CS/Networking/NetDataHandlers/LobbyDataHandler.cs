@@ -1,6 +1,7 @@
 using ChickenScratch;
 using Mirror;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static ChickenScratch.ColourManager;
@@ -8,9 +9,14 @@ using static ChickenScratch.ColourManager;
 public class LobbyDataHandler : NetworkBehaviour
 {
     [ClientRpc]
-    public void RpcSetPlayerListings(List<PlayerListingNetData> playerListingData)
+    public void RpcSetPlayerListings(string hostID, List<PlayerListingNetData> playerListingData)
     {
+        SettingsManager.Instance.hostID = hostID;
         LobbyNetwork.Instance.UpdateClientPlayerListings(playerListingData);
+        if(SettingsManager.Instance.isHost)
+        {
+            MenuLobbyButtons.Instance.lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.GetPlayerNameCount() == NetworkServer.connections.Count();
+        }
     }
 
 
@@ -31,8 +37,10 @@ public class LobbyDataHandler : NetworkBehaviour
         {
             RpcDeselectBirdBird(previousBird);
         }
+
         SettingsManager.Instance.SetBirdForPlayerID(sender, selectedBird);
-        RpcSelectPlayerBird(playerName, selectedBird);
+        SettingsManager.Instance.ServerRefreshBirds();
+        
     }
 
     [Command(requiresAuthority = false)]
@@ -44,7 +52,7 @@ public class LobbyDataHandler : NetworkBehaviour
     [ClientRpc]
     public void RpcSelectPlayerBird(string playerName, ColourManager.BirdName selectedBird)
     {
-        MenuLobbyButtons.Instance.SelectPlayerBird(selectedBird, playerName);
+        
         
     }
 
@@ -90,6 +98,12 @@ public class LobbyDataHandler : NetworkBehaviour
         MenuLobbyButtons.Instance.LoadLobbyFromGame();
         SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_lobby_room;
         Cursor.visible = true;
+    }
+
+    [TargetRpc]
+    public void TargetKickPlayer(NetworkConnectionToClient target)
+    {
+        NetworkManager.singleton.StopClient();
     }
 
     [ClientRpc]

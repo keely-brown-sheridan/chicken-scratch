@@ -20,7 +20,8 @@ namespace ChickenScratch
 
         public ColourManager.BirdName birdName;
 
-        public Image pinImage, birdHeadImage;
+        public Image pinImage;
+        public BirdImage birdHeadImage;
 
         public bool isInitialized = false;
 

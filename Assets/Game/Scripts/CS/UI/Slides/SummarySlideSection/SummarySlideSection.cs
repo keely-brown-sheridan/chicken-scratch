@@ -22,7 +22,7 @@ namespace ChickenScratch
 
 
         [SerializeField]
-        protected Image authorImage;
+        protected BirdImage authorImage;
 
         [SerializeField]
         protected TMPro.TMP_Text authorNameText;
@@ -47,7 +47,7 @@ namespace ChickenScratch
 
         public virtual void Show()
         {
-            transform.position = positionWhereItShouldBeIfUnityWasntShit;
+            //transform.position = positionWhereItShouldBeIfUnityWasntShit;
         }
     }
 }

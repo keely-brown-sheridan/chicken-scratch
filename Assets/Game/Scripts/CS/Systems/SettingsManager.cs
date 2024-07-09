@@ -3,8 +3,12 @@ using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.Analytics;
+using UnityEngine.SceneManagement;
 
 namespace ChickenScratch
 {
@@ -14,6 +18,7 @@ namespace ChickenScratch
         
         public bool isHost => NetworkServer.connections.Count > 0;
         public bool isHostInLobby = false;
+        public string hostID = "";
         public bool disconnected = false;
         public bool playerQuit = false;
         public bool waitingForPlayers = false;
@@ -22,14 +27,14 @@ namespace ChickenScratch
             disconnected, return_to_lobby_room, return_to_room_listings, invalid
         }
         public SceneTransitionState currentSceneTransitionState = SceneTransitionState.invalid;
-        public List<string> intSettingNames = new List<string>();
+        public List<SettingData> settingDatas = new List<SettingData>();
         public List<string> stringSettingNames = new List<string>();
         public int winningThreshold = 1;
         public int correctCabinetThreshold = 1;
 
         public List<GameModeData> allGameModes = new List<GameModeData>();
         public GameModeData gameMode;
-        public bool showFastResults = false;
+        public bool saveAdminReviewData = false;
 
         public string playerName => SteamManager.Initialized ? Steamworks.SteamFriends.GetPersonaName() : playerID;
         public string playerID = "";
@@ -62,6 +67,8 @@ namespace ChickenScratch
         public RoleData playerRole;
         public int botcherCoins;
 
+        private List<ColourManager.BirdName> coveredPlayers = new List<ColourManager.BirdName>();
+
 
 
         private void Awake()
@@ -75,7 +82,7 @@ namespace ChickenScratch
             {
                 return;
             }
-            Screen.SetResolution((int)defaultScreenSize.x, (int)defaultScreenSize.y, false);
+            //Screen.SetResolution((int)defaultScreenSize.x, (int)defaultScreenSize.y, false);
 
             DontDestroyOnLoad(this);
 
@@ -88,20 +95,20 @@ namespace ChickenScratch
                 MenuLobbyButtons.Instance.gameModeInformationHeaderText.text = "Game Mode: " + SettingsManager.Instance.gameMode.title;
                 MenuLobbyButtons.Instance.gameModeDescriptionText.text = SettingsManager.Instance.gameMode.description;
             }
-            foreach (string settingName in intSettingNames)
+            foreach (SettingData settingData in settingDatas)
             {
-                if (intSettings.ContainsKey(settingName))
+                if (intSettings.ContainsKey(settingData.settingName))
                 {
                     continue;
                 }
 
-                if (PlayerPrefs.HasKey(settingName))
+                if (PlayerPrefs.HasKey(settingData.settingName))
                 {
-                    intSettings.Add(settingName, PlayerPrefs.GetInt(settingName));
+                    intSettings.Add(settingData.settingName, PlayerPrefs.GetInt(settingData.settingName));
                 }
                 else
                 {
-                    intSettings.Add(settingName, 1);
+                    intSettings.Add(settingData.settingName, settingData.settingValue);
                 }
 
             }
@@ -367,6 +374,7 @@ namespace ChickenScratch
             }
             lobbyConnectionBirdMap.Clear();
             lobbyConnectionUsernameMap.Clear();
+            playerNameMap.Clear();
         }
 
         public void SetBirdForPlayerID(NetworkConnectionToClient playerID, ColourManager.BirdName bird)
@@ -384,7 +392,7 @@ namespace ChickenScratch
         public void ServerRefreshBirds()
         {
             List<PlayerListingNetData> playerListingData = new List<PlayerListingNetData>();
-            foreach (KeyValuePair<NetworkConnectionToClient, ColourManager.BirdName> connectedPlayer in SettingsManager.Instance.lobbyConnectionBirdMap)
+            foreach (KeyValuePair<NetworkConnectionToClient, ColourManager.BirdName> connectedPlayer in lobbyConnectionBirdMap)
             {
                 PlayerListingNetData data = new PlayerListingNetData();
                 data.playerName = lobbyConnectionUsernameMap.ContainsKey(connectedPlayer.Key) ? lobbyConnectionUsernameMap[connectedPlayer.Key] : "";
@@ -392,7 +400,8 @@ namespace ChickenScratch
                 playerListingData.Add(data);
             }
 
-            LobbyNetwork.Instance.lobbyDataHandler.RpcSetPlayerListings(playerListingData);
+            LobbyNetwork.Instance.lobbyDataHandler.RpcSetPlayerListings(playerName, playerListingData);
+            
         }
 
         public void AddConnection(NetworkConnectionToClient connection)
@@ -426,6 +435,53 @@ namespace ChickenScratch
             {
                 lobbyConnectionUsernameMap.Remove(connection);
             }
+        }
+
+        public void KickConnection(string playerName)
+        {
+            string sceneName = SceneManager.GetActiveScene().name;
+           
+            foreach (KeyValuePair<NetworkConnectionToClient, string> connection in lobbyConnectionUsernameMap)
+            {
+                if (connection.Value == playerName)
+                {
+                    if (sceneName == "MainMenu")
+                    {
+                        LobbyNetwork.Instance.lobbyDataHandler.TargetKickPlayer(connection.Key);
+                    }
+                    else if(sceneName == "Game")
+                    {
+                        GameManager.Instance.gameDataHandler.TargetKickPlayer(connection.Key);
+                        return;
+                    }
+                        
+                }
+            }
+        }
+
+        public void KickConnection(ColourManager.BirdName birdName)
+        {
+            string playerName = SettingsManager.Instance.GetPlayerName(birdName);
+
+            foreach(KeyValuePair<NetworkConnectionToClient,string> connection in lobbyConnectionUsernameMap)
+            {
+                if(connection.Value == playerName)
+                {
+                    GameManager.Instance.gameDataHandler.TargetKickPlayer(connection.Key);
+                    return;
+                }
+            }
+            if(birdConnectionMap.ContainsKey(birdName))
+            {
+                GameManager.Instance.gameDataHandler.TargetKickPlayer(birdConnectionMap[birdName]);
+            }
+        }
+
+        public void ClearAllPlayers()
+        {
+            ClearPlayerNameMap();
+            lobbyConnectionBirdMap.Clear();
+            lobbyConnectionUsernameMap.Clear();
         }
 
         public string CreatePromptText(string prefixText, string nounText)
@@ -498,7 +554,104 @@ namespace ChickenScratch
 
         public bool DidPlayersPassDay()
         {
-            return GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal >= GetCurrentGoal();
+            return GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal >= GameManager.Instance.playerFlowManager.GetCurrentGoal();
+        }
+
+        public void ClearOldSaveData()
+        {
+            try
+            {
+                string directory = Application.dataPath + "\\CurrentGame\\Drawings\\";
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    File.Delete(file);
+                }
+                directory = Application.dataPath + "\\CurrentGame\\Prompts\\";
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    File.Delete(file);
+                }
+
+            }
+            catch(Exception e)
+            {
+                Debug.LogError("Failed to clear old save data: " + e.Message);
+            }
+        }
+
+        public void SaveDrawingData(DrawingData inDrawingData, bool isQueuedForPlayer)
+        {
+            //Write the drawing locally to the machine
+            try
+            {
+                inDrawingData.PrepareForXmlSave(isQueuedForPlayer);
+                string filePath = Application.dataPath + "\\CurrentGame\\Drawings\\" + inDrawingData.caseID.ToString() + "-" + inDrawingData.round.ToString() + "-" + inDrawingData.author.ToString() + ".txt";
+                if (File.Exists(filePath))
+                {
+                    return;
+                }
+                var serializer = new XmlSerializer(typeof(DrawingData));
+                var stream = new FileStream(filePath, FileMode.Create);
+                serializer.Serialize(stream, inDrawingData);
+                stream.Close();
+            }
+            catch(Exception e)
+            {
+                Debug.LogError("Failed to save drawing data: " + e.InnerException);
+            }
+        }
+
+        public void SavePromptingData(int caseID, int round, PlayerTextInputData inPromptData)
+        {
+            //Write the drawing locally to the machine
+            try
+            {
+                string filePath = Application.dataPath + "\\CurrentGame\\Prompts\\" + caseID.ToString() + "-" + round.ToString() + "-" + inPromptData.author.ToString() + ".txt";
+                if (File.Exists(filePath))
+                {
+                    return;
+                }
+                var serializer = new XmlSerializer(typeof(PlayerTextInputData));
+                var stream = new FileStream(filePath, FileMode.Create);
+                serializer.Serialize(stream, inPromptData);
+                stream.Close();
+
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Failed to save drawing data: " + e.InnerException);
+            }
+        }
+
+        public void CoverPlayer(ColourManager.BirdName player)
+        {
+            if(!coveredPlayers.Contains(player))
+            {
+                coveredPlayers.Add(player);
+            }
+            //Update all drawing objects that are currently being shown
+        }
+
+        public void UncoverPlayer(ColourManager.BirdName player)
+        {
+            if(coveredPlayers.Contains(player))
+            {
+                coveredPlayers.Remove(player);
+            }
+            //Update all drawing objects that are currently being shown
+        }
+
+        public bool IsPlayerCovered(ColourManager.BirdName player)
+        {
+            return coveredPlayers.Contains(player);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace ChickenScratch
     public class WaitingOnPlayerVisual : MonoBehaviour
     {
         [SerializeField]
-        private Image birdImage;
+        private BirdImage birdImage;
 
         public void Initialize(ColourManager.BirdName birdName)
         {
@@ -17,7 +17,8 @@ namespace ChickenScratch
                 return;
             }
 
-            birdImage.sprite = bird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(birdName);
+            birdImage.Initialize(birdName, birdHat);
         }
     }
 

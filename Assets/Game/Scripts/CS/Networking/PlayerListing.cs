@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Steamworks;
+using Mirror;
 
 namespace ChickenScratch
 {
@@ -33,7 +34,7 @@ namespace ChickenScratch
             PlayerName.text = name;
 
             hostIndicatorObject.SetActive(isHost);
-            kickButtonObject.SetActive(SettingsManager.Instance.isHost && playerID != SettingsManager.Instance.playerID);
+            kickButtonObject.SetActive(SettingsManager.Instance.isHost && playerID != SettingsManager.Instance.playerName);
         }
 
         public void ChangePlayerBird(ColourManager.BirdName inBirdName)
@@ -59,13 +60,7 @@ namespace ChickenScratch
 
         public void KickPlayer()
         {
-            //foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
-            //{
-            //    if (!player.Value.IsLocal && player.Value.NickName == PlayerName.text)
-            //    {
-            //        PhotonNetwork.CloseConnection(player.Value);
-            //    }
-            //}
+            SettingsManager.Instance.KickConnection(PlayerID);
         }
 
 

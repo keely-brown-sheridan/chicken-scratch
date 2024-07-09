@@ -32,6 +32,7 @@ namespace ChickenScratch
         private List<TaskTimingData> taskTimingData = new List<TaskTimingData>();
         public string description;
 
+        public List<CaseUpgradeStoreItemData> upgrades = new List<CaseUpgradeStoreItemData>();
 
         public float GetTaskTiming(TaskData.TaskType taskType)
         {

@@ -155,7 +155,16 @@ namespace ChickenScratch
         void createLine()
         {
             _currentLineObject = Instantiate(drawingLinePrefab, Vector3.zero, Quaternion.identity, controller.transform);
-            DrawingLineData lineData = _currentLineObject.GetComponent<DrawingLine>().drawingLineData;
+            DrawingLine drawingLine = _currentLineObject.GetComponent<DrawingLine>();
+            DrawingLineData lineData = drawingLine.drawingLineData;
+            if (controller.drawingType == TaskData.TaskModifier.blind)
+            {
+                drawingLine.isFading = true;
+            }
+            else
+            {
+                drawingLine.isFading = false;
+            }
             lineData.lineSize = _currentDrawingSize;
             lineData.author = SettingsManager.Instance.birdName;
             Material lineMaterial = null;

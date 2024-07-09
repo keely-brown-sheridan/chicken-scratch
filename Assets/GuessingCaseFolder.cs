@@ -103,13 +103,13 @@ namespace ChickenScratch
             return guessWords.Count == 2;
         }
 
-        public void ChooseGuess(int caseID)
+        public bool ChooseGuess(int caseID)
         {
             AudioManager.Instance.PlaySoundVariant("sfx_game_int_answer_select");
 
             if (guessWords.Count < 2)
             {
-                return;
+                return false;
             }
             StatTracker.Instance.wordIsGuessed = true;
             Dictionary<int, string> tempGuessWords = new Dictionary<int, string>();
@@ -123,7 +123,6 @@ namespace ChickenScratch
                 possibleWord.gameObject.SetActive(false);
             }
 
-            AudioManager.Instance.PlaySound("Stamp");
             GameManager.Instance.playerFlowManager.drawingRound.stampIsActive = false;
             float timeTaken = GameManager.Instance.playerFlowManager.drawingRound.timeInCurrentCase;
             StatTracker.Instance.timeInGuessingRound += timeTaken;
@@ -137,6 +136,8 @@ namespace ChickenScratch
             ClearGuess(1);
             ClearGuess(2);
             guessWords.Clear();
+
+            return true;
         }
 
         public void ForceGuess(int caseID)

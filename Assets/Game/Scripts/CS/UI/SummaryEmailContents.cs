@@ -15,7 +15,9 @@ namespace ChickenScratch
         [SerializeField]
         private PointsPieChart pointsPieChart;
         [SerializeField]
-        private Image mostLikedImage;
+        private BirdImage mostLikedImage;
+        [SerializeField]
+        private GameObject mostLikedHolder;
 
         private Dictionary<int, GameObject> voteRoundObjectMap = new Dictionary<int, GameObject>();
         private int currentRoundIndex = 1;
@@ -35,11 +37,12 @@ namespace ChickenScratch
             BirdData bestBird = GameDataManager.Instance.GetBird(PlayerFlowManager.employeeOfTheMonth);
             if (bestBird == null)
             {
-                Debug.LogError("Could not map employee of the month image because best bird["+PlayerFlowManager.employeeOfTheMonth.ToString()+"] was not mapped in the Colour Manager.");
+                mostLikedHolder.SetActive(false);
             }
             else
             {
-                mostLikedImage.sprite = bestBird.faceSprite;
+                BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(PlayerFlowManager.employeeOfTheMonth);
+                mostLikedImage.Initialize(PlayerFlowManager.employeeOfTheMonth, birdHat);
             }
             
             Dictionary<BirdName, float> pointsMap = new Dictionary<BirdName, float>();

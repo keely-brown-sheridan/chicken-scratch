@@ -32,7 +32,9 @@ public class PlayerStretchArm : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        handTransform.position = Input.mousePosition;
+        Vector3 mousePosition = new Vector3(Mathf.Min(Input.mousePosition.x, Screen.width), Input.mousePosition.y, handTransform.position.z);
+        
+        handTransform.position = mousePosition;
         timeSinceLastMove += Time.deltaTime;
 
         if (timeSinceLastMove > moveDelay)

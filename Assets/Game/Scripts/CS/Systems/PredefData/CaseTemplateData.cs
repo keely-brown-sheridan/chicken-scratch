@@ -10,7 +10,7 @@ namespace ChickenScratch
         public string name;
         public enum CaseFormat
         {
-            standard, rush, contribution, shrunk, thirds, top_bottom, corners
+            standard, rush, contribution, shrunk, thirds, top_bottom, corners, curveball, blind
         }
         public CaseFormat format = CaseFormat.standard;
 
@@ -114,6 +114,19 @@ namespace ChickenScratch
                     taskDuration = choice.GetTaskTiming(TaskData.TaskType.base_guessing);
                     queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.base_guessing, duration = taskDuration });
                     break;
+                case CaseFormat.curveball:
+                    queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.base_drawing, modifiers = new List<TaskData.TaskModifier>() { TaskData.TaskModifier.hidden_prefix } });
+                    queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.add_drawing } );
+
+                    foreach (TaskData queuedTask in queuedTasks)
+                    {
+                        taskDuration = choice.GetTaskTiming(queuedTask.taskType);
+                        //Reduce the time that the player takes for each of these tasks
+                        queuedTask.duration = taskDuration * SettingsManager.Instance.gameMode.contributionTaskRatio;
+                    }
+                    taskDuration = choice.GetTaskTiming(TaskData.TaskType.base_guessing);
+                    queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.base_guessing, duration = taskDuration });
+                    break;
                 case CaseFormat.shrunk:
                     List<TaskData.TaskModifier> shrunkModifier = new List<TaskData.TaskModifier>() { TaskData.TaskModifier.shrunk };
                     queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.base_drawing, modifiers = shrunkModifier } );
@@ -132,6 +145,33 @@ namespace ChickenScratch
                     if (choice.numberOfTasks > 5)
                     {
                         queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.prompt_drawing, modifiers = shrunkModifier });
+                    }
+                    queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.base_guessing });
+
+                    foreach (TaskData queuedTask in queuedTasks)
+                    {
+                        taskDuration = choice.GetTaskTiming(queuedTask.taskType);
+                        queuedTask.duration = taskDuration;
+                    }
+                    break;
+                case CaseFormat.blind:
+                    List<TaskData.TaskModifier> blindModifier = new List<TaskData.TaskModifier>() { TaskData.TaskModifier.blind };
+                    queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.base_drawing, modifiers = blindModifier });
+                    if (choice.numberOfTasks > 2)
+                    {
+                        queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.prompting });
+                    }
+                    if (choice.numberOfTasks > 3)
+                    {
+                        queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.prompt_drawing, modifiers = blindModifier });
+                    }
+                    if (choice.numberOfTasks > 4)
+                    {
+                        queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.prompting });
+                    }
+                    if (choice.numberOfTasks > 5)
+                    {
+                        queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.prompt_drawing, modifiers = blindModifier });
                     }
                     queuedTasks.Add(new TaskData() { taskType = TaskData.TaskType.base_guessing });
 

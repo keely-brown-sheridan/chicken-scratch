@@ -7,7 +7,7 @@ namespace ChickenScratch
     public class GuessCaseEmailSection : CaseEmailSection
     {
         [SerializeField]
-        private Image playerImage;
+        private BirdImage playerImage;
 
         [SerializeField]
         private TMPro.TMP_Text prefixText;
@@ -27,7 +27,9 @@ namespace ChickenScratch
                 Debug.LogError("Could not initialize the guess case email section because the guess bird["+ guessData.author.ToString()+"] was not mapped in the Colour Manager.");
                 return;
             }
-            playerImage.sprite = guessingBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(guessData.author);
+            playerImage.Initialize(guessData.author, birdHat);
+
             playerNameText.text = SettingsManager.Instance.GetPlayerName(guessData.author);
             playerNameText.color = guessingBird.colour;
 

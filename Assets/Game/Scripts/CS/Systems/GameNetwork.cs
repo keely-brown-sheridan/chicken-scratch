@@ -47,6 +47,7 @@ namespace ChickenScratch
             {
                 SettingsManager.Instance.waitingForPlayers = true;
                 SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_lobby_room;
+                Steamworks.SteamMatchmaking.SetLobbyJoinable(SettingsManager.Instance.currentRoomID, true);
                 NetworkManager.singleton.ServerChangeScene("MainMenu");
             }
         }
@@ -64,7 +65,8 @@ namespace ChickenScratch
                     NetworkManager.singleton.StopClient();
                 }
             }
-
+            SettingsManager.Instance.ClearAllPlayers();
+            SettingsManager.Instance.birdName = BirdName.none;
             SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_room_listings;
             SettingsManager.Instance.disconnected = true;
             Cursor.visible = true;

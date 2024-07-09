@@ -20,9 +20,9 @@ MonoBehaviour:
   cost: 0
   difficulty: 2
   penalty: 0
-  startingScoreModifier: 1.5
-  maxScoreModifier: 1.5
-  modifierDecrement: 0.25
+  startingScoreModifier: 1
+  maxScoreModifier: 1
+  modifierDecrement: 0.1
   taskFalloff: 0
   colour: {r: 0.6367924, g: 1, b: 0.8588751, a: 1}
   startingWordIdentifiers:
@@ -31,11 +31,11 @@ MonoBehaviour:
   selectionFrequency: 1
   taskTimingData:
   - taskType: 0
-    duration: 60
+    duration: 45
   - taskType: 3
-    duration: 60
+    duration: 45
   - taskType: 5
     duration: 60
-  queuedTaskSprites: 000000000000000002000000
   description: Your canvas will only be the top half. Another player will add to
     it.
+  upgrades: []

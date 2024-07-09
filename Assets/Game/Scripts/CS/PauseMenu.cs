@@ -61,9 +61,13 @@ namespace ChickenScratch
 
         private void LoadSettings()
         {
-            float masterVolume = ((float)SettingsManager.Instance.GetIntegerSetting("master_volume", 100)) / 100f;
-            float musicVolume = ((float)SettingsManager.Instance.GetIntegerSetting("music_volume", 100)) / 100f;
-            float effectVolume = ((float)SettingsManager.Instance.GetIntegerSetting("effect_volume", 100)) / 100f;
+            int defaultMasterVolume = AudioManager.Instance.defaultMasterVolume;
+            int defaultMusicVolume = AudioManager.Instance.defaultMusicVolume;
+            int defaultEffectVolume = AudioManager.Instance.defaultEffectsVolume;
+
+            float masterVolume = ((float)SettingsManager.Instance.GetIntegerSetting("master_volume", defaultMasterVolume)) / 100f;
+            float musicVolume = ((float)SettingsManager.Instance.GetIntegerSetting("music_volume", defaultMusicVolume)) / 100f;
+            float effectVolume = ((float)SettingsManager.Instance.GetIntegerSetting("effect_volume", defaultEffectVolume)) / 100f;
 
             //Load in the previous settings
             masterVolumeSlider.value = masterVolume;

@@ -70,30 +70,6 @@ namespace ChickenScratch
         private IEnumerator PlaceTestSticky(float t)
         {
             yield return new WaitForSeconds(t);
-            QueueSticky(GameManager.Instance.playerFlowManager.instructionRound.drawingToolsSticky2);
-        }
-
-        public void QueueSticky(TutorialSticky inTutorialSticky)
-        {
-            if (queuedStickyIdentifiers.Contains(inTutorialSticky.identifier))
-            {
-                Debug.Log("Could not add sticky with identifier[" + inTutorialSticky.identifier + "] because it has already been added.");
-                return;
-            }
-            queuedStickyIdentifiers.Add(inTutorialSticky.identifier);
-            queuedStickies.Add(inTutorialSticky.identifier, inTutorialSticky);
-            if (currentState == BossState.idle)
-            {
-                AudioManager.Instance.PlaySound("sfx_game_env_boss_rise");
-                if (inTutorialSticky.transform.position.x > Screen.width / 2)
-                {
-                    currentState = BossState.right_rising;
-                }
-                else
-                {
-                    currentState = BossState.left_rising;
-                }
-            }
         }
 
 
@@ -150,7 +126,7 @@ namespace ChickenScratch
             {
                 originalStartingPosition = armTransform.position;
                 startingPosition = originalStartingPosition;
-                QueueNextSticky();
+                //QueueNextSticky();
             }
         }
 
@@ -236,7 +212,7 @@ namespace ChickenScratch
                     if (queuedStickyIdentifiers.Count > 0)
                     {
                         startingPosition = originalStartingPosition;
-                        QueueNextSticky();
+                        //QueueNextSticky();
                     }
                     else
                     {
@@ -261,7 +237,7 @@ namespace ChickenScratch
                     if (queuedStickyIdentifiers.Count > 0)
                     {
                         startingPosition = originalStartingPosition;
-                        QueueNextSticky();
+                        //QueueNextSticky();
                     }
                     else
                     {
@@ -309,7 +285,7 @@ namespace ChickenScratch
                     if (queuedStickyIdentifiers.Count > 0)
                     {
                         startingPosition = targetPosition;
-                        QueueNextSticky();
+                        //QueueNextSticky();
                     }
                     else
                     {
@@ -322,82 +298,6 @@ namespace ChickenScratch
 
                 }
             }
-        }
-
-        private void QueueNextSticky()
-        {
-            string topQueuedStickyID = queuedStickyIdentifiers[0];
-            currentSticky = queuedStickies[topQueuedStickyID];
-            GameObject stickyObject;
-            Transform armTransform;
-            Vector3 startingOrientation;
-            Vector3 originalStartingScale;
-            float imageSize;
-            switch (currentState)
-            {
-                case BossState.right_rising:
-                case BossState.right_returning:
-                case BossState.right_lowering:
-                case BossState.right_placing:
-                    currentState = BossState.right_placing;
-                    stickyObject = rightStickyObject;
-                    armTransform = rightArmTransform;
-                    startingOrientation = rightStartingOrientation;
-                    originalStartingScale = rightOriginalStartingScale;
-                    imageSize = rightImageSize;
-                    break;
-                case BossState.left_rising:
-                case BossState.left_returning:
-                case BossState.left_lowering:
-                case BossState.left_placing:
-                    currentState = BossState.left_placing;
-                    stickyObject = leftStickyObject;
-                    armTransform = leftArmTransform;
-                    startingOrientation = leftStartingOrientation;
-                    originalStartingScale = leftOriginalStartingScale;
-                    imageSize = leftImageSize;
-                    break;
-                default:
-                    if (currentSticky.transform.position.x > Screen.width / 2)
-                    {
-                        currentState = BossState.right_placing;
-                        stickyObject = rightStickyObject;
-                        armTransform = rightArmTransform;
-                        startingOrientation = rightStartingOrientation;
-                        originalStartingScale = rightOriginalStartingScale;
-                        imageSize = rightImageSize;
-                    }
-                    else
-                    {
-                        currentState = BossState.left_placing;
-                        stickyObject = leftStickyObject;
-                        armTransform = leftArmTransform;
-                        startingOrientation = leftStartingOrientation;
-                        originalStartingScale = leftOriginalStartingScale;
-                        imageSize = leftImageSize;
-                    }
-                    break;
-            }
-
-            stickyObject.SetActive(true);
-            queuedStickyIdentifiers.RemoveAt(0);
-            queuedStickies.Remove(topQueuedStickyID);
-
-            targetPosition = new Vector3(currentSticky.transform.position.x, currentSticky.transform.position.y, currentSticky.transform.position.z);
-            timeRising = 0.0f;
-
-            targetDirection = targetPosition - originalStartingPosition;
-            targetDirection = Vector3.Normalize(targetDirection);
-
-            timeReachingTarget = Time.deltaTime;
-
-            startingScale = startingOrientation;
-            targetScale = new Vector3(1, 1, 1);
-            float screenWidthRatio = 1280f / Screen.width;
-            armTransform.localScale = new Vector3(originalStartingScale.x, 1f, 1f);
-            targetScale.x = Vector3.Distance(startingPosition, targetPosition) / imageSize * screenWidthRatio;
-            armTransform.right = targetDirection;
-
         }
     }
 }

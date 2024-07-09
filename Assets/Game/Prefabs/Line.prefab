@@ -157,5 +157,9 @@ MonoBehaviour:
     lineSize: 0.15
     author: 6
     positions: []
+    locked: 0
     index: -1
     subIndex: -1
+  isFading: 0
+  fadingTime: 3
+  fadeUpdateTime: 0.25

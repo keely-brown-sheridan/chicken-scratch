@@ -52,8 +52,7 @@ namespace ChickenScratch
         public bool active;
         public float armUpdateFrequency = 0.5f;
 
-        public TutorialSequence botcherGameTutorialSequence, bossRushGameTutorialSequence, botcherSlidesTutorialSequence, bossRushSlidesTutorialSequence, accusationTutorialSequence;
-        public TutorialSequence endlessModeTutorialSequence;
+        public TutorialSequence deadlineTutorialSequence, slideTutorialSequence;
 
         public List<BirdName> scoreTrackerPlayers;
         private PlayerFlowManager playerFlowManager;
@@ -138,6 +137,11 @@ namespace ChickenScratch
             GameManager.Instance.gameDataHandler.RpcServerIsReady();
             GameManager.Instance.gameFlowManager.SetCabinetOwnership();
             InitializeGame();
+
+            if(SettingsManager.Instance.isHost && SettingsManager.Instance.saveAdminReviewData)
+            {
+                SettingsManager.Instance.ClearOldSaveData();
+            }
             
             timeRemainingInPhase = loadingTimeLimit;
             active = true;
@@ -180,6 +184,7 @@ namespace ChickenScratch
                
             }
             SetPlayerObjectOwnership();
+
 
 
             switch (SettingsManager.Instance.gameMode.caseDeliveryMode)
@@ -267,7 +272,7 @@ namespace ChickenScratch
         public void IncreaseNumberOfCompletedCases()
         {
             totalCompletedCases++;
-            int requiredCaseCount = SettingsManager.Instance.GetCaseCountForDay();
+            int requiredCaseCount = SettingsManager.Instance.GetCaseCountForDay() + GameManager.Instance.playerFlowManager.baseCasesIncrease;
 
             if(totalCompletedCases >= requiredCaseCount)
             {
@@ -396,8 +401,10 @@ namespace ChickenScratch
 
         public void dequeueFrontCase(BirdName birdName)
         {
+            int round = -1;
             if (queuedChains.ContainsKey(birdName) && queuedChains[birdName].Count > 0)
             {
+                round = queuedChains[birdName][0].Item3;
                 queuedChains[birdName].RemoveAt(0);
 
                 if (queuedChains[birdName].Count == 0)
@@ -560,12 +567,12 @@ namespace ChickenScratch
 
                     break;
                 case GamePhase.game_tutorial:
-                    if (bossRushGameTutorialSequence.active ||
+                    if (deadlineTutorialSequence.active ||
                         !isRoundOver())
                     {
                         return;
                     }
-                    bossRushGameTutorialSequence.gameObject.SetActive(false);
+                    deadlineTutorialSequence.gameObject.SetActive(false);
  
                     currentGamePhase = GamePhase.instructions;
                     break;
@@ -612,11 +619,18 @@ namespace ChickenScratch
                         
                         //Send the difficulty values of the correct values to each player
                         broadcastCaseDifficultyValues();
-                        currentGamePhase = GamePhase.slides;
+                        if (SettingsManager.Instance.GetSetting("tutorials") && !slideTutorialSequence.hasBeenShown)
+                        {
+                            currentGamePhase = GamePhase.slides_tutorial;
+                        }
+                        else
+                        {
+                            currentGamePhase = GamePhase.slides;
+                        }
                     }
                     break;
                 case GamePhase.slides_tutorial:
-                    if (bossRushSlidesTutorialSequence.active ||
+                    if (slideTutorialSequence.active ||
                             !isRoundOver())
                     {
                         return;
@@ -625,12 +639,11 @@ namespace ChickenScratch
                     {
                         if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
                         {
-                            addTransitionCondition("ratings_loaded:" + bird);
-                            addTransitionCondition("stats_loaded:" + bird);
+                            //addTransitionCondition("ratings_loaded:" + bird);
+                            //addTransitionCondition("stats_loaded:" + bird);
                         }
                     }
-                    bossRushSlidesTutorialSequence.gameObject.SetActive(false);
-
+                    slideTutorialSequence.gameObject.SetActive(false);
                     currentGamePhase = GamePhase.slides;
                     break;
                 case GamePhase.slides:
@@ -685,15 +698,32 @@ namespace ChickenScratch
                     }
                     break;
                 case GamePhase.store:
-                    foreach(BirdName bird in SettingsManager.Instance.GetAllActiveBirds())
+                    if(GameManager.Instance.playerFlowManager.storeRound.currentState == StoreRound.State.unlock)
                     {
-                        string potentiallyActiveCondition = "store_complete:" + bird.ToString();
-                        if (activeTransitionConditions.Contains(potentiallyActiveCondition))
-                        {
-                            activeTransitionConditions.Remove(potentiallyActiveCondition);
-                        }
+                        GameManager.Instance.playerFlowManager.storeRound.ForceChoice();
+                        GameManager.Instance.playerFlowManager.storeRound.ServerInitializeStore();
+                        return;
                     }
-                    currentGamePhase = GamePhase.instructions;
+                    else
+                    {
+                        GameManager.Instance.gameDataHandler.RpcUpdateGameDay(GameManager.Instance.playerFlowManager.currentDay + 1);
+                        foreach (BirdName bird in GameManager.Instance.gameFlowManager.gamePlayers.Keys)
+                        {
+                            if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
+                            {
+                                addTransitionCondition("day_loaded:" + bird);
+                            }
+                        }
+                        foreach (BirdName bird in SettingsManager.Instance.GetAllActiveBirds())
+                        {
+                            string potentiallyActiveCondition = "store_complete:" + bird.ToString();
+                            if (activeTransitionConditions.Contains(potentiallyActiveCondition))
+                            {
+                                activeTransitionConditions.Remove(potentiallyActiveCondition);
+                            }
+                        }
+                        currentGamePhase = GamePhase.instructions;
+                    }
                     break;
                     
                 case GamePhase.results:
@@ -701,7 +731,7 @@ namespace ChickenScratch
             }
 
             playerFlowManager.loadingCircleObject.SetActive(false);
-            timeRemainingInPhase = playerFlowManager.currentTimeInRound;
+            //timeRemainingInPhase = playerFlowManager.currentTimeInRound;
 
             //Debug.Log("Broadcasting the phase["+currentGamePhase.ToString()+"].");
             //Broadcast the phase
@@ -908,9 +938,14 @@ namespace ChickenScratch
 
     public class PlayerTextInputData
     {
+        [XmlAttribute("Author")]
         public BirdName author = BirdName.none;
+        [XmlAttribute("Prompt")]
         public string text = "";
+        [XmlIgnore]
         public float timeTaken = 0.0f;
+        [XmlAttribute("IsQueued")]
+        public bool isQueuedForPlayer = false;
     }
 
     public class PlayerRatingData

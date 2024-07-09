@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8889a585509b4f54a9d98c92d24b3d8c, type: 3}
+  m_Name: CoffeeMug
+  m_EditorClassIdentifier: 
+  itemType: 12
+  itemName: Coffee Mug
+  itemDescription: Increases the day timer by 30 seconds once.
+  storeBGColour: {r: 0.9245283, g: 0.58725667, b: 0.51023495, a: 1}
+  cost: 5
+  itemImagePrefab: {fileID: 6114168219710276963, guid: 6586626352bffef4f89d36d5bf0be5b3,
+    type: 3}
+  isSinglePurchase: 0
+  index: 0
+  value: 30

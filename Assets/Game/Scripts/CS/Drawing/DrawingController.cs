@@ -80,6 +80,8 @@ namespace ChickenScratch
         private Dictionary<TaskData.TaskModifier, GameObject> drawingBoxMap = new Dictionary<TaskData.TaskModifier, GameObject>();
         private Drawing currentDrawing = null;
         private TaskData.TaskModifier boxType;
+        public TaskData.TaskModifier drawingType => _drawingType;
+        private TaskData.TaskModifier _drawingType = TaskData.TaskModifier.invalid;
 
         private bool isInitialized = false;
 
@@ -130,6 +132,10 @@ namespace ChickenScratch
         public void SetDrawingBoxType(TaskData.TaskModifier inBoxType)
         {
             boxType = inBoxType;
+        }
+        public void SetDrawingType(TaskData.TaskModifier inDrawingType)
+        {
+            _drawingType = inDrawingType;
         }
 
         void Update()
@@ -437,7 +443,14 @@ namespace ChickenScratch
                 StartNewDrawing();
             }
             List<GameObject> newLines = currentDrawing.CreateDrawingsFromVisuals(inDrawingData.visuals, drawingOriginTransform.position, 1f);
-
+            foreach(GameObject newLineObject in newLines)
+            {
+                DrawingLine drawingLine = newLineObject.GetComponent<DrawingLine>();
+                if(drawingLine)
+                {
+                    GameManager.Instance.playerFlowManager.AddAuthorDrawingLine(drawingLine.drawingLineData.author, newLineObject);
+                }
+            }
             drawingLines.AddRange(newLines);
             currentSortingOrder += inDrawingData.visuals.Count;
         }

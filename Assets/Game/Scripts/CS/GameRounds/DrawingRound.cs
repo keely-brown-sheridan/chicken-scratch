@@ -102,7 +102,6 @@ namespace ChickenScratch
         {
             onPlayerStartTask.AddListener(HandlePlayerStartTask);
             onPlayerSubmitTask.AddListener(HandlePlayerSubmitTask);
-            timeInRound = SettingsManager.Instance.gameMode.totalGameTime;
 
             if (cabinetDrawerMap == null || cabinetDrawerMap.Count == 0)
             {
@@ -143,11 +142,12 @@ namespace ChickenScratch
                 }
                 else
                 {
-                    GameManager.Instance.gameDataHandler.RpcUpdateNumberOfCases((int)(SettingsManager.Instance.GetCaseCountForDay()));
+                    GameManager.Instance.gameDataHandler.RpcUpdateNumberOfCases(GameManager.Instance.playerFlowManager.GetCasesForDay());
                     GameManager.Instance.gameDataHandler.RpcActivateCasePile();
                 }
-                GameManager.Instance.gameFlowManager.timeRemainingInPhase = SettingsManager.Instance.gameMode.totalGameTime;
-                GameManager.Instance.gameDataHandler.RpcUpdateTimer(SettingsManager.Instance.gameMode.totalGameTime);
+                float timeInDay = GameManager.Instance.playerFlowManager.GetTimeInDay();
+                GameManager.Instance.gameFlowManager.timeRemainingInPhase = timeInDay;
+                GameManager.Instance.gameDataHandler.RpcUpdateTimer(timeInDay);
             }
             hasRequestedCaseDetails = false;
             hasSentCaseDetails = false;
@@ -159,6 +159,17 @@ namespace ChickenScratch
                 scoreTracker.Reset();
                 scoreTracker.gameObject.SetActive(true);
             }
+
+            if(SettingsManager.Instance.GetSetting("stickies"))
+            {
+                TutorialSticky caseCabinetSticky = GameManager.Instance.playerFlowManager.instructionRound.caseCabinetSticky;
+                if(!caseCabinetSticky.hasBeenPlaced)
+                {
+                    caseCabinetSticky.Queue(true);
+                }
+            }
+
+
         }
 
         private void InitializeCabinetDrawers()
@@ -240,13 +251,18 @@ namespace ChickenScratch
             cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier = queuedCaseIndex;
             currentState = queuedFolderMap[queuedCaseIndex].queuedState;
 
+
             ChainData chainData = cabinetDrawerMap[playerCabinetIndex].currentChainData;
+            if(!StatTracker.Instance.uniqueCaseChoiceIdentifiers.Contains(chainData.caseTypeName))
+            {
+                StatTracker.Instance.uniqueCaseChoiceIdentifiers.Add(chainData.caseTypeName);
+            }
             float currentTaskTime = chainData.currentTaskDuration;
             float scoreDecrement = chainData.scoreModifierDecrement;
             Color inFolderColour = Color.white;
             SetCurrentDrawingRound(queuedFolderMap[queuedCaseIndex]);
             int lastRoundIndex = currentRound-1;
-            TaskModifier drawingBoxModifier = TaskModifier.standard;
+
             if(lastRoundIndex == -1)
             {
                 Debug.LogError("ERROR[UpdateToNewFolderState]: Last round index could not be set for case[" + chainData.identifier + "].");
@@ -254,6 +270,7 @@ namespace ChickenScratch
             stampIsActive = false;
             BirdName lastDrawer;
             BirdData lastDrawerBird;
+            
             switch (currentState)
             {
                 case CaseState.prompting:
@@ -313,27 +330,27 @@ namespace ChickenScratch
                             inFolderColour = playerBird.folderColour;
                         }
                         
-                        prompt = chainData.correctPrompt;
-                    }
-                    foreach(TaskModifier modifier in chainData.currentTaskModifiers)
-                    {
-                        switch(modifier)
+                        if(chainData.currentTaskModifiers.Contains(TaskModifier.hidden_prefix))
                         {
-                            case TaskModifier.shrunk:
-                            case TaskModifier.thirds_first:
-                            case TaskModifier.thirds_second:
-                            case TaskModifier.thirds_third:
-                            case TaskModifier.top:
-                            case TaskModifier.bottom:
-                            case TaskModifier.top_left:
-                            case TaskModifier.top_right:
-                            case TaskModifier.bottom_left:
-                            case TaskModifier.bottom_right:
-                                drawingBoxModifier = modifier;
-                                break;
+                            Debug.LogError("Current task modifiers contains hidden_prefix");
+                            CaseWordData promptWord = GameDataManager.Instance.GetWord(chainData.correctWordIdentifierMap[2]);
+                            if(promptWord != null)
+                            {
+                                prompt = promptWord.value;
+                            }
+                            else
+                            {
+                                prompt = "";
+                            }
                         }
+                        else
+                        {
+                            prompt = chainData.correctPrompt;
+                        }
+                        
                     }
-                    drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
+
+                    drawingCaseFolder.Initialize(prompt, chainData.currentTaskModifiers, ForceCaseExpirySubmit);
                     if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
                     {
                         drawingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
@@ -360,25 +377,8 @@ namespace ChickenScratch
                     {
                         Debug.LogError("Could not access drawing for round["+lastRoundIndex.ToString()+"] in case["+chainData.identifier.ToString()+"].");
                     }
-                    foreach (TaskModifier modifier in chainData.currentTaskModifiers)
-                    {
-                        switch (modifier)
-                        {
-                            case TaskModifier.shrunk:
-                            case TaskModifier.thirds_first:
-                            case TaskModifier.thirds_second:
-                            case TaskModifier.thirds_third:
-                            case TaskModifier.top:
-                            case TaskModifier.bottom:
-                            case TaskModifier.top_left:
-                            case TaskModifier.top_right:
-                            case TaskModifier.bottom_left:
-                            case TaskModifier.bottom_right:
-                                drawingBoxModifier = modifier;
-                                break;
-                        }
-                    }
-                    copyingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], drawingBoxModifier, ForceCaseExpirySubmit);
+
+                    copyingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], chainData.currentTaskModifiers, ForceCaseExpirySubmit);
                     if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
                     {
                         copyingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
@@ -404,25 +404,8 @@ namespace ChickenScratch
                             inFolderColour = lastDrawerBird.folderColour;
                         }
                     }
-                    foreach (TaskModifier modifier in chainData.currentTaskModifiers)
-                    {
-                        switch (modifier)
-                        {
-                            case TaskModifier.shrunk:
-                            case TaskModifier.thirds_first:
-                            case TaskModifier.thirds_second:
-                            case TaskModifier.thirds_third:
-                            case TaskModifier.top:
-                            case TaskModifier.bottom:
-                            case TaskModifier.top_left:
-                            case TaskModifier.top_right:
-                            case TaskModifier.bottom_left:
-                            case TaskModifier.bottom_right:
-                                drawingBoxModifier = modifier;
-                                break;
-                        }
-                    }
-                    addingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], chainData.correctPrompt, drawingBoxModifier, ForceCaseExpirySubmit);
+                    
+                    addingCaseFolder.Initialize(chainData.drawings[lastRoundIndex], chainData.correctPrompt, chainData.currentTaskModifiers, ForceCaseExpirySubmit);
                     if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
                     {
                         addingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
@@ -544,13 +527,16 @@ namespace ChickenScratch
                     }
                     else
                     {
-                        guessingCaseFolder.ChooseGuess(selectedCase.identifier);
+                        if(!guessingCaseFolder.ChooseGuess(selectedCase.identifier))
+                        {
+                            return;
+                        }
                     }
                     
                     break;
             }
 
-            Submit(false);
+            PressSubmit();
             timeHasExpired = false;
         }
 
@@ -581,7 +567,7 @@ namespace ChickenScratch
                 }
             }
 
-            float timeUsed = SettingsManager.Instance.gameMode.totalGameTime - GameManager.Instance.playerFlowManager.currentTimeInRound;
+            float timeUsed = GameManager.Instance.playerFlowManager.GetTimeInDay() - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
             int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
@@ -625,7 +611,7 @@ namespace ChickenScratch
                 }
             }
 
-            float timeUsed = SettingsManager.Instance.gameMode.totalGameTime - GameManager.Instance.playerFlowManager.currentTimeInRound;
+            float timeUsed = GameManager.Instance.playerFlowManager.GetTimeInDay() - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
             int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
@@ -670,7 +656,7 @@ namespace ChickenScratch
                 }
             }
 
-            float timeUsed = SettingsManager.Instance.gameMode.totalGameTime - GameManager.Instance.playerFlowManager.currentTimeInRound;
+            float timeUsed = GameManager.Instance.playerFlowManager.GetTimeInDay() - GameManager.Instance.playerFlowManager.currentTimeInRound;
 
             int currentRoundIndex = currentRound;
             if(currentRoundIndex == -1)
@@ -724,6 +710,39 @@ namespace ChickenScratch
             return true;
         }
 
+        public void PressSubmit()
+        {
+            switch (currentState)
+            {
+                case CaseState.drawing:
+                    drawingCaseFolder.RegisterToStampComplete(OnSubmitted);
+                    drawingCaseFolder.Submit();
+                    break;
+                case CaseState.prompting:
+                    promptingCaseFolder.RegisterToStampComplete(OnSubmitted);
+                    promptingCaseFolder.Submit();
+                    break;
+                case CaseState.guessing:
+                    guessingCaseFolder.RegisterToStampComplete(OnSubmitted);
+                    guessingCaseFolder.Submit();
+                    break;
+                case CaseState.copy_drawing:
+                    copyingCaseFolder.RegisterToStampComplete(OnSubmitted);
+                    copyingCaseFolder.Submit();
+                    break;
+                case CaseState.add_drawing:
+                    addingCaseFolder.RegisterToStampComplete(OnSubmitted);
+                    addingCaseFolder.Submit();
+                   
+                    break;
+            }
+        }
+
+        public void OnSubmitted()
+        {
+            Submit(false);
+        }
+
         public void Submit(bool force)
         {
             if(force && playerIsReady)
@@ -763,14 +782,15 @@ namespace ChickenScratch
                     {
                         ReleaseDeskDrawingFolder(cabinetDrawerMap[playerCabinetIndex].currentChainData, true);
                     }
-                    AudioManager.Instance.PlaySound("Stamp");
+
                     SubmitDrawing();
+                    drawingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     drawingCaseFolder.Hide();
                     currentScoreModifier = drawingCaseFolder.GetScoreModifier();
                     break;
                 case CaseState.prompting:
-                    AudioManager.Instance.PlaySound("Stamp");
                     SubmitPrompt(cabinetDrawerMap[playerCabinetIndex], force);
+                    promptingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     promptingCaseFolder.Hide();
                     currentScoreModifier = promptingCaseFolder.GetScoreModifier();
                     break;
@@ -779,6 +799,7 @@ namespace ChickenScratch
                     {
                         guessingCaseFolder.ForceGuess(cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier);
                     }
+                    guessingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     guessingCaseFolder.Hide();
                     currentScoreModifier = guessingCaseFolder.GetScoreModifier();
                     break;
@@ -787,9 +808,9 @@ namespace ChickenScratch
                     {
                         ReleaseDeskCopyingFolder(cabinetDrawerMap[playerCabinetIndex].currentChainData, true);
                     }
-                    AudioManager.Instance.PlaySound("Stamp");
-                    SubmitDrawing();
+                    copyingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     copyingCaseFolder.Hide();
+                    SubmitDrawing();
                     currentScoreModifier = copyingCaseFolder.GetScoreModifier();
                     break;
                 case CaseState.add_drawing:
@@ -797,9 +818,10 @@ namespace ChickenScratch
                     {
                         ReleaseDeskAddingFolder(cabinetDrawerMap[playerCabinetIndex].currentChainData, true);
                     }
-                    AudioManager.Instance.PlaySound("Stamp");
-                    SubmitDrawing();
+                    addingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     addingCaseFolder.Hide();
+
+                    SubmitDrawing();
                     currentScoreModifier = addingCaseFolder.GetScoreModifier();
                     break;
             }
@@ -826,7 +848,15 @@ namespace ChickenScratch
                     GameManager.Instance.gameDataHandler.CmdRequestNextCase(SettingsManager.Instance.birdName);
                 }
             }
-            
+            if (SettingsManager.Instance.GetSetting("stickies"))
+            {
+                TutorialSticky modifierSticky = GameManager.Instance.playerFlowManager.instructionRound.modifierSticky;
+                if(!modifierSticky.hasBeenClicked)
+                {
+                    modifierSticky.Click();
+                }
+            }
+
         }
 
         public void SendNextInQueue(BirdName birdToSendTo)
@@ -842,6 +872,7 @@ namespace ChickenScratch
                 Debug.LogError("ERROR[SendNextInQueue]: Could not find cabinet with identifier[" + cabinetIndex.ToString() + "]");
                 return;
             }
+            
             Dictionary<BirdName, List<Tuple<ChainData, int, int, BirdName>>> queuedChains = GameManager.Instance.gameFlowManager.queuedChains;
             if (queuedChains.ContainsKey(birdToSendTo) &&
                 queuedChains[birdToSendTo].Count > 0)
@@ -957,7 +988,7 @@ namespace ChickenScratch
             }
         }
 
-        public void StartChoiceCaseDrawing(int cabinetIndex, int caseID, string prompt, float taskTime, float currentModifierValue, float maxModifierValue, float modifierDecrement, TaskModifier drawingBoxModifier)
+        public void StartChoiceCaseDrawing(int cabinetIndex, int caseID, string prompt, float taskTime, float currentModifierValue, float maxModifierValue, float modifierDecrement, List<TaskModifier> taskModifiers)
         {
             currentState = CaseState.drawing;
 
@@ -987,8 +1018,17 @@ namespace ChickenScratch
             }
             Color folderColour = playerBird.folderColour;
             SetCurrentDrawingRound(1);
-            drawingCaseFolder.Initialize(prompt, drawingBoxModifier, ForceCaseExpirySubmit);
+            drawingCaseFolder.Initialize(prompt, taskModifiers, ForceCaseExpirySubmit);
             drawingCaseFolder.Show(folderColour, taskTime, currentModifierValue, maxModifierValue, modifierDecrement);
+
+            if (SettingsManager.Instance.GetSetting("stickies"))
+            {
+                TutorialSticky modifierSticky = GameManager.Instance.playerFlowManager.instructionRound.modifierSticky;
+                if (!modifierSticky.hasBeenPlaced)
+                {
+                    modifierSticky.Queue(true);
+                }
+            }
         }
 
         private void ForceCaseExpirySubmit()
@@ -1054,6 +1094,16 @@ namespace ChickenScratch
                 return;
             }
             caseChoicePanel.SetChoices(choices[0], choices[1], choices[2]);
+
+            if (SettingsManager.Instance.GetSetting("stickies"))
+            {
+                TutorialSticky choiceSticky = GameManager.Instance.playerFlowManager.instructionRound.choicesSticky2;
+                if (!choiceSticky.hasBeenPlaced)
+                {
+                    choiceSticky.Queue(true);
+                    GameManager.Instance.playerFlowManager.instructionRound.choicesSticky3.Queue(true);
+                }
+            }
         }
 
         private void SendEmptyDrawingToServer(BirdName author, int caseID, int round)
@@ -1105,7 +1155,7 @@ namespace ChickenScratch
 
         public void UpdateNumberOfCases(int numberOfCases)
         {
-            SettingsManager.Instance.gameMode.casesRemaining = numberOfCases;
+            GameManager.Instance.playerFlowManager.casesRemaining = numberOfCases;
             casesRemainingText.text = numberOfCases.ToString() + " cases\n remaining";
             if(numberOfCases <= 0)
             {
@@ -1158,6 +1208,7 @@ namespace ChickenScratch
 
         public void SetBirdArmTargetPosition(BirdName inBirdName, Vector3 inPosition)
         {
+            
             if (inBirdName == SettingsManager.Instance.birdName)
             {
                 return;
@@ -1165,6 +1216,7 @@ namespace ChickenScratch
             BirdArm birdArm = GetBirdArm(inBirdName);
             if(birdArm != null)
             {
+                
                 birdArm.targetPosition = inPosition;
             }
         }

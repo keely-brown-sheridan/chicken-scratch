@@ -9,7 +9,7 @@ namespace ChickenScratch
         private Transform drawingParent;
 
         [SerializeField]
-        private Image playerImage;
+        private BirdImage playerImage;
 
         [SerializeField]
         private float drawingSize;
@@ -24,7 +24,9 @@ namespace ChickenScratch
                 Debug.LogError("Could not initialize drawing case email section because drawing bird["+drawingData.author.ToString()+"] has not been mapped in the Colour Manager.");
                 return;
             }
-            playerImage.sprite = drawingBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(drawingData.author);
+            playerImage.Initialize(drawingData.author, birdHat);
+
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(drawingParent.position);
             worldPosition = new Vector3(worldPosition.x, worldPosition.y, 0f);
             drawingParent.position = worldPosition;

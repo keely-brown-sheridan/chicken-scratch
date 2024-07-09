@@ -25,6 +25,7 @@ namespace ChickenScratch
 
         public Text CreateRoomNameText, SetPlayerNameText, RoomListingsPlayerNameText;
         public Button LobbyStartGameBtn;
+        public GameObject LobbyStartGameBtnTextObject;
         public GameObject WaitingForHostMessageText;
 
         public CameraDock baseTransitionCameraDock;
@@ -87,14 +88,12 @@ namespace ChickenScratch
 
         public List<Animator> splashArmAnimators;
 
-        [SerializeField]
-        private GameObject selectionInstructionsObject;
+        public GameObject selectionInstructionsObject;
         [SerializeField]
         private GameObject selectedBirdParentObject;
         [SerializeField]
         private Image selectedBirdImage;
-        [SerializeField]
-        private Toggle privacyToggle;
+        public Toggle privacyToggle;
         [SerializeField]
         private PauseMenu splashScreenPauseMenu;
         [SerializeField]
@@ -102,10 +101,12 @@ namespace ChickenScratch
 
         [SerializeField]
         private GameObject skipIntroButton;
-        [SerializeField]
-        private LobbyNotReadyManager lobbyNotReadyManager;
 
-        public Toggle quickplayToggle;
+        public LobbyNotReadyManager lobbyNotReadyManager;
+
+        public Toggle exportTasksToggle;
+        [SerializeField]
+        private GameObject exportTasksContainerObject;
 
 
         private Dictionary<BirdName, Animator> splashArmAnimatorMap = new Dictionary<BirdName, Animator>();
@@ -162,6 +163,7 @@ namespace ChickenScratch
 
             if (NetworkClient.isConnected && SettingsManager.Instance.currentSceneTransitionState == SettingsManager.SceneTransitionState.return_to_lobby_room)
             {
+                currentMenuState = MenuState.lobby;
                 AudioManager.Instance.PlaySound("LobbyMusic");
                 roomListingsObject.SetActive(true);
                 //We're already connected to a game so we should load up the lobby page
@@ -169,6 +171,7 @@ namespace ChickenScratch
             }
             else if (SettingsManager.Instance.currentSceneTransitionState == SettingsManager.SceneTransitionState.return_to_room_listings)
             {
+                currentMenuState = MenuState.rooms;
                 AudioManager.Instance.PlaySound("LobbyMusic");
                 SkipIntro();
                 roomListingsObject.SetActive(true);
@@ -387,6 +390,8 @@ namespace ChickenScratch
 
         public void JoinedRoom()
         {
+            LobbyStartGameBtnTextObject.SetActive(SettingsManager.Instance.isHost);
+
             currentMenuState = MenuState.lobby;
             roomCodeText.text = "*****";
             splashScreenPauseMenu.canBeOpened = false;
@@ -401,13 +406,13 @@ namespace ChickenScratch
                 gameModeButton.interactable = true;
                 tutorialsButton.Initialize(SettingsManager.Instance.GetSetting("tutorials", true));
                 tutorialsButton.containerObject.SetActive(true);
-                quickplayToggle.interactable = true;
+                exportTasksContainerObject.SetActive(true);
             }
             else
             {
                 gameModeButton.interactable = false;
                 tutorialsButton.containerObject.SetActive(false);
-                quickplayToggle.interactable = false;
+                exportTasksContainerObject.SetActive(false);
             }
             stickiesButton.Initialize(SettingsManager.Instance.GetSetting("stickies", true));
         }
@@ -432,7 +437,7 @@ namespace ChickenScratch
 
             foreach (KeyValuePair<ColourManager.BirdName, PlayerIdentification> playerID in PlayerIdentificationMap)
             {
-                playerID.Value.Deselect();
+                //playerID.Value.Deselect();
             }
 
 
@@ -473,6 +478,11 @@ namespace ChickenScratch
 
                 if (!previousRoomIDs.Contains(roomID))
                 {
+                    bool isPrivate = bool.Parse(SteamMatchmaking.GetLobbyData(roomID, "isPrivate"));
+                    if (isPrivate)
+                    {
+                        continue;
+                    }
                     newRoomListing = Instantiate(RoomListingPrefab, RoomListingsParent);
                     rListingBehaviour = newRoomListing.GetComponent<RoomListing>();
                     rListingBehaviour.roomID = roomID;
@@ -622,10 +632,6 @@ namespace ChickenScratch
             {
                 SettingsManager.Instance.playerID = GameDelim.stripGameDelims(SetPlayerNameText.text);
             }
-            if (!LobbyNetwork.Instance.CreateRoom(GameDelim.stripGameDelims(CreateRoomNameText.text), privacyToggle.isOn))
-            {
-
-            }
         }
 
         public void RoomsPage_JoinGameOnClick()
@@ -691,6 +697,7 @@ namespace ChickenScratch
 
             if (playerNameCount >= SettingsManager.Instance.gameMode.minimumNumberOfPlayers)
             {
+                Steamworks.SteamMatchmaking.SetLobbyJoinable(SettingsManager.Instance.currentRoomID, false);
                 NetworkManager.singleton.ServerChangeScene(loadingLevel);
             }
         }
@@ -773,7 +780,6 @@ namespace ChickenScratch
         public void DeselectPlayerBird(ColourManager.BirdName birdName)
         {
             SettingsManager.Instance.DeassignBirdToPlayer(birdName);
-            lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.GetPlayerNameCount() == NetworkServer.connections.Count();
             PlayerIdentificationMap[birdName].Deselect();
         }
 
@@ -896,12 +902,11 @@ namespace ChickenScratch
         public void UpdateQuickplayToggle()
         {
             //LobbyNetwork.Instance.BroadcastQueue.Add("update_quickplay" + GameDelim.BASE + quickplayToggle.isOn.ToString());
-            SettingsManager.Instance.showFastResults = quickplayToggle.isOn;
+            SettingsManager.Instance.saveAdminReviewData = exportTasksToggle.isOn;
         }
 
         public void LoadLobbyFromGame()
         {
-            currentMenuState = MenuState.waiting;
             roomCodeText.text = "*****";
             AudioManager.Instance.StopSound("SplashMusic");
             AudioManager.Instance.StopSound("sfx_lobby_amb_outdoor");
@@ -911,28 +916,24 @@ namespace ChickenScratch
             LoadingPageObject.SetActive(true);
             LobbyStartGameBtn.interactable = SettingsManager.Instance.isHost;
             SettingsManager.Instance.SetGameMode(SettingsManager.Instance.gameMode.title);
-            
-            
+
+            LobbyStartGameBtnTextObject.SetActive(SettingsManager.Instance.isHost);
+            wordGroupsController.Initialize();
             if (SettingsManager.Instance.isHost)
             {
-                wordGroupsController.Initialize();
                 UpdatePlayerCount();
                 gameModeButton.interactable = true;
                 tutorialsButton.Initialize(SettingsManager.Instance.GetSetting("tutorials", true));
                 tutorialsButton.containerObject.SetActive(true);
-                quickplayToggle.interactable = true;
+                exportTasksContainerObject.SetActive(true);
                 lobbyNotReadyManager.playerAllHaveCardsSelected = SettingsManager.Instance.GetPlayerNameCount() == NetworkServer.connections.Count();
             }
             else
             {
-                Text startGameButtonText = LobbyStartGameBtn.GetComponentInChildren<Text>();
-                if (startGameButtonText)
-                {
-                    startGameButtonText.gameObject.SetActive(false);
-                }
+                
                 gameModeButton.interactable = false;
                 tutorialsButton.containerObject.SetActive(false);
-                quickplayToggle.interactable = false;
+                exportTasksContainerObject.SetActive(false);
             }
         }
 

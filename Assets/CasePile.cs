@@ -49,7 +49,7 @@ public class CasePile : MonoBehaviour
 
     public void Activate()
     {
-        if(SettingsManager.Instance.gameMode.casesRemaining > 0)
+        if(GameManager.Instance.playerFlowManager.casesRemaining > 0)
         {
             foreach (GameObject objectToShow in objectsToShowOnActivate)
             {
@@ -65,6 +65,15 @@ public class CasePile : MonoBehaviour
 
     public void Deactivate()
     {
+        if (SettingsManager.Instance.GetSetting("stickies"))
+        {
+            TutorialSticky panelSticky = GameManager.Instance.playerFlowManager.instructionRound.caseCabinetSticky;
+            if (!panelSticky.hasBeenClicked)
+            {
+                panelSticky.Click();
+            }
+        }
+
         foreach (GameObject objectToShow in objectsToShowOnActivate)
         {
             if(objectToShow == null)

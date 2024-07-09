@@ -19,16 +19,43 @@ namespace ChickenScratch
         [SerializeField]
         private TMPro.TMP_Dropdown typeDropDown;
 
+        [SerializeField]
+        private GameObject addWordButtonObject;
+
+        [SerializeField]
+        private WordManagerWarningMessage wordManagerWarningMessage;
+
+        [SerializeField]
+        private Color warningMessageColour, validMessageColour;
+
         private WordGroupData.WordType currentWordType = WordGroupData.WordType.prefixes;
 
         public string editingCategoryName => _editingCategoryName;
         private string _editingCategoryName = "";
 
+        private WordItem selectedItem = null;
+
+        private void Update()
+        {
+            if (selectedItem != null && Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    ShiftToHigherItem();
+                }
+                else
+                {
+                    ShiftToLowerItem();
+                }
+            }
+        }
+
         public void AddToContent()
         {
             GameObject wordItemObject = Instantiate(wordItemPrefab, contentObject.transform);
             WordItem wordItem = wordItemObject.GetComponent<WordItem>();
-            wordItem.Initialize(new WordData("", currentWordType.ToString(), 1));
+            wordItem.Initialize(new WordData("", currentWordType.ToString(), 1), this);
+            addWordButtonObject.transform.SetAsLastSibling();
         }
 
         public void SetWordType()
@@ -80,6 +107,8 @@ namespace ChickenScratch
                 WordItem wordItem = wordItemObject.GetComponent<WordItem>();
                 wordItem.Initialize(new WordData(word.text, selectedGroupData.wordType.ToString(), word.difficulty));
             }
+
+            addWordButtonObject.transform.SetAsLastSibling();
         }
 
         public bool CanSave(List<string> existingGroupNames, ref List<WordData> words)
@@ -88,7 +117,7 @@ namespace ChickenScratch
             {
                 if (existingGroupName == nameInputField.text && existingGroupName != editingCategoryName)
                 {
-                    Debug.LogError("Error: Trying to save word group with a name that already exists.");
+                    wordManagerWarningMessage.ShowMessage("Category already exists.", warningMessageColour);
                     return false;
                 }
             }
@@ -103,12 +132,12 @@ namespace ChickenScratch
 
                 if (existingWords.Contains(wordItem.WordData.text))
                 {
-                    Debug.LogError("Error: Trying to save word group that has word repeats in it.");
+                    wordManagerWarningMessage.ShowMessage("Category contains word repeats.", warningMessageColour);
                     return false;
                 }
                 if (wordItem.WordData.text == "")
                 {
-                    Debug.LogError("Error: Trying to save word group that has an empty word.");
+                    wordManagerWarningMessage.ShowMessage("Category contains empty words.", warningMessageColour);
                     return false;
                 }
                 existingWords.Add(wordItem.WordData.text);
@@ -117,7 +146,7 @@ namespace ChickenScratch
 
             if (words.Count < 3)
             {
-                Debug.LogError("Error: Insufficient words for a word group.");
+                wordManagerWarningMessage.ShowMessage("Insufficient words for a word group.", warningMessageColour);
                 return false;
             }
 
@@ -130,10 +159,10 @@ namespace ChickenScratch
             //Get the word type
             switch (typeDropDown.captionText.text)
             {
-                case "Prefix":
+                case "Prefixes":
                     wordType = WordGroupData.WordType.prefixes;
                     break;
-                case "Noun":
+                case "Nouns":
                     wordType = WordGroupData.WordType.nouns;
                     break;
             }
@@ -142,7 +171,61 @@ namespace ChickenScratch
             existingWordGroup.SetName(nameInputField.text);
             existingWordGroup.SetType(wordType);
             existingWordGroup.words = words;
+            wordManagerWarningMessage.ShowMessage("Word group saved.", validMessageColour);
             return existingWordGroup;
+        }
+
+        public void SetSelectedItem(WordItem item)
+        {
+            selectedItem = item;
+        }
+
+        public void DeselectItem(WordItem item)
+        {
+            if (selectedItem == item)
+            {
+                selectedItem = null;
+            }
+        }
+
+        private void ShiftToHigherItem()
+        {
+            List<Transform> itemTransforms = new List<Transform>();
+            foreach (Transform itemTransform in contentObject.transform)
+            {
+                if (itemTransform != addWordButtonObject)
+                {
+                    itemTransforms.Add(itemTransform);
+                }
+            }
+            for (int i = 1; i < itemTransforms.Count; i++)
+            {
+                if (itemTransforms[i] == selectedItem.transform)
+                {
+                    selectedItem = itemTransforms[i - 1].GetComponent<WordItem>();
+                    selectedItem.Select();
+                }
+            }
+        }
+
+        private void ShiftToLowerItem()
+        {
+            List<Transform> itemTransforms = new List<Transform>();
+            foreach (Transform itemTransform in contentObject.transform)
+            {
+                if (itemTransform != addWordButtonObject)
+                {
+                    itemTransforms.Add(itemTransform);
+                }
+            }
+            for (int i = 0; i < itemTransforms.Count - 2; i++)
+            {
+                if (itemTransforms[i] == selectedItem.transform)
+                {
+                    selectedItem = itemTransforms[i + 1].GetComponent<WordItem>();
+                    selectedItem.Select();
+                }
+            }
         }
     }
 }

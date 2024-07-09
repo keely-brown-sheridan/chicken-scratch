@@ -20,7 +20,7 @@ namespace ChickenScratch
         {
             SettingsManager.Instance.UpdateSetting("tutorials", false);
             SettingsManager.Instance.UpdateSetting("music", false);
-            SettingsManager.Instance.UpdateSetting("stickies", true);
+            SettingsManager.Instance.UpdateSetting("stickies", false);
         }
 
 
@@ -95,7 +95,6 @@ namespace ChickenScratch
             { 
                 GameManager.Instance.gameDataHandler.CmdPlayerLoadedGame(SettingsManager.Instance.birdName);
                 hasConfirmedReadyToStart = true;
-                SettingsManager.Instance.UpdateSetting("tutorials", false);
             }
 
         }

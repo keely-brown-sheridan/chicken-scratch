@@ -30,5 +30,21 @@ namespace ChickenScratch
         public GameObject storePlayerBirdArmPrefab;
         public GameObject storeBirdArmPrefab;
         public string birdSoundName;
+
+        [SerializeField]
+        private List<BirdHatData> hats;
+
+        public BirdHatData GetHat(BirdHatData.HatType hatType)
+        {
+            foreach(BirdHatData hat in hats)
+            {
+                if(hat.hatType == hatType)
+                {
+                    return hat;
+                }
+                
+            }
+            return null;
+        }
     }
 }

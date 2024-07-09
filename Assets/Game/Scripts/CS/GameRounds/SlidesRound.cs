@@ -63,7 +63,7 @@ namespace ChickenScratch
         private GameObject caseDetailsHolder;
 
         [SerializeField]
-        private Image authorImage;
+        private BirdImage authorImage;
 
         [SerializeField]
         private TMPro.TMP_Text authorNameText;
@@ -96,12 +96,12 @@ namespace ChickenScratch
         private Dictionary<BirdName, PeanutBird> chatBirdMap = new Dictionary<BirdName, PeanutBird>();
         public int currentSlideContentIndex = 0;
 
-        private int totalCasesInSlidesRound = 0;
-        private int startingCaseIndex = 0;
+        public int totalCasesInSlidesRound = 0;
+        public int startingCaseIndex = 0;
+        private bool hasUpdatedCasesInSlideRound = false;
         public override void StartRound()
         {
-            startingCaseIndex = currentSlideContentIndex;
-            totalCasesInSlidesRound = caseDataMap.Count - currentSlideContentIndex;
+            hasUpdatedCasesInSlideRound = false;
             currentBirdBuckTotal = 0;
             hasStartedShowingDayResult = false;
             inProgress = true;
@@ -187,6 +187,12 @@ namespace ChickenScratch
                     {
                         return;
                     }
+                    if(!hasUpdatedCasesInSlideRound)
+                    {
+                        hasUpdatedCasesInSlideRound = true;
+                        GameManager.Instance.gameDataHandler.RpcUpdateSlidesCaseCount(currentSlideCaseIndex, caseDataMap.Count - currentSlideCaseIndex);
+
+                    }
                     //Get the next active case which has content which can be shown
                     currentSlideCaseIndex++;
 
@@ -255,7 +261,7 @@ namespace ChickenScratch
             currentSlideType = slideTypeMap[SlideTypeData.SlideType.summary];
             GameObject summarySlideObject = Instantiate(currentSlideType.prefab, slidesParent);
             SummarySlideContents summarySlide = summarySlideObject.GetComponent<SummarySlideContents>();
-            summarySlide.Initialize(correctPrefix, correctNoun, caseData.identifier, currentSlideType.showDuration, caseData.scoringData.GetTotalPoints());
+            summarySlide.Initialize(caseData.identifier, currentSlideType.showDuration, caseData.scoringData.GetTotalPoints());
 
             //Create task slides
             foreach (KeyValuePair<int,EndgameTaskData> taskData in caseData.taskDataMap)
@@ -301,7 +307,7 @@ namespace ChickenScratch
             queuedSlides.Add(summarySlide);
             //Show the first slide
             currentSlideContents = introSlide;
-            currentSlideContents.gameObject.SetActive(true);
+            currentSlideContents.Show();
             currentSlideContents.active = true;
             currentSlideContentIndex = 0;
         }
@@ -362,7 +368,8 @@ namespace ChickenScratch
                 Debug.LogError("Could not update preview bird visuals because bird[" + author.ToString() + "] was not mapped in the Colour Manager.");
                 return;
             }
-            authorImage.sprite = authorBird.faceSprite;
+            BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(author);
+            authorImage.Initialize(author, birdHat);
             authorNameText.color = authorBird.colour;
             authorNameText.text = SettingsManager.Instance.GetPlayerName(author);
         }
@@ -558,7 +565,7 @@ namespace ChickenScratch
 
             if(SettingsManager.Instance.DidPlayersPassDay())
             {
-                if(GameManager.Instance.playerFlowManager.currentDay + 1 >= SettingsManager.Instance.gameMode.maxDays)
+                if(GameManager.Instance.playerFlowManager.currentDay + 1 >= SettingsManager.Instance.gameMode.days.Count)
                 {
                     foreach (BirdName bird in GameManager.Instance.gameFlowManager.gamePlayers.Keys)
                     {
@@ -570,7 +577,6 @@ namespace ChickenScratch
                     }
                     //Send broadcast to players for ratings
                     GameManager.Instance.gameDataHandler.RpcSendStats();
-                    StatTracker.Instance.SetServerPlayerStats();
                     sendRatingsToClients();
                     _phaseToTransitionTo = GamePhase.accolades;
                 }
@@ -578,15 +584,6 @@ namespace ChickenScratch
                 {
                     currentSlideContents = null;
                     currentSlideCaseIndex--;
-                    GameManager.Instance.gameDataHandler.RpcUpdateGameDay(GameManager.Instance.playerFlowManager.currentDay + 1);
-                    foreach (BirdName bird in GameManager.Instance.gameFlowManager.gamePlayers.Keys)
-                    {
-                        if (!GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
-                        {
-                            GameManager.Instance.gameFlowManager.addTransitionCondition("day_loaded:" + bird);
-                        }
-                    }
-                    
                     _phaseToTransitionTo = GamePhase.store;
                 }
             }
@@ -603,7 +600,6 @@ namespace ChickenScratch
 
                 //Send broadcast to players for ratings
                 GameManager.Instance.gameDataHandler.RpcSendStats();
-                StatTracker.Instance.SetServerPlayerStats();
                 sendRatingsToClients();
                 _phaseToTransitionTo = GamePhase.accolades;
             }

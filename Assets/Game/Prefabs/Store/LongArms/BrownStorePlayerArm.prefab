@@ -136,8 +136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0083b7fe6fb2bc54a8911e9151c0adb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  variant: 0
   handTransform: {fileID: 2369830707715719983}
   _birdName: 4
+  moveDelay: 0.5
 --- !u!1 &2369830708361353073
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +176,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 740.12, y: -1.4}
-  m_SizeDelta: {x: 1490.8754, y: 39.8}
+  m_SizeDelta: {x: 70, y: 39.8}
   m_Pivot: {x: 1, y: 0.3326615}
 --- !u!222 &2369830708361353085
 CanvasRenderer:
