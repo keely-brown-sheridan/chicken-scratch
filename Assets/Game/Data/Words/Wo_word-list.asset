@@ -4118,3 +4118,873 @@ MonoBehaviour:
     difficulty: 3
     category: SLIGHT-POSITIVE
     wordType: 0
+  - identifier: prefixes-BIRDS-DIVING
+    value: DIVING
+    difficulty: 1
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-FLYING
+    value: FLYING
+    difficulty: 1
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-LAYING
+    value: LAYING
+    difficulty: 1
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-NESTING
+    value: NESTING
+    difficulty: 1
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-CALLING
+    value: CALLING
+    difficulty: 1
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-SINGING
+    value: SINGING
+    difficulty: 1
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-TWEETING
+    value: TWEETING
+    difficulty: 1
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-SWOOPING
+    value: SWOOPING
+    difficulty: 2
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-PERCHING
+    value: PERCHING
+    difficulty: 2
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-FEATHERED
+    value: FEATHERED
+    difficulty: 2
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-WILD
+    value: WILD
+    difficulty: 3
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-WEBBED
+    value: WEBBED
+    difficulty: 3
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-PECKING
+    value: PECKING
+    difficulty: 3
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-FLOCKING
+    value: FLOCKING
+    difficulty: 3
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-WADDLING
+    value: WADDLING
+    difficulty: 3
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-NOCTURNAL
+    value: NOCTURNAL
+    difficulty: 3
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-COOING
+    value: COOING
+    difficulty: 4
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-WINGLESS
+    value: WINGLESS
+    difficulty: 4
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-CHIRPING
+    value: CHIRPING
+    difficulty: 4
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-MOULTING
+    value: MOULTING
+    difficulty: 4
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-MIGRATORY
+    value: MIGRATORY
+    difficulty: 4
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-WARBLING
+    value: WARBLING
+    difficulty: 5
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-TROPICAL
+    value: TROPICAL
+    difficulty: 5
+    category: BIRDS
+    wordType: 0
+  - identifier: prefixes-BIRDS-DOMESTICATED
+    value: DOMESTICATED
+    difficulty: 5
+    category: BIRDS
+    wordType: 0
+  - identifier: nouns-CREATURE-MIMIC
+    value: MIMIC
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-CHIMERA
+    value: CHIMERA
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-ELEMENTAL
+    value: ELEMENTAL
+    difficulty: 5
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-POLTERGEIST
+    value: POLTERGEIST
+    difficulty: 5
+    category: CREATURE
+    wordType: 1
+  - identifier: prefixes-ACTION-FLYING
+    value: FLYING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-KICKING
+    value: KICKING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-DANCING
+    value: DANCING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-PUNCHING
+    value: PUNCHING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-FLIPPING
+    value: FLIPPING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-ROLLING
+    value: ROLLING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-SWINGING
+    value: SWINGING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-LOOPING
+    value: LOOPING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-DRIVING
+    value: DRIVING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-WALKING
+    value: WALKING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-RUNNING
+    value: RUNNING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-JOGGING
+    value: JOGGING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-COOKING
+    value: COOKING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-BAKING
+    value: BAKING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-SMELLING
+    value: SMELLING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-TALKING
+    value: TALKING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-YELLING
+    value: YELLING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-WATERING
+    value: WATERING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-FREEZING
+    value: FREEZING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-MELTING
+    value: MELTING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-CHASING
+    value: CHASING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-FLEEING
+    value: FLEEING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-TASTING
+    value: TASTING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-LOOKING
+    value: LOOKING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-LEAPING
+    value: LEAPING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-FLOATING
+    value: FLOATING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-POURING
+    value: POURING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-DROOPING
+    value: DROOPING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-CRYING
+    value: CRYING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-FROWNING
+    value: FROWNING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-GROWING
+    value: GROWING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-STALKING
+    value: STALKING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-BUILDING
+    value: BUILDING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-BOOING
+    value: BOOING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-CLAPPING
+    value: CLAPPING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-COPYING
+    value: COPYING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-DELIVERING
+    value: DELIVERING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-HUMMING
+    value: HUMMING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-FORGETTING
+    value: FORGETTING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-ARRANGING
+    value: ARRANGING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-BIKING
+    value: BIKING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-CLICKING
+    value: CLICKING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-INSTALLING
+    value: INSTALLING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-REBELLING
+    value: REBELLING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-SNORING
+    value: SNORING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-THINKING
+    value: THINKING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-COILING
+    value: COILING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-PRETENDING
+    value: PRETENDING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-LEARNING
+    value: LEARNING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-DESIGNING
+    value: DESIGNING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-DUCKING
+    value: DUCKING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-SURPRISING
+    value: SURPRISING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-WHISPERING
+    value: WHISPERING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-WRESTLING
+    value: WRESTLING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-CONCOCTING
+    value: CONCOCTING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-TRICKING
+    value: TRICKING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-ENCODING
+    value: ENCODING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-FILING
+    value: FILING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-DECIDING
+    value: DECIDING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-BUZZING
+    value: BUZZING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-INVENTING
+    value: INVENTING
+    difficulty: 4
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-PARTICIPATING
+    value: PARTICIPATING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-PRODUCING
+    value: PRODUCING
+    difficulty: 5
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-HUGGING
+    value: HUGGING
+    difficulty: 1
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-SQUINTING
+    value: SQUINTING
+    difficulty: 3
+    category: ACTION
+    wordType: 0
+  - identifier: prefixes-ACTION-GRIMACING
+    value: GRIMACING
+    difficulty: 2
+    category: ACTION
+    wordType: 0
+  - identifier: nouns-PROFESSION-GARBAGE-COLLECTOR
+    value: GARBAGE-COLLECTOR
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-VEHICLE-ZEPPELIN
+    value: ZEPPELIN
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: variant-ADJUSTMENT-LIQUID
+    value: LIQUID
+    difficulty: 1
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-SOLID
+    value: SOLID
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-GASEOUS
+    value: GASEOUS
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-WOODEN
+    value: WOODEN
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-METALLIC
+    value: METALLIC
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-GEOMETRIC
+    value: GEOMETRIC
+    difficulty: 5
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-ENCHANTED
+    value: ENCHANTED
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-ENCASED
+    value: ENCASED
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-DIGITAL
+    value: DIGITAL
+    difficulty: 4
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-ELECTRONIC
+    value: ELECTRONIC
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-AQUATIC
+    value: AQUATIC
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-CLASSIC
+    value: CLASSIC
+    difficulty: 5
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-ROBOTIC
+    value: ROBOTIC
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-ANCIENT
+    value: ANCIENT
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-BIG
+    value: BIG
+    difficulty: 1
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-ROUNDER
+    value: ROUNDER
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-CLOSER
+    value: CLOSER
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-FARTHER
+    value: FARTHER
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-UNDERNEATH
+    value: UNDERNEATH
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-ABOVE
+    value: ABOVE
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-BELOW
+    value: BELOW
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-BURIED
+    value: BURIED
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-AIRBORNE
+    value: AIRBORNE
+    difficulty: 1
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-COVERED
+    value: COVERED
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-SURROUNDED
+    value: SURROUNDED
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-BLOODIER
+    value: BLOODIER
+    difficulty: 4
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-HOTTER
+    value: HOTTER
+    difficulty: 1
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-COLDER
+    value: COLDER
+    difficulty: 1
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-WETTER
+    value: WETTER
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-DRIER
+    value: DRIER
+    difficulty: 3
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-BRAVER
+    value: BRAVER
+    difficulty: 4
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-BUSIER
+    value: BUSIER
+    difficulty: 5
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-CLEANER
+    value: CLEANER
+    difficulty: 3
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-DIRTIER
+    value: DIRTIER
+    difficulty: 2
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-DEADER
+    value: DEADER
+    difficulty: 1
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-BRAINIER
+    value: BRAINIER
+    difficulty: 2
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-BRIGHTER
+    value: BRIGHTER
+    difficulty: 2
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-DARKER
+    value: DARKER
+    difficulty: 2
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-DULLER
+    value: DULLER
+    difficulty: 4
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-CRAZIER
+    value: CRAZIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-SADDER
+    value: SADDER
+    difficulty: 1
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-HAPPIER
+    value: HAPPIER
+    difficulty: 1
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-ANGRIER
+    value: ANGRIER
+    difficulty: 1
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-DIZZIER
+    value: DIZZIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-FAIRER
+    value: FAIRER
+    difficulty: 5
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-FUNNIER
+    value: FUNNIER
+    difficulty: 2
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-GENTLER
+    value: GENTLER
+    difficulty: 4
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-BETTER
+    value: BETTER
+    difficulty: 3
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-GRUMPIER
+    value: GRUMPIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-SCARIER
+    value: SCARIER
+    difficulty: 1
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-HEALTHIER
+    value: HEALTHIER
+    difficulty: 4
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-HUNGRIER
+    value: HUNGRIER
+    difficulty: 2
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-SICKER
+    value: SICKER
+    difficulty: 1
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-ITCHIER
+    value: ITCHIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-KINDER
+    value: KINDER
+    difficulty: 3
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-LAZIER
+    value: LAZIER
+    difficulty: 4
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-LONELIER
+    value: LONELIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-LONGER
+    value: LONGER
+    difficulty: 2
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-TALLER
+    value: TALLER
+    difficulty: 1
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-ADJUSTMENT-SMALLER
+    value: SMALLER
+    difficulty: 1
+    category: ADJUSTMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-MUSHIER
+    value: MUSHIER
+    difficulty: 4
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-NASTIER
+    value: NASTIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-NUTTIER
+    value: NUTTIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-PLAINER
+    value: PLAINER
+    difficulty: 5
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-POORER
+    value: POORER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-PROUDER
+    value: PROUDER
+    difficulty: 4
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-RICHER
+    value: RICHER
+    difficulty: 1
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-SHINIER
+    value: SHINIER
+    difficulty: 3
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-SILLIER
+    value: SILLIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-TAMER
+    value: TAMER
+    difficulty: 5
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-TASTIER
+    value: TASTIER
+    difficulty: 3
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-TOUGHER
+    value: TOUGHER
+    difficulty: 4
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-REGRESSION-WEAKER
+    value: WEAKER
+    difficulty: 2
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-UGLIER
+    value: UGLIER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-WILDER
+    value: WILDER
+    difficulty: 3
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-REGRESSION-ZANIER
+    value: ZANIER
+    difficulty: 4
+    category: REGRESSION
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-QUICKER
+    value: QUICKER
+    difficulty: 2
+    category: IMPROVEMENT
+    wordType: 2
+  - identifier: variant-IMPROVEMENT-STRONGER
+    value: STRONGER
+    difficulty: 1
+    category: IMPROVEMENT
+    wordType: 2

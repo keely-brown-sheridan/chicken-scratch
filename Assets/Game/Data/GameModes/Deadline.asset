@@ -21,10 +21,14 @@ MonoBehaviour:
     caseTypesToAddToPool:
     - Short Add
     - Short Copy
-    - Top Bottom
+    - Split
+    - Blender
+    - Flipped Copy
+    - Morph
+    unlocksToAddToPool: []
     numberOfCaseTypeUnlocks: 1
   - goalPerPlayer: 10
-    casesPerPlayer: 1.5
+    casesPerPlayer: 1.25
     winResult: {fileID: 11400000, guid: ef990e2c1bbb114449760b118b1f7266, type: 2}
     loseResult: {fileID: 11400000, guid: 961dc0b86e73c8a4590192ac0af3ced3, type: 2}
     caseTypesToAddToPool:
@@ -35,9 +39,11 @@ MonoBehaviour:
     - Long Copy
     - Shrunk One-Off
     - Shrunk Telephone
-    numberOfCaseTypeUnlocks: 2
+    - Limited Input
+    unlocksToAddToPool: []
+    numberOfCaseTypeUnlocks: 1
   - goalPerPlayer: 20
-    casesPerPlayer: 2
+    casesPerPlayer: 1.5
     winResult: {fileID: 11400000, guid: 3173dc4d4cb60d24f9b5a46e20565ce3, type: 2}
     loseResult: {fileID: 11400000, guid: f1126f6783963cf4087a235ce41cc13e, type: 2}
     caseTypesToAddToPool:
@@ -45,12 +51,14 @@ MonoBehaviour:
     - Faded One-Off
     - Faded Telephone
     - Hard One-Off
+    unlocksToAddToPool: []
     numberOfCaseTypeUnlocks: 2
-  - goalPerPlayer: 45
-    casesPerPlayer: 2.5
+  - goalPerPlayer: 50
+    casesPerPlayer: 2
     winResult: {fileID: 11400000, guid: 015fafb42a44a054d88a177495ffd290, type: 2}
     loseResult: {fileID: 11400000, guid: f1126f6783963cf4087a235ce41cc13e, type: 2}
     caseTypesToAddToPool: []
+    unlocksToAddToPool: []
     numberOfCaseTypeUnlocks: 2
   minimumNumberOfPlayers: 2
   wordDistributionMode: 0
@@ -78,6 +86,7 @@ MonoBehaviour:
   baseGameTime: 180
   dailyGameTimeRamp: 60
   baseRestockCost: 3
-  itemRestockCost: 2
   hasAccusationRound: 0
   rolesToDistribute: []
+  middleStoreRowUnlockCost: 10
+  bottomStoreRowUnlockCost: 25

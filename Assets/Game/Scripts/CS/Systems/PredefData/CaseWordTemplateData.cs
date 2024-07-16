@@ -12,7 +12,7 @@ namespace ChickenScratch
     {
         public enum CaseWordType
         {
-            descriptor, noun, invalid
+            descriptor, noun, variant, invalid
         }
         public CaseWordType type = CaseWordType.invalid;
 

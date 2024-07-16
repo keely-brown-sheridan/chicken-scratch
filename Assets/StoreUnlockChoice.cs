@@ -18,8 +18,12 @@ public class StoreUnlockChoice : MonoBehaviour
     public List<string> caseTypes => _caseTypes;
     private List<string> _caseTypes = new List<string>();
 
+    public bool hasChosen => _hasChosen;
+    private bool _hasChosen = false;
+
     public void Initialize(List<string> inCaseTypes, ColourManager.BirdName unionRep)
     {
+        _hasChosen = false;
         _caseTypes = inCaseTypes;
 
         //Clear previous instances
@@ -51,6 +55,7 @@ public class StoreUnlockChoice : MonoBehaviour
 
     public void Choose(bool endRound)
     {
+        _hasChosen = true;
         GameManager.Instance.gameDataHandler.CmdChooseStoreUnlockOption(_caseTypes, endRound);
         GameManager.Instance.playerFlowManager.storeRound.HideChoiceOptionButtons();
     }

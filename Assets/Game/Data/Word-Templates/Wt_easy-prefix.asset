@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 0
   identifier: easy-prefix
   difficultyMinimum: 1
-  difficultyMaximum: 2
+  difficultyMaximum: 3
   cost: 0
   reward: 0
   numberOfOptionsForGuessing: 3

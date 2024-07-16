@@ -9,6 +9,8 @@ namespace ChickenScratch
     [Serializable]
     public class EndgameTaskData
     {
+        public bool expectingDrawing = false;
+
         public int round;
         public TaskData.TaskType taskType;
         public PlayerRatingData ratingData;
@@ -30,6 +32,17 @@ namespace ChickenScratch
             ratingData = new PlayerRatingData();
             round = inRound;
             timeModifierDecrement = inTimeModifierDecrement;
+        }
+
+        public EndgameTaskData(EndgameTaskNetData netData)
+        {
+            expectingDrawing = netData.expectingDrawing;
+            taskType = netData.taskType;
+            ratingData = netData.ratingData;
+            promptData = netData.promptData;
+            assignedPlayer = netData.assignedPlayer;
+            timeModifierDecrement = netData.timeModifierDecrement;
+            isComplete = netData.isComplete;
         }
 
 

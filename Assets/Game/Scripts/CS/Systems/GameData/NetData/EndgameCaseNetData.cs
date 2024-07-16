@@ -10,8 +10,7 @@ namespace ChickenScratch
     public class EndgameCaseNetData
     {
         public int identifier;
-        public List<int> taskDataKeys = new List<int>();
-        public List<EndgameTaskData> taskDataValues = new List<EndgameTaskData>();
+        public List<EndgameTaskNetData> taskData = new List<EndgameTaskNetData>();
         public string correctPrompt;
         public GuessData guessData;
         public List<int> correctWordsKeys = new List<int>();
@@ -30,8 +29,10 @@ namespace ChickenScratch
         public EndgameCaseNetData(EndgameCaseData inCaseData)
         {
             identifier = inCaseData.identifier;
-            taskDataKeys = inCaseData.taskDataMap.Keys.ToList();
-            taskDataValues = inCaseData.taskDataMap.Values.ToList();
+            foreach(KeyValuePair<int,EndgameTaskData> task in inCaseData.taskDataMap)
+            {
+                taskData.Add(new EndgameTaskNetData(task.Value));
+            }
             correctPrompt = inCaseData.correctPrompt;
             guessData = inCaseData.guessData;
             correctWordsKeys = inCaseData.correctWordIdentifierMap.Keys.ToList();

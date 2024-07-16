@@ -14,24 +14,73 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   identifier: Long Copy
   caseFormat: 1
-  numberOfTasks: 5
+  numberOfTasks: 6
   pointsPerCorrectWord: 6
   bonusPoints: 5
   cost: 0
+  basePointsPerCorrectWord: 5
+  baseBonusPoints: 6
+  baseStartingModifier: 1.25
+  baseFrequency: 1
+  taskTemplates:
+  - roundIndex: 1
+    taskType: 0
+    duration: 90
+    taskModifiers: 
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 2
+    taskType: 2
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 01000000
+    caseWordIndices: []
+  - roundIndex: 3
+    taskType: 2
+    duration: 50
+    taskModifiers: 
+    requiredRoundTasks: 02000000
+    caseWordIndices: []
+  - roundIndex: 4
+    taskType: 2
+    duration: 40
+    taskModifiers: 
+    requiredRoundTasks: 03000000
+    caseWordIndices: []
+  - roundIndex: 5
+    taskType: 2
+    duration: 30
+    taskModifiers: 
+    requiredRoundTasks: 04000000
+    caseWordIndices: []
+  - roundIndex: 6
+    taskType: 5
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 05000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
   difficulty: 2
   penalty: 0
   startingScoreModifier: 1.25
-  maxScoreModifier: 0.1
   modifierDecrement: 0.1
-  taskFalloff: 0.75
-  colour: {r: 1, g: 0.5529412, b: 0.5529412, a: 1}
+  taskFalloff: 0.9
+  colour: {r: 1, g: 0.7764706, b: 0.7294118, a: 1}
+  backgroundFontColour: {r: 0.4245283, g: 0.36652508, b: 0.35444108, a: 1}
+  importantFontColour: {r: 0.4811321, g: 0.12709151, b: 0.052198302, a: 1}
   startingWordIdentifiers:
-  - prefix
-  - noun
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - hard-noun
   selectionFrequency: 1
+  maxScoreModifier: 1
   taskTimingData:
   - taskType: 0
-    duration: 120
+    duration: 90
   - taskType: 2
     duration: 60
   - taskType: 5

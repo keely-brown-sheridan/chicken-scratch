@@ -30,10 +30,20 @@ public class GameDataManager : Singleton<GameDataManager>
     private Dictionary<StoreItem.StoreItemType, StoreItemData> storeItemMap = new Dictionary<StoreItem.StoreItemType, StoreItemData>();
 
     [SerializeField]
+    private HatStoreItemData hatStoreItem;
+
+    [SerializeField]
     private List<CaseUpgradeStoreItemData> upgradeStoreItems = new List<CaseUpgradeStoreItemData>();
+
+    private List<CaseUpgradeStoreItemData> activeUpgradeStoreItems = new List<CaseUpgradeStoreItemData>();
+
+    [SerializeField]
+    private List<CaseFrequencyStoreItemData> frequencyStoreItems = new List<CaseFrequencyStoreItemData>();
+    private List<CaseFrequencyStoreItemData> activeFrequencyStoreItems = new List<CaseFrequencyStoreItemData>();
 
     [SerializeField]
     private List<CaseUnlockStoreItemData> unlockStoreItems = new List<CaseUnlockStoreItemData>();
+    private List<CaseUnlockStoreItemData> activeUnlockStoreItems = new List<CaseUnlockStoreItemData>();
 
     [SerializeField]
     private List<BirdData> birdDatas = new List<BirdData>();
@@ -46,6 +56,8 @@ public class GameDataManager : Singleton<GameDataManager>
     [SerializeField]
     private List<HatData> hats = new List<HatData>();
     private Dictionary<BirdHatData.HatType, HatData> hatMap = new Dictionary<BirdHatData.HatType, HatData>();
+
+    private List<string> currentShowingItems = new List<string>();
 
     // Start is called before the first frame update
     void Awake()
@@ -86,6 +98,17 @@ public class GameDataManager : Singleton<GameDataManager>
             hatMap.Add(hat.hatType, hat);
         }
         //RefreshWords(new List<CaseWordData>());
+    }
+
+    public void Reset()
+    {
+        activeUpgradeStoreItems = new List<CaseUpgradeStoreItemData>(upgradeStoreItems);
+        activeUnlockStoreItems = new List<CaseUnlockStoreItemData>(unlockStoreItems);
+        activeFrequencyStoreItems = new List<CaseFrequencyStoreItemData>(frequencyStoreItems);
+        foreach (CaseChoiceData choice in caseChoices)
+        {
+            choice.Reset();
+        }
     }
 
     public void RefreshWords(List<CaseWordData> otherWords)
@@ -141,17 +164,24 @@ public class GameDataManager : Singleton<GameDataManager>
         return null;
     }
 
-    public List<CaseWordTemplateData> GetWordTemplates(List<string> inIdentifiers)
+    public Dictionary<int,List<CaseWordTemplateData>> GetWordTemplates(List<WordPromptTemplateData> promptDatas)
     {
-        List<CaseWordTemplateData> wordTemplates = new List<CaseWordTemplateData>();
-        foreach(string identifier in inIdentifiers)
+        Dictionary<int,List<CaseWordTemplateData>> wordTemplates = new Dictionary<int,List<CaseWordTemplateData>>();
+        int iterator = 1;
+        foreach(WordPromptTemplateData promptData in promptDatas)
         {
-            CaseWordTemplateData wordTemplate = GetWordTemplate(identifier);
-            if(wordTemplate != null)
+            wordTemplates.Add(iterator, new List<CaseWordTemplateData>());
+            foreach (string identifier in promptData.caseWordIdentifiers)
             {
-                wordTemplates.Add(wordTemplate);
+                CaseWordTemplateData wordTemplate = GetWordTemplate(identifier);
+                if (wordTemplate != null)
+                {
+                    wordTemplates[iterator].Add(wordTemplate);
+                }
             }
+            iterator++;
         }
+
         return wordTemplates;
     }
 
@@ -196,7 +226,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public CaseUnlockStoreItemData GetUnlockStoreItem()
     {
-        List<CaseUnlockStoreItemData> randomizedUnlocks = unlockStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
+        List<CaseUnlockStoreItemData> randomizedUnlocks = activeUnlockStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
 
         foreach (CaseUnlockStoreItemData unlockStoreItem in randomizedUnlocks)
         {
@@ -215,43 +245,104 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void AddUpgradeOption(CaseUpgradeStoreItemData upgrade)
     {
-        if(!upgradeStoreItems.Contains(upgrade))
+        if(!activeUpgradeStoreItems.Contains(upgrade))
         {
-            upgradeStoreItems.Add(upgrade);
+            activeUpgradeStoreItems.Add(upgrade);
+        }
+        else
+        {
+            Debug.LogError("Failed to add upgrade because it already exists in the active upgrade store items.");
         }
     }
 
-    public CaseUpgradeStoreItemData GetUpgradeStoreItem()
+    public void AddFrequencyOption(CaseFrequencyStoreItemData frequency)
     {
-        List<CaseUpgradeStoreItemData> randomizedUpgrades = upgradeStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
+        if(!activeFrequencyStoreItems.Contains(frequency))
+        {
+            activeFrequencyStoreItems.Add(frequency);
+        }
+        else
+        {
+            Debug.LogError("Failed to add frequency item because it already exists in the active frequency store items.");
+        }
+    }
 
+    public CaseUpgradeStoreItemData GetUpgradeStoreItem(int storeTier)
+    {
+        List<CaseUpgradeStoreItemData> randomizedUpgrades = activeUpgradeStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
         foreach (CaseUpgradeStoreItemData upgradeStoreItem in randomizedUpgrades)
         {
             //Skip if the upgrade's choice hasn't been unlocked
-            if (!GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Contains(upgradeStoreItem.caseChoiceIdentifier))
+            if (!GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Contains(upgradeStoreItem.caseChoiceIdentifier) ||
+                upgradeStoreItem.tier > storeTier)
+            {
+                continue;
+            }
+
+            //Skip if this upgrade is already showing in the shop
+            if (currentShowingItems.Contains(upgradeStoreItem.itemName))
             {
                 continue;
             }
             CaseChoiceData caseChoice = GetCaseChoice(upgradeStoreItem.caseChoiceIdentifier);
             if(caseChoice != null)
             {
-                
                 int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
                 if (caseChoice.numberOfTasks <= numberOfPlayers)
                 {
+                    currentShowingItems.Add(upgradeStoreItem.itemName);
                     return upgradeStoreItem;
                 }
+            }
+            else
+            {
+                Debug.LogError("Could not find matching case["+upgradeStoreItem.caseChoiceIdentifier+"] for upgrade["+upgradeStoreItem.itemName+"]");
+            }
+        }
+        return null;
+    }
+
+    public CaseFrequencyStoreItemData GetFrequencyStoreItem(int storeTier)
+    {
+        List<CaseFrequencyStoreItemData> randomizedFrequencies = activeFrequencyStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
+        foreach (CaseFrequencyStoreItemData frequencyStoreItem in randomizedFrequencies)
+        {
+            //Skip if the upgrade's choice hasn't been unlocked
+            if (!GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Contains(frequencyStoreItem.caseChoiceIdentifier) ||
+                frequencyStoreItem.tier > storeTier)
+            {
+                continue;
+            }
+
+            //Skip if this frequency item is already showing in the shop
+            if(currentShowingItems.Contains(frequencyStoreItem.itemName))
+            {
+                continue;
+            }
+            CaseChoiceData caseChoice = GetCaseChoice(frequencyStoreItem.caseChoiceIdentifier);
+            if (caseChoice != null)
+            {
+                int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
+                if (caseChoice.numberOfTasks <= numberOfPlayers)
+                {
+                    currentShowingItems.Add(frequencyStoreItem.itemName);
+                    return frequencyStoreItem;
+                }
+            }
+            else
+            {
+                Debug.LogError("Could not find matching case[" + frequencyStoreItem.caseChoiceIdentifier + "] for frequency item[" + frequencyStoreItem.itemName + "]");
             }
         }
         return null;
     }
 
 
-    public StoreItemData GetStoreItem(List<StoreItem.StoreItemType> usedTypes)
+    public StoreItemData GetStoreItem(List<StoreItem.StoreItemType> usedTypes, int storeTier)
     {
         StoreItemData chosenStoreItem = null;
 
-        List<StoreItemData> validItems = storeItems.Where(i => !i.isSinglePurchase || !usedTypes.Contains(i.itemType)).OrderBy(cp => Guid.NewGuid()).ToList();
+        List<StoreItemData> validItems = storeItems.Where(i => (!i.isSinglePurchase || !usedTypes.Contains(i.itemType)) && i.tier <= storeTier ).OrderBy(cp => Guid.NewGuid()).ToList();
 
         if(validItems.Count > 0)
         {
@@ -271,25 +362,56 @@ public class GameDataManager : Singleton<GameDataManager>
         return null;
     }
 
+    public HatStoreItemData GetHatStoreItem()
+    {
+        return hatStoreItem;
+    }
+
+    public string GetHatString()
+    {
+        string hatString = "";
+        foreach(StoreItemData storeItem in storeItemMap.Values)
+        {
+            if(storeItem.itemType == StoreItem.StoreItemType.hat)
+            {
+                hatString += ((HatStoreItemData)storeItem).hatType.ToString();
+            }
+        }
+        return hatString;
+    }
+
     public CaseUpgradeStoreItemData GetMatchingCaseUpgradeStoreItem(string itemName)
     {
-        foreach(CaseUpgradeStoreItemData caseUpgrade in upgradeStoreItems)
+        foreach(CaseUpgradeStoreItemData caseUpgrade in activeUpgradeStoreItems)
         {
             if(caseUpgrade.itemName == itemName)
             {
                 return caseUpgrade;
             }
         }
+        Debug.LogError("Could not find matching store item["+itemName+"]");
         return null;
     }
 
     public CaseUnlockStoreItemData GetMatchingCaseUnlockStoreItem(string caseChoiceIdentifier)
     {
-        foreach (CaseUnlockStoreItemData caseUnlockItem in unlockStoreItems)
+        foreach (CaseUnlockStoreItemData caseUnlockItem in activeUnlockStoreItems)
         {
             if(caseUnlockItem.caseChoiceIdentifier == caseChoiceIdentifier)
             {
                 return caseUnlockItem;
+            }
+        }
+        return null;
+    }
+
+    public CaseFrequencyStoreItemData GetMatchingCaseFrequencyStoreItem(string itemName)
+    {
+        foreach(CaseFrequencyStoreItemData caseFrequencyItem in activeFrequencyStoreItems)
+        {
+            if(caseFrequencyItem.itemName == itemName)
+            {
+                return caseFrequencyItem;
             }
         }
         return null;
@@ -312,25 +434,25 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         
         GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Add(unlockIdentifier);
-        for(int i = unlockStoreItems.Count - 1; i >= 0; i--)
+        for(int i = activeUnlockStoreItems.Count - 1; i >= 0; i--)
         {
-            if (unlockStoreItems[i].caseChoiceIdentifier == unlockIdentifier)
+            if (activeUnlockStoreItems[i].caseChoiceIdentifier == unlockIdentifier)
             {
-                unlockStoreItems.RemoveAt(i);
+                activeUnlockStoreItems.RemoveAt(i);
             }
         }
 
         CaseChoiceData caseChoice = GetCaseChoice(unlockIdentifier);
-        upgradeStoreItems.AddRange(caseChoice.upgrades);
+        activeUpgradeStoreItems.AddRange(caseChoice.upgrades);
     }
 
     public void RemoveStoreItemType(StoreItem.StoreItemType storeItemType)
     {
-        for(int i = unlockStoreItems.Count - 1; i >= 0; i--)
+        for(int i = activeUnlockStoreItems.Count - 1; i >= 0; i--)
         {
-            if (unlockStoreItems[i].itemType == storeItemType)
+            if (activeUnlockStoreItems[i].itemType == storeItemType)
             {
-                unlockStoreItems.RemoveAt(i);
+                activeUnlockStoreItems.RemoveAt(i);
             }
         }
     }
@@ -343,13 +465,36 @@ public class GameDataManager : Singleton<GameDataManager>
             upgradingCaseChoice.bonusPoints += upgradeData.upgradeRampData.bonusPointsIncrease;
             upgradingCaseChoice.modifierDecrement += upgradeData.modifierDecrementDecrease;
             upgradingCaseChoice.pointsPerCorrectWord += upgradeData.upgradeRampData.pointsPerCorrectWordIncrease;
-            upgradingCaseChoice.maxScoreModifier += upgradeData.upgradeRampData.modifierIncrease;
             upgradingCaseChoice.startingScoreModifier += upgradeData.upgradeRampData.modifierIncrease;
-            if(upgradeStoreItems.Contains(upgradeData))
+            for(int i = activeUpgradeStoreItems.Count -1 ; i >= 0; i--)
             {
-                upgradeStoreItems.Remove(upgradeData);
+                if (activeUpgradeStoreItems[i].itemName == upgradeData.itemName)
+                {
+                    activeUpgradeStoreItems.RemoveAt(i);
+                }
+            }            
+        }
+    }
+
+    public void RemoveUpgrade(CaseUpgradeStoreItemData upgradeData)
+    {
+        for (int i = activeUpgradeStoreItems.Count - 1; i >= 0; i--)
+        {
+            if (activeUpgradeStoreItems[i].itemName == upgradeData.itemName)
+            {
+                activeUpgradeStoreItems.RemoveAt(i);
             }
-            
+        }
+    }
+
+    public void RemoveFrequencyItem(CaseFrequencyStoreItemData frequencyData)
+    {
+        for (int i = activeFrequencyStoreItems.Count - 1; i >= 0; i--)
+        {
+            if (activeFrequencyStoreItems[i].itemName == frequencyData.itemName)
+            {
+                activeFrequencyStoreItems.RemoveAt(i);
+            }
         }
     }
 
@@ -369,5 +514,10 @@ public class GameDataManager : Singleton<GameDataManager>
             return hatMap[hatType];
         }
         return null;
+    }
+
+    public void ResetCurrentShowingItems()
+    {
+        currentShowingItems.Clear();
     }
 }

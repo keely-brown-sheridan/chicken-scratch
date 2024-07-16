@@ -41,10 +41,13 @@ namespace ChickenScratch
         public int penalty;
         public float currentTaskDuration;
         public List<TaskData.TaskModifier> currentTaskModifiers;
+        public TaskData.TaskType currentTaskType;
         public bool active => identifier != -1;
         public int identifier = -1;
         public string caseTypeName = "";
         public Color caseTypeColour = Color.white;
+        public List<int> requiredTasks = new List<int>();
+        public List<int> waitingOnTasks = new List<int>();
 
         public enum CaseModifier
         {
@@ -81,6 +84,8 @@ namespace ChickenScratch
             maxScoreModifier = folderData.maxScoreModifier;
             currentTaskDuration = folderData.taskTime;
             currentTaskModifiers = folderData.taskModifiers;
+            currentTaskType = folderData.taskType;
+            caseTypeName = folderData.caseTypeName;
 
             if (!playerOrder.ContainsKey(folderData.roundNumber - 1))
             {
@@ -142,10 +147,14 @@ namespace ChickenScratch
                     return CaseState.copy_drawing;
                 case TaskData.TaskType.add_drawing:
                     return CaseState.add_drawing;
+                case TaskData.TaskType.blender_drawing:
+                    return CaseState.blender_drawing;
                 case TaskData.TaskType.prompting:
                     return CaseState.prompting;
                 case TaskData.TaskType.base_guessing:
                     return CaseState.guessing;
+                case TaskData.TaskType.morph_guessing:
+                    return CaseState.morph_guessing;
             }
             return CaseState.invalid;
         }

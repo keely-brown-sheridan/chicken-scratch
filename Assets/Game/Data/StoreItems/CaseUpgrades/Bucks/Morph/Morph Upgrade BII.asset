@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4a71c1c28d74534c9909b5d2fbc30d0, type: 3}
+  m_Name: Morph Upgrade BII
+  m_EditorClassIdentifier: 
+  itemType: 10
+  itemName: Morph$$
+  itemDescription: Improves the base birdbucks for Morph cases.
+  storeBGColour: {r: 0.654902, g: 0.84705883, b: 1, a: 1}
+  cost: 20
+  itemImagePrefab: {fileID: 7135884217427031847, guid: e7ef5ff82d48799459c69046956aec73,
+    type: 3}
+  isSinglePurchase: 0
+  index: 0
+  tier: 2
+  upgradeRampData: {fileID: 11400000, guid: 29b8e67f9488c6b42a5f37512d622a75, type: 2}
+  caseChoiceIdentifier: Morph
+  modifierDecrementDecrease: 0
+  timeIncrease: 0
+  unlocks:
+  - {fileID: 11400000, guid: 2e74cbe7de0ab584bbdd456c92f58a95, type: 2}

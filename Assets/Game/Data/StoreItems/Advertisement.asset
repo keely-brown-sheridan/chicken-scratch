@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 13
   itemName: Advertisement
-  itemDescription: Increases the number of cases available every day by 2.
+  itemDescription: Increases the number of cases available every day by 1.
   storeBGColour: {r: 0.4764151, g: 1, b: 0.5002838, a: 1}
   cost: 10
   itemImagePrefab: {fileID: 3017703972109777129, guid: 13039da077e3d824db34438627051ffd,
     type: 3}
   isSinglePurchase: 0
   index: 0
-  value: 2
+  tier: 1
+  value: 1

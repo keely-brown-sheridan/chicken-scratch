@@ -21,7 +21,11 @@ namespace ChickenScratch
         public int caseID;
         public BirdName player;
         public List<TaskData.TaskModifier> taskModifiers;
+        public TaskData.TaskType taskType;
         public BirdName lastPlayer;
         public WordCategoryData wordCategory;
+        public string caseTypeName;
+        public List<BirdName> playerOrder = new List<BirdName>();
+        public List<int> requiredTasks = new List<int>();
     }
 }

@@ -17,9 +17,28 @@ namespace ChickenScratch
 
         }
 
+        public override void Initialize(StoreItemData existingItemData)
+        {
+            base.Initialize(existingItemData);
+            HatStoreItemData hatData = existingItemData as HatStoreItemData;
+            hatType = hatData.hatType;
+        }
+
+        public HatStoreItemData(HatStoreItemData existingHatData)
+        {
+            hatType = existingHatData.hatType;
+            itemType = existingHatData.itemType;
+            itemDescription = existingHatData.itemDescription;
+            cost = existingHatData.cost;
+            itemImagePrefab = existingHatData.itemImagePrefab;
+            itemName = existingHatData.itemName;
+            storeBGColour = existingHatData.storeBGColour;
+            index = existingHatData.index;
+        }
+
         public HatStoreItemData(HatStoreItemNetData netData)
         {
-            HatStoreItemData gameData = (HatStoreItemData)GameDataManager.Instance.GetMatchingStoreItem(netData.itemType);
+            HatStoreItemData gameData = (HatStoreItemData)GameDataManager.Instance.GetHatStoreItem();
             if (gameData != null)
             {
                 hatType = netData.hatType;

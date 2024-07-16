@@ -21,4 +21,5 @@ MonoBehaviour:
     type: 3}
   isSinglePurchase: 0
   index: 0
+  tier: 2
   markerColour: {r: 0.6557553, g: 0.94865793, b: 0.5872912, a: 1}

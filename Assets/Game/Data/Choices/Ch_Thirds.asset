@@ -18,17 +18,58 @@ MonoBehaviour:
   pointsPerCorrectWord: 4
   bonusPoints: 2
   cost: 0
+  basePointsPerCorrectWord: 4
+  baseBonusPoints: 2
+  baseStartingModifier: 1
+  baseFrequency: 1
+  taskTemplates:
+  - roundIndex: 1
+    taskType: 0
+    duration: 30
+    taskModifiers: 02000000
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 2
+    taskType: 3
+    duration: 30
+    taskModifiers: 03000000
+    requiredRoundTasks: 0000000001000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 3
+    taskType: 3
+    duration: 30
+    taskModifiers: 04000000
+    requiredRoundTasks: 0000000002000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 4
+    taskType: 5
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 03000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
   difficulty: 1
   penalty: 0
   startingScoreModifier: 1
-  maxScoreModifier: 1
   modifierDecrement: 0.1
   taskFalloff: 0
-  colour: {r: 1, g: 0.3915094, b: 0.3915094, a: 1}
+  colour: {r: 0.9716981, g: 0.8021093, b: 0.89059037, a: 1}
+  backgroundFontColour: {r: 0.3962264, g: 0.3457636, b: 0.3729359, a: 1}
+  importantFontColour: {r: 0.24528301, g: 0.1469384, b: 0.19824862, a: 1}
   startingWordIdentifiers:
-  - easy-prefix
-  - easy-noun
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - noun
   selectionFrequency: 1
+  maxScoreModifier: 1
   taskTimingData:
   - taskType: 0
     duration: 30

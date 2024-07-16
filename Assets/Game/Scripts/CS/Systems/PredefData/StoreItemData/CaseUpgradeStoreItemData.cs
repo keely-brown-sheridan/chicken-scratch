@@ -15,11 +15,22 @@ namespace ChickenScratch
         public float modifierDecrementDecrease;
         public float timeIncrease;
 
-        public List<CaseUpgradeStoreItemData> unlocks = new List<CaseUpgradeStoreItemData>();
+        public List<StoreItemData> unlocks = new List<StoreItemData>();
 
         public CaseUpgradeStoreItemData()
         {
 
+        }
+
+        public override void Initialize(StoreItemData existingItemData)
+        {
+            base.Initialize(existingItemData);
+            CaseUpgradeStoreItemData upgradeData = existingItemData as CaseUpgradeStoreItemData;
+            upgradeRampData = upgradeData.upgradeRampData;
+            caseChoiceIdentifier = upgradeData.caseChoiceIdentifier;
+            modifierDecrementDecrease = upgradeData.modifierDecrementDecrease;
+            timeIncrease = upgradeData.timeIncrease;
+            unlocks = upgradeData.unlocks;
         }
 
         public CaseUpgradeStoreItemData(CaseUpgradeStoreItemNetData netData)

@@ -46,7 +46,7 @@ namespace ChickenScratch
             return true;
         }
 
-        public void Show(DrawingData drawingData, float scalingFactor, Vector3 drawingOffset)
+        public void Show(DrawingData drawingData, float scalingFactor, List<TaskData.TaskModifier> taskModifiers)
         {
             if (AddDrawingHolder(drawingData.caseID, drawingData.round))
             {
@@ -61,7 +61,14 @@ namespace ChickenScratch
                     return;
                 }
                 Vector3 drawingScale = new Vector3(scalingFactor, scalingFactor, 1f);
-                GameManager.Instance.playerFlowManager.createDrawingVisuals(drawingData, drawingHolderMap[drawingData.caseID][drawingData.round].gameObject.transform, transform.position, drawingScale, scalingFactor);
+                if(taskModifiers.Contains(TaskData.TaskModifier.flipped))
+                {
+                    GameManager.Instance.playerFlowManager.createFlippedDrawingVisuals(drawingData, drawingHolderMap[drawingData.caseID][drawingData.round].gameObject.transform, transform.position, drawingScale, scalingFactor);
+                }
+                else
+                {
+                    GameManager.Instance.playerFlowManager.createDrawingVisuals(drawingData, drawingHolderMap[drawingData.caseID][drawingData.round].gameObject.transform, transform.position, drawingScale, scalingFactor);
+                }
                 drawingHolderMap[drawingData.caseID][drawingData.round].gameObject.SetActive(true);
             }
             else

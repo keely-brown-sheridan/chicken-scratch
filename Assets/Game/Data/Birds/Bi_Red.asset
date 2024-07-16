@@ -117,3 +117,31 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     width: 70.5
     height: 32.5
+  - hatType: 9
+    hatName: Santa
+    hatSprite: {fileID: -860967110, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: 7.9, y: 31.1, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    width: 61.5
+    height: 47.5
+  - hatType: 11
+    hatName: Flower
+    hatSprite: {fileID: -373015079, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -1.4, y: 23, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    width: 45.3726
+    height: 20.9165
+  - hatType: 10
+    hatName: Sherlock
+    hatSprite: {fileID: 1047589752, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: 3.5, y: 25.5, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    width: 55.77
+    height: 41.39
+  - hatType: 12
+    hatName: Propeller
+    hatSprite: {fileID: 278697442, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -10, y: 30.7, z: 0}
+    rotation: {x: 0, y: 0, z: 17.23}
+    width: 37.1
+    height: 27.2338

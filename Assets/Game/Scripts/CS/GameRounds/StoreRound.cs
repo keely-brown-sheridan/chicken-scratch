@@ -26,10 +26,16 @@ namespace ChickenScratch
         private Transform storeItemHolderParent;
 
         [SerializeField]
+        private Transform columnStoreItemHolderParent;
+
+        [SerializeField]
+        private Transform hatRowStoreItemHolderParent;
+
+        [SerializeField]
         private GameObject storeItemPrefab;
 
         [SerializeField]
-        private int numberOfStoreItems;
+        private int baseNumberOfStoreItems;
 
         [SerializeField]
         private Transform playerLongArmHolder;
@@ -77,6 +83,9 @@ namespace ChickenScratch
         private TMPro.TMP_Text unlocksInstructionText;
 
         [SerializeField]
+        private BirdImage unlockerImage;
+
+        [SerializeField]
         private StoreUnlockChoice optionA, optionB;
 
         [SerializeField]
@@ -84,6 +93,18 @@ namespace ChickenScratch
 
         [SerializeField]
         private StoreBossArm storeBossArm;
+
+        [SerializeField]
+        private GameObject middleRowBGObject, bottomRowBGObject;
+
+        [SerializeField]
+        private Color unlockedRowColour;
+
+        [SerializeField]
+        private GameObject middleRowUnlockButtonObject, bottomRowUnlockButtonObject;
+
+        [SerializeField]
+        private TMPro.TMP_Text middleRowUnlockCostText, bottomRowUnlockCostText;
 
         public enum State
         {
@@ -106,6 +127,9 @@ namespace ChickenScratch
         public int currentMoney => _currentMoney;
 
         private int _currentMoney;
+
+        private int middleUnlockCost, bottomUnlockCost;
+
         private float timeShowingUnaffordableNotification = 0f;
 
         private List<StoreItem.StoreItemType> soldStoreItems = new List<StoreItem.StoreItemType>();
@@ -121,11 +145,16 @@ namespace ChickenScratch
         private float timeSinceLastArmUpdate = 0f;
         private bool hasStartedReaching = false;
         private StoreUnlockChoice defaultChoice;
+        private int storeItemAdditions;
+        private int currentStoreTier = 1;
+
 
         public override void StartRound()
         {
             base.StartRound();
-            ResetRestock();
+            currentRestockCost = SettingsManager.Instance.gameMode.baseRestockCost;
+            Cursor.visible = false;
+            restockParentObject.SetActive(false);
             readyButtonObject.SetActive(true);
             ClearStoreItems();
             ClearPlayerWaitingVisuals();
@@ -150,7 +179,10 @@ namespace ChickenScratch
                 }
             }
 
-            
+            middleUnlockCost = SettingsManager.Instance.gameMode.middleStoreRowUnlockCost;
+            bottomUnlockCost = SettingsManager.Instance.gameMode.bottomStoreRowUnlockCost;
+            middleRowUnlockCostText.text = middleUnlockCost.ToString();
+            bottomRowUnlockCostText.text = bottomUnlockCost.ToString();
 
             //Set the face of the player
             BirdData playerBird = GameDataManager.Instance.GetBird(SettingsManager.Instance.birdName);
@@ -173,7 +205,6 @@ namespace ChickenScratch
 
         public void ServerInitializeStore()
         {
-            Debug.LogError("Server initializing store.");
             _currentState = State.store;
 
             GameManager.Instance.gameFlowManager.timeRemainingInPhase = storeTime;
@@ -184,7 +215,6 @@ namespace ChickenScratch
 
         public void ServerInitializeUnlocks()
         {
-            Debug.LogError("Server initializing unlocks.");
             _currentState = State.unlock;
             //Choose the player in charge of selecting the choice
             //Who has the most stars from the previous round?
@@ -217,21 +247,34 @@ namespace ChickenScratch
                 }
             }
 
+
+            int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
+
             //Add options to the pool that should be there for this day
             DayData currentDay = SettingsManager.Instance.gameMode.days[GameManager.Instance.playerFlowManager.currentDay];
             List<string> caseTypesToAdd = currentDay.caseTypesToAddToPool;
             GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.AddRange(caseTypesToAdd);
 
             //Generate the options
-            List<string> pool = GameManager.Instance.playerFlowManager.caseChoiceUnlockPool;
+            List<string> pool = new List<string>(GameManager.Instance.playerFlowManager.caseChoiceUnlockPool);
 
             List<string> choiceAOptions = new List<string>();
             for(int i = 0; i < currentDay.numberOfCaseTypeUnlocks; i++)
             {
                 //Randomize the order
                 pool = pool.OrderBy(x => System.Guid.NewGuid()).ToList();
-                choiceAOptions.Add(pool[0]);
-                pool.RemoveAt(0);
+                
+                for(int j = pool.Count - 1; j >= 0; j--)
+                {
+                    CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(pool[j]);
+                    if (choice != null && choice.numberOfTasks <= numberOfPlayers)
+                    {
+                        choiceAOptions.Add(choice.identifier);
+                        pool.RemoveAt(j);
+                        break;
+                    }
+                }
+                
             }
 
             List<string> choiceBOptions = new List<string>();
@@ -239,8 +282,17 @@ namespace ChickenScratch
             {
                 //Randomize the order
                 pool = pool.OrderBy(x => System.Guid.NewGuid()).ToList();
-                choiceBOptions.Add(pool[0]);
-                pool.RemoveAt(0);
+                for (int j = pool.Count - 1; j >= 0; j--)
+                {
+                    CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(pool[j]);
+                    
+                    if (choice != null && choice.numberOfTasks <= numberOfPlayers)
+                    {
+                        choiceBOptions.Add(choice.identifier);
+                        pool.RemoveAt(j);
+                        break;
+                    }
+                }
             }
 
             //Send relevant information to all players
@@ -252,7 +304,7 @@ namespace ChickenScratch
 
         public void ClientInitializeUnlocks(List<string> optionAChoices, List<string> optionBChoices, BirdName unionRep, bool defaultChoiceA)
         {
-            Debug.LogError("Initializing unlocks.");
+            _currentState = State.unlock;
             optionA.Initialize(optionAChoices, unionRep);
             optionB.Initialize(optionBChoices, unionRep);
 
@@ -262,16 +314,26 @@ namespace ChickenScratch
             }
             else
             {
-                unlocksInstructionText.text = "Waiting for " + unionRep.ToString() + " to choose an option.";
+                unlocksInstructionText.text = "Waiting for " + GameManager.Instance.playerFlowManager.playerNameMap[unionRep] + " to choose an option.";
             }
+            BirdData unlockerBird = GameDataManager.Instance.GetBird(unionRep);
+            if(unlockerBird != null)
+            {
+                BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(unionRep);
+                unlockerImage.Initialize(unionRep, birdHat);
+            }
+            
             inventoryHolderObject.SetActive(false);
             unlocksHolderObject.SetActive(true);
             defaultChoice = defaultChoiceA ? optionA : optionB;
+            GameManager.Instance.playerFlowManager.currentTimeInRound = unlockTime;
+            hasStartedReaching = false;
+            
         }
 
         public void ClientInitializeStore()
         {
-            Debug.LogError("Initializing store.");
+            _currentState = State.store;
             List<BirdName> allPlayers = SettingsManager.Instance.GetAllActiveBirds();
             foreach (BirdName bird in allPlayers)
             {
@@ -284,6 +346,7 @@ namespace ChickenScratch
             activePlayers.AddRange(allPlayers);
             inventoryHolderObject.SetActive(true);
             unlocksHolderObject.SetActive(false);
+            storeBossArm.CancelReach();
         }
 
         // Update is called once per frame
@@ -294,7 +357,6 @@ namespace ChickenScratch
                 case State.unlock:
                     if(!hasStartedReaching && GameManager.Instance.playerFlowManager.currentTimeInRound <= startReachingTime)
                     {
-                        
                         hasStartedReaching = true;
                         storeBossArm.StartReach(defaultChoice.buttonPosition, startReachingTime);
                     }
@@ -321,7 +383,6 @@ namespace ChickenScratch
 
         public void DecreaseCurrentMoney(int money)
         {
-            
             _currentMoney -= money;
             currentMoneyText.text = _currentMoney.ToString();
         }
@@ -390,7 +451,15 @@ namespace ChickenScratch
             {
                 existingStoreItems.Add(child);
             }
-            for(int i = existingStoreItems.Count - 1; i >= 0; i--)
+            foreach(Transform child in columnStoreItemHolderParent)
+            {
+                existingStoreItems.Add(child);
+            }
+            foreach (Transform child in hatRowStoreItemHolderParent)
+            {
+                existingStoreItems.Add(child);
+            }
+            for (int i = existingStoreItems.Count - 1; i >= 0; i--)
             {
                 GameObject.Destroy(existingStoreItems[i].gameObject);
             }
@@ -512,33 +581,52 @@ namespace ChickenScratch
         public void CreateStoreItems()
         {
             //
+            GameDataManager.Instance.ResetCurrentShowingItems();
             int iterator = 0;
-            //Try to create an upgrade
-            if(CreateUpgradeStoreItemData(iterator))
-            {
-                iterator++;
-            }
 
-            //Try to create a hat
-            if (CreateHatStoreItemData(iterator))
-            {
-                iterator++;
-            }
+            int numberOfStoreItems = baseNumberOfStoreItems + storeItemAdditions;
 
-            //Create store items
+            //Create the rest of the store items
             for (int i = iterator; i < numberOfStoreItems; i++)
             {
                 CreateStoreItemData(i);
             }
+
+            //Try to create two upgrades and two frequency items
+            CreateColumnStoreItemData(100);
+            if(currentStoreTier >= 2)
+            {
+                CreateColumnStoreItemData(101);
+            }
+            if(currentStoreTier >= 3)
+            {
+                CreateColumnStoreItemData(102);
+            }
+            int playerCount = SettingsManager.Instance.GetPlayerNameCount();
+            if (playerCount == 2)
+            {
+                CreateUnlockStoreItemData(103);
+            }
+
+            CreateHatStoreItemData(104);
+            if(playerCount > 2)
+            {
+                CreateHatStoreItemData(105);
+            }
+            if (playerCount > 5)
+            {
+                CreateHatStoreItemData(106);
+            }
         }
 
-        public void CreateRestockItems()
+        public void CreateRestockItem()
         {
             for(int i = 0; i < storeItems.Count; i++)
             {
-                if (storeItems[i].currentState == StoreItem.State.out_of_stock)
+                if (storeItems[i].index < 100 && storeItems[i].currentState == StoreItem.State.out_of_stock)
                 {
                     CreateStoreItemData(i);
+                    return;
                 }
             }
         }
@@ -550,46 +638,87 @@ namespace ChickenScratch
             {
                 return false;
             }
-            storeItemData.index = index;
-            activeStoreItemMap.Add(index, storeItemData);
-            GameManager.Instance.gameDataHandler.RpcSendUnlockStoreItemWrapper(storeItemData);
+            CaseUnlockStoreItemData unlockItem = new CaseUnlockStoreItemData();
+            unlockItem.Initialize(storeItemData);
+            unlockItem.index = index;
+            activeStoreItemMap.Add(index, unlockItem);
+            GameManager.Instance.gameDataHandler.RpcSendUnlockStoreItemWrapper(unlockItem);
             return true;
+        }
+
+        private bool CreateColumnStoreItemData(int index)
+        {
+            if(Random.Range(0,3) == 0)
+            {
+                return CreateUpgradeStoreItemData(index);
+            }
+            else
+            {
+                return CreateFrequencyStoreItemData(index);
+            }
         }
 
         private bool CreateUpgradeStoreItemData(int index)
         {
-            CaseUpgradeStoreItemData storeItemData = GameDataManager.Instance.GetUpgradeStoreItem();
+            CaseUpgradeStoreItemData storeItemData = GameDataManager.Instance.GetUpgradeStoreItem(currentStoreTier);
+            if(storeItemData == null)
+            {
+                //.LogError("No upgrade store items could be generated.");
+                return false;
+            }
+
+            CaseUpgradeStoreItemData newStoreItem = new CaseUpgradeStoreItemData();
+            newStoreItem.Initialize(storeItemData);
+            newStoreItem.index = index;
+            activeStoreItemMap.Add(index, newStoreItem);
+            GameManager.Instance.gameDataHandler.RpcSendUpgradeStoreItemWrapper(newStoreItem);
+            return true;
+        }
+
+        private bool CreateFrequencyStoreItemData(int index)
+        {
+            CaseFrequencyStoreItemData storeItemData = GameDataManager.Instance.GetFrequencyStoreItem(currentStoreTier);
             if(storeItemData == null)
             {
                 return false;
             }
-            storeItemData.index = index;
-            activeStoreItemMap.Add(index, storeItemData);
-            GameManager.Instance.gameDataHandler.RpcSendUpgradeStoreItemWrapper(storeItemData);
+
+            CaseFrequencyStoreItemData newStoreItem = new CaseFrequencyStoreItemData();
+            newStoreItem.Initialize(storeItemData);
+            newStoreItem.index = index;
+            activeStoreItemMap.Add(index, newStoreItem);
+            GameManager.Instance.gameDataHandler.RpcSendFrequencyStoreItemWrapper(newStoreItem);
             return true;
         }
 
         private bool CreateHatStoreItemData(int index)
         {
-            HatStoreItemData hatItemData = (HatStoreItemData)GameDataManager.Instance.GetMatchingStoreItem(StoreItem.StoreItemType.hat);
+            HatStoreItemData hatItemData = GameDataManager.Instance.GetHatStoreItem();
+
             if (hatItemData == null)
             {
                 return false;
             }
-            hatItemData.hatType = availableHats[Random.Range(0, availableHats.Count)];
-            hatItemData.index = index;
-            activeStoreItemMap.Add(index, hatItemData);
-            GameManager.Instance.gameDataHandler.RpcSendHatStoreItemWrapper(hatItemData);
+
+            HatStoreItemData newHatItemData = new HatStoreItemData();
+            newHatItemData.Initialize(hatItemData);
+            newHatItemData.hatType = availableHats[Random.Range(0, availableHats.Count)];
+            newHatItemData.index = index;
+            activeStoreItemMap.Add(index, newHatItemData);
+            GameManager.Instance.gameDataHandler.RpcSendHatStoreItemWrapper(newHatItemData);
             return true;
         }
 
         private void CreateStoreItemData(int index)
         {
-            StoreItemData storeItemData = GameDataManager.Instance.GetStoreItem(soldStoreItems);
-            storeItemData.index = index;
-            activeStoreItemMap.Add(index, storeItemData);
-            if (storeItemData.itemType == StoreItem.StoreItemType.marker || storeItemData.itemType == StoreItem.StoreItemType.highlighter)
+            StoreItemData oldStoreItemData = GameDataManager.Instance.GetStoreItem(soldStoreItems, currentStoreTier);
+            
+            if (oldStoreItemData.itemType == StoreItem.StoreItemType.marker || oldStoreItemData.itemType == StoreItem.StoreItemType.highlighter)
             {
+                MarkerStoreItemData markerItem = new MarkerStoreItemData();
+                markerItem.Initialize(oldStoreItemData);
+                markerItem.index = index;
+                activeStoreItemMap.Add(index, markerItem);
                 //Generate a colour and set the value for the BG colour and the marker colour
                 Color randomColour = new Color(Random.Range(0.4f, 1f), Random.Range(0.4f, 1f), Random.Range(0.4f, 1f));
                     
@@ -599,39 +728,66 @@ namespace ChickenScratch
                 red = (1 - red) * 0.5f + red;
                 green = (1 - green) * 0.5f + green;
                 blue = (1 - blue) * 0.5f + blue;
-                storeItemData.storeBGColour = new Color(red, green, blue, 1f);
-                if (storeItemData.itemType == StoreItem.StoreItemType.highlighter)
+                markerItem.storeBGColour = new Color(red, green, blue, 1f);
+                if (oldStoreItemData.itemType == StoreItem.StoreItemType.highlighter)
                 {
                     randomColour = new Color(randomColour.r, randomColour.g, randomColour.b, 0.4f);
                 }
-                MarkerStoreItemData markerItem = ((MarkerStoreItemData)storeItemData);
+                
                 markerItem.markerColour = randomColour;
                 //Broadcast to players to create
                 GameManager.Instance.gameDataHandler.RpcSendMarkerStoreItemWrapper(markerItem);
             }
-            else if(storeItemData.itemType == StoreItem.StoreItemType.case_tab)
+            else if(oldStoreItemData.itemType == StoreItem.StoreItemType.case_tab || oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_pot ||
+                    oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_mug || oldStoreItemData.itemType == StoreItem.StoreItemType.nest_feathering ||
+                    oldStoreItemData.itemType == StoreItem.StoreItemType.advertisement || oldStoreItemData.itemType == StoreItem.StoreItemType.contract)
             {
                 //Broadcast to players to create
-                ValueStoreItemData valueItem = ((ValueStoreItemData)storeItemData);
+                ValueStoreItemData valueItem = new ValueStoreItemData();
+                valueItem.Initialize(oldStoreItemData);
+                valueItem.index = index;
+                activeStoreItemMap.Add(index, valueItem);
                 GameManager.Instance.gameDataHandler.RpcSendValueStoreItemWrapper(valueItem);
             }
-            else if(storeItemData.itemType == StoreItem.StoreItemType.reroll || storeItemData.itemType == StoreItem.StoreItemType.stopwatch)
+            else if(oldStoreItemData.itemType == StoreItem.StoreItemType.reroll || oldStoreItemData.itemType == StoreItem.StoreItemType.stopwatch)
             {
                 //Broadcast to players to create
-                ChargedStoreItemData chargeItem = ((ChargedStoreItemData)storeItemData);
+                ChargedStoreItemData chargeItem = new ChargedStoreItemData();
+                chargeItem.Initialize(oldStoreItemData);
+                chargeItem.index = index;
+                activeStoreItemMap.Add(index, chargeItem);
                 GameManager.Instance.gameDataHandler.RpcSendChargeStoreItemWrapper(chargeItem);
             }
-            else if(storeItemData.itemType == StoreItem.StoreItemType.hat)
+            else if(oldStoreItemData.itemType == StoreItem.StoreItemType.hat)
             {
                 //Randomly choose a hat
-                HatStoreItemData hatItem = ((HatStoreItemData)storeItemData);
+                HatStoreItemData hatItem = new HatStoreItemData();
+                hatItem.Initialize(oldStoreItemData);
+                hatItem.index = index;
+                activeStoreItemMap.Add(index, hatItem);
                 hatItem.hatType = availableHats[Random.Range(0, availableHats.Count)];
                 GameManager.Instance.gameDataHandler.RpcSendHatStoreItemWrapper(hatItem);
             }
+            else if(oldStoreItemData.itemType == StoreItem.StoreItemType.case_upgrade)
+            {
+                Debug.LogError("Something funky is happening???");
+                CaseUpgradeStoreItemData upgradeItem = new CaseUpgradeStoreItemData();
+                upgradeItem.Initialize(oldStoreItemData);
+                upgradeItem.index = index;
+                activeStoreItemMap.Add(index, upgradeItem);
+
+                //Broadcast to players to create
+                GameManager.Instance.gameDataHandler.RpcSendUpgradeStoreItemWrapper(upgradeItem);
+            }
             else
             {
+                StoreItemData newStoreItemData = new StoreItemData();
+                newStoreItemData.Initialize(oldStoreItemData);
+                newStoreItemData.index = index;
+                activeStoreItemMap.Add(index, newStoreItemData);
+
                 //Broadcast to players to create
-                GameManager.Instance.gameDataHandler.RpcSendStoreItemWrapper(storeItemData);
+                GameManager.Instance.gameDataHandler.RpcSendStoreItemWrapper(newStoreItemData);
             }
 
             
@@ -639,27 +795,47 @@ namespace ChickenScratch
 
         public void CreateStoreItem(StoreItemData storeItemData)
         {
-            StoreItem storeItem;
-            if(storeItems.Count > storeItemData.index)
+            bool restockingItem = false;
+            foreach(StoreItem existingStoreItem in storeItems)
             {
-                storeItem = storeItems[storeItemData.index];
-                if(storeItem.currentState == StoreItem.State.out_of_stock)
+                if(existingStoreItem.index == storeItemData.index)
                 {
-                    storeItem.Initialize(storeItemData);
-                }
-                else
-                {
-                    Debug.LogError("Trying to restock an item that already has stock.");
+                    restockingItem = true;
+                    existingStoreItem.Initialize(storeItemData);
                 }
             }
-            else
+            if(!restockingItem)
             {
-                GameObject storeItemObject = Instantiate(storeItemPrefab, storeItemHolderParent);
+                StoreItem storeItem;
+                Transform spawningParent = storeItemHolderParent;
+                if (storeItemData.itemType == StoreItem.StoreItemType.case_upgrade ||
+                    storeItemData.itemType == StoreItem.StoreItemType.case_frequency ||
+                    storeItemData.itemType == StoreItem.StoreItemType.case_unlock)
+                {
+                    spawningParent = columnStoreItemHolderParent;
+                }
+                if(storeItemData.itemType == StoreItem.StoreItemType.hat)
+                {
+                    spawningParent = hatRowStoreItemHolderParent;
+                }
+                GameObject storeItemObject = Instantiate(storeItemPrefab, spawningParent);
                 storeItem = storeItemObject.GetComponent<StoreItem>();
                 storeItem.Initialize(storeItemData);
                 storeItems.Add(storeItem);
             }
-            
+            bool anItemIsOutOfStock = false;
+            //If all store items are restocked then hide the restock button
+            foreach(StoreItem currentItem in storeItems)
+            {
+                if(currentItem.currentState == StoreItem.State.out_of_stock && currentItem.index < 100)
+                {
+                    anItemIsOutOfStock = true;
+                }
+            }
+            if(!anItemIsOutOfStock)
+            {
+                restockParentObject.SetActive(false);
+            }
         }
 
         public void HandleClientRequestItem(BirdName client, int itemIndex)
@@ -674,7 +850,43 @@ namespace ChickenScratch
                         break;
                     case StoreItem.StoreItemType.case_upgrade:
                         CaseUpgradeStoreItemData upgradeData = (CaseUpgradeStoreItemData)activeStoreItemMap[itemIndex];
+
+                        foreach (StoreItemData upgrade in upgradeData.unlocks)
+                        {
+                            if(upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
+                            {
+                                GameDataManager.Instance.AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
+                            }
+                            else if(upgrade.itemType == StoreItem.StoreItemType.case_frequency)
+                            {
+                                GameDataManager.Instance.AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
+                            }
+                        }
+                        GameDataManager.Instance.UpgradeCaseChoice(upgradeData);
                         GameManager.Instance.gameDataHandler.RpcUpgradeCaseChoice(activeStoreItemMap[itemIndex].itemName);
+                        GameDataManager.Instance.RemoveUpgrade(upgradeData);
+                        break;
+                    case StoreItem.StoreItemType.case_frequency:
+                        CaseFrequencyStoreItemData frequencyData = (CaseFrequencyStoreItemData)activeStoreItemMap[itemIndex];
+                        CaseChoiceData caseChoice = GameDataManager.Instance.GetCaseChoice(frequencyData.caseChoiceIdentifier);
+                        if(caseChoice != null)
+                        {
+                            caseChoice.selectionFrequency += frequencyData.frequencyIncrease;
+                            GameManager.Instance.gameDataHandler.RpcIncreaseCaseChoiceFrequency(activeStoreItemMap[itemIndex].itemName);
+                            GameDataManager.Instance.RemoveFrequencyItem(frequencyData);
+                        }
+                        
+                        foreach (StoreItemData upgrade in frequencyData.unlocks)
+                        {
+                            if (upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
+                            {
+                                GameDataManager.Instance.AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
+                            }
+                            else if (upgrade.itemType == StoreItem.StoreItemType.case_frequency)
+                            {
+                                GameDataManager.Instance.AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
+                            }
+                        }
                         break;
                     case StoreItem.StoreItemType.coffee_pot:
                         GameDataManager.Instance.RemoveStoreItemType(StoreItem.StoreItemType.coffee_pot);
@@ -687,6 +899,7 @@ namespace ChickenScratch
                         GameManager.Instance.playerFlowManager.baseTimeIncrease += coffeeMugData.value;
                         break;
                     case StoreItem.StoreItemType.advertisement:
+                    case StoreItem.StoreItemType.contract:
                         ValueStoreItemData advertisementData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
                         GameManager.Instance.playerFlowManager.baseCasesIncrease += (int)advertisementData.value;
                         break;
@@ -695,8 +908,8 @@ namespace ChickenScratch
                         GameManager.Instance.playerFlowManager.baseQuotaDecrement -= (int)nestFeatheringData.value;
                         break;
                     case StoreItem.StoreItemType.hat:
+                        
                         HatStoreItemData hatData = (HatStoreItemData)activeStoreItemMap[itemIndex];
-
                         //Broadcast to all players to update the hat for the player
                         GameManager.Instance.gameDataHandler.RpcSetPlayerHat(client, hatData.hatType);
 
@@ -715,11 +928,14 @@ namespace ChickenScratch
                 StoreItem.StoreItemType itemType = activeStoreItemMap[itemIndex].itemType;
                 activeStoreItemMap.Remove(itemIndex);
 
-                if(itemType == StoreItem.StoreItemType.case_upgrade)
+                if(itemType == StoreItem.StoreItemType.case_upgrade || itemType == StoreItem.StoreItemType.case_frequency)
                 {
-                    CreateUpgradeStoreItemData(itemIndex);
+                    CreateColumnStoreItemData(itemIndex);
                 }
-                
+                else if(itemType == StoreItem.StoreItemType.case_unlock)
+                {
+                    CreateUnlockStoreItemData(itemIndex);
+                }
                 
             }
         }
@@ -731,10 +947,12 @@ namespace ChickenScratch
                 if(storeItem.index == itemIndex)
                 {
                     storeItem.Purchase(purchaser);
-                    restockParentObject.SetActive(true);
+                    if(storeItem.index < 100)
+                    {
+                        restockParentObject.SetActive(true);
+                        restockCostText.text = currentRestockCost.ToString();
+                    }
                     
-                    currentRestockCost += SettingsManager.Instance.gameMode.itemRestockCost;
-                    restockCostText.text = currentRestockCost.ToString();
                     return;
                 }
             }
@@ -748,35 +966,69 @@ namespace ChickenScratch
             }
             else
             {
-                restockParentObject.SetActive(false);
                 StatTracker.Instance.totalSpent += currentRestockCost;
                 StatTracker.Instance.storeRestocks++;
-
-                bool areAllOutOfStock = true;
-                foreach(StoreItem storeItem in storeItems)
-                {
-                    if(storeItem.currentState == StoreItem.State.in_stock)
-                    {
-                        areAllOutOfStock = false;
-                        break;
-                    }
-                }
-                if(areAllOutOfStock)
-                {
-                    StatTracker.Instance.restockedEmptyShop = true;
-                }
-
+                
                 _currentMoney -= currentRestockCost;
                 currentMoneyText.text = _currentMoney.ToString();
                 GameManager.Instance.gameDataHandler.CmdRequestRestock();
             }
         }
 
-        public void ResetRestock()
+        public bool HasChosen()
         {
-            restockParentObject.SetActive(false);
-            currentRestockCost = SettingsManager.Instance.gameMode.baseRestockCost;
-            restockCostText.text = currentRestockCost.ToString();
+            return optionA.hasChosen || optionB.hasChosen;
+        }
+
+        public void OnUnlockMiddleRowPress()
+        {
+            if(_currentMoney < middleUnlockCost)
+            {
+                ShowUnaffordableNotification();
+                return;
+            }
+
+            _currentMoney -= middleUnlockCost;
+            currentMoneyText.text = _currentMoney.ToString();
+            GameManager.Instance.gameDataHandler.CmdUnlockMiddleStoreRow();
+        }
+
+        public void ServerUnlockRow()
+        {
+            int previousNumberOfStoreItems = baseNumberOfStoreItems + storeItemAdditions;
+            storeItemAdditions += 4;
+            currentStoreTier++;
+            int numberOfStoreItems = baseNumberOfStoreItems + storeItemAdditions;
+            for (int i = previousNumberOfStoreItems; i < numberOfStoreItems; i++)
+            {
+                CreateStoreItemData(i);
+            }
+        }
+
+        public void UnlockMiddleRow()
+        {
+            middleRowBGObject.GetComponent<Image>().color = unlockedRowColour;
+            middleRowUnlockButtonObject.SetActive(false);
+            bottomRowUnlockButtonObject.SetActive(true);
+        }
+
+        public void OnUnlockBottomRowPress()
+        {
+            if (_currentMoney < bottomUnlockCost)
+            {
+                ShowUnaffordableNotification();
+                return;
+            }
+
+            _currentMoney -= bottomUnlockCost;
+            currentMoneyText.text = _currentMoney.ToString();
+            GameManager.Instance.gameDataHandler.CmdUnlockBottomStoreRow();
+        }
+
+        public void UnlockBottomRow()
+        {
+            bottomRowBGObject.GetComponent<Image>().color = unlockedRowColour;
+            bottomRowUnlockButtonObject.SetActive(false);
         }
     }
 }

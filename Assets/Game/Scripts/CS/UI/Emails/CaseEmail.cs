@@ -113,6 +113,7 @@ namespace ChickenScratch
                 case TaskData.TaskType.add_drawing:
                 case TaskData.TaskType.prompt_drawing:
                 case TaskData.TaskType.compile_drawing:
+                case TaskData.TaskType.blender_drawing:
                     GameObject drawingCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.drawing], emailSectionParent);
                     DrawingCaseEmailSection drawingCaseEmailSection = drawingCaseEmailSectionObject.GetComponent<DrawingCaseEmailSection>();
                     drawingCaseEmailSection.Initialize(taskData.drawingData, taskData.ratingData, drawingRatio);
@@ -122,6 +123,7 @@ namespace ChickenScratch
                     PromptCaseEmailSection promptCaseEmailSection = promptCaseEmailSectionObject.GetComponent<PromptCaseEmailSection>();
                     promptCaseEmailSection.Initialize(taskData.promptData, taskData.ratingData);
                     return promptCaseEmailSectionObject;
+                case TaskData.TaskType.morph_guessing:
                 case TaskData.TaskType.base_guessing:
                     GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], emailSectionParent);
                     GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();

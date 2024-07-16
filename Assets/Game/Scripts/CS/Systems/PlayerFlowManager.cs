@@ -37,7 +37,7 @@ namespace ChickenScratch
         public List<Hourglass> cabinetHourglasses = new List<Hourglass>();
 
         private Dictionary<BirdName, BirdArm> birdArmMap = new Dictionary<BirdName, BirdArm>();
-        private bool hasWarnedOnTime = false;
+        private bool hasWarnedOnTime = false, hasUpdatedTimeColour = false;
         public bool hasRunOutOfTime = false;
         public Dictionary<string, DrawingVisualsPackage> drawingVisualPackageQueue = new Dictionary<string, DrawingVisualsPackage>();
         public GameObject loadingCircleObject;
@@ -52,8 +52,13 @@ namespace ChickenScratch
 
         private Dictionary<BirdName, List<GameObject>> lineObjectMap = new Dictionary<BirdName,List<GameObject>>();
 
+        [HideInInspector]
         public List<string> unlockedCaseChoiceIdentifiers = new List<string>();
+        [HideInInspector]
         public List<string> caseChoiceUnlockPool = new List<string>();
+
+        [SerializeField]
+        private Color baseTimerColour, warningTimerColour, expiringTimerColour;
 
         public float dailyTimeIncrease = 0f;
         public float baseTimeIncrease = 0f;
@@ -71,6 +76,7 @@ namespace ChickenScratch
             {
                 NetworkClient.Ready();
             }
+            //Screen.SetResolution(1280, 720, false);
             Screen.fullScreen = false;
 
             if (!isInitialized)
@@ -131,12 +137,14 @@ namespace ChickenScratch
                 Texture2D selectedCursor = playerBird.cursor;
                 Cursor.SetCursor(selectedCursor, new Vector2(10, 80), CursorMode.Auto);
             }
-            
+
+            //Clear any old data from previous games
+            GameDataManager.Instance.Reset();
 
             drawingVisualPackageQueue = new Dictionary<string, DrawingVisualsPackage>();
 
-            unlockedCaseChoiceIdentifiers = SettingsManager.Instance.gameMode.baseUnlockedChoiceIdentifiers;
-            caseChoiceUnlockPool = SettingsManager.Instance.gameMode.baseChoiceIdentifierPool;
+            unlockedCaseChoiceIdentifiers = new List<string>(SettingsManager.Instance.gameMode.baseUnlockedChoiceIdentifiers);
+            caseChoiceUnlockPool = new List<string>(SettingsManager.Instance.gameMode.baseChoiceIdentifierPool);
 
             isInitialized = true;
         }
@@ -161,7 +169,12 @@ namespace ChickenScratch
             currentTimeInRound -= Time.deltaTime;
             var ts = TimeSpan.FromSeconds(currentTimeInRound);
 
-            if (currentTimeInRound < 10.0f &&
+            if(currentTimeInRound < 60 & !hasUpdatedTimeColour && currentPhaseName == GameFlowManager.GamePhase.drawing)
+            {
+                timeRemainingText.color = warningTimerColour;
+                hasUpdatedTimeColour = true;
+            }
+            else if (currentTimeInRound < 10.0f &&
                 !hasWarnedOnTime &&
                 (currentPhaseName != GameFlowManager.GamePhase.game_tutorial
                 && currentPhaseName != GameFlowManager.GamePhase.loading
@@ -172,6 +185,10 @@ namespace ChickenScratch
                 hasWarnedOnTime = true;
                 if (currentTimeInRound > 0.1f)
                 {
+                    if(currentPhaseName == GameFlowManager.GamePhase.drawing)
+                    {
+                        timeRemainingText.color = expiringTimerColour;
+                    }
                     AudioManager.Instance.PlaySound("TimeTick");
                 }
 
@@ -205,7 +222,7 @@ namespace ChickenScratch
                     if (!selectedCase.Value.IsComplete())
                     {
                         //Queue the player who has the case to force submit
-                        int currentRound = drawingRound.currentRound;
+                        int currentRound = selectedCase.Value.currentRound;
                         if (currentRound == -1)
                         {
                             Debug.LogError("ERROR[OnOutOfTime]: Could not isolate currentRound for case["+selectedCase.Key.ToString()+"]");
@@ -258,6 +275,8 @@ namespace ChickenScratch
         {
             currentPhaseName = inPhaseName;
             hasWarnedOnTime = false;
+            timeRemainingText.color = baseTimerColour;
+            hasUpdatedTimeColour = false;
             hasRunOutOfTime = false;
 
             switch (inPhaseName)
@@ -374,6 +393,73 @@ namespace ChickenScratch
             drawingContainer.transform.localScale = scale;
         }
 
+        public void createFlippedDrawingVisuals(DrawingData drawingData, Transform drawingParent, Vector3 position, Vector3 scale, float lineThicknessReductionFactor)
+        {
+            if(drawingData.visuals.Count == 0)
+            {
+                return;
+            }
+            GameObject drawingContainer = new GameObject();
+            drawingContainer.transform.parent = drawingParent;
+            drawingContainer.transform.position = drawingParent.position;
+            Material drawingMaterial;
+            GameObject drawingPrefab = ColourManager.Instance.linePrefab;
+            if (!lineObjectMap.ContainsKey(drawingData.author))
+            {
+                lineObjectMap.Add(drawingData.author, new List<GameObject>());
+            }
+
+            float highestY = 0f;
+            float lowestY = Mathf.Infinity;
+            foreach (DrawingVisualData visual in drawingData.visuals)
+            {
+                if (visual is DrawingLineData)
+                {
+                    DrawingLineData line = (DrawingLineData)visual;
+                    foreach (Vector3 linePosition in line.positions)
+                    {
+                        if(highestY < linePosition.y)
+                        {
+                            highestY = linePosition.y;
+                        }
+                        if(lowestY > linePosition.y)
+                        {
+                            lowestY = linePosition.y;
+                        }
+                    }
+                }
+            }
+
+            float flipOffset = Screen.height / 720 * 2.5f;
+
+            foreach (DrawingVisualData visual in drawingData.visuals)
+            {
+                if (visual is DrawingLineData)
+                {
+                    DrawingLineData line = (DrawingLineData)visual;
+                    drawingMaterial = ColourManager.Instance.baseLineMaterial;
+
+                    GameObject newLine = Instantiate(drawingPrefab, position, Quaternion.identity, drawingContainer.transform);
+                    LineRenderer newLineRenderer = newLine.GetComponent<LineRenderer>();
+
+                    lineObjectMap[drawingData.author].Add(newLine);
+                    newLineRenderer.material = drawingMaterial;
+                    newLineRenderer.material.color = line.lineColour;
+                    newLineRenderer.positionCount = line.positions.Count;
+
+                    
+
+                    newLineRenderer.SetPositions(line.GetFlippedPositions(position + Vector3.up * flipOffset, scale, line.positions.Count).ToArray());
+                    newLine.transform.position = new Vector3(newLine.transform.position.x, newLine.transform.position.y, line.zDepth);
+                    newLineRenderer.startWidth = line.lineSize * lineThicknessReductionFactor;
+                    newLineRenderer.endWidth = line.lineSize * lineThicknessReductionFactor;
+                    newLine.SetActive(!SettingsManager.Instance.IsPlayerCovered(drawingData.author));
+                }
+            }
+
+            drawingContainer.transform.localScale = scale;
+        }
+
         public void AnimateDrawingVisuals(DrawingData drawingData, Transform drawingParent, Vector3 position, Vector3 scale, float lineThicknessReductionFactor, float duration)
         {
             GameObject drawingContainer = new GameObject();
@@ -410,12 +496,24 @@ namespace ChickenScratch
 
         private IEnumerator AnimateDrawingVisual(LineRenderer newLineRenderer, DrawingLineData line, Vector3 position, Vector3 scale)
         {
+            float completionTime = 4f;
+            float timePassed = 0f;
+            int numberOfTimesItCrossedThreshold = 0;
             for (int i = 0; i < line.positions.Count; i++)
             {
+                float timeRatio = timePassed / completionTime;
+                float lineRatio = i / (float)line.positions.Count;
+
+                if(timeRatio < lineRatio)
+                {
+                    numberOfTimesItCrossedThreshold++;
+                    yield return new WaitForEndOfFrame();
+                    timePassed += Time.deltaTime * slidesRound.slideSpeed;
+                }
                 newLineRenderer.positionCount = i+1;
                 newLineRenderer.SetPositions(line.GetTransformedPositions(position, scale, i+1).ToArray());
-                yield return null;
             }
+
         }
 
         public void addGuessPrompt(GuessData inGuessData, int caseID, float timeTaken)
@@ -531,10 +629,12 @@ namespace ChickenScratch
         {
             if(inStoreItemData.itemType == StoreItem.StoreItemType.case_unlock ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.case_upgrade ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.case_frequency ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.coffee_pot ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.advertisement ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.nest_feathering ||
-                inStoreItemData.itemType == StoreItem.StoreItemType.coffee_mug)
+                inStoreItemData.itemType == StoreItem.StoreItemType.coffee_mug ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.contract)
             {
                 //These are handled on the server-side and propagated to everyone in the game
                 return;

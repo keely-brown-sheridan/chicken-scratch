@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using UnityEngine;
 using static ChickenScratch.ColourManager;
@@ -71,6 +72,11 @@ namespace ChickenScratch
 
         [SerializeField]
         private RoleData workerRole;
+
+        [SerializeField]
+        private float timeToWaitForPlayers = 0f;
+
+        private float timeWaitingForPlayers = 0f;
 
         public int totalCompletedCases = 0;
         private bool hasRequestedBirdClaim = false;
@@ -174,6 +180,8 @@ namespace ChickenScratch
             }
             GameManager.Instance.gameDataHandler.RPCUpdatePlayerNameMapWrapper(playerFlowManager.playerNameMap);
 
+            
+
             //Assign cabinets to each player
             iterator = 1;
             foreach(KeyValuePair<BirdName,PlayerData> player in gamePlayers)
@@ -184,89 +192,6 @@ namespace ChickenScratch
                
             }
             SetPlayerObjectOwnership();
-
-
-
-            switch (SettingsManager.Instance.gameMode.caseDeliveryMode)
-            {
-                case GameModeData.CaseDeliveryMode.queue:
-                    InitializeQueueMode();
-                    break;
-                case GameModeData.CaseDeliveryMode.free_for_all:
-                    
-                    break;
-            }
-        }
-
-        private void InitializeQueueMode()
-        {
-            SettingsManager.Instance.ServerBroadcastPlayerNames();
-           
-
-            InitializeChains();
-
-            BirdName currentPlayer;
-
-            //Send cases to players
-            foreach (KeyValuePair<int, CabinetDrawer> cabinet in playerFlowManager.drawingRound.cabinetDrawerMap)
-            {
-                ChainData chain = cabinet.Value.currentChainData;
-                if (chain == null || !chain.active)
-                {
-                    continue;
-                }
-                if (!playerFlowManager.drawingRound.caseMap.ContainsKey(chain.identifier))
-                {
-                    playerFlowManager.drawingRound.caseMap.Add(chain.identifier, chain);
-                }
-
-                currentPlayer = chain.playerOrder[1];
-                AddCaseToQueue(currentPlayer, chain, chain.identifier, 1, currentPlayer);
-
-                switch (SettingsManager.Instance.gameMode.wordDistributionMode)
-                {
-                    case GameModeData.WordDistributionMode.random:
-                        DistributeRandomWordsToPlayer(currentPlayer, chain, cabinet.Key);
-                        break;
-                    default:
-                        Debug.LogError("Word distribution mode[" + SettingsManager.Instance.gameMode.wordDistributionMode.ToString() + "] has not been implemented.");
-                        break;
-                }
-            }
-        }
-
-
-        private void DistributeRandomWordsToPlayer(BirdName currentPlayer, ChainData currentChain, int cabinetIndex)
-        {
-            if (currentPlayer == SettingsManager.Instance.birdName)
-            {
-                playerFlowManager.drawingRound.playerCabinetIndex = cabinetIndex;
-                playerFlowManager.drawingRound.SetInitialPrompt(currentChain.identifier, currentChain.correctPrompt);
-            }
-            else
-            {
-                GameManager.Instance.gameFlowManager.addTransitionCondition("initial_cabinet_prompt_receipt:" + currentPlayer);
-                GameManager.Instance.gameDataHandler.TargetAssignCabinetToPlayer(SettingsManager.Instance.GetConnection(currentPlayer), cabinetIndex);
-                GameManager.Instance.gameDataHandler.TargetInitialCabinetPromptContents(SettingsManager.Instance.GetConnection(currentPlayer), currentChain.identifier, currentChain.correctPrompt, true);
-            }
-
-            //Send possible words
-            GameManager.Instance.gameDataHandler.TargetPossibleWordsWrapper(SettingsManager.Instance.GetConnection(currentChain.guessData.author), currentChain.identifier, currentChain.possibleWordsMap);
-            
-        }
-
-        private void InitializeChains()
-        {
-            switch (SettingsManager.Instance.gameMode.caseDeliveryMode)
-            {
-                case GameModeData.CaseDeliveryMode.queue:
-                case GameModeData.CaseDeliveryMode.free_for_all:
-                    InitializeCaseQueue();
-                    return;
-                default:
-                    Debug.LogError("Delivery mode[" + SettingsManager.Instance.gameMode.caseDeliveryMode.ToString() + "] has not been implemented yet.");
-                    return;
-            }
         }
 
         public void IncreaseNumberOfCompletedCases()
@@ -322,18 +247,27 @@ namespace ChickenScratch
 
             //Set the player order
             newChain.playerOrder.Add(1, startingPlayer);
-            List<BirdName> randomizedPlayers = GameManager.Instance.gameFlowManager.connectedBirds.OrderBy(cp => Guid.NewGuid()).ToList();
+            List<BirdName> randomizedPlayers = new List<BirdName>(GameManager.Instance.gameFlowManager.connectedBirds);
 
+            bool firstPlayerAssigned = false;
             //Randomize the player list and then add players until the number of tasks has been filled
             for (int j = 0; j < randomizedPlayers.Count; j++)
             {
-                if (choiceData.numberOfTasks < newChain.playerOrder.Count)
+                if (choiceData.numberOfTasks <= newChain.playerOrder.Count)
                 {
                     break;
                 }
                 if (randomizedPlayers[j] != startingPlayer)
                 {
                     newChain.playerOrder.Add(newChain.playerOrder.Count + 1, randomizedPlayers[j]);
+                    if(!firstPlayerAssigned)
+                    {
+                        //Remove and add the player so that they're at the end of the queue of possible players
+                        GameManager.Instance.gameFlowManager.connectedBirds.Remove(randomizedPlayers[j]);
+                        GameManager.Instance.gameFlowManager.connectedBirds.Add(randomizedPlayers[j]);
+                        firstPlayerAssigned = true;
+                    }
+                    
                 }
             }
             if(!newChain.playerOrder.ContainsKey(choiceData.numberOfTasks))
@@ -415,48 +349,6 @@ namespace ChickenScratch
             updateQueuedFolderVisuals(birdName);
         }
 
-        private void InitializeCaseQueue()
-        {
-            PlayerTextInputData tempPromptData;
-            ChainData newChain;
-            List<BirdName> playerColours = gamePlayers.Keys.ToList();
-            for (int i = 0; i < gamePlayers.Count; i++)
-            {
-                if (GameManager.Instance.gameFlowManager.disconnectedPlayers.Contains(playerColours[i]))
-                {
-                    continue;
-                }
-
-                //Pick the base case
-                CaseTemplateData selectedCase = SettingsManager.Instance.gameMode.baseTemplateData;
-                string correctPrompt = "";
-
-                wordManager.ClearUsedWords();
-                tempPromptData = new PlayerTextInputData()
-                {
-                    author = BirdName.none
-                };
-                newChain = new ChainData();
-                Debug.LogError("Initializing case queue and creating new case["+currentLowestUnusedCaseNumber.ToString()+"]");
-                newChain.identifier = currentLowestUnusedCaseNumber;
-                currentLowestUnusedCaseNumber++;
-
-                int cabinetID = playerCabinetMap[newChain.playerOrder[1]];
-                GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[cabinetID].currentChainData = newChain;
-
-                switch (SettingsManager.Instance.gameMode.wordDistributionMode)
-                {
-                    case GameModeData.WordDistributionMode.random:
-                        wordManager.PopulateStandardCaseWords(newChain, selectedCase.startingWordIdentifiers);
-                        newChain.correctPrompt = correctPrompt;
-                        tempPromptData.text = correctPrompt;
-                        newChain.prompts.Add(1, tempPromptData);
-                        break;
-                }
-            }
-
-            return;
-        }
 
         public void reorderCasesOnDisconnect(BirdName disconnectingPlayer)
         {
@@ -568,7 +460,7 @@ namespace ChickenScratch
                     break;
                 case GamePhase.game_tutorial:
                     if (deadlineTutorialSequence.active ||
-                        !isRoundOver())
+                        !isRoundOver(true))
                     {
                         return;
                     }
@@ -577,7 +469,7 @@ namespace ChickenScratch
                     currentGamePhase = GamePhase.instructions;
                     break;
                 case GamePhase.instructions:
-                    if (!isRoundOver())
+                    if (!isRoundOver(false))
                     {
                         return;
                     }
@@ -587,12 +479,13 @@ namespace ChickenScratch
                 case GamePhase.drawing:
                     if(!playerFlowManager.drawingRound.hasRequestedCaseDetails)
                     {
+                        GameManager.Instance.gameDataHandler.RpcDeactivateCasePile();
                         playerFlowManager.OnOutOfTime();
                         return;
                     }
                     else if (!playerFlowManager.drawingRound.hasSentCaseDetails)
                     {
-                        if (!isRoundOver())
+                        if (!isRoundOver(false))
                         {
                             return;
                         }
@@ -602,6 +495,7 @@ namespace ChickenScratch
                             updateQueuedFolderVisuals(bird);
                             if (!disconnectedPlayers.Contains(bird) && bird != SettingsManager.Instance.birdName)
                             {
+                                addTransitionCondition("endgame_cases_expected:" + bird);
                                 addTransitionCondition("endgame_data_loaded:" + bird);
                             }
                         }
@@ -611,7 +505,7 @@ namespace ChickenScratch
                     }
                     else
                     {
-                        if (!isRoundOver())
+                        if (!isRoundOver(false))
                         {
                             UpdatePhase();
                             return;
@@ -631,7 +525,7 @@ namespace ChickenScratch
                     break;
                 case GamePhase.slides_tutorial:
                     if (slideTutorialSequence.active ||
-                            !isRoundOver())
+                            !isRoundOver(true))
                     {
                         return;
                     }
@@ -649,13 +543,13 @@ namespace ChickenScratch
                 case GamePhase.slides:
                     if (playerFlowManager.slidesRound.inProgress)
                     {
-                        if (isRoundOver())
+                        if (isRoundOver(true))
                         {
                             playerFlowManager.slidesRound.inProgress = false;
                         }
                         return;
                     }
-                    else if (!isRoundOver())
+                    else if (!isRoundOver(false))
                     {
                         return;
                     }
@@ -670,7 +564,7 @@ namespace ChickenScratch
                     currentGamePhase = GamePhase.results;
                     break;
                 case GamePhase.accusation:
-                    if (!isRoundOver())
+                    if (!isRoundOver(true))
                     {
                         return;
                     }
@@ -700,7 +594,11 @@ namespace ChickenScratch
                 case GamePhase.store:
                     if(GameManager.Instance.playerFlowManager.storeRound.currentState == StoreRound.State.unlock)
                     {
-                        GameManager.Instance.playerFlowManager.storeRound.ForceChoice();
+                        if(!GameManager.Instance.playerFlowManager.storeRound.HasChosen())
+                        {
+                            GameManager.Instance.playerFlowManager.storeRound.ForceChoice();
+                        }
+                        
                         GameManager.Instance.playerFlowManager.storeRound.ServerInitializeStore();
                         return;
                     }
@@ -759,12 +657,6 @@ namespace ChickenScratch
             }
             activeTransitionConditions.Remove(condition);
             //Debug.LogError("Resolving transition condition[" + condition + "]. There are still " + activeTransitionConditions.Count + " active conditions.");
-
-            if (isRoundOver())
-            {
-                //Debug.LogError("Round is over, setting time remaining in phase to 0.");
-                //timeRemainingInPhase = 0.0f;
-            }
         }
 
         public void clearPlayerTransitionConditions(BirdName disconnectingPlayer)
@@ -835,13 +727,29 @@ namespace ChickenScratch
             }
         }
 
-        public bool isRoundOver()
+        public bool isRoundOver(bool waitIndefinitely = true)
         {
+            
             if (activeTransitionConditions.Count > 0)
             {
-                return false;
+                if(waitIndefinitely)
+                {
+                    return false;
+                }
+                timeWaitingForPlayers += Time.deltaTime;
+                if(timeWaitingForPlayers < timeToWaitForPlayers)
+                {
+                    return false;
+                }
+                Debug.LogError("Forcing a transition because waiting time has elapsed, these are the transition conditions that are currently active and being cleared:");
+                foreach (string transitionCondition in activeTransitionConditions)
+                {
+                    Debug.LogError(transitionCondition);
+                }
+                timeWaitingForPlayers = 0f;
+                activeTransitionConditions.Clear();
             }
-
+            
             return true;
         }
 

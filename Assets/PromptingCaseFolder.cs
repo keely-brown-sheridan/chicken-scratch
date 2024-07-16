@@ -1,3 +1,4 @@
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,9 +23,22 @@ namespace ChickenScratch
         [SerializeField]
         private CaseWordCategoryVisual caseWordCategoryVisual;
 
-        public void Initialize(DrawingData drawingData, UnityAction inTimeCompleteAction)
+        [SerializeField]
+        private int basePromptingLength = 24;
+
+        public void Initialize(int round, DrawingData drawingData, UnityAction inTimeCompleteAction, List<TaskData.TaskModifier> taskModifiers, int promptingLength = -1)
         {
-            promptingContainer.Show(drawingData, drawingScalingFactor, drawingOffset);
+            if(promptingLength < 1)
+            {
+                promptInputField.characterLimit = basePromptingLength;
+            }
+            else
+            {
+                promptInputField.characterLimit = promptingLength;
+            }
+            casePlayerTabs.Initialize(round, drawingData.caseID);
+            SetCaseTypeVisuals(drawingData.caseID);
+            promptingContainer.Show(drawingData, drawingScalingFactor, taskModifiers);
             timeCompleteAction = inTimeCompleteAction;
             RegisterToTimer(inTimeCompleteAction);
         }

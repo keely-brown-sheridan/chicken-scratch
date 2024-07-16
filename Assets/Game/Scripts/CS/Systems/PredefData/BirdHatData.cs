@@ -8,7 +8,7 @@ namespace ChickenScratch
     {
         public enum HatType
         {
-            crown, baseball_cap, jester_hat, top_hat, fez, chefs_hat, wizards, beret, straw_hat, none
+            crown, baseball_cap, jester_hat, top_hat, fez, chefs_hat, wizards, beret, straw_hat, santa, sherlock, flower, propeller, none
         }
         public HatType hatType;
         public string hatName;
@@ -18,5 +18,6 @@ namespace ChickenScratch
         public Vector3 rotation;
         public float width;
         public float height;
+        public Vector3 scale = Vector3.one;
     }
 }

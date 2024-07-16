@@ -229,6 +229,7 @@ public class AccusationRound : PlayerRound
             case TaskData.TaskType.add_drawing:
             case TaskData.TaskType.prompt_drawing:
             case TaskData.TaskType.compile_drawing:
+            case TaskData.TaskType.blender_drawing:
                 GameObject drawingCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.drawing], evidenceHolder);
                 DrawingCaseEmailSection drawingCaseEmailSection = drawingCaseEmailSectionObject.GetComponent<DrawingCaseEmailSection>();
                 drawingCaseEmailSection.Initialize(taskData.drawingData, taskData.ratingData, 1f);
@@ -238,6 +239,7 @@ public class AccusationRound : PlayerRound
                 PromptCaseEmailSection promptCaseEmailSection = promptCaseEmailSectionObject.GetComponent<PromptCaseEmailSection>();
                 promptCaseEmailSection.Initialize(taskData.promptData, taskData.ratingData);
                 break;
+            case TaskData.TaskType.morph_guessing:
             case TaskData.TaskType.base_guessing:
                 GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], evidenceHolder);
                 GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();

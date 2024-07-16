@@ -188,7 +188,7 @@ namespace ChickenScratch
             Instantiate(botcherCoinPrefab, botcherCoinHolder);
             if(SettingsManager.Instance.playerRole.team == RoleData.Team.botcher)
             {
-                SettingsManager.Instance.botcherCoins++;
+                //SettingsManager.Instance.botcherCoins++;
             }
         }
     }

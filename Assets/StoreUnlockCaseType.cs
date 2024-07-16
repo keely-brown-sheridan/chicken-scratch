@@ -32,7 +32,9 @@ public class StoreUnlockCaseType : MonoBehaviour
         backgroundImage.color = choice.colour;
         caseTypeNameText.text = choice.identifier;
         caseTypeDescriptionText.text = choice.description;
-        baseBirdbucksText.text = choice.bonusPoints.ToString();
-        baseMultiplierText.text = choice.maxScoreModifier.ToString();
+        int minValue = choice.bonusPoints + choice.pointsPerCorrectWord * 2 + 2;
+        int maxValue = choice.bonusPoints + choice.pointsPerCorrectWord * 2 + 10;
+        baseBirdbucksText.text = (minValue).ToString() + "-" + maxValue.ToString();
+        baseMultiplierText.text = choice.startingScoreModifier.ToString();
     }
 }

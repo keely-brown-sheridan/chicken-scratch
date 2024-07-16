@@ -14,6 +14,13 @@ namespace ChickenScratch
 
         }
 
+        public override void Initialize(StoreItemData existingItemData)
+        {
+            base.Initialize(existingItemData);
+            ValueStoreItemData valueItem = existingItemData as ValueStoreItemData;
+            value = valueItem.value;
+        }
+
         public ValueStoreItemData(ValueStoreItemNetData netData)
         {
             ValueStoreItemData gameData = (ValueStoreItemData)GameDataManager.Instance.GetMatchingStoreItem(netData.itemType);

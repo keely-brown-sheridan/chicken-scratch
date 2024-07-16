@@ -19,11 +19,17 @@ namespace ChickenScratch
         [SerializeField]
         private GameObject playerListingPrefab;
 
+        [SerializeField]
+        private GameObject endRoundButtonObject;
+
         private Dictionary<ColourManager.BirdName,PausePlayerListing> playerListingsMap = new Dictionary<ColourManager.BirdName,PausePlayerListing>();
 
         public void Initialize()
         {
-            
+            if(SettingsManager.Instance.isHost)
+            {
+                endRoundButtonObject.SetActive(true);
+            }
             List<ColourManager.BirdName> allBirds = SettingsManager.Instance.GetAllActiveBirds();
             foreach(ColourManager.BirdName bird in allBirds)
             {
@@ -42,6 +48,11 @@ namespace ChickenScratch
         public void DisconnectPlayer(ColourManager.BirdName bird)
         {
             playerListingsMap[bird].OnDisconnect();
+        }
+
+        public void OnFinishRoundTimerPress()
+        {
+            GameManager.Instance.gameFlowManager.timeRemainingInPhase = 0f;
         }
     }
 }

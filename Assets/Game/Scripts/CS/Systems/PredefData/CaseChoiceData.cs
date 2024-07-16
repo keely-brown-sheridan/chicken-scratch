@@ -13,20 +13,42 @@ namespace ChickenScratch
         }
         public string identifier;
         public CaseTemplateData.CaseFormat caseFormat;
+
         public int numberOfTasks;
+
+        [HideInInspector]
         public int pointsPerCorrectWord;
+        [HideInInspector]
         public int bonusPoints;
+        [HideInInspector]
         public int cost;
+
+        [SerializeField]
+        private int basePointsPerCorrectWord;
+        [SerializeField]
+        private int baseBonusPoints;
+        [SerializeField]
+        private float baseStartingModifier;
+        [SerializeField]
+        private int baseFrequency;
+
+        public List<TemplateTaskData> taskTemplates = new List<TemplateTaskData>();
+
         public DifficultyDescriptor difficulty;
         public int penalty;
         public float startingScoreModifier;
-        public float maxScoreModifier;
         public float modifierDecrement;
         public float taskFalloff;
         public Color colour;
-        public List<string> startingWordIdentifiers = new List<string>();
+        public Color backgroundFontColour;
+        public Color importantFontColour;
+        public List<WordPromptTemplateData> startingWordIdentifiers = new List<WordPromptTemplateData>();
+
+        [HideInInspector]
         public int selectionFrequency;
-       
+
+        [HideInInspector]
+        public float maxScoreModifier;
 
         [SerializeField]
         private List<TaskTimingData> taskTimingData = new List<TaskTimingData>();
@@ -45,6 +67,15 @@ namespace ChickenScratch
             }
 
             return 0f;
+        }
+
+        public void Reset()
+        {
+            startingScoreModifier = baseStartingModifier;
+            bonusPoints = baseBonusPoints;
+            pointsPerCorrectWord = basePointsPerCorrectWord;
+            maxScoreModifier = startingScoreModifier;
+            selectionFrequency = baseFrequency;
         }
     }
 }

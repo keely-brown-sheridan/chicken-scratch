@@ -59,6 +59,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 4.583}
     width: 23.5
     height: 17.75
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 1
     hatName: Baseball Cap
     hatSprite: {fileID: 60674070, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -66,6 +67,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 8.046}
     width: 27
     height: 17
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 2
     hatName: Jester Hat
     hatSprite: {fileID: -1059053478, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -73,6 +75,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     width: 27.25
     height: 17.75
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 3
     hatName: Top Hat
     hatSprite: {fileID: -400362027, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -80,6 +83,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     width: 20
     height: 20
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 4
     hatName: Fez
     hatSprite: {fileID: -511790863, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -87,6 +91,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 7.06}
     width: 10
     height: 10
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 5
     hatName: Chefs Hat
     hatSprite: {fileID: -767838121, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -94,6 +99,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: -6.585}
     width: 22
     height: 16.5
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 6
     hatName: Wizards Hat
     hatSprite: {fileID: -897547993, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -101,6 +107,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     width: 25
     height: 25
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 7
     hatName: Beret
     hatSprite: {fileID: -481659573, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -108,6 +115,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 11.8}
     width: 19
     height: 9.5
+    scale: {x: 1, y: 1, z: 1}
   - hatType: 8
     hatName: Straw Hat
     hatSprite: {fileID: 476127118, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
@@ -115,3 +123,36 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     width: 35.25
     height: 16.25
+    scale: {x: 1, y: 1, z: 1}
+  - hatType: 9
+    hatName: Santa
+    hatSprite: {fileID: -860967110, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: 7.3, y: 27, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    width: 29.1434
+    height: 22.5091
+    scale: {x: 1, y: 1, z: 1}
+  - hatType: 11
+    hatName: Flower
+    hatSprite: {fileID: -373015079, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: 4.6, y: 19.4, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    width: 45.3726
+    height: 20.9165
+    scale: {x: 1, y: 1, z: 1}
+  - hatType: 10
+    hatName: Sherlock
+    hatSprite: {fileID: 1047589752, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: 5.9, y: 28.2, z: 0}
+    rotation: {x: 0, y: 0, z: 11.68}
+    width: 55.77
+    height: 41.39
+    scale: {x: 1, y: 1, z: 1}
+  - hatType: 12
+    hatName: Propeller
+    hatSprite: {fileID: 278697442, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: 3, y: 26.5, z: 0}
+    rotation: {x: 0, y: 0, z: 1.84}
+    width: 21.4949
+    height: 15.7787
+    scale: {x: 1, y: 1, z: 1}

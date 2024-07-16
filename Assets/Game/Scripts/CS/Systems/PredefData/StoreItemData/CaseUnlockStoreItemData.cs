@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace ChickenScratch
 {
@@ -16,6 +17,14 @@ namespace ChickenScratch
         public CaseUnlockStoreItemData()
         {
 
+        }
+
+        public override void Initialize(StoreItemData existingData)
+        {
+            base.Initialize(existingData);
+            CaseUnlockStoreItemData existingUnlockData = (existingData as CaseUnlockStoreItemData);
+            caseChoiceIdentifier = existingUnlockData.caseChoiceIdentifier;
+            unlocks = existingUnlockData.unlocks;
         }
 
         public CaseUnlockStoreItemData(CaseUnlockStoreItemNetData netData)

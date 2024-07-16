@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static ChickenScratch.TaskData;
 
 namespace ChickenScratch
 {
@@ -51,10 +52,13 @@ namespace ChickenScratch
             }
         }
 
-        public void Initialize(int caseID, Dictionary<int,List<string>> inPossibleWords, DrawingData drawingData, UnityAction inTimeCompleteAction)
+        public void Initialize(int round, int caseID, Dictionary<int,List<string>> inPossibleWords, DrawingData drawingData, List<TaskData.TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
         {
+            casePlayerTabs.Initialize(round, caseID);
             currentCaseIndex = caseID;
-            guessingContainer.Show(drawingData, drawingScalingFactor, drawingOffset);
+            SetCaseTypeVisuals(caseID);
+
+            guessingContainer.Show(drawingData, drawingScalingFactor, taskModifiers);
             PossiblePrompt currentPossibleWord;
             int iterator = 1;
             Color guessButtonColour = Color.white;

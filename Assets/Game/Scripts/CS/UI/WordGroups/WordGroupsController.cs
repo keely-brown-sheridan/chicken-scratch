@@ -322,7 +322,7 @@ namespace ChickenScratch
         public string name = "";
         public enum WordType
         {
-            prefixes, nouns, invalid
+            prefixes, nouns, variant, invalid
         }
         public WordType wordType = WordType.invalid;
         public List<WordData> words = new List<WordData>();
@@ -380,6 +380,10 @@ namespace ChickenScratch
 
         public WordData GetWord(int index)
         {
+            if(words.Count <= index)
+            {
+                return null;
+            }
             return words[index];
         }
 

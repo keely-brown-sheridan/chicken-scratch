@@ -65,11 +65,7 @@ namespace ChickenScratch
 
         public CSteamID currentRoomID;
         public RoleData playerRole;
-        public int botcherCoins;
-
         private List<ColourManager.BirdName> coveredPlayers = new List<ColourManager.BirdName>();
-
-
 
         private void Awake()
         {

@@ -99,6 +99,7 @@ namespace ChickenScratch
         public int totalCasesInSlidesRound = 0;
         public int startingCaseIndex = 0;
         private bool hasUpdatedCasesInSlideRound = false;
+        public int expectedCaseCount;
         public override void StartRound()
         {
             hasUpdatedCasesInSlideRound = false;
@@ -166,15 +167,25 @@ namespace ChickenScratch
         public void GenerateEndgameData()
         {
             Dictionary<int, ChainData> gameCaseMap = GameManager.Instance.playerFlowManager.drawingRound.caseMap;
-            List<EndgameCaseData> endgameCases = new List<EndgameCaseData>();
+
+            
             foreach (KeyValuePair<int, ChainData> currentCase in gameCaseMap)
             {
+                if(GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.ContainsKey(currentCase.Key))
+                {
+                    //This is a case from the last round, we don't need to send it again
+                    continue;
+                }
                 EndgameCaseData endgameCase = new EndgameCaseData(currentCase.Value);
-                endgameCases.Add(endgameCase);
+                GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Add(currentCase.Key, endgameCase);
+                bool caseContainsPlayer = endgameCase.ContainsBird(SettingsManager.Instance.birdName);
+                if (caseContainsPlayer)
+                {
+                    int birdBucksEarned = endgameCase.taskDataMap.Count != 0 ? endgameCase.scoringData.GetTotalPoints() / endgameCase.taskDataMap.Count : 0;
+                    GameManager.Instance.playerFlowManager.storeRound.IncreaseCurrentMoney(birdBucksEarned);
+                }
             }
-            GameManager.Instance.gameDataHandler.RpcSendEndgameCaseDataWrapper(endgameCases);
-
-
+            GameManager.Instance.gameDataHandler.RpcSendEndgameCaseCount(gameCaseMap.Count);
         }
 
         private void updateSlideFlow()
@@ -205,7 +216,7 @@ namespace ChickenScratch
                     else
                     {
                         //Create the slides for the next case and start showing them
-                        GameManager.Instance.gameDataHandler.RpcCreateSlidesFromCaseWrapper(caseDataMap[currentSlideCaseIndex]);
+                        GameManager.Instance.gameDataHandler.RpcCreateSlidesFromCase(currentSlideCaseIndex);
                     }
                 }
                 //Manage the execution of the current slide
@@ -229,8 +240,15 @@ namespace ChickenScratch
             }
         }
 
-        public void CreateSlidesFromCase(EndgameCaseData caseData)
+        public void CreateSlidesFromCase(int caseID)
         {
+            if(!caseDataMap.ContainsKey(caseID))
+            {
+                Debug.LogError("Could not create slides for case["+caseID.ToString()+"] because it does not exist in the case data map.");
+                return;
+            }
+            EndgameCaseData caseData = caseDataMap[caseID];
+            caseData.hasBeenShown = true;
             int caseIndex = caseData.identifier - startingCaseIndex;
             string caseReminderText = "Case " + caseIndex.ToString() + " of " + totalCasesInSlidesRound.ToString();
             casesProgressReminderText.text = caseReminderText;
@@ -274,6 +292,7 @@ namespace ChickenScratch
                     case TaskData.TaskType.compile_drawing:
                     case TaskData.TaskType.copy_drawing:
                     case TaskData.TaskType.prompt_drawing:
+                    case TaskData.TaskType.blender_drawing:
                         currentSlideType = slideTypeMap[SlideTypeData.SlideType.drawing];
                         GameObject drawingSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
                         DrawingSlideContents drawingSlide = drawingSlideObject.GetComponent<DrawingSlideContents>();
@@ -289,6 +308,7 @@ namespace ChickenScratch
                         queuedSlides.Add(promptingSlide);
                         summarySlide.AddPrompt(taskData.Value.promptData, taskData.Key, caseData.identifier, taskData.Value.timeModifierDecrement);
                         break;
+                    case TaskData.TaskType.morph_guessing:
                     case TaskData.TaskType.base_guessing:
                         currentSlideType = slideTypeMap[SlideTypeData.SlideType.guess];
                         GameObject guessingSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
@@ -398,28 +418,28 @@ namespace ChickenScratch
         }
 
 
-        public void UpdateCaseRatings(List<EndgameCaseData> inCaseData)
+        public void UpdateCaseRatings(List<PlayerRatingNetData> inRatingData)
         {
             PlayerRatingData selectedRatingData;
-            foreach (EndgameCaseData serverCase in inCaseData)
+            foreach (PlayerRatingNetData rating in inRatingData)
             {
-                if(!caseDataMap.ContainsKey(serverCase.identifier))
+                if(!caseDataMap.ContainsKey(rating.caseID))
                 {
-                    Debug.LogError("ERROR[UpdateCaseRatings]: Could not find matching case["+ serverCase.identifier+"] on client.");
+                    Debug.LogError("ERROR[UpdateCaseRatings]: Could not find matching case["+ rating.caseID+"] on client.");
+                    continue;
                 }
-                EndgameCaseData matchingCase = caseDataMap[serverCase.identifier];
-                foreach(KeyValuePair<int,EndgameTaskData> serverTask in serverCase.taskDataMap)
+                EndgameCaseData matchingCase = caseDataMap[rating.caseID];
+                if (!matchingCase.taskDataMap.ContainsKey(rating.round))
                 {
-                    if (!matchingCase.taskDataMap.ContainsKey(serverTask.Key))
-                    {
-                        Debug.LogError("ERROR[UpdateCaseRatings]: Could not access task[" + serverTask.Key.ToString() + "] for case because it wasn't in the queue.");
-                    }
-                    selectedRatingData = matchingCase.taskDataMap[serverTask.Key].ratingData;
-                    selectedRatingData.likeCount = serverTask.Value.ratingData.likeCount;
-                    selectedRatingData.target = serverTask.Value.ratingData.target;
+                    Debug.LogError("ERROR[UpdateCaseRatings]: Could not find matching task["+rating.round.ToString()+"] for case["+rating.caseID.ToString()+"] on client.");
+                    continue;
                 }
+                selectedRatingData = matchingCase.taskDataMap[rating.round].ratingData;
+                selectedRatingData.likeCount = rating.data.likeCount;
+                selectedRatingData.target = rating.data.target;
                 
             }
+            hasReceivedRatings = true;
         }
 
         

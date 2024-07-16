@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static ChickenScratch.TaskData;
 
 namespace ChickenScratch
 {
@@ -20,6 +21,7 @@ namespace ChickenScratch
         public string caseTypeName = "";
         public Color caseTypeColour = Color.white;
         public CaseScoringData scoringData = new CaseScoringData();
+        public bool hasBeenShown = false;
 
         public EndgameCaseData()
         {
@@ -52,6 +54,7 @@ namespace ChickenScratch
                     case TaskData.TaskType.copy_drawing:
                     case TaskData.TaskType.add_drawing:
                     case TaskData.TaskType.compile_drawing:
+                    case TaskData.TaskType.blender_drawing:
                         if (!inChainData.drawings.ContainsKey(taskRound))
                         {
                             endgameTaskData.isComplete = false;
@@ -60,6 +63,7 @@ namespace ChickenScratch
                         else
                         {
                             endgameTaskData.drawingData = inChainData.drawings[taskRound];
+                            endgameTaskData.expectingDrawing = false;
                         }
                         
                         break;
@@ -75,6 +79,7 @@ namespace ChickenScratch
                         }
                         
                         break;
+                    case TaskData.TaskType.morph_guessing:
                     case TaskData.TaskType.base_guessing:
                         if(inChainData.guessData == null || !inChainData.IsComplete())
                         {
@@ -92,9 +97,20 @@ namespace ChickenScratch
         {
             identifier = netData.identifier;
             taskDataMap = new Dictionary<int, EndgameTaskData>();
-            for (int i = 0; i < netData.taskDataKeys.Count; i++)
+            for (int i = 0; i < netData.taskData.Count; i++)
             {
-                taskDataMap.Add(netData.taskDataKeys[i], netData.taskDataValues[i]);
+                int taskIndex = netData.taskData[i].round;
+                taskDataMap.Add(taskIndex, new EndgameTaskData(netData.taskData[i]));
+                TaskType taskType = taskDataMap[taskIndex].taskType;
+                if (taskType == TaskData.TaskType.base_drawing ||
+                    taskType == TaskType.compile_drawing ||
+                    taskType == TaskType.prompt_drawing ||
+                    taskType == TaskType.add_drawing ||
+                    taskType == TaskType.copy_drawing ||
+                    taskType == TaskType.blender_drawing)
+                {
+                    taskDataMap[taskIndex].expectingDrawing = true;
+                }
             }
             correctPrompt = netData.correctPrompt;
             guessData = netData.guessData;
@@ -151,7 +167,7 @@ namespace ChickenScratch
         {
             foreach(EndgameTaskData taskData in taskDataMap.Values)
             {
-                if(taskData.taskType == TaskData.TaskType.base_guessing)
+                if(taskData.taskType == TaskData.TaskType.base_guessing || taskData.taskType == TaskType.morph_guessing)
                 {
                     return taskData.assignedPlayer;
                 }

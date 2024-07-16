@@ -118,7 +118,7 @@ namespace ChickenScratch
                     {
                         pointsCountMap.Add(currentTask.assignedPlayer, 0);
                     }
-                    pointsCountMap[currentTask.assignedPlayer] += currentCase.scoringData.GetTotalPoints() / currentCase.taskDataMap.Count;
+                    pointsCountMap[currentTask.assignedPlayer] += currentCase.taskDataMap.Count != 0 ? currentCase.scoringData.GetTotalPoints() / currentCase.taskDataMap.Count : 0;
                     switch (currentTask.taskType)
                     {
                         case TaskData.TaskType.prompt_drawing:
@@ -126,6 +126,7 @@ namespace ChickenScratch
                         case TaskData.TaskType.copy_drawing:
                         case TaskData.TaskType.add_drawing:
                         case TaskData.TaskType.compile_drawing:
+                        case TaskData.TaskType.blender_drawing:
                             if (!timeTakenMap.ContainsKey(currentTask.drawingData.author))
                             {
                                 timeTakenMap.Add(currentTask.drawingData.author, 0.0f);
@@ -199,6 +200,7 @@ namespace ChickenScratch
                             }
 
                             break;
+                        case TaskData.TaskType.morph_guessing:
                         case TaskData.TaskType.base_guessing:
                             if (currentCase.WasCorrect())
                             {

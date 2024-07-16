@@ -32,7 +32,8 @@ namespace ChickenScratch
         public override void StartRound()
         {
             base.StartRound();
-            if(SettingsManager.Instance.isHost)
+            Cursor.visible = true;
+            if (SettingsManager.Instance.isHost)
             {
                 GameManager.Instance.gameFlowManager.timeRemainingInPhase = timeInRound;
             }

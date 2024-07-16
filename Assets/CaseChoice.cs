@@ -53,22 +53,28 @@ namespace ChickenScratch
                 CaseWordData prefixWord = GameDataManager.Instance.GetWord(inCaseChoiceData.correctWordIdentifiersMap[0]);
                 CaseWordData nounWord = GameDataManager.Instance.GetWord(inCaseChoiceData.correctWordIdentifiersMap[1]);
                 difficulty = prefixWord.difficulty + nounWord.difficulty;
-                string prefixValue = "";
-                if(caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.curveball)
+                string promptValue = "";
+                if(caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.curveball ||
+                    caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.morph)
                 {
-                    prefixValue = SettingsManager.Instance.CreateNounText(nounWord.value);
+                    promptValue = SettingsManager.Instance.CreateNounText(nounWord.value);
+                }
+
+                else if(caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.blender)
+                {
+                    promptValue = SettingsManager.Instance.CreateNounText(prefixWord.value);
                 }
                 else
                 {
-                    prefixValue = SettingsManager.Instance.CreatePromptText(prefixWord.value, nounWord.value);
+                    promptValue = SettingsManager.Instance.CreatePromptText(prefixWord.value, nounWord.value);
                 }
-                prefixText.text = prefixValue;
+                prefixText.text = promptValue;
                 totalReward += prefixWord.difficulty;
                 totalReward += nounWord.difficulty;
             }
             else
             {
-                Debug.LogError("Invalid number of correct words in the identifiers map.");
+                Debug.LogError("Invalid number of correct words in the identifiers map["+inCaseChoiceData.caseChoiceIdentifier+"].");
             }
             
             nounText.text = "";
@@ -77,6 +83,7 @@ namespace ChickenScratch
 
             rewardText.text = totalReward.ToString();
             modifierText.text = caseChoiceData.startingScoreModifier.ToString("F2");
+            caseTabObject.SetActive(false);
         }
 
         public void SetCaseTab(float caseTabModifierValue)

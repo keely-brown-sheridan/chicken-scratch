@@ -36,9 +36,10 @@ namespace ChickenScratch
         public float dailyGameTimeRamp;
 
         public int baseRestockCost;
-        public int itemRestockCost;
 
         public bool hasAccusationRound;
         public List<RoleData> rolesToDistribute = new List<RoleData>();
+
+        public int middleStoreRowUnlockCost, bottomStoreRowUnlockCost;
     }
 }

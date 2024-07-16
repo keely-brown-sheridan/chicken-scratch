@@ -14,8 +14,18 @@ public class BirdImage : MonoBehaviour
     public ColourManager.BirdName currentBird => _currentBird;
     private ColourManager.BirdName _currentBird = ColourManager.BirdName.none;
 
+   // private List<ColourManager.BirdName> testBirds = new List<ColourManager.BirdName>() { ColourManager.BirdName.red, ColourManager.BirdName.blue, ColourManager.BirdName.green,
+    //                                                                                        ColourManager.BirdName.orange, ColourManager.BirdName.purple, ColourManager.BirdName.grey,
+     //                                                                                        ColourManager.BirdName.maroon, ColourManager.BirdName.black, ColourManager.BirdName.brown,
+    //                                                                                             ColourManager.BirdName.pink, ColourManager.BirdName.yellow, ColourManager.BirdName.teal };
+    //private List<BirdHatData.HatType> testHats = new List<BirdHatData.HatType>() { BirdHatData.HatType.flower, BirdHatData.HatType.sherlock, BirdHatData.HatType.santa, BirdHatData.HatType.propeller };
+    //private int currentTestBirdIndex = 0;
+    //private int currentTestHatIndex = 0;
+
     private void Awake()
     {
+        //_currentBird = testBirds[currentTestBirdIndex];
+        //GameManager.Instance.playerFlowManager.SetBirdHatType(_currentBird, testHats[currentTestHatIndex]);
         if(!GameManager.Instance.playerFlowManager.activeBirdImages.Contains(this))
         {
             GameManager.Instance.playerFlowManager.activeBirdImages.Add(this);
@@ -25,6 +35,7 @@ public class BirdImage : MonoBehaviour
             }
             
         }
+
     }
     private void OnDestroy()
     {
@@ -36,10 +47,30 @@ public class BirdImage : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            Initialize(ColourManager.BirdName.red, BirdHatData.HatType.crown);
-        }
+        //if(Input.GetKeyDown(KeyCode.E))
+        //{
+        //    //Increase the hat index
+        //    currentTestBirdIndex++;
+        //    if(currentTestBirdIndex >= testBirds.Count)
+        //    {
+        //        currentTestBirdIndex = 0;
+        //    }
+
+        //    _currentBird = testBirds[currentTestBirdIndex];
+        //    GameManager.Instance.playerFlowManager.SetBirdHatType(_currentBird, testHats[currentTestHatIndex]);
+        //}
+        //if(Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    //Increase the bird index
+        //    currentTestHatIndex++;
+        //    if(currentTestHatIndex >= testHats.Count)
+        //    {
+        //        currentTestHatIndex = 0;
+        //    }
+
+        //    _currentBird = testBirds[currentTestBirdIndex];
+        //    GameManager.Instance.playerFlowManager.SetBirdHatType(_currentBird, testHats[currentTestHatIndex]);
+        //}
     }
 
     public void Initialize(ColourManager.BirdName birdName, BirdHatData.HatType hatType = BirdHatData.HatType.none)
@@ -65,6 +96,7 @@ public class BirdImage : MonoBehaviour
                 hatImage.rectTransform.sizeDelta = new Vector2(hatData.width * widthRatio, hatData.height * heightRatio);
                 hatImage.transform.eulerAngles = hatData.rotation;
                 hatImage.transform.localPosition = new Vector3(hatData.position.x * widthRatio, hatData.position.y * heightRatio, hatData.position.z);
+                hatImage.transform.localScale = hatData.scale;
             }
         }
     }

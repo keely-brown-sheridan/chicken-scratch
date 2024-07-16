@@ -11,6 +11,7 @@ namespace ChickenScratch
     {
         private List<string> allPrefixCategories = new List<string>();
         private List<string> allNounCategories = new List<string>();
+        private List<string> allVariantCategories = new List<string>();
         public Dictionary<string, WordGroupData> AllNouns => allNouns;
         private Dictionary<string, WordGroupData> allNouns = new Dictionary<string, WordGroupData>();
         public Dictionary<string, WordGroupData> AllPrefixes => allPrefixes;
@@ -18,10 +19,15 @@ namespace ChickenScratch
         public static string testingPrefixIdentifier = "prefixes-NEUTRAL-ATTACHED", testingNounIdentifier = "nouns-ANIMAL-AXOLOTL";
         private Dictionary<string, WordGroupData> allPrefixes = new Dictionary<string, WordGroupData>();
 
+        public Dictionary<string, WordGroupData> AllVariants => allVariants;
+        private Dictionary<string, WordGroupData> allVariants = new Dictionary<string, WordGroupData>();
+
         private List<WordData> nounQueue = new List<WordData>();
         private List<WordData> prefixQueue = new List<WordData>();
+        private List<WordData> variantQueue = new List<WordData>();
         private List<string> usedNouns = new List<string>();
         private List<string> usedPrefixes = new List<string>();
+        private List<string> usedVariants = new List<string>();
 
         public void LoadPromptWords()
         {
@@ -29,10 +35,12 @@ namespace ChickenScratch
             prefixQueue.Clear();
             allNouns.Clear();
             nounQueue.Clear();
+            allVariants.Clear();
+            variantQueue.Clear();
             //Load in the potential prompts
             List<WordGroupData> nounWordGroups = GameDataManager.Instance.GetWordGroups(WordGroupData.WordType.nouns);
             List<WordGroupData> prefixWordGroups = GameDataManager.Instance.GetWordGroups(WordGroupData.WordType.prefixes);
-
+            List<WordGroupData> variantWordGroups = GameDataManager.Instance.GetWordGroups(WordGroupData.WordType.variant);
             foreach (WordGroupData prefixWordGroup in prefixWordGroups)
             {
                 prefixWordGroup.isBaseWordGroup = true;
@@ -58,8 +66,20 @@ namespace ChickenScratch
 
 
             }
+            foreach (WordGroupData variantWordGroup in variantWordGroups)
+            {
+                variantWordGroup.isBaseWordGroup = true;
+                variantWordGroup.isOn = true;
+                variantQueue.AddRange(variantWordGroup.words);
+                allVariants.Add(variantWordGroup.name, variantWordGroup);
+                if (SettingsManager.Instance.wordGroupNames.Contains(variantWordGroup.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
+                {
+                    allVariantCategories.Add(variantWordGroup.name);
+                }
+            }
             prefixQueue = prefixQueue.OrderBy(a => Guid.NewGuid()).ToList();
             nounQueue = nounQueue.OrderBy(a => Guid.NewGuid()).ToList();
+            variantQueue = variantQueue.OrderBy(a => Guid.NewGuid()).ToList();
         }
 
         public void LoadCustomWords()
@@ -100,7 +120,20 @@ namespace ChickenScratch
                             allNounCategories.Add(wordGroupData.name);
                         }
                     }
-                    foreach(WordData wordData in wordGroupData.words)
+                    else if (wordGroupData.wordType == WordGroupData.WordType.variant)
+                    {
+                        if (allVariants.ContainsKey(wordGroupData.name))
+                        {
+                            continue;
+                        }
+                        variantQueue.AddRange(wordGroupData.words);
+                        allVariants.Add(wordGroupData.name, wordGroupData);
+                        if (SettingsManager.Instance.wordGroupNames.Contains(wordGroupData.name) || SettingsManager.Instance.wordGroupNames.Count == 0)
+                        {
+                            allVariantCategories.Add(wordGroupData.name);
+                        }
+                    }
+                    foreach (WordData wordData in wordGroupData.words)
                     {
                         CaseWordData caseWordData = new CaseWordData() { category = wordGroupData.name, difficulty = wordData.difficulty, value = wordData.text, wordType = wordGroupData.wordType, identifier = wordGroupData.wordType.ToString() + "-" + wordData.category+ "-" + wordData.text };
                         customWords.Add(caseWordData);
@@ -130,23 +163,13 @@ namespace ChickenScratch
                     allNounCategories.RemoveAt(i);
                 }
             }
-        }
-
-        public void PopulateStandardCaseWords(ChainData caseData, List<string> startingWordIdentifiers)
-        {
-            Dictionary<int, List<string>> possibleWordsMap = new Dictionary<int, List<string>>();
-            Dictionary<int, string> correctWordsMap = new Dictionary<int, string>();
-
-            string correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, startingWordIdentifiers);
-            if(correctPrompt == "")
+            for (int i = allVariantCategories.Count - 1; i >= 0; i--)
             {
-                Debug.LogError("ERROR[PopulateStandardCaseWords]: Could not generate a correct prompt for the case.");
-                return;
+                if (!activeWordGroupCategories.Contains(allVariantCategories[i]))
+                {
+                    allVariantCategories.RemoveAt(i);
+                }
             }
-
-            caseData.possibleWordsMap = possibleWordsMap;
-            caseData.correctWordIdentifierMap = correctWordsMap;
-            caseData.correctPrompt = correctPrompt;
         }
 
         public CaseChoiceNetData PopulateChoiceWords(CaseChoiceData choice)
@@ -155,124 +178,87 @@ namespace ChickenScratch
             Dictionary<int, List<string>> possibleWordsMap = new Dictionary<int, List<string>>();
             Dictionary<int, string> correctWordsMap = new Dictionary<int, string>();
 
-            caseChoiceNetData.correctPrompt = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, choice.startingWordIdentifiers);
-            if (caseChoiceNetData.correctPrompt == "")
-            {
-                Debug.LogError("ERROR[PopulateChoiceWords]: Could not generate a correct prompt for the case.");
-                return null;
-            }
+            Dictionary<int, List<int>> correctPromptsMap = new Dictionary<int, List<int>>();
 
-            List<List<string>> possibleWords = new List<List<string>>();
-            List<string> correctWords = new List<string>();
-            //Order the keys
-            List<int> orderedKeys = possibleWordsMap.Keys.ToList();
-            orderedKeys.Sort();
-            foreach(int key in orderedKeys)
-            {
-                possibleWords.Add(possibleWordsMap[key]);
-            }
-            //Order the keys
-            orderedKeys = correctWordsMap.Keys.ToList();
-            orderedKeys.Sort();
-            foreach (int key in orderedKeys)
-            {
-                correctWords.Add(correctWordsMap[key]);
-            }
-            caseChoiceNetData.possibleWordsMap = possibleWords;
-            caseChoiceNetData.correctWordIdentifiersMap = correctWords;
+            correctPromptsMap = PopulateWordMaps(ref possibleWordsMap, ref correctWordsMap, choice.startingWordIdentifiers);
+            caseChoiceNetData.SetWords(possibleWordsMap, correctWordsMap, correctPromptsMap);
             caseChoiceNetData.caseChoiceIdentifier = choice.identifier;
             caseChoiceNetData.maxScoreModifier = choice.maxScoreModifier;
             caseChoiceNetData.scoreModifierDecrement = choice.modifierDecrement;
             return caseChoiceNetData;
         }
 
-        private string PopulateWordMaps(ref Dictionary<int,List<string>> possibleWordsMap, ref Dictionary<int,string> correctWordIdentifiersMap, List<string> caseWordIdentifiers)
+        private Dictionary<int,List<int>> PopulateWordMaps(ref Dictionary<int,List<string>> possibleWordsMap, ref Dictionary<int,string> correctWordIdentifiersMap, List<WordPromptTemplateData> promptData)
         {
             usedPrefixes.Clear();
             usedNouns.Clear();
+            usedVariants.Clear();
 
-            List<CaseWordTemplateData> caseWords = GameDataManager.Instance.GetWordTemplates(caseWordIdentifiers);
+            Dictionary<int,List<CaseWordTemplateData>> caseWords = GameDataManager.Instance.GetWordTemplates(promptData);
             string category;
             WordGroupData prefixGroupData;
             WordGroupData nounGroupData;
+            WordGroupData variantGroupData;
+            int promptIterator = 1;
             int iterator;
             WordData currentWord;
             int currentWordIndex = 1;
+            Dictionary<int, List<int>> correctPromptMap = new Dictionary<int, List<int>>();
             string correctPrompt = "";
             int totalDifficulty = 0;
-            foreach (CaseWordTemplateData startingWord in caseWords)
+            foreach (KeyValuePair<int,List<CaseWordTemplateData>> prompt in caseWords)
             {
-                switch (startingWord.type)
+                correctPromptMap.Add(promptIterator, new List<int>());
+                List<int> wordsInPrompt = new List<int>();
+                foreach(CaseWordTemplateData startingWord in prompt.Value)
                 {
-                    case CaseWordTemplateData.CaseWordType.descriptor:
-                        allPrefixCategories = allPrefixCategories.OrderBy(a => Guid.NewGuid()).ToList();
-                        if(allPrefixCategories.Count == 0)
-                        {
-                            Debug.LogError("ERROR[PopulateWordMaps]: There were no valid prefix categories.");
-                            return "";
-                        }
-                        category = allPrefixCategories[0];
-                        if(!allPrefixes.ContainsKey(category))
-                        {
-                            Debug.LogError("ERROR[PopulateWordMaps]: allPrefixes did not contain category[" + category + "]");
-                            return "";
-                        }
-                        prefixGroupData = allPrefixes[category];
-                        prefixGroupData.Randomize();
-                        possibleWordsMap.Add(currentWordIndex, new List<string>());
-                        iterator = 0;
-                        while (possibleWordsMap[currentWordIndex].Count < startingWord.numberOfOptionsForGuessing - 1)
-                        {
-                            if (prefixGroupData.wordCount <= iterator)
+                    switch (startingWord.type)
+                    {
+                        case CaseWordTemplateData.CaseWordType.descriptor:
+                            allPrefixCategories = allPrefixCategories.OrderBy(a => Guid.NewGuid()).ToList();
+                            if (allPrefixCategories.Count == 0)
                             {
-                                Debug.LogError("Not enough prefixes[" + iterator.ToString() + "] in category[" + category + "].");
-                                return "";
+                                Debug.LogError("ERROR[PopulateWordMaps]: There were no valid prefix categories.");
+                                return new Dictionary<int, List<int>>();
                             }
-                            currentWord = prefixGroupData.GetWord(iterator);
-                            if (!usedPrefixes.Contains(currentWord.text))
+                            category = allPrefixCategories[0];
+                            if (!allPrefixes.ContainsKey(category))
                             {
-                                possibleWordsMap[currentWordIndex].Add(currentWord.text);
-                                usedPrefixes.Add(currentWord.text);
+                                Debug.LogError("ERROR[PopulateWordMaps]: allPrefixes did not contain category[" + category + "]");
+                                return new Dictionary<int, List<int>>();
                             }
-                            iterator++;
-                        }
-
-                        correctWordIdentifiersMap.Add(currentWordIndex, "");
-
-                        while (correctWordIdentifiersMap[currentWordIndex] == "")
-                        {
-                            if (prefixGroupData.wordCount <= iterator)
-                            {
-                                break;
-                            }
-                            currentWord = prefixGroupData.GetWord(iterator);
-                            if (!usedPrefixes.Contains(currentWord.text) &&
-                                currentWord.difficulty >= startingWord.difficultyMinimum &&
-                                currentWord.difficulty <= startingWord.difficultyMaximum)
-                            {
-                                usedPrefixes.Add(currentWord.text);
-                                totalDifficulty += currentWord.difficulty;
-                                correctWordIdentifiersMap[currentWordIndex] = ("prefixes-" + category + "-" + currentWord.text);
-                                possibleWordsMap[currentWordIndex].Add(currentWord.text);
-                            }
-
-                            iterator++;
-                        }
-
-                        
-                        if(correctWordIdentifiersMap[currentWordIndex] == "")
-                        {
+                            prefixGroupData = allPrefixes[category];
+                            prefixGroupData.Randomize();
+                            possibleWordsMap.Add(currentWordIndex, new List<string>());
                             iterator = 0;
-                            //Try again without considering difficulty
+                            while (possibleWordsMap[currentWordIndex].Count < startingWord.numberOfOptionsForGuessing - 1)
+                            {
+                                if (prefixGroupData.wordCount <= iterator)
+                                {
+                                    Debug.LogError("Not enough prefixes[" + iterator.ToString() + "] in category[" + category + "].");
+                                    return new Dictionary<int, List<int>>();
+                                }
+                                currentWord = prefixGroupData.GetWord(iterator);
+                                if (!usedPrefixes.Contains(currentWord.text))
+                                {
+                                    possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                    usedPrefixes.Add(currentWord.text);
+                                }
+                                iterator++;
+                            }
+
+                            correctWordIdentifiersMap.Add(currentWordIndex, "");
+
                             while (correctWordIdentifiersMap[currentWordIndex] == "")
                             {
                                 if (prefixGroupData.wordCount <= iterator)
                                 {
-                                    Debug.LogError("Failed to generate correct prefix before running out of options.");
                                     break;
                                 }
                                 currentWord = prefixGroupData.GetWord(iterator);
-                                if (!usedPrefixes.Contains(currentWord.text))
+                                if (!usedPrefixes.Contains(currentWord.text) &&
+                                    currentWord.difficulty >= startingWord.difficultyMinimum &&
+                                    currentWord.difficulty <= startingWord.difficultyMaximum)
                                 {
                                     usedPrefixes.Add(currentWord.text);
                                     totalDifficulty += currentWord.difficulty;
@@ -282,78 +268,164 @@ namespace ChickenScratch
 
                                 iterator++;
                             }
-                        }
-
-                        possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();
-                        break;
-                    case CaseWordTemplateData.CaseWordType.noun:
-                        allNounCategories = allNounCategories.OrderBy(a => Guid.NewGuid()).ToList();
-                        if (allNounCategories.Count == 0)
-                        {
-                            Debug.LogError("ERROR[PopulateWordMaps]: There were no valid noun categories.");
-                            return "";
-                        }
-                        category = allNounCategories[0];
-                        if (!allNouns.ContainsKey(category))
-                        {
-                            Debug.LogError("ERROR[PopulateWordMaps]: allNouns did not contain category[" + category + "]");
-                            return "";
-                        }
-                        nounGroupData = allNouns[category];
-                        nounGroupData.Randomize();
 
 
-                        possibleWordsMap.Add(currentWordIndex, new List<string>());
-                        iterator = 0;
-                        while (possibleWordsMap[currentWordIndex].Count < startingWord.numberOfOptionsForGuessing - 1)
-                        {
-                            if (nounGroupData.wordCount <= iterator)
+                            if (correctWordIdentifiersMap[currentWordIndex] == "")
                             {
-                                Debug.LogError("Could not map enough nouns from category: " + category + "[" + nounGroupData.wordCount.ToString() + "]");
-                                return "";
-                            }
-                            currentWord = nounGroupData.GetWord(iterator);
-                            if (!usedNouns.Contains(currentWord.text))
-                            {
-                                possibleWordsMap[currentWordIndex].Add(currentWord.text);
-                                usedNouns.Add(currentWord.text);
-                            }
-                            iterator++;
-                        }
+                                iterator = 0;
+                                //Try again without considering difficulty
+                                while (correctWordIdentifiersMap[currentWordIndex] == "")
+                                {
+                                    if (prefixGroupData.wordCount <= iterator)
+                                    {
+                                        Debug.LogError("Failed to generate correct prefix before running out of options.");
+                                        return new Dictionary<int, List<int>>();
+                                    }
+                                    currentWord = prefixGroupData.GetWord(iterator);
+                                    if (!usedPrefixes.Contains(currentWord.text))
+                                    {
+                                        usedPrefixes.Add(currentWord.text);
+                                        totalDifficulty += currentWord.difficulty;
+                                        correctWordIdentifiersMap[currentWordIndex] = ("prefixes-" + category + "-" + currentWord.text);
+                                        possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                    }
 
-                        correctWordIdentifiersMap.Add(currentWordIndex, "");
-
-                        while (correctWordIdentifiersMap[currentWordIndex] == "")
-                        {
-                            currentWord = nounGroupData.GetWord(iterator);
-                            bool isLastWord = caseWords[caseWords.Count - 1] == startingWord;
-                            if (!usedNouns.Contains(currentWord.text) &&
-                                currentWord.difficulty >= startingWord.difficultyMinimum &&
-                                currentWord.difficulty <= startingWord.difficultyMaximum)
-                            {
-                                usedNouns.Add(currentWord.text);
-                                totalDifficulty += currentWord.difficulty;
-                                correctWordIdentifiersMap[currentWordIndex] = ("nouns-" + category + "-" + currentWord.text);
-                                possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                    iterator++;
+                                }
                             }
 
-                            iterator++;
-                            
-                        }
-                        if (correctWordIdentifiersMap[currentWordIndex] == "")
-                        {
-                            //Try again without considering difficulty
+                            possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();
+                            break;
+                        case CaseWordTemplateData.CaseWordType.variant:
+                            allVariantCategories = allVariantCategories.OrderBy(a => Guid.NewGuid()).ToList();
+                            if (allVariantCategories.Count == 0)
+                            {
+                                Debug.LogError("ERROR[PopulateWordMaps]: There were no valid variant categories.");
+                                return new Dictionary<int, List<int>>();
+                            }
+                            category = allVariantCategories[0];
+                            if (!allVariants.ContainsKey(category))
+                            {
+                                Debug.LogError("ERROR[PopulateWordMaps]: allVariants did not contain category[" + category + "]");
+                                return new Dictionary<int, List<int>>();
+                            }
+                            variantGroupData = allVariants[category];
+                            variantGroupData.Randomize();
+                            possibleWordsMap.Add(currentWordIndex, new List<string>());
                             iterator = 0;
+                            while (possibleWordsMap[currentWordIndex].Count < startingWord.numberOfOptionsForGuessing - 1)
+                            {
+                                if (variantGroupData.wordCount <= iterator)
+                                {
+                                    Debug.LogError("Not enough variants[" + iterator.ToString() + "] in category[" + category + "].");
+                                    return new Dictionary<int, List<int>>();
+                                }
+                                currentWord = variantGroupData.GetWord(iterator);
+                                if (!usedVariants.Contains(currentWord.text))
+                                {
+                                    possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                    usedVariants.Add(currentWord.text);
+                                }
+                                iterator++;
+                            }
+
+                            correctWordIdentifiersMap.Add(currentWordIndex, "");
+
+                            while (correctWordIdentifiersMap[currentWordIndex] == "")
+                            {
+                                if (variantGroupData.wordCount <= iterator)
+                                {
+                                    break;
+                                }
+                                currentWord = variantGroupData.GetWord(iterator);
+                                if (!usedVariants.Contains(currentWord.text) &&
+                                    currentWord.difficulty >= startingWord.difficultyMinimum &&
+                                    currentWord.difficulty <= startingWord.difficultyMaximum)
+                                {
+                                    usedVariants.Add(currentWord.text);
+                                    totalDifficulty += currentWord.difficulty;
+                                    correctWordIdentifiersMap[currentWordIndex] = ("variant-" + category + "-" + currentWord.text);
+                                    possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                }
+
+                                iterator++;
+                            }
+
+
+                            if (correctWordIdentifiersMap[currentWordIndex] == "")
+                            {
+                                iterator = 0;
+                                //Try again without considering difficulty
+                                while (correctWordIdentifiersMap[currentWordIndex] == "")
+                                {
+                                    if (variantGroupData.wordCount <= iterator)
+                                    {
+                                        Debug.LogError("Failed to generate correct variant before running out of options.");
+                                        return new Dictionary<int, List<int>>();
+                                    }
+                                    currentWord = variantGroupData.GetWord(iterator);
+                                    if (!usedVariants.Contains(currentWord.text))
+                                    {
+                                        usedVariants.Add(currentWord.text);
+                                        totalDifficulty += currentWord.difficulty;
+                                        correctWordIdentifiersMap[currentWordIndex] = ("variant-" + category + "-" + currentWord.text);
+                                        possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                    }
+
+                                    iterator++;
+                                }
+                            }
+
+                            possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();
+                            break;
+                        case CaseWordTemplateData.CaseWordType.noun:
+                            allNounCategories = allNounCategories.OrderBy(a => Guid.NewGuid()).ToList();
+                            if (allNounCategories.Count == 0)
+                            {
+                                Debug.LogError("ERROR[PopulateWordMaps]: There were no valid noun categories.");
+                                return new Dictionary<int, List<int>>();
+                            }
+                            category = allNounCategories[0];
+                            if (!allNouns.ContainsKey(category))
+                            {
+                                Debug.LogError("ERROR[PopulateWordMaps]: allNouns did not contain category[" + category + "]");
+                                return new Dictionary<int, List<int>>();
+                            }
+                            nounGroupData = allNouns[category];
+                            nounGroupData.Randomize();
+
+
+                            possibleWordsMap.Add(currentWordIndex, new List<string>());
+                            iterator = 0;
+                            while (possibleWordsMap[currentWordIndex].Count < startingWord.numberOfOptionsForGuessing - 1)
+                            {
+                                if (nounGroupData.wordCount <= iterator)
+                                {
+                                    Debug.LogError("Could not map enough nouns from category: " + category + "[" + nounGroupData.wordCount.ToString() + "]");
+                                    return new Dictionary<int, List<int>>();
+                                }
+                                currentWord = nounGroupData.GetWord(iterator);
+                                if (!usedNouns.Contains(currentWord.text))
+                                {
+                                    possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                    usedNouns.Add(currentWord.text);
+                                }
+                                iterator++;
+                            }
+
+                            correctWordIdentifiersMap.Add(currentWordIndex, "");
+
                             while (correctWordIdentifiersMap[currentWordIndex] == "")
                             {
                                 if (nounGroupData.wordCount <= iterator)
                                 {
-                                    Debug.LogError("Failed to generate correct noun before running out of options.");
                                     break;
                                 }
                                 currentWord = nounGroupData.GetWord(iterator);
-                                bool isLastWord = caseWords[caseWords.Count - 1] == startingWord;
-                                if (!usedNouns.Contains(currentWord.text))
+
+                                if (!usedNouns.Contains(currentWord.text) &&
+                                    currentWord.difficulty >= startingWord.difficultyMinimum &&
+                                    currentWord.difficulty <= startingWord.difficultyMaximum)
                                 {
                                     usedNouns.Add(currentWord.text);
                                     totalDifficulty += currentWord.difficulty;
@@ -362,52 +434,64 @@ namespace ChickenScratch
                                 }
 
                                 iterator++;
-                                
-                            }
-                        }
-                        possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();
 
-                        break;
-                    default:
-                        Debug.LogError("Selected case has word with type[" + startingWord.type.ToString() + "] that isn't implemented.");
-                        continue;
+                            }
+                            if (correctWordIdentifiersMap[currentWordIndex] == "")
+                            {
+                                //Try again without considering difficulty
+                                iterator = 0;
+                                while (correctWordIdentifiersMap[currentWordIndex] == "")
+                                {
+                                    if (nounGroupData.wordCount <= iterator)
+                                    {
+                                        Debug.LogError("Failed to generate correct noun before running out of options[" + category + "].");
+                                        return new Dictionary<int, List<int>>();
+                                    }
+                                    currentWord = nounGroupData.GetWord(iterator);
+                                    if (!usedNouns.Contains(currentWord.text))
+                                    {
+                                        usedNouns.Add(currentWord.text);
+                                        totalDifficulty += currentWord.difficulty;
+                                        correctWordIdentifiersMap[currentWordIndex] = ("nouns-" + category + "-" + currentWord.text);
+                                        possibleWordsMap[currentWordIndex].Add(currentWord.text);
+                                    }
+
+                                    iterator++;
+
+                                }
+                            }
+                            possibleWordsMap[currentWordIndex] = possibleWordsMap[currentWordIndex].OrderBy(a => Guid.NewGuid()).ToList();
+
+                            break;
+                        default:
+                            Debug.LogError("Selected case has word with type[" + startingWord.type.ToString() + "] that isn't implemented.");
+                            continue;
+                    }
+                    wordsInPrompt.Add(currentWordIndex);
+                    correctPromptMap[promptIterator].Add(currentWordIndex);
+                    currentWordIndex++;
                 }
 
-                currentWordIndex++;
+                correctPrompt = "";
+                foreach(int wordInPrompt in wordsInPrompt)
+                {
+                    CaseWordData correctWord = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[wordInPrompt]);
+                    if(correctWord == null)
+                    {
+                        Debug.LogError("ERROR[PopulateWordMaps]: correct word could not be found in the GameDataManager for identifier[" + correctWordIdentifiersMap[wordInPrompt] + "]");
+                        return new Dictionary<int, List<int>>();
+                    }
+                    correctPrompt += correctWord.value;
+                }
+                correctPrompt = correctPrompt.Trim();
             }
-            if(!correctWordIdentifiersMap.ContainsKey(1))
-            {
-                Debug.LogError("ERROR[PopulateWordMaps]: correctWordIdentifiersMap did not contain a prefix.");
-                return "";
-            }
-            if(!correctWordIdentifiersMap.ContainsKey(2))
-            {
-                Debug.LogError("ERROR[PopulateWordMaps]: correctWordIdentifiersMap did not contain a noun.");
-                return "";
-            }
-
-            //Remove the last added white space from the correct prompt
-            CaseWordData correctPrefix = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[1]);
-            CaseWordData correctNoun = GameDataManager.Instance.GetWord(correctWordIdentifiersMap[2]);
-            if(correctPrefix == null)
-            {
-                Debug.LogError("ERROR[PopulateWordMaps]: correctPrefix could not be found in the GameDataManager for identifier[" + correctWordIdentifiersMap[1] + "]");
-                return "";
-            }
-            if(correctNoun == null)
-            {
-                Debug.LogError("ERROR[PopulateWordMaps]: correctNoun could not be found in the GameDataManager for identifier[" + correctWordIdentifiersMap[2] + "]");
-                return "";
-            }
-
-            correctPrompt = correctPrefix.value + " " + correctNoun.value;
             
-
-            return correctPrompt;
+            return correctPromptMap;
         }
 
         public void ClearUsedWords()
         {
+            usedVariants.Clear();
             usedNouns.Clear();
             usedPrefixes.Clear();
         }

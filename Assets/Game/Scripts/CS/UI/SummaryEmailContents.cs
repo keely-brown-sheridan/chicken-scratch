@@ -57,7 +57,7 @@ namespace ChickenScratch
                     {
                         pointsMap.Add(guesser, 0);
                     }
-                    pointsMap[guesser] += currentCase.scoringData.GetTotalPoints()/ currentCase.taskDataMap.Count;
+                    pointsMap[guesser] += currentCase.taskDataMap.Count != 0 ? currentCase.scoringData.GetTotalPoints()/ currentCase.taskDataMap.Count : 0;
                 }
                 foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
                 {
@@ -76,11 +76,13 @@ namespace ChickenScratch
                         case TaskData.TaskType.compile_drawing:
                         case TaskData.TaskType.copy_drawing:
                         case TaskData.TaskType.prompt_drawing:
+                        case TaskData.TaskType.blender_drawing:
                             timeMap[currentTask.assignedPlayer] += currentTask.drawingData.timeTaken;
                             break;
                         case TaskData.TaskType.prompting:
                             timeMap[currentTask.assignedPlayer] += currentTask.promptData.timeTaken;
                             break;
+                        case TaskData.TaskType.morph_guessing:
                         case TaskData.TaskType.base_guessing:
                             timeMap[currentTask.assignedPlayer] += currentCase.guessData.timeTaken;
                             break;

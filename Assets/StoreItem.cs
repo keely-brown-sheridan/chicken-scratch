@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ChickenScratch
@@ -10,7 +11,7 @@ namespace ChickenScratch
         public enum StoreItemType
         {
             eraser, marker, white_out, reroll, category_preview, score_tracker, highlighter, stopwatch, case_tab, case_unlock, case_upgrade,
-            coffee_pot, coffee_mug, advertisement, nest_feathering, hat
+            coffee_pot, coffee_mug, advertisement, nest_feathering, hat, case_frequency, contract
         }
         [SerializeField]
         private TMPro.TMP_Text itemNameText;
@@ -38,6 +39,8 @@ namespace ChickenScratch
 
         [SerializeField]
         private string cantAffordSFX;
+
+
 
         public int index => _index;
 
@@ -153,6 +156,8 @@ namespace ChickenScratch
             inactiveContentsObject.SetActive(true);
             _currentState = State.out_of_stock;
         }
+
+
     }
 
 }

@@ -1,3 +1,4 @@
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,11 +24,19 @@ namespace ChickenScratch
         [SerializeField]
         private CaseWordCategoryVisual caseWordCategoryVisual;
 
+        [SerializeField]
+        private GameObject baseInstructionsObject, morphInstructionsObject;
+
+        [SerializeField]
+        private TMPro.TMP_Text variantText;
+
         private TaskModifier drawingBoxModifier;
         private TaskModifier drawingTypeModifier;
 
-        public void Initialize(DrawingData drawingData, List<TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
+        public void Initialize(int round, DrawingData drawingData, List<TaskModifier> taskModifiers, UnityAction inTimeCompleteAction, string variantWord = "")
         {
+            casePlayerTabs.Initialize(round, drawingData.caseID);
+            SetCaseTypeVisuals(drawingData.caseID);
             drawingTypeModifier = TaskModifier.invalid;
             drawingBoxModifier = TaskModifier.standard;
             foreach (TaskModifier modifier in taskModifiers)
@@ -51,7 +60,20 @@ namespace ChickenScratch
                         break;
                 }
             }
-            copyingContainer.Show(drawingData, drawingScalingFactor, drawingOffset);
+
+            if(taskModifiers.Contains(TaskModifier.morphed))
+            {
+                //Get the variant word
+                morphInstructionsObject.SetActive(true);
+                baseInstructionsObject.SetActive(false);
+                variantText.text = variantWord;
+            }
+            else
+            {
+                morphInstructionsObject.SetActive(false);
+                baseInstructionsObject.SetActive(true);
+            }
+            copyingContainer.Show(drawingData, drawingScalingFactor, taskModifiers);
             timeCompleteAction = inTimeCompleteAction;
             RegisterToTimer(inTimeCompleteAction);
         }

@@ -18,6 +18,13 @@ namespace ChickenScratch
 
         }
 
+        public override void Initialize(StoreItemData existingItemData)
+        {
+            base.Initialize(existingItemData);
+            MarkerStoreItemData markerData = existingItemData as MarkerStoreItemData;
+            markerColour = markerData.markerColour;
+        }
+
         public MarkerStoreItemData(MarkerStoreItemNetData netData)
         {
             MarkerStoreItemData gameData = (MarkerStoreItemData)GameDataManager.Instance.GetMatchingStoreItem(netData.itemType);

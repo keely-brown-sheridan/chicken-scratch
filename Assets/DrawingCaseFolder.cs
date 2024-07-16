@@ -1,3 +1,4 @@
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,8 +21,10 @@ namespace ChickenScratch
         private TaskModifier drawingBoxModifier;
         private TaskModifier drawingTypeModifier;
 
-        public void Initialize(string inPromptText, List<TaskData.TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
+        public void Initialize(int caseID, int round, string inPromptText, List<TaskData.TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
         {
+            casePlayerTabs.Initialize(round, caseID);
+            SetCaseTypeVisuals(caseID);
             drawingTypeModifier = TaskModifier.invalid;
             drawingBoxModifier = TaskModifier.standard;
             foreach (TaskModifier modifier in taskModifiers)

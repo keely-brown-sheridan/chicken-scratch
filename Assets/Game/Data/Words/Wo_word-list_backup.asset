@@ -1,0 +1,4120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3cde0eaed705c848b2ac88138dcadb3, type: 3}
+  m_Name: Wo_word-list_backup
+  m_EditorClassIdentifier: 
+  allWords:
+  - identifier: nouns-ANIMAL-AARDVARK
+    value: AARDVARK
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-ALLIGATOR
+    value: ALLIGATOR
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-ANT
+    value: ANT
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-ARMADILLO
+    value: ARMADILLO
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-AXOLOTL
+    value: AXOLOTL
+    difficulty: 5
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-BADGER
+    value: BADGER
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-BAT
+    value: BAT
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-BEE
+    value: BEE
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-BEETLE
+    value: BEETLE
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-BUTTERFLY
+    value: BUTTERFLY
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CAMEL
+    value: CAMEL
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CAPYBARA
+    value: CAPYBARA
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CAT
+    value: CAT
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CATFISH
+    value: CATFISH
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CATTERPILLAR
+    value: CATTERPILLAR
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CENTIPEDE
+    value: CENTIPEDE
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CHAMELEON
+    value: CHAMELEON
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CHEETAH
+    value: CHEETAH
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CHICKEN
+    value: CHICKEN
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CHIPMUNK
+    value: CHIPMUNK
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-COBRA
+    value: COBRA
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-COW
+    value: COW
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CRAB
+    value: CRAB
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-CRICKET
+    value: CRICKET
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-DOG
+    value: DOG
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-DOLPHIN
+    value: DOLPHIN
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-DUCK
+    value: DUCK
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-EEL
+    value: EEL
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-ELEPHANT
+    value: ELEPHANT
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-FERRET
+    value: FERRET
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-FISH
+    value: FISH
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-FLAMINGO
+    value: FLAMINGO
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-FOX
+    value: FOX
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-FROG
+    value: FROG
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-GIRAFFE
+    value: GIRAFFE
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-GOAT
+    value: GOAT
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-GOPHER
+    value: GOPHER
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-GORILLA
+    value: GORILLA
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-GRASSHOPPER
+    value: GRASSHOPPER
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-HAMSTER
+    value: HAMSTER
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-HEDGEHOG
+    value: HEDGEHOG
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-HIPPO
+    value: HIPPO
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-HORSE
+    value: HORSE
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-HYENA
+    value: HYENA
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-IGUANA
+    value: IGUANA
+    difficulty: 5
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-JELLYFISH
+    value: JELLYFISH
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-KANGAROO
+    value: KANGAROO
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-KOALA
+    value: KOALA
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-LADYBUG
+    value: LADYBUG
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-LEMUR
+    value: LEMUR
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-LION
+    value: LION
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-LLAMA
+    value: LLAMA
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-LOBSTER
+    value: LOBSTER
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-MANATEE
+    value: MANATEE
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-MONKEY
+    value: MONKEY
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-MOOSE
+    value: MOOSE
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-MOTH
+    value: MOTH
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-MOUSE
+    value: MOUSE
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-OTTER
+    value: OTTER
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-OWL
+    value: OWL
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PANDA
+    value: PANDA
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PEACOCK
+    value: PEACOCK
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PELICAN
+    value: PELICAN
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PIG
+    value: PIG
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PIRANHA
+    value: PIRANHA
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PLATYPUS
+    value: PLATYPUS
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PORCUPINE
+    value: PORCUPINE
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-POSSUM
+    value: POSSUM
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-PUPPY
+    value: PUPPY
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-RABBIT
+    value: RABBIT
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-RACCOON
+    value: RACCOON
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-RAT
+    value: RAT
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-REINDEER
+    value: REINDEER
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-RHINO
+    value: RHINO
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-ROBIN
+    value: ROBIN
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SALAMANDER
+    value: SALAMANDER
+    difficulty: 4
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SEAGULL
+    value: SEAGULL
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SEAHORSE
+    value: SEAHORSE
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SEAL
+    value: SEAL
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SHARK
+    value: SHARK
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SHRIMP
+    value: SHRIMP
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SKUNK
+    value: SKUNK
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SLOTH
+    value: SLOTH
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SLUG
+    value: SLUG
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SNAIL
+    value: SNAIL
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SNAKE
+    value: SNAKE
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SPIDER
+    value: SPIDER
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SQUID
+    value: SQUID
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SQUIRREL
+    value: SQUIRREL
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-SWORDFISH
+    value: SWORDFISH
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-TIGER
+    value: TIGER
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-TURTLE
+    value: TURTLE
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-WALRUS
+    value: WALRUS
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-WARTHOG
+    value: WARTHOG
+    difficulty: 3
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-WASP
+    value: WASP
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-WHALE
+    value: WHALE
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-WOLF
+    value: WOLF
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-WORM
+    value: WORM
+    difficulty: 1
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-ANIMAL-ZEBRA
+    value: ZEBRA
+    difficulty: 2
+    category: ANIMAL
+    wordType: 1
+  - identifier: nouns-BODY-ARM
+    value: ARM
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-BEAK
+    value: BEAK
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-BLOOD
+    value: BLOOD
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-BRAIN
+    value: BRAIN
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-CHEEK
+    value: CHEEK
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-CHIN
+    value: CHIN
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-CLAW
+    value: CLAW
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-EAR
+    value: EAR
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-ELBOW
+    value: ELBOW
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-EYE
+    value: EYE
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-FACE
+    value: FACE
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-FOOT
+    value: FOOT
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-FEATHERS
+    value: FEATHERS
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-HAIR
+    value: HAIR
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-HAND
+    value: HAND
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-HEAD
+    value: HEAD
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-HEART
+    value: HEART
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-INJURY
+    value: INJURY
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-JAW
+    value: JAW
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-KIDNEY
+    value: KIDNEY
+    difficulty: 4
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-KNEE
+    value: KNEE
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-LEG
+    value: LEG
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-LIPS
+    value: LIPS
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-LUNG
+    value: LUNG
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-MEDICINE
+    value: MEDICINE
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-MIND
+    value: MIND
+    difficulty: 4
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-MOUTH
+    value: MOUTH
+    difficulty: 1
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-NOSE
+    value: NOSE
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-PLUMAGE
+    value: PLUMAGE
+    difficulty: 5
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-SKIN
+    value: SKIN
+    difficulty: 4
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-SKULL
+    value: SKULL
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-STOMACH
+    value: STOMACH
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-TALON
+    value: TALON
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-TAIL
+    value: TAIL
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-TEETH
+    value: TEETH
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-THROAT
+    value: THROAT
+    difficulty: 4
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-TONGUE
+    value: TONGUE
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-WHISKER
+    value: WHISKER
+    difficulty: 2
+    category: BODY
+    wordType: 1
+  - identifier: nouns-BODY-WING
+    value: WING
+    difficulty: 3
+    category: BODY
+    wordType: 1
+  - identifier: nouns-EVENT-BIRTHDAY
+    value: BIRTHDAY
+    difficulty: 2
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-CELEBRATION
+    value: CELEBRATION
+    difficulty: 4
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-CHAMPIONSHIP
+    value: CHAMPIONSHIP
+    difficulty: 3
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-DAY
+    value: DAY
+    difficulty: 3
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-DEATH
+    value: DEATH
+    difficulty: 2
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-DINNER
+    value: DINNER
+    difficulty: 2
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-DISASTER
+    value: DISASTER
+    difficulty: 4
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-ELECTION
+    value: ELECTION
+    difficulty: 5
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-EXAM
+    value: EXAM
+    difficulty: 4
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-FUNERAL
+    value: FUNERAL
+    difficulty: 3
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-MIDNIGHT
+    value: MIDNIGHT
+    difficulty: 3
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-MORNING
+    value: MORNING
+    difficulty: 2
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-NIGHT
+    value: NIGHT
+    difficulty: 1
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-OPERATION
+    value: OPERATION
+    difficulty: 4
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-SURGERY
+    value: SURGERY
+    difficulty: 2
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-EVENT-WEDDING
+    value: WEDDING
+    difficulty: 1
+    category: EVENT
+    wordType: 1
+  - identifier: nouns-FOOD-APPLE
+    value: APPLE
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-ASPARAGUS
+    value: ASPARAGUS
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-AVOCADO
+    value: AVOCADO
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-BACON
+    value: BACON
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-BAGEL
+    value: BAGEL
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-BANANA
+    value: BANANA
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-BEAN
+    value: BEAN
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-BREAD
+    value: BREAD
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-BROCCOLI
+    value: BROCCOLI
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-BURRITO
+    value: BURRITO
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CAKE
+    value: CAKE
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CARROT
+    value: CARROT
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CELERY
+    value: CELERY
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CHEESE
+    value: CHEESE
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CHERRY
+    value: CHERRY
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CHIPS
+    value: CHIPS
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-COFFEE
+    value: COFFEE
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-COOKIE
+    value: COOKIE
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CORN
+    value: CORN
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CRACKER
+    value: CRACKER
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CUCUMBER
+    value: CUCUMBER
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-CURRY
+    value: CURRY
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-EGG
+    value: EGG
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-FALAFEL
+    value: FALAFEL
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-FONDUE
+    value: FONDUE
+    difficulty: 5
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-FRIES
+    value: FRIES
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-GARLIC
+    value: GARLIC
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-GINGER
+    value: GINGER
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-GRAPES
+    value: GRAPES
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-GUACAMOLE
+    value: GUACAMOLE
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-HAM
+    value: HAM
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-HAMBURGER
+    value: HAMBURGER
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-HONEY
+    value: HONEY
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-HOTDOG
+    value: HOTDOG
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-HUMMUS
+    value: HUMMUS
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-ICE CREAM
+    value: ICE CREAM
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-JAM
+    value: JAM
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-JUICE
+    value: JUICE
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-KABOB
+    value: KABOB
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-KETCHUP
+    value: KETCHUP
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-KIWI
+    value: KIWI
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-LASAGNA
+    value: LASAGNA
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-LETTUCE
+    value: LETTUCE
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-MACARONI
+    value: MACARONI
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-MEATBALLS
+    value: MEATBALLS
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-MEATLOAF
+    value: MEATLOAF
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-MUSHROOM
+    value: MUSHROOM
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-NACHOS
+    value: NACHOS
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-OMELET
+    value: OMELET
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-ONION
+    value: ONION
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-ORANGE
+    value: ORANGE
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PANCAKES
+    value: PANCAKES
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PEA
+    value: PEA
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PEPPER
+    value: PEPPER
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PIE
+    value: PIE
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PINEAPPLE
+    value: PINEAPPLE
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PIZZA
+    value: PIZZA
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-POPSICLE
+    value: POPSICLE
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PORKCHOPS
+    value: PORKCHOPS
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-POTATO
+    value: POTATO
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PUDDING
+    value: PUDDING
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-PUMPKIN
+    value: PUMPKIN
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-RAISIN
+    value: RAISIN
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-RASPBERRY
+    value: RASPBERRY
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-RAVIOLI
+    value: RAVIOLI
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-RICE
+    value: RICE
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-SALAD
+    value: SALAD
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-SANDWICH
+    value: SANDWICH
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-SMOOTHIE
+    value: SMOOTHIE
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-SOUP
+    value: SOUP
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-SPAGHETTI
+    value: SPAGHETTI
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-STEAK
+    value: STEAK
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-STIRFRY
+    value: STIRFRY
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-STRAWBERRY
+    value: STRAWBERRY
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-TACO
+    value: TACO
+    difficulty: 1
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-TEA
+    value: TEA
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-TOFU
+    value: TOFU
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-TOMATO
+    value: TOMATO
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-TORTILLA
+    value: TORTILLA
+    difficulty: 3
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-WATERMELON
+    value: WATERMELON
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-YOGURT
+    value: YOGURT
+    difficulty: 2
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-FOOD-ZUCCHINI
+    value: ZUCCHINI
+    difficulty: 4
+    category: FOOD
+    wordType: 1
+  - identifier: nouns-LOCATION-AIRPORT
+    value: AIRPORT
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-AQUARIUM
+    value: AQUARIUM
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-ARCADE
+    value: ARCADE
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-ARENA
+    value: ARENA
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-ATTIC
+    value: ATTIC
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-BALCONY
+    value: BALCONY
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-BANK
+    value: BANK
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-BARRACKS
+    value: BARRACKS
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-BASEMENT
+    value: BASEMENT
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-BEACH
+    value: BEACH
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-BOTTOM
+    value: BOTTOM
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-BRIDGE
+    value: BRIDGE
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CABIN
+    value: CABIN
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CAFE
+    value: CAFE
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CANYON
+    value: CANYON
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CASTLE
+    value: CASTLE
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CHURCH
+    value: CHURCH
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CIRCUS
+    value: CIRCUS
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CLASSROOM
+    value: CLASSROOM
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CLIFF
+    value: CLIFF
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CLUB
+    value: CLUB
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-COLLEGE
+    value: COLLEGE
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-CRATER
+    value: CRATER
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-DEALERSHIP
+    value: DEALERSHIP
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-DESERT
+    value: DESERT
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-DRIVE-THRU
+    value: DRIVE-THRU
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-DUNGEON
+    value: DUNGEON
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-ELEVATOR
+    value: ELEVATOR
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-FACTORY
+    value: FACTORY
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-FARM
+    value: FARM
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-GARDEN
+    value: GARDEN
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-GRAVEYARD
+    value: GRAVEYARD
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-HALL
+    value: HALL
+    difficulty: 5
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-HIGHWAY
+    value: HIGHWAY
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-HOSPITAL
+    value: HOSPITAL
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-HOTEL
+    value: HOTEL
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-HOUSE
+    value: HOUSE
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-ISLAND
+    value: ISLAND
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-JAILCELL
+    value: JAILCELL
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-LAB
+    value: LAB
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-LAKE
+    value: LAKE
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-LIBRARY
+    value: LIBRARY
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-MALL
+    value: MALL
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-MARKETPLACE
+    value: MARKETPLACE
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-MUSEUM
+    value: MUSEUM
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-OFFICE
+    value: OFFICE
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-PARK
+    value: PARK
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-PIER
+    value: PIER
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-PIZZERIA
+    value: PIZZERIA
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-POOL
+    value: POOL
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-PYRAMID
+    value: PYRAMID
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-RESORT
+    value: RESORT
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-RESTAURANT
+    value: RESTAURANT
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-RIVER
+    value: RIVER
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-SAUNA
+    value: SAUNA
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-SCHOOL
+    value: SCHOOL
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-SETTLEMENT
+    value: SETTLEMENT
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-SHELTER
+    value: SHELTER
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-SIMULATION
+    value: SIMULATION
+    difficulty: 5
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-SPA
+    value: SPA
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-STATION
+    value: STATION
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-SUMMIT
+    value: SUMMIT
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-TAVERN
+    value: TAVERN
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-THEATER
+    value: THEATER
+    difficulty: 3
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-TOMB
+    value: TOMB
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-TOWNHALL
+    value: TOWNHALL
+    difficulty: 4
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-TREEHOUSE
+    value: TREEHOUSE
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-TUNNEL
+    value: TUNNEL
+    difficulty: 1
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-LOCATION-ZOO
+    value: ZOO
+    difficulty: 2
+    category: LOCATION
+    wordType: 1
+  - identifier: nouns-OBJECT-BALL
+    value: BALL
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-BASEBALL
+    value: BASEBALL
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-BASKET
+    value: BASKET
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-BATHTUB
+    value: BATHTUB
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-BOARD
+    value: BOARD
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-BOOK
+    value: BOOK
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-BOX
+    value: BOX
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-CABINET
+    value: CABINET
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-CAMERA
+    value: CAMERA
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-CARD
+    value: CARD
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-CHEST
+    value: CHEST
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-CIGARETTE
+    value: CIGARETTE
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-CLOTHING
+    value: CLOTHING
+    difficulty: 4
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-COMPUTER
+    value: COMPUTER
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-DESK
+    value: DESK
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-DIAMOND
+    value: DIAMOND
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-DIRT
+    value: DIRT
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-DISK
+    value: DISK
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-DRAWER
+    value: DRAWER
+    difficulty: 4
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-DRAWING
+    value: DRAWING
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-ENGINE
+    value: ENGINE
+    difficulty: 4
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-FIRE
+    value: FIRE
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-FOOTBALL
+    value: FOOTBALL
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-FRAME
+    value: FRAME
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-GARBAGE
+    value: GARBAGE
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-GATE
+    value: GATE
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-GIFT
+    value: GIFT
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-GROCERIES
+    value: GROCERIES
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-GUITAR
+    value: GUITAR
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-HAT
+    value: HAT
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-HOMEWORK
+    value: HOMEWORK
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-ICE
+    value: ICE
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-KEY
+    value: KEY
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-LADDER
+    value: LADDER
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-LIGHT
+    value: LIGHT
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-LINE
+    value: LINE
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-LIST
+    value: LIST
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MACHINE
+    value: MACHINE
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MAGAZINE
+    value: MAGAZINE
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MAP
+    value: MAP
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MENU
+    value: MENU
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MESSAGE
+    value: MESSAGE
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-METAL
+    value: METAL
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MONEY
+    value: MONEY
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MOVIE
+    value: MOVIE
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MUD
+    value: MUD
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-MUSIC
+    value: MUSIC
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-NEWSPAPER
+    value: NEWSPAPER
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-NOTE
+    value: NOTE
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-OIL
+    value: OIL
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-OVEN
+    value: OVEN
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-PAINTING
+    value: PAINTING
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-PAPER
+    value: PAPER
+    difficulty: 2
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-PHONE
+    value: PHONE
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-PHOTO
+    value: PHOTO
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-PIANO
+    value: PIANO
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-POEM
+    value: POEM
+    difficulty: 4
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-POT
+    value: POT
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-RADIO
+    value: RADIO
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-REFRIGERATOR
+    value: REFRIGERATOR
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-ROAD
+    value: ROAD
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-ROCK
+    value: ROCK
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-SHIRT
+    value: SHIRT
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-SIGN
+    value: SIGN
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-SPEAKER
+    value: SPEAKER
+    difficulty: 3
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-SQUARE
+    value: SQUARE
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-STAR
+    value: STAR
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-SUN
+    value: SUN
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-OBJECT-TABLE
+    value: TABLE
+    difficulty: 1
+    category: OBJECT
+    wordType: 1
+  - identifier: nouns-PROFESSION-ACCOUNTANT
+    value: ACCOUNTANT
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-ACTOR
+    value: ACTOR
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-ADVISOR
+    value: ADVISOR
+    difficulty: 5
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-ANIMATOR
+    value: ANIMATOR
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-ARCHER
+    value: ARCHER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-ASTRONOMER
+    value: ASTRONOMER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BABYSITTER
+    value: BABYSITTER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BANKER
+    value: BANKER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BARTENDER
+    value: BARTENDER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BEEKEEPER
+    value: BEEKEEPER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BODYGUARD
+    value: BODYGUARD
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BOSS
+    value: BOSS
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BOXER
+    value: BOXER
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BUILDER
+    value: BUILDER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BUTCHER
+    value: BUTCHER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-BUTLER
+    value: BUTLER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-CARTOONIST
+    value: CARTOONIST
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-CASHIER
+    value: CASHIER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-CATERER
+    value: CATERER
+    difficulty: 5
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-CHEF
+    value: CHEF
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-CLOWN
+    value: CLOWN
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-COMEDIAN
+    value: COMEDIAN
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-CORONER
+    value: CORONER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-CUSTODIAN
+    value: CUSTODIAN
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-DEALER
+    value: DEALER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-DENTIST
+    value: DENTIST
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-DIRECTOR
+    value: DIRECTOR
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-DIVER
+    value: DIVER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-DOCTOR
+    value: DOCTOR
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-DRIVER
+    value: DRIVER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-DRUMMER
+    value: DRUMMER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-ELECTRICIAN
+    value: ELECTRICIAN
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-EMPLOYEE
+    value: EMPLOYEE
+    difficulty: 5
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-EMPLOYER
+    value: EMPLOYER
+    difficulty: 5
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-EXPLORER
+    value: EXPLORER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-EXTERMINATOR
+    value: EXTERMINATOR
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-FARMER
+    value: FARMER
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-FIREFIGHTER
+    value: FIREFIGHTER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-FLORIST
+    value: FLORIST
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-GENETICIST
+    value: GENETICIST
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-GOLFER
+    value: GOLFER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-GOVERNOR
+    value: GOVERNOR
+    difficulty: 5
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-GUIDE
+    value: GUIDE
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-HAIRDRESSER
+    value: HAIRDRESSER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-INTERN
+    value: INTERN
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-INVENTOR
+    value: INVENTOR
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-JESTER
+    value: JESTER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-JOCKEY
+    value: JOCKEY
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-JUDGE
+    value: JUDGE
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-KING
+    value: KING
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-KNIGHT
+    value: KNIGHT
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-LANDLORD
+    value: LANDLORD
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-LEADER
+    value: LEADER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-LIBRARIAN
+    value: LIBRARIAN
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-LIFEGUARD
+    value: LIFEGUARD
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MAGICIAN
+    value: MAGICIAN
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MAID
+    value: MAID
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MATHEMATICIAN
+    value: MATHEMATICIAN
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MAYOR
+    value: MAYOR
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MECHANIC
+    value: MECHANIC
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MEDIC
+    value: MEDIC
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MINER
+    value: MINER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-MODEL
+    value: MODEL
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-NOVELIST
+    value: NOVELIST
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-NUN
+    value: NUN
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-NUTRITIONIST
+    value: NUTRITIONIST
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-PHARMACIST
+    value: PHARMACIST
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-PHOTOGRAPHER
+    value: PHOTOGRAPHER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-PILOT
+    value: PILOT
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-PLUMBER
+    value: PLUMBER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-POET
+    value: POET
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-POLICE
+    value: POLICE
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-POPE
+    value: POPE
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-POSTMAN
+    value: POSTMAN
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-PRESIDENT
+    value: PRESIDENT
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-PRIEST
+    value: PRIEST
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-PROFESSOR
+    value: PROFESSOR
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-QUARTERBACK
+    value: QUARTERBACK
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-QUEEN
+    value: QUEEN
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-RANGER
+    value: RANGER
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-RECEPTIONIST
+    value: RECEPTIONIST
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-REFEREE
+    value: REFEREE
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-REPORTER
+    value: REPORTER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-SAILOR
+    value: SAILOR
+    difficulty: 1
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-SAMURAI
+    value: SAMURAI
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-SAXOPHONIST
+    value: SAXOPHONIST
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-SCOUT
+    value: SCOUT
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-SHERIFF
+    value: SHERIFF
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-SINGER
+    value: SINGER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-STUDENT
+    value: STUDENT
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-SURGEON
+    value: SURGEON
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-TEACHER
+    value: TEACHER
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-THERAPIST
+    value: THERAPIST
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-TRANSLATOR
+    value: TRANSLATOR
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-TUTOR
+    value: TUTOR
+    difficulty: 5
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-UMPIRE
+    value: UMPIRE
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-VALET
+    value: VALET
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-WAITER
+    value: WAITER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-WARDEN
+    value: WARDEN
+    difficulty: 4
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-WARLOCK
+    value: WARLOCK
+    difficulty: 5
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-WIZARD
+    value: WIZARD
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-WITCH
+    value: WITCH
+    difficulty: 2
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-PROFESSION-ZOOKEEPER
+    value: ZOOKEEPER
+    difficulty: 3
+    category: PROFESSION
+    wordType: 1
+  - identifier: nouns-VEHICLE-AMBULANCE
+    value: AMBULANCE
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-BICYCLE
+    value: BICYCLE
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-BOAT
+    value: BOAT
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-BUS
+    value: BUS
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-CAR
+    value: CAR
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-DUMPTRUCK
+    value: DUMPTRUCK
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-FLIGHT
+    value: FLIGHT
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-HELICOPTOR
+    value: HELICOPTOR
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-JET
+    value: JET
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-MOTORCYCLE
+    value: MOTORCYCLE
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SCOOTER
+    value: SCOOTER
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SKATEBOARD
+    value: SKATEBOARD
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SUBWAY
+    value: SUBWAY
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-TAXI
+    value: TAXI
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-TRACTOR
+    value: TRACTOR
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-TRUCK
+    value: TRUCK
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-VAN
+    value: VAN
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-BLIMP
+    value: BLIMP
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-CARRIAGE
+    value: CARRIAGE
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SLEIGH
+    value: SLEIGH
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-GONDOLA
+    value: GONDOLA
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SKI-LIFT
+    value: SKI-LIFT
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-TRAILER
+    value: TRAILER
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-TOW-TRUCK
+    value: TOW-TRUCK
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SLED
+    value: SLED
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-GOLF-CART
+    value: GOLF-CART
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-HOVERCRAFT
+    value: HOVERCRAFT
+    difficulty: 5
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-RACECAR
+    value: RACECAR
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-ROCKETSHIP
+    value: ROCKETSHIP
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SPACESHIP
+    value: SPACESHIP
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SUBMARINE
+    value: SUBMARINE
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-CARRIER
+    value: CARRIER
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-BATTLESHIP
+    value: BATTLESHIP
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-MOTORBOAT
+    value: MOTORBOAT
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-SAILBOAT
+    value: SAILBOAT
+    difficulty: 1
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-CRUISE
+    value: CRUISE
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-CABLE-CAR
+    value: CABLE-CAR
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-JET-SKI
+    value: JET-SKI
+    difficulty: 3
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-HANG-GLIDER
+    value: HANG-GLIDER
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-TANK
+    value: TANK
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-WHEELBARROW
+    value: WHEELBARROW
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-CANOE
+    value: CANOE
+    difficulty: 2
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-VEHICLE-KAYAK
+    value: KAYAK
+    difficulty: 4
+    category: VEHICLE
+    wordType: 1
+  - identifier: nouns-CREATURE-GENIE
+    value: GENIE
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-CENTAUR
+    value: CENTAUR
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-WEREWOLF
+    value: WEREWOLF
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-VAMPIRE
+    value: VAMPIRE
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-GNOME
+    value: GNOME
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-CYCLOPS
+    value: CYCLOPS
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-OGRE
+    value: OGRE
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-GOBLIN
+    value: GOBLIN
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-TROLL
+    value: TROLL
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-ORC
+    value: ORC
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-FAIRY
+    value: FAIRY
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-MEDUSA
+    value: MEDUSA
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-MERMAID
+    value: MERMAID
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-MINOTAUR
+    value: MINOTAUR
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-SATYR
+    value: SATYR
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-GRIFFIN
+    value: GRIFFIN
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-PHOENIX
+    value: PHOENIX
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-UNICORN
+    value: UNICORN
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-PEGASUS
+    value: PEGASUS
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-DRAGON
+    value: DRAGON
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-BIGFOOT
+    value: BIGFOOT
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-HYDRA
+    value: HYDRA
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-ZOMBIE
+    value: ZOMBIE
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-ANGEL
+    value: ANGEL
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-CERBERUS
+    value: CERBERUS
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-DEMON
+    value: DEMON
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-SATAN
+    value: SATAN
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-GOD
+    value: GOD
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-ELF
+    value: ELF
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-HARPY
+    value: HARPY
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-LEPRECHAUN
+    value: LEPRECHAUN
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-PIXIE
+    value: PIXIE
+    difficulty: 5
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-SPHINX
+    value: SPHINX
+    difficulty: 4
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-KRAKEN
+    value: KRAKEN
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-IMP
+    value: IMP
+    difficulty: 5
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-GHOST
+    value: GHOST
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-YETI
+    value: YETI
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-BEAST
+    value: BEAST
+    difficulty: 5
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-FRANKENSTEIN
+    value: FRANKENSTEIN
+    difficulty: 2
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-MUMMY
+    value: MUMMY
+    difficulty: 1
+    category: CREATURE
+    wordType: 1
+  - identifier: nouns-CREATURE-SIREN
+    value: SIREN
+    difficulty: 3
+    category: CREATURE
+    wordType: 1
+  - identifier: prefixes-NEGATIVE-ABANDONED
+    value: ABANDONED
+    difficulty: 5
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-ACCUSING
+    value: ACCUSING
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-ARROGANT
+    value: ARROGANT
+    difficulty: 5
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-BEGGING
+    value: BEGGING
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-BEWILDERED
+    value: BEWILDERED
+    difficulty: 5
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-BITING
+    value: BITING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-COMBATIVE
+    value: COMBATIVE
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-COUGHING
+    value: COUGHING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-CREEPING
+    value: CREEPING
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-CRITICIZING
+    value: CRITICIZING
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-CRYING
+    value: CRYING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-CURSED
+    value: CURSED
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-DAMAGED
+    value: DAMAGED
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-DANGEROUS
+    value: DANGEROUS
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-DEFEATED
+    value: DEFEATED
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-DESTROYING
+    value: DESTROYING
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-DRINKING
+    value: DRINKING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-ENRAGED
+    value: ENRAGED
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-EVIL
+    value: EVIL
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-FAILING
+    value: FAILING
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-FIGHTING
+    value: FIGHTING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-FLUSTERED
+    value: FLUSTERED
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-FRIGHTENED
+    value: FRIGHTENED
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-FROWNING
+    value: FROWNING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-GRUMPY
+    value: GRUMPY
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-HARMFUL
+    value: HARMFUL
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-HATED
+    value: HATED
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-HIDEOUS
+    value: HIDEOUS
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-HITTING
+    value: HITTING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-HURTING
+    value: HURTING
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-ILLEGAL
+    value: ILLEGAL
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-JEALOUS
+    value: JEALOUS
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-KLUTZY
+    value: KLUTZY
+    difficulty: 5
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-LAZY
+    value: LAZY
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-LESSER
+    value: LESSER
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-MAD
+    value: MAD
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-NARCISSISTIC
+    value: NARCISSISTIC
+    difficulty: 5
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-NASTY
+    value: NASTY
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-NAUSEOUS
+    value: NAUSEOUS
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-NEEDY
+    value: NEEDY
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-NERVOUS
+    value: NERVOUS
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-OBNOXIOUS
+    value: OBNOXIOUS
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-ODOROUS
+    value: ODOROUS
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-PETTY
+    value: PETTY
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-QUESTIONABLE
+    value: QUESTIONABLE
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-QUITTING
+    value: QUITTING
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-RABID
+    value: RABID
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-RADIOACTIVE
+    value: RADIOACTIVE
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-REPULSIVE
+    value: REPULSIVE
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-SAD
+    value: SAD
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-SCREAMING
+    value: SCREAMING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-STEALING
+    value: STEALING
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-TERRIBLE
+    value: TERRIBLE
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-THOUGHTLESS
+    value: THOUGHTLESS
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-THREATENING
+    value: THREATENING
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-UGLY
+    value: UGLY
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-UNLUCKY
+    value: UNLUCKY
+    difficulty: 1
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-UNPLEASANT
+    value: UNPLEASANT
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-UPTIGHT
+    value: UPTIGHT
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-WASTEFUL
+    value: WASTEFUL
+    difficulty: 3
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-WEAK
+    value: WEAK
+    difficulty: 2
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEGATIVE-WRATHFUL
+    value: WRATHFUL
+    difficulty: 4
+    category: NEGATIVE
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ACTING
+    value: ACTING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ACTIVE
+    value: ACTIVE
+    difficulty: 5
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-AGREEING
+    value: AGREEING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-AIMING
+    value: AIMING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ANCIENT
+    value: ANCIENT
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-APOLOGIZING
+    value: APOLOGIZING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ASTONISHED
+    value: ASTONISHED
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ATTACHED
+    value: ATTACHED
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BALANCING
+    value: BALANCING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BENDING
+    value: BENDING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BLUSHING
+    value: BLUSHING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BOILING
+    value: BOILING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BOUNCING
+    value: BOUNCING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BOWING
+    value: BOWING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BREAKDANCING
+    value: BREAKDANCING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BROADCASTING
+    value: BROADCASTING
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BUILDING
+    value: BUILDING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BURNING
+    value: BURNING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-BUYING
+    value: BUYING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-CALCULATING
+    value: CALCULATING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-CAREFREE
+    value: CAREFREE
+    difficulty: 5
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-CAUTIOUS
+    value: CAUTIOUS
+    difficulty: 5
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-CHOPPING
+    value: CHOPPING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-CLAPPING
+    value: CLAPPING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-CLIMBING
+    value: CLIMBING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-COMPETING
+    value: COMPETING
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-COOKING
+    value: COOKING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-COUNTING
+    value: COUNTING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-CRAWLING
+    value: CRAWLING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DEEP
+    value: DEEP
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DELIVERING
+    value: DELIVERING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DIGGING
+    value: DIGGING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DIVING
+    value: DIVING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DRAGGING
+    value: DRAGGING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DRAWING
+    value: DRAWING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DREAMING
+    value: DREAMING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DRILLING
+    value: DRILLING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DRIVING
+    value: DRIVING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-DROPPING
+    value: DROPPING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-EATING
+    value: EATING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-EMOTIONAL
+    value: EMOTIONAL
+    difficulty: 5
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ENCHANTED
+    value: ENCHANTED
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-EXPANDING
+    value: EXPANDING
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-EXPLORING
+    value: EXPLORING
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FAKE
+    value: FAKE
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FAMOUS
+    value: FAMOUS
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FANCY
+    value: FANCY
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FEEDING
+    value: FEEDING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FEISTY
+    value: FEISTY
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FLYING
+    value: FLYING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FREE
+    value: FREE
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-FREEZING
+    value: FREEZING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-GIANT
+    value: GIANT
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-GLOWING
+    value: GLOWING
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-GROWING
+    value: GROWING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-HIDING
+    value: HIDING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-HOLDING
+    value: HOLDING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-HOPPING
+    value: HOPPING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-IMMORTAL
+    value: IMMORTAL
+    difficulty: 5
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-INTROVERTED
+    value: INTROVERTED
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-INVENTING
+    value: INVENTING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-INVESTIGATING
+    value: INVESTIGATING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-INVESTING
+    value: INVESTING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-JAGGED
+    value: JAGGED
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-JITTERY
+    value: JITTERY
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-JUMPING
+    value: JUMPING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-JUMPY
+    value: JUMPY
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-KICKING
+    value: KICKING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-KISSABLE
+    value: KISSABLE
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-KNEELING
+    value: KNEELING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-LAWFUL
+    value: LAWFUL
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-LEANING
+    value: LEANING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-LIFTING
+    value: LIFTING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-LISTENING
+    value: LISTENING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-LONELY
+    value: LONELY
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-LOUD
+    value: LOUD
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-MAGICAL
+    value: MAGICAL
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-MELTING
+    value: MELTING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-MOWING
+    value: MOWING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-MUSICAL
+    value: MUSICAL
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-NATURAL
+    value: NATURAL
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-NEW
+    value: NEW
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-NORMAL
+    value: NORMAL
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ORIGINAL
+    value: ORIGINAL
+    difficulty: 5
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-OUTGOING
+    value: OUTGOING
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PAINTING
+    value: PAINTING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PASSIONATE
+    value: PASSIONATE
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PEELING
+    value: PEELING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PLANNING
+    value: PLANNING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PLAYFUL
+    value: PLAYFUL
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-POINTING
+    value: POINTING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-POURING
+    value: POURING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-POWERFUL
+    value: POWERFUL
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PROPOSING
+    value: PROPOSING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PULLING
+    value: PULLING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-PUSHING
+    value: PUSHING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-QUIET
+    value: QUIET
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-QUIRKY
+    value: QUIRKY
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-RADICAL
+    value: RADICAL
+    difficulty: 5
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-READING
+    value: READING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-RETIRING
+    value: RETIRING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ROBOTIC
+    value: ROBOTIC
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-ROMANTIC
+    value: ROMANTIC
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-RUNNING
+    value: RUNNING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SARCASTIC
+    value: SARCASTIC
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SASSY
+    value: SASSY
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SCENTED
+    value: SCENTED
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SENSITIVE
+    value: SENSITIVE
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SHAKING
+    value: SHAKING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SHOOTING
+    value: SHOOTING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SINKING
+    value: SINKING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SITTING
+    value: SITTING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SLEEPING
+    value: SLEEPING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SNEAKING
+    value: SNEAKING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SNEAKY
+    value: SNEAKY
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SNEEZING
+    value: SNEEZING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SNORING
+    value: SNORING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SPARKLING
+    value: SPARKLING
+    difficulty: 4
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SPELLING
+    value: SPELLING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SPITTING
+    value: SPITTING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-STEAMING
+    value: STEAMING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-STREAMING
+    value: STREAMING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-STRETCHING
+    value: STRETCHING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-STUDYING
+    value: STUDYING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SWEEPING
+    value: SWEEPING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-SWIMMING
+    value: SWIMMING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-TALKATIVE
+    value: TALKATIVE
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-TALL
+    value: TALL
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-TEMPTING
+    value: TEMPTING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-THINKING
+    value: THINKING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-UNDEAD
+    value: UNDEAD
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-VAULTING
+    value: VAULTING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WACKY
+    value: WACKY
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WAITING
+    value: WAITING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WALKING
+    value: WALKING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WARM
+    value: WARM
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WATCHING
+    value: WATCHING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WHIPPING
+    value: WHIPPING
+    difficulty: 2
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WHISTLING
+    value: WHISTLING
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-WILD
+    value: WILD
+    difficulty: 3
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-YAWNING
+    value: YAWNING
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-NEUTRAL-YOUNG
+    value: YOUNG
+    difficulty: 1
+    category: NEUTRAL
+    wordType: 0
+  - identifier: prefixes-POSITIVE-ACADEMIC
+    value: ACADEMIC
+    difficulty: 5
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-ADORABLE
+    value: ADORABLE
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-ADORING
+    value: ADORING
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-ATTRACTIVE
+    value: ATTRACTIVE
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-BRAINY
+    value: BRAINY
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-CELEBRATING
+    value: CELEBRATING
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-CHARISMATIC
+    value: CHARISMATIC
+    difficulty: 5
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-CHARMING
+    value: CHARMING
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-CHEERFUL
+    value: CHEERFUL
+    difficulty: 2
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-CLEVER
+    value: CLEVER
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-COURAGEOUS
+    value: COURAGEOUS
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-DANCING
+    value: DANCING
+    difficulty: 1
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-DELICIOUS
+    value: DELICIOUS
+    difficulty: 2
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-DIVINE
+    value: DIVINE
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-FLAWLESS
+    value: FLAWLESS
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-GENEROUS
+    value: GENEROUS
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-GENTLE
+    value: GENTLE
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-GIFTED
+    value: GIFTED
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-HEALTHY
+    value: HEALTHY
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-HEROIC
+    value: HEROIC
+    difficulty: 3
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-LAUGHING
+    value: LAUGHING
+    difficulty: 1
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-LOVABLE
+    value: LOVABLE
+    difficulty: 2
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-LUCKY
+    value: LUCKY
+    difficulty: 1
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-MAJESTIC
+    value: MAJESTIC
+    difficulty: 5
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-NICE
+    value: NICE
+    difficulty: 1
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-PATIENT
+    value: PATIENT
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-PEACEFUL
+    value: PEACEFUL
+    difficulty: 5
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-PRETTY
+    value: PRETTY
+    difficulty: 2
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-SMILING
+    value: SMILING
+    difficulty: 1
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-TALENTED
+    value: TALENTED
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-TRUSTWORTHY
+    value: TRUSTWORTHY
+    difficulty: 4
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-WINNING
+    value: WINNING
+    difficulty: 2
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-POSITIVE-WISE
+    value: WISE
+    difficulty: 2
+    category: POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-ACCEPTABLE
+    value: ACCEPTABLE
+    difficulty: 5
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-AFFORDABLE
+    value: AFFORDABLE
+    difficulty: 3
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-CALM
+    value: CALM
+    difficulty: 4
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-FASHIONABLE
+    value: FASHIONABLE
+    difficulty: 2
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-FEARLESS
+    value: FEARLESS
+    difficulty: 4
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-HILARIOUS
+    value: HILARIOUS
+    difficulty: 3
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-HUGGING
+    value: HUGGING
+    difficulty: 1
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-KINGLY
+    value: KINGLY
+    difficulty: 2
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-MEMORABLE
+    value: MEMORABLE
+    difficulty: 5
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-PERCEPTIVE
+    value: PERCEPTIVE
+    difficulty: 5
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-PROFESSIONAL
+    value: PROFESSIONAL
+    difficulty: 4
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-PROUD
+    value: PROUD
+    difficulty: 3
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-QUICK
+    value: QUICK
+    difficulty: 1
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-RELAXING
+    value: RELAXING
+    difficulty: 2
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-RELIEVED
+    value: RELIEVED
+    difficulty: 3
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-RESPECTABLE
+    value: RESPECTABLE
+    difficulty: 5
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-RESPONSIBLE
+    value: RESPONSIBLE
+    difficulty: 4
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-SINGING
+    value: SINGING
+    difficulty: 1
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-SKIPPING
+    value: SKIPPING
+    difficulty: 3
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-TASTY
+    value: TASTY
+    difficulty: 1
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-VICTORIOUS
+    value: VICTORIOUS
+    difficulty: 4
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-WEALTHY
+    value: WEALTHY
+    difficulty: 1
+    category: SLIGHT-POSITIVE
+    wordType: 0
+  - identifier: prefixes-SLIGHT-POSITIVE-WITTY
+    value: WITTY
+    difficulty: 3
+    category: SLIGHT-POSITIVE
+    wordType: 0

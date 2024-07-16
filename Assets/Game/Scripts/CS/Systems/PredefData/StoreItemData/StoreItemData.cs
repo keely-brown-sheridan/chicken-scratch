@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace ChickenScratch
 {
@@ -14,11 +15,23 @@ namespace ChickenScratch
         public GameObject itemImagePrefab;
         public bool isSinglePurchase = false;
         public int index;
+        public int tier;
+        public virtual void Initialize(StoreItemData existingItemData)
+        {
+            itemType = existingItemData.itemType;
+            itemDescription = existingItemData.itemDescription;
+            cost = existingItemData.cost;
+            itemImagePrefab = existingItemData.itemImagePrefab;
+            storeBGColour = existingItemData.storeBGColour;
+            itemName = existingItemData.itemName;
+            index = existingItemData.index;
+        }
 
         public StoreItemData()
         {
 
         }
+
 
         public StoreItemData(StoreItemNetData netData)
         {

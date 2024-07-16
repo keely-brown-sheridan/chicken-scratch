@@ -116,7 +116,14 @@ namespace ChickenScratch
         public void StampFile()
         {
             stampButton.interactable = false;
-            currentState = State.press;
+            onStampComplete.Invoke();
+            currentState = State.leave;
+        }
+
+        public void PullDown()
+        {
+            stampButton.interactable = false;
+            currentState = State.leave;
         }
     }
 }

@@ -117,7 +117,7 @@ namespace ChickenScratch
                     currentPlayerData = playerReviewMap[task.Value.assignedPlayer];
                     currentPlayerData.caseIndices.Add(caseData.identifier);
                     currentPlayerData.caseTaskMap.Add(caseData.identifier, task.Key);
-                    currentPlayerData.birdBucksEarned += birdBucksEarned / caseData.taskDataMap.Count;
+                    currentPlayerData.birdBucksEarned += caseData.taskDataMap.Count != 0 ? birdBucksEarned / caseData.taskDataMap.Count : 0;
                     currentPlayerData.numberOfStars += task.Value.ratingData.likeCount;
                     currentPlayerData.numberOfEyes += task.Value.ratingData.dislikeCount;
                 }
@@ -214,6 +214,7 @@ namespace ChickenScratch
                 case TaskData.TaskType.add_drawing:
                 case TaskData.TaskType.prompt_drawing:
                 case TaskData.TaskType.compile_drawing:
+                case TaskData.TaskType.blender_drawing:
                     GameObject drawingCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.drawing], parent);
                     DrawingCaseEmailSection drawingCaseEmailSection = drawingCaseEmailSectionObject.GetComponent<DrawingCaseEmailSection>();
                     drawingCaseEmailSection.Initialize(taskData.drawingData, taskData.ratingData, drawingScale);
@@ -223,6 +224,7 @@ namespace ChickenScratch
                     PromptCaseEmailSection promptCaseEmailSection = promptCaseEmailSectionObject.GetComponent<PromptCaseEmailSection>();
                     promptCaseEmailSection.Initialize(taskData.promptData, taskData.ratingData);
                     break;
+                case TaskData.TaskType.morph_guessing:
                 case TaskData.TaskType.base_guessing:
                     GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], parent);
                     GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();

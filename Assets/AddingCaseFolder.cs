@@ -1,4 +1,5 @@
 using ChickenScratch;
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,8 +26,10 @@ public class AddingCaseFolder : CaseFolder
     private TaskData.TaskModifier drawingBoxModifier;
     private TaskData.TaskModifier drawingTypeModifier;
 
-    public void Initialize(DrawingData drawingData, string prompt, List<TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
+    public void Initialize(int round, DrawingData drawingData, string prompt, List<TaskModifier> taskModifiers, UnityAction inTimeCompleteAction)
     {
+        casePlayerTabs.Initialize(round, drawingData.caseID);
+        SetCaseTypeVisuals(drawingData.caseID);
         drawingTypeModifier = TaskModifier.invalid;
         drawingBoxModifier = TaskModifier.standard;
         foreach (TaskModifier modifier in taskModifiers)

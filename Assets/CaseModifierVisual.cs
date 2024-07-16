@@ -50,8 +50,8 @@ public class CaseModifierVisual : MonoBehaviour
         scoreFillImage.color = currentModifierColour;
         scoreFillImage.transform.localScale = Vector3.one;
         gameObject.SetActive(true);
-
-        if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.stopwatch) &&
+        hasCrossedThreshold = false;
+        if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.stopwatch) &&
             GameManager.Instance.playerFlowManager.StoreItemHasCharges(StoreItem.StoreItemType.stopwatch))
         {
             stopWatchObject.SetActive(true);

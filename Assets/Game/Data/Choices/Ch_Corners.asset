@@ -18,17 +18,66 @@ MonoBehaviour:
   pointsPerCorrectWord: 7
   bonusPoints: 6
   cost: 0
+  basePointsPerCorrectWord: 7
+  baseBonusPoints: 6
+  baseStartingModifier: 1.25
+  baseFrequency: 1
+  taskTemplates:
+  - roundIndex: 1
+    taskType: 0
+    duration: 30
+    taskModifiers: 070000000b000000
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 02000000
+  - roundIndex: 2
+    taskType: 3
+    duration: 30
+    taskModifiers: 080000000d000000
+    requiredRoundTasks: 0000000001000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 01000000
+  - roundIndex: 3
+    taskType: 3
+    duration: 30
+    taskModifiers: 090000000b000000
+    requiredRoundTasks: 0000000002000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 02000000
+  - roundIndex: 4
+    taskType: 3
+    duration: 30
+    taskModifiers: 0a0000000d000000
+    requiredRoundTasks: 0000000003000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 01000000
+  - roundIndex: 5
+    taskType: 5
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 04000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
   difficulty: 3
   penalty: 0
   startingScoreModifier: 1.25
-  maxScoreModifier: 1
   modifierDecrement: 0.1
   taskFalloff: 0
   colour: {r: 1, g: 0.96186435, b: 0.6367924, a: 1}
+  backgroundFontColour: {r: 0.4811321, g: 0.47432363, b: 0.40623888, a: 1}
+  importantFontColour: {r: 0.4056604, g: 0.36389276, b: 0.017221425, a: 1}
   startingWordIdentifiers:
-  - hard-prefix
-  - hard-noun
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - hard-noun
   selectionFrequency: 1
+  maxScoreModifier: 1
   taskTimingData:
   - taskType: 0
     duration: 60
@@ -36,6 +85,6 @@ MonoBehaviour:
     duration: 60
   - taskType: 5
     duration: 60
-  description: Your canvas will only be a corner of the space. Other players will
-    append to it.
+  description: Each player draws only in a corner of the drawing area. Each player
+    only gets part of the prompt.
   upgrades: []

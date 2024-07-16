@@ -67,6 +67,25 @@ namespace ChickenScratch
             return allTransformedPositions;
         }
 
+        public List<Vector3> GetFlippedPositions(Vector3 parentPosition, Vector3 parentScale, int numberOfPositionsToReturn)
+        {
+            List<Vector3> allTransformedPositions = new List<Vector3>();
+            int iterator = 0;
+            foreach (Vector3 position in positions)
+            {
+                Vector3 transformedPosition = position;
+                transformedPosition = new Vector3(transformedPosition.x * parentScale.x, -transformedPosition.y * parentScale.y, transformedPosition.z * parentScale.z);
+                transformedPosition += parentPosition;
+                allTransformedPositions.Add(transformedPosition);
+                iterator++;
+                if (iterator >= numberOfPositionsToReturn)
+                {
+                    break;
+                }
+            }
+            return allTransformedPositions;
+        }
+
         public void SetPositions(List<Vector3> inPositions)
         {
             positions = new List<Vector3>();

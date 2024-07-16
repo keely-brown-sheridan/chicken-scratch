@@ -73,8 +73,17 @@ namespace ChickenScratch
             sections = inSummarySlideSections;
             totalBirdBucksToDistribute = caseScoringData.GetTotalPoints();
             birdBucksRemaining = totalBirdBucksToDistribute;
-            birdBucksToSteal = birdBucksRemaining % inSummarySlideSections.Count;
-            distributionFrequency = Mathf.Min((distributionTime - delayTime) / birdBucksRemaining * inSummarySlideSections.Count, 0.25f);
+            if(inSummarySlideSections.Count != 0)
+            {
+                birdBucksToSteal = birdBucksRemaining % inSummarySlideSections.Count;
+                distributionFrequency = Mathf.Min((distributionTime - delayTime) / birdBucksRemaining * inSummarySlideSections.Count, 0.25f);
+            }
+            else
+            {
+                birdBucksToSteal = 0;
+                distributionFrequency = 0.25f;
+            }
+            
             birdBucksRemainingText.text = birdBucksRemaining.ToString();
 
             if(birdBucksToSteal > 0)
