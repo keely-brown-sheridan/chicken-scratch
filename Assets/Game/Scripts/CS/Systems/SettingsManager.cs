@@ -507,17 +507,6 @@ namespace ChickenScratch
             return modifierColour;
         }
 
-        public int GetCurrentGoal()
-        {
-            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
-            if(gameMode.days.Count <= currentDay)
-            {
-                Debug.LogError("Could not access current goal for day["+currentDay.ToString()+"] because game mode only has days["+gameMode.days.Count.ToString()+"].");
-                return -1;
-            }
-            return gameMode.days[currentDay].goalPerPlayer * GetPlayerNameCount();
-        }
-
         public int GetCaseCountForDay()
         {
             int currentDay = GameManager.Instance.playerFlowManager.currentDay;
@@ -527,6 +516,28 @@ namespace ChickenScratch
                 return -1;
             }
             return (int)(gameMode.days[GameManager.Instance.playerFlowManager.currentDay].casesPerPlayer * GetPlayerNameCount());
+        }
+
+        public string GetCurrentDayName()
+        {
+            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            if (gameMode.days.Count <= currentDay)
+            {
+                Debug.LogError("Could not access name for day[" + currentDay.ToString() + "] because game mode only has days[" + gameMode.days.Count.ToString() + "].");
+                return "";
+            }
+            return gameMode.days[GameManager.Instance.playerFlowManager.currentDay].dayName;
+        }
+
+        public List<StoreChoiceOptionData> GetStoreChoiceOptionsForDay()
+        {
+            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            if (gameMode.days.Count <= currentDay)
+            {
+                Debug.LogError("Could not access store choice options for day[" + currentDay.ToString() + "] because game mode only has days[" + gameMode.days.Count.ToString() + "].");
+                return null;
+            }
+            return (gameMode.days[GameManager.Instance.playerFlowManager.currentDay].storeChoiceOptions);
         }
 
         public ResultData GetDayResult()

@@ -40,9 +40,14 @@ namespace ChickenScratch
         [SerializeField]
         protected CasePlayerTabs casePlayerTabs;
 
+        [SerializeField]
+        protected CertificationSlot certificationSlot1, certificationSlot2;
+
         private bool isActive = false;
         private bool isStampActive = false;
         protected UnityAction timeCompleteAction;
+        protected bool isBallparked = false;
+        protected int caseID = -1;
 
         void Update()
         {
@@ -84,12 +89,50 @@ namespace ChickenScratch
 
 
             formAnimator.SetBool("Slide", true);
-            caseModifierVisual.Initialize(timeForTask, currentModifierValue, maxModifierValue, modifierDecrement);
+            
+            caseModifierVisual.Initialize(caseID, timeForTask, currentModifierValue, maxModifierValue, modifierDecrement, isBallparked);
             
         }
-
-        public void SetCaseTypeVisuals(int caseID)
+        public void SetCertificationSlots(int inCaseID)
         {
+            caseID = inCaseID;
+            if (!GameManager.Instance.playerFlowManager.drawingRound.caseMap.ContainsKey(caseID))
+            {
+                certificationSlot1.gameObject.SetActive(false);
+                certificationSlot2.gameObject.SetActive(false);
+                return;
+            }
+            ChainData currentCase = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
+            CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(currentCase.caseTypeName);
+            if(choice != null)
+            {
+                isBallparked = GameManager.Instance.playerFlowManager.CaseHasCertification(choice.identifier, "Ballpark");
+
+                List<string> certifications = GameManager.Instance.playerFlowManager.GetCaseCertifications(choice.identifier);
+                if (choice.maxNumberOfSeals > 0)
+                {
+                    certificationSlot1.Initialize(certifications.Count > 0 ? certifications[0] : "");
+                    certificationSlot1.gameObject.SetActive(true);
+                }
+                else
+                {
+                    certificationSlot1.gameObject.SetActive(false);
+                }
+                if(choice.maxNumberOfSeals > 1)
+                {
+                    certificationSlot2.Initialize(certifications.Count > 1 ? certifications[1] : "");
+                    certificationSlot2.gameObject.SetActive(true);
+                }
+                else
+                {
+                    certificationSlot2.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        public void SetCaseTypeVisuals(int inCaseID)
+        {
+            caseID = inCaseID;
             if(!GameManager.Instance.playerFlowManager.drawingRound.caseMap.ContainsKey(caseID))
             {
                 caseTypeText.gameObject.SetActive(false);
@@ -151,6 +194,11 @@ namespace ChickenScratch
         public float GetScoreModifier()
         {
             return caseModifierVisual.GetFinalModifierValue();
+        }
+
+        public bool HasCrossedThreshold()
+        {
+            return caseModifierVisual.hasCrossedThreshold;
         }
 
         public void RegisterToStampComplete(UnityAction action)

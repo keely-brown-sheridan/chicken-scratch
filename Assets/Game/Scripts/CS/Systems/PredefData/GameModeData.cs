@@ -33,7 +33,7 @@ namespace ChickenScratch
 
         public string description;
         public float baseGameTime;
-        public float dailyGameTimeRamp;
+        public int dayOneGoalPerPlayer;
 
         public int baseRestockCost;
 

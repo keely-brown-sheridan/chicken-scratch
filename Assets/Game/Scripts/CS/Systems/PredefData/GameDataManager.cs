@@ -57,6 +57,19 @@ public class GameDataManager : Singleton<GameDataManager>
     private List<HatData> hats = new List<HatData>();
     private Dictionary<BirdHatData.HatType, HatData> hatMap = new Dictionary<BirdHatData.HatType, HatData>();
 
+    [SerializeField]
+    private List<CertificationData> certificationDatas = new List<CertificationData>();
+    private Dictionary<CertificationData.CertificationType, CertificationData> certificationTypeMap = new Dictionary<CertificationData.CertificationType, CertificationData>();
+    private Dictionary<string, CertificationData> certificationIdentifierMap = new Dictionary<string, CertificationData>();
+
+    [SerializeField]
+    private CaseCertificationStoreItemData certificationStoreItem;
+    private List<string> currentShowingCertificationCases = new List<string>();
+
+    [SerializeField]
+    private List<TeamMemberData> teamMembers;
+    private Dictionary<string, TeamMemberData> teamMemberMap = new Dictionary<string, TeamMemberData>();
+
     private List<string> currentShowingItems = new List<string>();
 
     // Start is called before the first frame update
@@ -96,6 +109,20 @@ public class GameDataManager : Singleton<GameDataManager>
         foreach(HatData hat in hats)
         {
             hatMap.Add(hat.hatType, hat);
+        }
+
+        certificationTypeMap.Clear();
+        certificationIdentifierMap.Clear();
+        foreach (CertificationData certificationData in certificationDatas)
+        {
+            certificationTypeMap.Add(certificationData.type, certificationData);
+            certificationIdentifierMap.Add(certificationData.identifier, certificationData);
+        }
+
+        teamMemberMap.Clear();
+        foreach(TeamMemberData teamMember in teamMembers)
+        {
+            teamMemberMap.Add(teamMember.name, teamMember);
         }
         //RefreshWords(new List<CaseWordData>());
     }
@@ -284,6 +311,12 @@ public class GameDataManager : Singleton<GameDataManager>
             {
                 continue;
             }
+
+            //Skip if this case is trademarked and can't be improved
+            if(GameManager.Instance.playerFlowManager.CaseHasCertification(upgradeStoreItem.caseChoiceIdentifier, "Trademark"))
+            {
+                continue;
+            }
             CaseChoiceData caseChoice = GetCaseChoice(upgradeStoreItem.caseChoiceIdentifier);
             if(caseChoice != null)
             {
@@ -316,6 +349,12 @@ public class GameDataManager : Singleton<GameDataManager>
 
             //Skip if this frequency item is already showing in the shop
             if(currentShowingItems.Contains(frequencyStoreItem.itemName))
+            {
+                continue;
+            }
+
+            //Skip if this case is trademarked and can't be improved
+            if (GameManager.Instance.playerFlowManager.CaseHasCertification(frequencyStoreItem.caseChoiceIdentifier, "Trademark"))
             {
                 continue;
             }
@@ -426,24 +465,37 @@ public class GameDataManager : Singleton<GameDataManager>
         return null;
     }
 
-    public void UnlockCaseChoice(string unlockIdentifier)
+    public void UnlockCaseChoice(string identifier, string certificationIdentifier)
     {
-        if(GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.Contains(unlockIdentifier))
+        if(GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.Contains(identifier))
         {
-            GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.Remove(unlockIdentifier);
+            GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.Remove(identifier);
         }
-        
-        GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Add(unlockIdentifier);
+
+        GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Add(identifier);
         for(int i = activeUnlockStoreItems.Count - 1; i >= 0; i--)
         {
-            if (activeUnlockStoreItems[i].caseChoiceIdentifier == unlockIdentifier)
+            if (activeUnlockStoreItems[i].caseChoiceIdentifier == identifier)
             {
                 activeUnlockStoreItems.RemoveAt(i);
             }
         }
 
-        CaseChoiceData caseChoice = GetCaseChoice(unlockIdentifier);
+        CaseChoiceData caseChoice = GetCaseChoice(identifier);
         activeUpgradeStoreItems.AddRange(caseChoice.upgrades);
+
+        //Universally set the certification for the case
+        if(certificationIdentifier != "")
+        {
+            GameManager.Instance.playerFlowManager.AddCaseCertification(identifier, certificationIdentifier);
+            GameManager.Instance.gameDataHandler.RpcAddCaseCertification(identifier, certificationIdentifier);
+            CertificationData certification = GameDataManager.Instance.GetCertification(certificationIdentifier);
+            if(certification != null)
+            {
+                certification.Enable(caseChoice);
+            }
+            
+        }
     }
 
     public void RemoveStoreItemType(StoreItem.StoreItemType storeItemType)
@@ -519,5 +571,156 @@ public class GameDataManager : Singleton<GameDataManager>
     public void ResetCurrentShowingItems()
     {
         currentShowingItems.Clear();
+        currentShowingCertificationCases.Clear();
+    }
+
+    public string GetRandomCertificationIdentifier(int goodChance, int badChance)
+    { 
+        List<string> options = new List<string>();
+        int totalPercent = 0;
+        for(int i = 0; i < goodChance; i++)
+        {
+            options.Add("good");
+            totalPercent++;
+        }
+        for(int i = 0; i < badChance; i++)
+        {
+            options.Add("bad");
+            totalPercent++;
+        }
+        for(int i = totalPercent; i < 100; i++)
+        {
+            options.Add("");
+        }
+
+        
+        options = options.OrderBy(x => Guid.NewGuid()).ToList();
+        switch(options[0])
+        {
+            case "good":
+                List<string> goodOptions = certificationDatas.Where(cd => cd.quality == CertificationData.CertificationQuality.good)
+                                            .Select(cd => cd.identifier)
+                                            .OrderBy(x => Guid.NewGuid()).ToList();
+                return goodOptions.Count > 0 ? goodOptions[0] : "";
+            case "bad":
+                List<string> badOptions = certificationDatas.Where(cd => cd.quality == CertificationData.CertificationQuality.bad)
+                                            .Select(cd => cd.identifier)
+                                            .OrderBy(x => Guid.NewGuid()).ToList();
+                return badOptions.Count > 0 ? badOptions[0] : "";
+            default:
+                return "";
+        }
+    }
+
+    public CertificationData GetCertification(string identifier)
+    {
+        if(certificationIdentifierMap.ContainsKey(identifier))
+        {
+            return certificationIdentifierMap[identifier];
+        }
+        return null;
+    }
+
+    public void IncreaseCaseChoiceModifier(string caseTypeName, float modifierIncrease)
+    {
+        CaseChoiceData caseChoice = GetCaseChoice(caseTypeName);
+        if(caseChoice != null)
+        {
+            caseChoice.startingScoreModifier += modifierIncrease;
+        }
+    }
+    
+    public void UpgradeRandomCaseChoice()
+    {
+        List<CaseUpgradeStoreItemData> upgrades = activeUpgradeStoreItems.OrderBy(x => Guid.NewGuid()).ToList();
+
+        foreach (CaseUpgradeStoreItemData upgradeData in upgrades)
+        {
+            //Skip if the upgrade's choice hasn't been unlocked
+            if (!GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Contains(upgradeData.caseChoiceIdentifier))
+            {
+                continue;
+            }
+
+            //Skip if this case is trademarked and can't be improved
+            if (GameManager.Instance.playerFlowManager.CaseHasCertification(upgradeData.caseChoiceIdentifier, "Trademark"))
+            {
+                continue;
+            }
+
+            if (upgradeData.upgradeRampData.modifierIncrease > 0)
+            {
+                GameManager.Instance.gameDataHandler.RpcStoreIncreaseModifierForCase(upgradeData.caseChoiceIdentifier);
+            }
+            else
+            {
+                GameManager.Instance.gameDataHandler.RpcStoreIncreaseBirdbucksForCase(upgradeData.caseChoiceIdentifier);
+            }
+            foreach (StoreItemData upgrade in upgradeData.unlocks)
+            {
+                if (upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
+                {
+                    AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
+                }
+                else if (upgrade.itemType == StoreItem.StoreItemType.case_frequency)
+                {
+                    AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
+                }
+            }
+            UpgradeCaseChoice(upgradeData);
+            GameManager.Instance.gameDataHandler.RpcUpgradeCaseChoice(upgradeData.itemName);
+            RemoveUpgrade(upgradeData);
+            return;
+        }
+
+
+    }
+
+    public CaseCertificationStoreItemData GetCertificationStoreItem()
+    {
+        return certificationStoreItem;
+    }
+
+    public CaseChoiceData GetUncertifiedCaseChoice()
+    {
+        foreach(CaseChoiceData caseChoice in caseChoiceMap.Values)
+        {
+            //Skip if the certification is currently showing
+            if(currentShowingCertificationCases.Contains(caseChoice.identifier))
+            {
+                continue;
+            }
+            if(GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Contains(caseChoice.identifier) && 
+                GameManager.Instance.playerFlowManager.GetCaseCertificationCount(caseChoice.identifier) < caseChoice.maxNumberOfSeals &&
+                caseChoice.numberOfTasks <= SettingsManager.Instance.GetPlayerNameCount())
+            {
+                currentShowingCertificationCases.Add(caseChoice.identifier);
+                return caseChoice;
+            }
+        }
+        return null;
+    }
+
+    public CertificationData GetUnusedGoodCertification(string caseIdentifier)
+    {
+        List<CertificationData> randomizedCertifications = certificationDatas.OrderBy(x => System.Guid.NewGuid()).ToList();
+        foreach (CertificationData certification in randomizedCertifications)
+        {
+            if (certification.quality != CertificationData.CertificationQuality.good || GameManager.Instance.playerFlowManager.CaseHasCertification(caseIdentifier, certification.identifier))
+            {
+                continue;
+            }
+            return certification;
+        }
+        return null;
+    }
+
+    public TeamMemberData GetTeamMember(string teamMemberName)
+    {
+        if(teamMemberMap.ContainsKey(teamMemberName))
+        {
+            return teamMemberMap[teamMemberName];
+        }
+        return null;
     }
 }

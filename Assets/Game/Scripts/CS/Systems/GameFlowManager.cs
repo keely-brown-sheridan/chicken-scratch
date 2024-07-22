@@ -19,7 +19,7 @@ namespace ChickenScratch
     {
         public enum GamePhase
         {
-            loading, game_tutorial, instructions, drawing, results, slides_tutorial, slides, accolades, store, review, accusation, invalid
+            loading, game_tutorial, instructions, drawing, results, slides_tutorial, slides, accolades, store, review, accusation, store_tutorial, invalid
         }
         public GamePhase currentGamePhase = GamePhase.loading;
 
@@ -53,7 +53,7 @@ namespace ChickenScratch
         public bool active;
         public float armUpdateFrequency = 0.5f;
 
-        public TutorialSequence deadlineTutorialSequence, slideTutorialSequence;
+        public TutorialSequence deadlineTutorialSequence, slideTutorialSequence, storeTutorialSequence;
 
         public List<BirdName> scoreTrackerPlayers;
         private PlayerFlowManager playerFlowManager;
@@ -197,7 +197,8 @@ namespace ChickenScratch
         public void IncreaseNumberOfCompletedCases()
         {
             totalCompletedCases++;
-            int requiredCaseCount = SettingsManager.Instance.GetCaseCountForDay() + GameManager.Instance.playerFlowManager.baseCasesIncrease;
+            int requiredCaseCount = SettingsManager.Instance.GetCaseCountForDay() + GameManager.Instance.playerFlowManager.baseCasesIncrease + GameManager.Instance.playerFlowManager.tomorrowOnlyCasesIncrease;
+            requiredCaseCount = (int)(requiredCaseCount * GameManager.Instance.playerFlowManager.caseIncreaseRatio);
 
             if(totalCompletedCases >= requiredCaseCount)
             {
@@ -235,8 +236,8 @@ namespace ChickenScratch
                 author = BirdName.none
             };
             ChainData newChain = new ChainData();
-            newChain.pointsForBonus = choiceData.bonusPoints;
-            newChain.pointsPerCorrectWord = choiceData.pointsPerCorrectWord;
+            newChain.pointsForBonus = choiceNetData.bonusBirdbucks;
+            newChain.pointsPerCorrectWord = choiceNetData.birdbucksPerCorrectWord;
             newChain.identifier = currentLowestUnusedCaseNumber;
             currentLowestUnusedCaseNumber++;
             newChain.taskQueue = selectedCase.queuedTasks;
@@ -556,6 +557,15 @@ namespace ChickenScratch
                     currentGamePhase = GameManager.Instance.playerFlowManager.slidesRound.phaseToTransitionTo;
 
                     break;
+                case GamePhase.store_tutorial:
+                    if (storeTutorialSequence.active ||
+                            !isRoundOver(true))
+                    {
+                        return;
+                    }
+                    storeTutorialSequence.gameObject.SetActive(false);
+                    currentGamePhase = GamePhase.store;
+                    break;
                 case GamePhase.accolades:
                     if (playerFlowManager.accoladesRound.isActive)
                     {
@@ -594,7 +604,7 @@ namespace ChickenScratch
                 case GamePhase.store:
                     if(GameManager.Instance.playerFlowManager.storeRound.currentState == StoreRound.State.unlock)
                     {
-                        if(!GameManager.Instance.playerFlowManager.storeRound.HasChosen())
+                        if(!GameManager.Instance.playerFlowManager.storeRound.hasChosen)
                         {
                             GameManager.Instance.playerFlowManager.storeRound.ForceChoice();
                         }

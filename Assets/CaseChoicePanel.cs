@@ -16,6 +16,12 @@ public class CaseChoicePanel : MonoBehaviour
     [SerializeField]
     private string rerollSFX;
 
+    [SerializeField]
+    private GameObject parentObject;
+
+    [SerializeField]
+    private CertificationEffectIndicator assemblyIndicator;
+
     private CaseChoiceNetData choiceData1, choiceData2, choiceData3;
     private bool hasRerolled = false;
     private float timeChoosing = 0f;
@@ -32,14 +38,13 @@ public class CaseChoicePanel : MonoBehaviour
 
     public void SetChoices(CaseChoiceNetData inChoice1, CaseChoiceNetData inChoice2, CaseChoiceNetData inChoice3)
     {
-        
         timeChoosing = Time.deltaTime;
         choiceData1 = inChoice1;
         choiceData2 = inChoice2;
         choiceData3 = inChoice3;
-        choice1.Initialize(choiceData1);
-        choice2.Initialize(choiceData2);
-        choice3.Initialize(choiceData3);
+        choice1.Initialize(choiceData1, new List<CaseChoiceNetData>() { choiceData2, choiceData3 });
+        choice2.Initialize(choiceData2, new List<CaseChoiceNetData>() { choiceData1, choiceData3 });
+        choice3.Initialize(choiceData3, new List<CaseChoiceNetData>() { choiceData1, choiceData2 });
 
         mostDifficultChoice = choice1.GetDifficulty();
         leastDifficultChoice = mostDifficultChoice;
@@ -89,14 +94,22 @@ public class CaseChoicePanel : MonoBehaviour
             }
         }
 
-        gameObject.SetActive(true);
+        parentObject.SetActive(true);
         hasRerolled = false;
     }
 
     public void Choose1()
     {
+        if(GameManager.Instance.playerFlowManager.CaseHasCertification(choiceData1.caseChoiceIdentifier, "Assembly"))
+        {
+            CertificationData assemblyCertification = GameDataManager.Instance.GetCertification("Assembly");
+            if(assemblyCertification != null)
+            {
+                assemblyIndicator.Show(assemblyCertification, "+1 to frequency for " + choiceData1.caseChoiceIdentifier);
+            }
+        }
         GameManager.Instance.gameDataHandler.CmdChooseCase(SettingsManager.Instance.birdName, choiceData1);
-        gameObject.SetActive(false);
+        parentObject.SetActive(false);
         caseChoiceRerollerObject.SetActive(false);
         StatTracker.Instance.timeChoosing += timeChoosing;
         StatTracker.Instance.casesStarted++;
@@ -110,16 +123,32 @@ public class CaseChoicePanel : MonoBehaviour
             StatTracker.Instance.alwaysChoseLowestDifficulty = false;
         }
         timeChoosing = 0f;
+
+        if(choice1.cost > 0)
+        {
+            AudioManager.Instance.PlaySound("sale");
+            GameManager.Instance.playerFlowManager.storeRound.DecreaseCurrentMoney(choice1.cost);
+        }
+
         if (SettingsManager.Instance.GetSetting("stickies"))
         {
             UpdateStickies();
         }
+
     }
 
     public void Choose2()
     {
         GameManager.Instance.gameDataHandler.CmdChooseCase(SettingsManager.Instance.birdName, choiceData2);
-        gameObject.SetActive(false);
+        if (GameManager.Instance.playerFlowManager.CaseHasCertification(choiceData2.caseChoiceIdentifier, "Assembly"))
+        {
+            CertificationData assemblyCertification = GameDataManager.Instance.GetCertification("Assembly");
+            if (assemblyCertification != null)
+            {
+                assemblyIndicator.Show(assemblyCertification, "+1 to frequency for " + choiceData2.caseChoiceIdentifier);
+            }
+        }
+        parentObject.SetActive(false);
         caseChoiceRerollerObject.SetActive(false);
         StatTracker.Instance.timeChoosing += timeChoosing;
         StatTracker.Instance.casesStarted++;
@@ -133,6 +162,12 @@ public class CaseChoicePanel : MonoBehaviour
             StatTracker.Instance.alwaysChoseLowestDifficulty = false;
         }
         timeChoosing = 0f;
+
+        if (choice2.cost > 0)
+        {
+            AudioManager.Instance.PlaySound("sale");
+            GameManager.Instance.playerFlowManager.storeRound.DecreaseCurrentMoney(choice2.cost);
+        }
         if (SettingsManager.Instance.GetSetting("stickies"))
         {
             UpdateStickies();
@@ -142,7 +177,15 @@ public class CaseChoicePanel : MonoBehaviour
     public void Choose3()
     {
         GameManager.Instance.gameDataHandler.CmdChooseCase(SettingsManager.Instance.birdName, choiceData3);
-        gameObject.SetActive(false);
+        if (GameManager.Instance.playerFlowManager.CaseHasCertification(choiceData3.caseChoiceIdentifier, "Assembly"))
+        {
+            CertificationData assemblyCertification = GameDataManager.Instance.GetCertification("Assembly");
+            if (assemblyCertification != null)
+            {
+                assemblyIndicator.Show(assemblyCertification, "+1 to frequency for " + choiceData3.caseChoiceIdentifier);
+            }
+        }
+        parentObject.SetActive(false);
         caseChoiceRerollerObject.SetActive(false);
         StatTracker.Instance.timeChoosing += timeChoosing;
         StatTracker.Instance.casesStarted++;
@@ -155,6 +198,29 @@ public class CaseChoicePanel : MonoBehaviour
         {
             StatTracker.Instance.alwaysChoseLowestDifficulty = false;
         }
+        timeChoosing = 0f;
+
+        if (choice3.cost > 0)
+        {
+            AudioManager.Instance.PlaySound("sale");
+            GameManager.Instance.playerFlowManager.storeRound.DecreaseCurrentMoney(choice3.cost);
+        }
+        if (SettingsManager.Instance.GetSetting("stickies"))
+        {
+            UpdateStickies();
+        }
+    }
+
+    public void SkipChoice()
+    {
+        GameManager.Instance.playerFlowManager.drawingRound.onPlayerSubmitTask.Invoke();
+        GameManager.Instance.gameDataHandler.CmdSkipCaseChoice();
+        GameManager.Instance.gameDataHandler.CmdRequestNextCase(SettingsManager.Instance.birdName);
+        parentObject.SetActive(false);
+        caseChoiceRerollerObject.SetActive(false);
+        StatTracker.Instance.timeChoosing += timeChoosing;
+        StatTracker.Instance.alwaysChoseHighestDifficulty = false;
+        StatTracker.Instance.alwaysChoseLowestDifficulty = false;
         timeChoosing = 0f;
         if (SettingsManager.Instance.GetSetting("stickies"))
         {

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb55a1713802d334f84e4fa2e19bf5cf, type: 3}
+  m_Name: Ce_overhead
+  m_EditorClassIdentifier: 
+  identifier: Overhead
+  type: 10
+  quality: 1
+  sealSprite: {fileID: 958256884, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+  iconSprite: {fileID: 21300000, guid: 7565f116f6a20874cbb036a218fe945f, type: 3}
+  sealColour: {r: 0.9716981, g: 0.3669654, b: 0.1787558, a: 1}
+  description: Boosts the bonus reward by 6, but the chooser must personally pay
+    3 birdbucks to select it.
+  initialCost: 3
+  modifierIncrement: 0
+  correctWordBirdbucksIncrement: 0
+  bonusBirdbucksIncrement: 6

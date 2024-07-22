@@ -22,6 +22,7 @@ namespace ChickenScratch
         public string caseTypeName;
         public Color caseTypeColour;
         public CaseScoringData scoringData;
+        public string dayName;
         public EndgameCaseNetData()
         {
 
@@ -44,6 +45,7 @@ namespace ChickenScratch
             caseTypeName = inCaseData.caseTypeName;
             caseTypeColour = inCaseData.caseTypeColour;
             scoringData = inCaseData.scoringData;
+            dayName = inCaseData.dayName;
         }
     }
 }

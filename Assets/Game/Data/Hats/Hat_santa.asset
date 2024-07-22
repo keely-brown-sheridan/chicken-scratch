@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47034887394db32409b4f123282bae0c, type: 3}
   m_Name: Hat_santa
   m_EditorClassIdentifier: 
-  sprite: {fileID: -897547993, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+  sprite: {fileID: -860967110, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
   width: 61.5
   height: 47.5
   hatType: 9

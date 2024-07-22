@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9c85563faa1ce44cac7fd5e73260a8d, type: 3}
+  m_Name: Ce_growth
+  m_EditorClassIdentifier: 
+  identifier: Growth
+  type: 0
+  quality: 0
+  sealSprite: {fileID: -1776010690, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+  iconSprite: {fileID: 21300000, guid: 1858e682aed7fd54d94c2fc5cd9a795a, type: 3}
+  sealColour: {r: 0.002447496, g: 0.5188679, b: 0.15609507, a: 1}
+  description: Lower multiplier by 0.25, but increase it by 0.1 when this case is
+    correctly guessed.
+  initialMultiplierDecrement: 0.25
+  modifierRamp: 0.1

@@ -86,9 +86,10 @@ namespace ChickenScratch
         {
             
             string newWordsFilePath = Application.persistentDataPath + "\\new-word-groups.json";
+            List<CaseWordData> customWords = new List<CaseWordData>();
             if (File.Exists(newWordsFilePath))
             {
-                List<CaseWordData> customWords = new List<CaseWordData>();
+                
                 string newWordGroupJSON = File.ReadAllText(newWordsFilePath);
                 List<WordGroupData> newWordGroups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WordGroupData>>(newWordGroupJSON);
                 foreach (WordGroupData wordGroupData in newWordGroups)
@@ -139,8 +140,8 @@ namespace ChickenScratch
                         customWords.Add(caseWordData);
                     }
                 }
-                GameManager.Instance.gameDataHandler.RpcSendWords(customWords);
             }
+            GameManager.Instance.gameDataHandler.RpcSendWords(customWords);
         }
 
         public void DisableInactiveCategories(List<string> activeWordGroupCategories)
@@ -185,6 +186,8 @@ namespace ChickenScratch
             caseChoiceNetData.caseChoiceIdentifier = choice.identifier;
             caseChoiceNetData.maxScoreModifier = choice.maxScoreModifier;
             caseChoiceNetData.scoreModifierDecrement = choice.modifierDecrement;
+            caseChoiceNetData.birdbucksPerCorrectWord = choice.pointsPerCorrectWord;
+            caseChoiceNetData.bonusBirdbucks = choice.bonusPoints;
             return caseChoiceNetData;
         }
 

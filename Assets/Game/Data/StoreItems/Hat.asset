@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Hat
   itemDescription: A hat that your bird can wear on its head.
   storeBGColour: {r: 0.70694315, g: 0.44045925, b: 0.9245283, a: 1}
-  cost: 5
+  cost: 3
   itemImagePrefab: {fileID: 4797839213824395224, guid: 787a8813f45b908449872ad3a6308dac,
     type: 3}
   isSinglePurchase: 1

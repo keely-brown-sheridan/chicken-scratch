@@ -81,6 +81,8 @@ namespace ChickenScratch
 
         public UnityAction caseFolderOnStartAction;
 
+        public TMPro.TMP_Text birdbucksText;
+
         public int currentRound => _currentRound;
         private int _currentRound;
 
@@ -139,15 +141,15 @@ namespace ChickenScratch
 
             queuedCaseFolderIdentifiers.Clear();
             queuedFolderMap.Clear();
-            
+            birdbucksText.text = GameManager.Instance.playerFlowManager.storeRound.currentMoney.ToString();
             if (SettingsManager.Instance.isHost)
             {
                 GameManager.Instance.gameFlowManager.totalCompletedCases = 0;
                 GameManager.Instance.gameDataHandler.RpcUpdateNumberOfCases(GameManager.Instance.playerFlowManager.GetCasesForDay());
                 GameManager.Instance.gameDataHandler.RpcActivateCasePile();
-                float timeInDay = GameManager.Instance.playerFlowManager.GetTimeInDay();
-                GameManager.Instance.gameFlowManager.timeRemainingInPhase = timeInDay;
-                GameManager.Instance.gameDataHandler.RpcUpdateTimer(timeInDay);
+
+                GameManager.Instance.gameFlowManager.timeRemainingInPhase = GameManager.Instance.playerFlowManager.GetTimeInDay();
+                GameManager.Instance.gameDataHandler.RpcUpdateTimer(GameManager.Instance.playerFlowManager.GetTimeInDay());
             }
             hasRequestedCaseDetails = false;
             hasSentCaseDetails = false;
@@ -168,8 +170,6 @@ namespace ChickenScratch
                     caseCabinetSticky.Queue(true);
                 }
             }
-
-
         }
 
         public void SetDrawerAsClosed(int cabinetIndex)
@@ -957,6 +957,8 @@ namespace ChickenScratch
                     Debug.LogError("ERROR[Submit]: Could not isolate cabinet for player, check to make sure the currentRoundMap is working.");
                 }
             }
+            bool hasCollaborationCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(cabinetDrawerMap[playerCabinetIndex].currentChainData.caseTypeName, "Collaboration");
+            bool crossedTimeThreshold = false;
             switch (currentState)
             {
                 case CaseState.drawing:
@@ -970,6 +972,7 @@ namespace ChickenScratch
                     drawingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     drawingCaseFolder.Hide();
                     currentScoreModifier = drawingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = drawingCaseFolder.HasCrossedThreshold();
                     break;
                 case CaseState.prompting:
                     if(force)
@@ -980,6 +983,7 @@ namespace ChickenScratch
                     promptingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     promptingCaseFolder.Hide();
                     currentScoreModifier = promptingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = promptingCaseFolder.HasCrossedThreshold();
                     break;
                 case CaseState.guessing:
                     if(force)
@@ -987,9 +991,11 @@ namespace ChickenScratch
                         guessingCaseFolder.PullDownStamp();
                         guessingCaseFolder.ForceGuess(cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier);
                     }
+                    
                     guessingCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     guessingCaseFolder.Hide();
                     currentScoreModifier = guessingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = guessingCaseFolder.HasCrossedThreshold();
                     break;
                 case CaseState.morph_guessing:
                     if (force)
@@ -1000,6 +1006,7 @@ namespace ChickenScratch
                     morphGuessCaseFolder.DeregisterToStampComplete(OnSubmitted);
                     morphGuessCaseFolder.Hide();
                     currentScoreModifier = morphGuessCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = morphGuessCaseFolder.HasCrossedThreshold();
                     break;
                 case CaseState.copy_drawing:
                     if(force)
@@ -1011,6 +1018,7 @@ namespace ChickenScratch
                     copyingCaseFolder.Hide();
                     SubmitDrawing();
                     currentScoreModifier = copyingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = copyingCaseFolder.HasCrossedThreshold();
                     break;
                 case CaseState.blender_drawing:
                     if(force)
@@ -1022,6 +1030,7 @@ namespace ChickenScratch
                     blendingCaseFolder.Hide();
                     SubmitDrawing();
                     currentScoreModifier = blendingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = blendingCaseFolder.HasCrossedThreshold();
                     break;
                 case CaseState.add_drawing:
                     if(force)
@@ -1034,6 +1043,7 @@ namespace ChickenScratch
 
                     SubmitDrawing();
                     currentScoreModifier = addingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = addingCaseFolder.HasCrossedThreshold();
                     break;
             }
 
@@ -1046,18 +1056,21 @@ namespace ChickenScratch
             else
             {
                 GameManager.Instance.playerFlowManager.drawingRound.onPlayerSubmitTask.Invoke();
-                if (SettingsManager.Instance.gameMode.caseDeliveryMode == GameModeData.CaseDeliveryMode.free_for_all)
+                if (currentState != CaseState.guessing && currentState != CaseState.morph_guessing)
                 {
-                    if (currentState != CaseState.guessing && currentState != CaseState.morph_guessing)
-                    {
-                        GameManager.Instance.gameDataHandler.CmdTransitionCase(caseID);
-                    }
-                    else
-                    {
-                        GameManager.Instance.gameDataHandler.CmdSendPointsToScoreTrackerPlayers(caseID);
-                    }
-                    GameManager.Instance.gameDataHandler.CmdRequestNextCase(SettingsManager.Instance.birdName);
+                    GameManager.Instance.gameDataHandler.CmdTransitionCase(caseID);
                 }
+                else
+                {
+                    GameManager.Instance.gameDataHandler.CmdSendPointsToScoreTrackerPlayers(caseID);
+                }
+                GameManager.Instance.gameDataHandler.CmdRequestNextCase(SettingsManager.Instance.birdName);
+            }
+
+            if(!crossedTimeThreshold && hasCollaborationCertification)
+            {
+                int increment = ((IntCertificationData)GameDataManager.Instance.GetCertification("Collaboration")).value;
+                GameManager.Instance.gameDataHandler.CmdIncreaseCaseBirdbucks(caseID, increment);
             }
             if (SettingsManager.Instance.GetSetting("stickies"))
             {
@@ -1069,6 +1082,8 @@ namespace ChickenScratch
             }
 
         }
+
+
 
         public void SendNextInQueue(BirdName birdToSendTo)
         {

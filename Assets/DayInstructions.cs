@@ -22,9 +22,9 @@ public class DayInstructions : MonoBehaviour
 
     private State currentState = State.faded;
 
-    public void Show(int currentDay, int currentGoal)
+    public void Show(string currentDay, int currentGoal)
     {
-        dayText.text = "Day " + (currentDay+1).ToString();
+        dayText.text = currentDay;
         goalText.text = "Earn " + currentGoal.ToString() + " Birdbucks";
         currentState = State.fading_in;
     }

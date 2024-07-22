@@ -57,6 +57,7 @@ namespace ChickenScratch
             casePlayerTabs.Initialize(round, caseID);
             currentCaseIndex = caseID;
             SetCaseTypeVisuals(caseID);
+            SetCertificationSlots(caseID);
 
             guessingContainer.Show(drawingData, drawingScalingFactor, taskModifiers);
             PossiblePrompt currentPossibleWord;
@@ -158,7 +159,9 @@ namespace ChickenScratch
             guessData.author = SettingsManager.Instance.birdName;
             guessData.prefix = guessWords.ContainsKey(1) ? guessWords[1] : "";
             guessData.noun = guessWords.ContainsKey(2) ? guessWords[2] : "";
-            if(!GameManager.Instance.playerFlowManager.drawingRound.queuedFolderMap.ContainsKey(caseID))
+
+            
+            if (!GameManager.Instance.playerFlowManager.drawingRound.queuedFolderMap.ContainsKey(caseID))
             {
                 Debug.LogError("ERROR[ForceGuess]: Queued folder map does not contain caseID["+caseID.ToString()+"]");
                 return;

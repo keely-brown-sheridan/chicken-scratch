@@ -41,7 +41,7 @@ namespace ChickenScratch
         void Start()
         {
 
-            Screen.fullScreen = false;
+            Screen.fullScreen = true;
             
             
             if (SteamManager.Initialized)

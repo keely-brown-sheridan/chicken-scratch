@@ -18,6 +18,8 @@ namespace ChickenScratch
         public float scoreModifierDecrement;
         public float modifierIncreaseValue;
         public float maxScoreModifier;
+        public int bonusBirdbucks;
+        public int birdbucksPerCorrectWord;
 
         public void SetWords(Dictionary<int,List<string>> inPossibleWordsMap, Dictionary<int,string> inCorrectWordsMap, Dictionary<int,List<int>> inCorrectPromptMap)
         {
@@ -56,7 +58,13 @@ namespace ChickenScratch
             }
             else
             {
-                correctPrompt = GameDataManager.Instance.GetWord(correctWords[0]).value + " " + GameDataManager.Instance.GetWord(correctWords[1]).value;
+                CaseWordData prefix = GameDataManager.Instance.GetWord(correctWords[0]);
+                CaseWordData noun = GameDataManager.Instance.GetWord(correctWords[1]);
+                if(prefix != null && noun != null)
+                {
+                    correctPrompt = prefix.value + " " + noun.value;
+                }
+                
             }
             
             possibleWordsMap = possibleWords;

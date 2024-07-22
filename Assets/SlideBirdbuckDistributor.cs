@@ -45,6 +45,9 @@ namespace ChickenScratch
         [SerializeField]
         private Transform stealingHandTransform;
 
+        [SerializeField]
+        private CertificationEffectIndicator shareholdersEffectIndicator;
+
         private enum State
         {
             delay, distribute, stealing_reach, stealing_pull, inactive
@@ -71,9 +74,14 @@ namespace ChickenScratch
         {
             caseScoringData = inCaseScoringData;
             sections = inSummarySlideSections;
-            totalBirdBucksToDistribute = caseScoringData.GetTotalPoints();
+            //Do not steal birdbucks from players if the total goes below 0 - it can affect the total but not the money they've earned to this point
+            totalBirdBucksToDistribute = Mathf.Max(0,caseScoringData.GetTotalPoints());
             birdBucksRemaining = totalBirdBucksToDistribute;
-            if(inSummarySlideSections.Count != 0)
+
+            EndgameCaseData caseData = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[inCaseScoringData.caseID];
+
+
+            if (inSummarySlideSections.Count != 0)
             {
                 birdBucksToSteal = birdBucksRemaining % inSummarySlideSections.Count;
                 distributionFrequency = Mathf.Min((distributionTime - delayTime) / birdBucksRemaining * inSummarySlideSections.Count, 0.25f);
@@ -83,7 +91,21 @@ namespace ChickenScratch
                 birdBucksToSteal = 0;
                 distributionFrequency = 0.25f;
             }
-            
+
+            bool caseHasShareholdersCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(caseData.caseTypeName, "Shareholders");
+            if (caseHasShareholdersCertification)
+            {
+                FloatCertificationData shareholderCertification = (FloatCertificationData)GameDataManager.Instance.GetCertification("Shareholders");
+                if (shareholderCertification != null)
+                {
+                    shareholdersEffectIndicator.Show(shareholderCertification, shareholderCertification.value.ToString()+  " birdbucks distributed to shareholders");
+                    birdBucksToSteal = totalBirdBucksToDistribute;
+                    totalBirdBucksToDistribute = (int)(totalBirdBucksToDistribute * (1-shareholderCertification.value));
+                    birdBucksToSteal -= totalBirdBucksToDistribute;
+                }
+
+            }
+
             birdBucksRemainingText.text = birdBucksRemaining.ToString();
 
             if(birdBucksToSteal > 0)

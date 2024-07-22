@@ -68,6 +68,9 @@ MonoBehaviour:
     caseWordIdentifiers:
     - easy-prefix
     - noun
+  _percentageChanceOfGoodCertification: 10
+  _percentageChanceOfBadCertification: 25
+  _maxNumberOfSeals: 1
   selectionFrequency: 1
   maxScoreModifier: 1
   taskTimingData:

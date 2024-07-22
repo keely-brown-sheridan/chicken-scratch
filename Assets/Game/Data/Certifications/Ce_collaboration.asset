@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714f2a23ce3a46f4abcbd471c8908ff4, type: 3}
+  m_Name: Ce_collaboration
+  m_EditorClassIdentifier: 
+  identifier: Collaboration
+  type: 9
+  quality: 0
+  sealSprite: {fileID: -1615712108, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+  iconSprite: {fileID: 21300000, guid: 4d3346f9de9cbc84eb5b3ab7b304ebd6, type: 3}
+  sealColour: {r: 0.73795134, g: 1, b: 0.25943398, a: 1}
+  description: A taken case gains 1 birdbuck per correct word for every submitted
+    task where at least half the time was remaining.
+  value: 1

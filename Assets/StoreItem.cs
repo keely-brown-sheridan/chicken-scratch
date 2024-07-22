@@ -11,7 +11,8 @@ namespace ChickenScratch
         public enum StoreItemType
         {
             eraser, marker, white_out, reroll, category_preview, score_tracker, highlighter, stopwatch, case_tab, case_unlock, case_upgrade,
-            coffee_pot, coffee_mug, advertisement, nest_feathering, hat, case_frequency, contract
+            coffee_pot, coffee_mug, advertisement, nest_feathering, hat, case_frequency, campaign, case_certification, sponsorship, coffee_run, 
+            favour, corruption
         }
         [SerializeField]
         private TMPro.TMP_Text itemNameText;

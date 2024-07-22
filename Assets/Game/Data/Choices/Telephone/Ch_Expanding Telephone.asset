@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c5960dbc4aa1044a0794ad46fea8e9, type: 3}
+  m_Name: Ch_Expanding Telephone
+  m_EditorClassIdentifier: 
+  identifier: Expanding Telephone
+  caseFormat: 0
+  numberOfTasks: 4
+  pointsPerCorrectWord: 4
+  bonusPoints: 4
+  cost: 0
+  basePointsPerCorrectWord: 6
+  baseBonusPoints: 4
+  baseStartingModifier: 1
+  baseFrequency: 1
+  taskTemplates:
+  - roundIndex: 1
+    taskType: 0
+    duration: 90
+    taskModifiers: 12000000
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 2
+    taskType: 1
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 01000000
+    caseWordIndices: []
+  - roundIndex: 3
+    taskType: 4
+    duration: 90
+    taskModifiers: 12000000
+    requiredRoundTasks: 02000000
+    caseWordIndices: []
+  - roundIndex: 4
+    taskType: 5
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 03000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  difficulty: 1
+  penalty: 0
+  startingScoreModifier: 1
+  modifierDecrement: 0.1
+  taskFalloff: 0
+  colour: {r: 0.7980598, g: 0.9245283, b: 0.8940014, a: 1}
+  backgroundFontColour: {r: 0.4, g: 0.4509804, b: 0.44313726, a: 1}
+  importantFontColour: {r: 0.054512277, g: 0.3301887, b: 0.2612696, a: 1}
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - easy-prefix
+    - noun
+  _percentageChanceOfGoodCertification: 0
+  _percentageChanceOfBadCertification: 0
+  _maxNumberOfSeals: 1
+  selectionFrequency: 1
+  maxScoreModifier: 1
+  taskTimingData:
+  - taskType: 0
+    duration: 120
+  - taskType: 4
+    duration: 120
+  - taskType: 1
+    duration: 60
+  - taskType: 5
+    duration: 60
+  description: A telephone case where the drawing space expands over time. Your drawing
+    will be captioned by another player.
+  upgrades: []

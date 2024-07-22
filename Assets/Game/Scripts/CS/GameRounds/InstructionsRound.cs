@@ -65,7 +65,7 @@ namespace ChickenScratch
                 GameManager.Instance.playerFlowManager.drawingRound.deskRenderer.color = playerBird.bgColour;
             }
 
-            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
+            string currentDay = SettingsManager.Instance.GetCurrentDayName();
             int currentGoal = GameManager.Instance.playerFlowManager.GetCurrentGoal();
             dayInstructions.Show(currentDay, currentGoal);
         }

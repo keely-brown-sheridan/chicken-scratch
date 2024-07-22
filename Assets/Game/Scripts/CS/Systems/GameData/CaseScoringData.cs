@@ -20,33 +20,33 @@ namespace ChickenScratch
         {
 
         }
-        public CaseScoringData(EndgameCaseData caseData)
+        public CaseScoringData(EndgameCaseData caseData, int pointsPerCorrectWord, int bonusPoints)
         {
             caseID = caseData.identifier;
             CaseChoiceData originalCaseChoice = GameDataManager.Instance.GetCaseChoice(caseData.caseTypeName);
             GuessData guessData = caseData.guessData;
             CaseWordData prefix = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]);
             CaseWordData noun = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]);
-            Initialize(originalCaseChoice, caseData.scoreModifier, guessData, prefix, noun);
+            Initialize(pointsPerCorrectWord, bonusPoints, caseData.scoreModifier, guessData, prefix, noun);
         }
 
-        private void Initialize(CaseChoiceData originalCaseChoice, float currentModifier, GuessData guessData, CaseWordData prefix, CaseWordData noun)
+        private void Initialize(int pointsPerCorrectWord, int bonusPoints, float currentModifier, GuessData guessData, CaseWordData prefix, CaseWordData noun)
         {
             bool isPrefixCorrect = guessData.prefix == prefix.value;
             bool isNounCorrect = guessData.noun == noun.value;
             if (isPrefixCorrect)
             {
-                prefixBirdbucks = originalCaseChoice.pointsPerCorrectWord + prefix.difficulty;
+                prefixBirdbucks = pointsPerCorrectWord + prefix.difficulty;
             }           
 
             if (isNounCorrect)
             {
-                nounBirdbucks = originalCaseChoice.pointsPerCorrectWord + noun.difficulty;
+                nounBirdbucks = pointsPerCorrectWord + noun.difficulty;
             }
 
             if(isPrefixCorrect && isNounCorrect)
             {
-                bonusBirdbucks = originalCaseChoice.bonusPoints;
+                bonusBirdbucks = bonusPoints;
             }
 
             scoreModifier = currentModifier;
@@ -54,7 +54,37 @@ namespace ChickenScratch
 
         public int GetTotalPoints()
         {
-            return (int)((prefixBirdbucks + nounBirdbucks + bonusBirdbucks) * scoreModifier);
+            EndgameCaseData caseData = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
+            int baseBirdbucks = prefixBirdbucks + nounBirdbucks + bonusBirdbucks;
+
+            bool caseHasSanctionsCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(caseData.caseTypeName, "Sanctions");
+            if (caseHasSanctionsCertification)
+            {
+                IntCertificationData sanctionsCertification = (IntCertificationData)GameDataManager.Instance.GetCertification("Sanctions");
+                int numberOfIncorrectWords = 0;
+                CaseWordData prefixWord = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[1]);
+                CaseWordData nounWord = GameDataManager.Instance.GetWord(caseData.correctWordIdentifierMap[2]);
+
+                if (prefixWord != null && caseData.guessData.prefix != prefixWord.value)
+                {
+                    numberOfIncorrectWords++;
+                }
+                if (nounWord != null && caseData.guessData.noun != nounWord.value)
+                {
+                    numberOfIncorrectWords++;
+                }
+                if (sanctionsCertification != null)
+                {
+                    baseBirdbucks -= sanctionsCertification.value * numberOfIncorrectWords;
+                }
+            }
+
+            int birdbucksEarned = baseBirdbucks;
+            if (birdbucksEarned > 0)
+            {
+                birdbucksEarned = (int)(birdbucksEarned * scoreModifier);
+            }
+            return birdbucksEarned;
         }
     }
 }

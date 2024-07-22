@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static ChickenScratch.ColourManager;
@@ -8,146 +9,119 @@ namespace ChickenScratch
 {
     public class SummaryEmailContents : MonoBehaviour
     {
+        [SerializeField]
+        private GameObject birdbucksRowPrefab, casesRowPrefab, starsRowPrefab;
+
+        [SerializeField]
+        private Transform birdbucksRowHolder, casesRowHolder, starsRowHolder;
+
+        [SerializeField]
+        private Image birdbucksButtonImage, casesButtonImage, starsButtonImage;
+
+        [SerializeField]
+        private GameObject birdbucksTabHolder, casesTabHolder, starsTabHolder;
+
+        [SerializeField]
+        private Color selectedTabColour, deselectedTabColour;
+
+
+
+
         public Text outcomeText;
-        public List<GameObject> voteRoundObjects = new List<GameObject>();
-        [SerializeField]
-        private TimeBarGraph timeBarGraph;
-        [SerializeField]
-        private PointsPieChart pointsPieChart;
-        [SerializeField]
-        private BirdImage mostLikedImage;
-        [SerializeField]
-        private GameObject mostLikedHolder;
-
-        private Dictionary<int, GameObject> voteRoundObjectMap = new Dictionary<int, GameObject>();
-        private int currentRoundIndex = 1;
-
-        public void Initialize()
-        {
-            IndexMap currentIndex;
-            foreach (GameObject voteRoundObject in voteRoundObjects)
-            {
-                currentIndex = voteRoundObject.GetComponent<IndexMap>();
-                voteRoundObjectMap.Add(currentIndex.index, voteRoundObject);
-            }
-        }
 
         public void setSummaryContents()
         {
-            BirdData bestBird = GameDataManager.Instance.GetBird(PlayerFlowManager.employeeOfTheMonth);
-            if (bestBird == null)
-            {
-                mostLikedHolder.SetActive(false);
-            }
-            else
-            {
-                BirdHatData.HatType birdHat = GameManager.Instance.playerFlowManager.GetBirdHatType(PlayerFlowManager.employeeOfTheMonth);
-                mostLikedImage.Initialize(PlayerFlowManager.employeeOfTheMonth, birdHat);
-            }
-            
-            Dictionary<BirdName, float> pointsMap = new Dictionary<BirdName, float>();
-            Dictionary<BirdName, float> timeMap = new Dictionary<BirdName, float>();
+            Dictionary<BirdName, int> birdbucksMap = new Dictionary<BirdName, int>();
+            Dictionary<BirdName, int> starsMap = new Dictionary<BirdName, int>();
+            Dictionary<BirdName, List<Color>> folderColoursMap = new Dictionary<BirdName, List<Color>>();
 
-            foreach (EndgameCaseData currentCase in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
+            //Iterate over all cases to determine how many birdbucks each player got, what cases they were involved in and how many stars they received
+            foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
-                BirdName guesser = currentCase.GetGuesser();
-                if (guesser != BirdName.none)
+                Color folderColour = GameDataManager.Instance.GetCaseChoice(caseData.caseTypeName).colour;
+                int birdbucksEarned = caseData.taskDataMap.Count != 0 ? caseData.scoringData.GetTotalPoints() : 0;
+                foreach (EndgameTaskData taskData in caseData.taskDataMap.Values)
                 {
-                    if (!pointsMap.ContainsKey(guesser))
+                    if (!birdbucksMap.ContainsKey(taskData.assignedPlayer))
                     {
-                        pointsMap.Add(guesser, 0);
+                        birdbucksMap.Add(taskData.assignedPlayer, 0);
+                        starsMap.Add(taskData.assignedPlayer, 0);
+                        folderColoursMap.Add(taskData.assignedPlayer, new List<Color>());
                     }
-                    pointsMap[guesser] += currentCase.taskDataMap.Count != 0 ? currentCase.scoringData.GetTotalPoints()/ currentCase.taskDataMap.Count : 0;
-                }
-                foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
-                {
-                    if(currentTask.assignedPlayer == BirdName.none)
-                    {
-                        continue;
-                    }
-                    if (!timeMap.ContainsKey(currentTask.assignedPlayer))
-                    {
-                        timeMap.Add(currentTask.assignedPlayer, 0.0f);
-                    }
-                    switch(currentTask.taskType)
-                    {
-                        case TaskData.TaskType.base_drawing:
-                        case TaskData.TaskType.add_drawing:
-                        case TaskData.TaskType.compile_drawing:
-                        case TaskData.TaskType.copy_drawing:
-                        case TaskData.TaskType.prompt_drawing:
-                        case TaskData.TaskType.blender_drawing:
-                            timeMap[currentTask.assignedPlayer] += currentTask.drawingData.timeTaken;
-                            break;
-                        case TaskData.TaskType.prompting:
-                            timeMap[currentTask.assignedPlayer] += currentTask.promptData.timeTaken;
-                            break;
-                        case TaskData.TaskType.morph_guessing:
-                        case TaskData.TaskType.base_guessing:
-                            timeMap[currentTask.assignedPlayer] += currentCase.guessData.timeTaken;
-                            break;
-                    }
-                    //timeMap[currentTask.assignedPlayer] += currentTask.timeTaken;
+                    birdbucksMap[taskData.assignedPlayer] += birdbucksEarned / caseData.taskDataMap.Count;
+                    starsMap[taskData.assignedPlayer] += taskData.ratingData.likeCount;
+                    folderColoursMap[taskData.assignedPlayer].Add(folderColour);
                 }
             }
-            timeBarGraph.SetTimeValues(timeMap);
-            pointsPieChart.SetPointValues(pointsMap);
+
+            //Determine what the highest amount of birdbucks was
+            int highestBirdbucksTotal = 0;
+            foreach (int value in birdbucksMap.Values)
+            {
+                if (value > highestBirdbucksTotal)
+                {
+                    highestBirdbucksTotal = value;
+                }
+            }
+            //Order the birds by what's highest then create corresponding rows for each type
+            List<BirdName> allBirds = birdbucksMap.OrderBy(bb => bb.Value).Select(bb => bb.Key).ToList();
+            foreach(BirdName bird in allBirds)
+            {
+                GameObject instantiatedBirdbucksRow = Instantiate(birdbucksRowPrefab, birdbucksRowHolder);
+                ResultsBirdbuckRow resultsBirdbuckRow = instantiatedBirdbucksRow.GetComponent<ResultsBirdbuckRow>();
+                resultsBirdbuckRow.Initialize(bird, ((float)(birdbucksMap[bird])) / ((float)highestBirdbucksTotal));
+            }
+
+            allBirds = folderColoursMap.OrderBy(fcs => fcs.Value.Count).Select(fcs => fcs.Key).ToList();
+            foreach(BirdName bird in allBirds)
+            {
+                GameObject instantiatedFolderColoursRow = Instantiate(casesRowPrefab, casesRowHolder);
+                ResultsCasesRow resultsCasesRow = instantiatedFolderColoursRow.GetComponent<ResultsCasesRow>();
+                resultsCasesRow.Initialize(bird, folderColoursMap[bird]);
+            }
+
+            allBirds = starsMap.OrderBy(s => s.Value).Select(s => s.Key).ToList();
+            foreach(BirdName bird in allBirds)
+            {
+                GameObject instantiatedStarsRow = Instantiate(starsRowPrefab, starsRowHolder);
+                ResultsStarRow starsRow = instantiatedStarsRow.GetComponent<ResultsStarRow>();
+                starsRow.Initialize(bird, starsMap[bird]);
+            }
+
+            OnBirdbucksTabSelected();
         }
 
-
-
-        public void setNumberOfVoteRounds(int numberOfVoteRounds)
+        public void OnBirdbucksTabSelected()
         {
-            if (numberOfVoteRounds == -1 || numberOfVoteRounds == 0)
-            {
-                return;
-            }
-            int iterator = 0;
-            IndexMap currentIndex;
-
-            voteRoundObjectMap.Clear();
-            foreach (GameObject voteRoundObject in voteRoundObjects)
-            {
-                if (iterator == numberOfVoteRounds)
-                {
-                    break;
-                }
-                iterator++;
-                currentIndex = voteRoundObject.GetComponent<IndexMap>();
-                voteRoundObjectMap.Add(currentIndex.index, voteRoundObject);
-            }
+            AudioManager.Instance.PlaySoundVariant("sfx_ui_int_gen_sel");
+            birdbucksButtonImage.color = selectedTabColour;
+            casesButtonImage.color = deselectedTabColour;
+            starsButtonImage.color = deselectedTabColour;
+            birdbucksTabHolder.SetActive(true);
+            casesTabHolder.SetActive(false);
+            starsTabHolder.SetActive(false);
         }
 
-        public void shiftPageLeft()
+        public void OnCasesTabSelected()
         {
-
-            if (voteRoundObjectMap.ContainsKey(currentRoundIndex))
-            {
-                AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
-                voteRoundObjectMap[currentRoundIndex].SetActive(false);
-                currentRoundIndex--;
-                if (currentRoundIndex <= 0)
-                {
-                    currentRoundIndex = voteRoundObjectMap.Count;
-                }
-                voteRoundObjectMap[currentRoundIndex].SetActive(true);
-            }
+            AudioManager.Instance.PlaySoundVariant("sfx_ui_int_gen_sel");
+            birdbucksButtonImage.color = deselectedTabColour;
+            casesButtonImage.color = selectedTabColour;
+            starsButtonImage.color = deselectedTabColour;
+            birdbucksTabHolder.SetActive(false);
+            casesTabHolder.SetActive(true);
+            starsTabHolder.SetActive(false);
         }
 
-        public void shiftPageRight()
+        public void OnStarsTabSelected()
         {
-            if (voteRoundObjectMap.ContainsKey(currentRoundIndex))
-            {
-                AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
-                voteRoundObjectMap[currentRoundIndex].SetActive(false);
-                currentRoundIndex++;
-                if (currentRoundIndex > voteRoundObjectMap.Count)
-                {
-                    currentRoundIndex = 1;
-                }
-                voteRoundObjectMap[currentRoundIndex].SetActive(true);
-            }
-
+            AudioManager.Instance.PlaySoundVariant("sfx_ui_int_gen_sel");
+            birdbucksButtonImage.color = deselectedTabColour;
+            casesButtonImage.color = deselectedTabColour;
+            starsButtonImage.color = selectedTabColour;
+            birdbucksTabHolder.SetActive(false);
+            casesTabHolder.SetActive(false);
+            starsTabHolder.SetActive(true);
         }
     }
 }

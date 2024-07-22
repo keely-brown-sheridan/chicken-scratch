@@ -80,6 +80,7 @@ namespace ChickenScratch
         private Dictionary<TaskData.TaskModifier, GameObject> drawingBoxMap = new Dictionary<TaskData.TaskModifier, GameObject>();
         private Drawing currentDrawing = null;
         private TaskData.TaskModifier boxType;
+        private float timeInTask;
         public TaskData.TaskModifier drawingType => _drawingType;
         private TaskData.TaskModifier _drawingType = TaskData.TaskModifier.invalid;
 
@@ -127,6 +128,11 @@ namespace ChickenScratch
                 currentDrawingToolType = DrawingToolType.colour_marker;
                 isInitialized = true;
             }
+        }
+
+        public void SetTimeInTask(float inTimeInTask)
+        {
+            timeInTask = inTimeInTask;
         }
 
         public void SetDrawingBoxType(TaskData.TaskModifier inBoxType)
@@ -305,6 +311,16 @@ namespace ChickenScratch
             if (drawingBoxMap.ContainsKey(boxType))
             {
                 drawingBoxMap[boxType].SetActive(true);
+                if(boxType == TaskData.TaskModifier.expanding ||
+                    boxType == TaskData.TaskModifier.collapsing)
+                {
+                    //Initialize with the time for the task
+                    CollapsingBoxType collapsingBoxType = drawingBoxMap[boxType].GetComponent<CollapsingBoxType>();
+                    if(collapsingBoxType != null)
+                    {
+                        collapsingBoxType.Initialize(timeInTask);
+                    }
+                }
             }
             else
             {
@@ -318,7 +334,7 @@ namespace ChickenScratch
             Vector2 temp = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100.0f, drawingLayer);
-            isMouseInDrawingArea = hit;
+            isMouseInDrawingArea = hit && hit.collider.gameObject.GetComponent<DrawingBlocker>() == null;
             isLeftMouseHeld = Input.GetMouseButton(0);
             isLeftMouseDown = Input.GetMouseButtonDown(0);
             isLeftMouseUp = Input.GetMouseButtonUp(0);

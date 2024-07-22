@@ -86,7 +86,7 @@ namespace ChickenScratch
         private BirdImage unlockerImage;
 
         [SerializeField]
-        private StoreUnlockChoice optionA, optionB;
+        private ContractChoice optionA, optionB;
 
         [SerializeField]
         private List<BirdHatData.HatType> availableHats = new List<BirdHatData.HatType>();
@@ -106,6 +106,9 @@ namespace ChickenScratch
         [SerializeField]
         private TMPro.TMP_Text middleRowUnlockCostText, bottomRowUnlockCostText;
 
+        [SerializeField]
+        private List<CertificationEffectIndicator> expiryEffectIndicators;
+
         public enum State
         {
             unlock, store
@@ -123,6 +126,9 @@ namespace ChickenScratch
 
         [SerializeField]
         private float startReachingTime;
+
+        [SerializeField]
+        private StoreReviewPanel storeReviewPanel;
 
         public int currentMoney => _currentMoney;
 
@@ -144,14 +150,21 @@ namespace ChickenScratch
         private int currentRestockCost = 0;
         private float timeSinceLastArmUpdate = 0f;
         private bool hasStartedReaching = false;
-        private StoreUnlockChoice defaultChoice;
+        private ContractChoice defaultChoice;
         private int storeItemAdditions;
         private int currentStoreTier = 1;
 
-
+        private bool initialized = false;
+        public bool hasChosen = false;
         public override void StartRound()
         {
             base.StartRound();
+
+            if(!initialized)
+            {
+                Initialize();
+            }
+            hasChosen = false;
             currentRestockCost = SettingsManager.Instance.gameMode.baseRestockCost;
             Cursor.visible = false;
             restockParentObject.SetActive(false);
@@ -161,8 +174,25 @@ namespace ChickenScratch
             List<BirdName> allPlayers = SettingsManager.Instance.GetAllActiveBirds();
             waitingOnPlayersObjectMap.Clear();
 
+            int expiryIndex = 0;
+            //Check for expired case types
+            for(int i = GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Count - 1; i >= 0; i--)
+            {
+                if(SettingsManager.Instance.isHost)
+                {
+                    string activeCaseType = GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers[i];
+                    if (GameManager.Instance.playerFlowManager.CaseHasCertification(activeCaseType, "Expiration"))
+                    {
+                        GameManager.Instance.gameDataHandler.RpcShowStoreCaseExpiry(activeCaseType, expiryIndex);
+                        GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Remove(activeCaseType);
+                        expiryIndex++;
+                    }
+                }
 
-            if(allPlayers.Count > 2)
+            }
+
+
+            if(allPlayers.Count >= 2)
             {
                 //We have enough for the unlocks phase
                 if(SettingsManager.Instance.isHost)
@@ -196,6 +226,22 @@ namespace ChickenScratch
             GenerateLongArms();
             
             storeObject.SetActive(true);
+            GameManager.Instance.playerFlowManager.ResetTomorrowOnlyValues();
+        }
+
+        private void Initialize()
+        {
+            List<CaseChoiceData> initialCaseChoices = new List<CaseChoiceData>();
+            foreach(string caseChoiceIdentifier in SettingsManager.Instance.gameMode.baseUnlockedChoiceIdentifiers)
+            {
+                CaseChoiceData initialCaseChoice = GameDataManager.Instance.GetCaseChoice(caseChoiceIdentifier);
+                if(initialCaseChoice != null && initialCaseChoice.numberOfTasks <= SettingsManager.Instance.GetPlayerNameCount())
+                {
+                    initialCaseChoices.Add(initialCaseChoice);
+                }
+            }
+            storeReviewPanel.Initialize(initialCaseChoices);
+            initialized = true;
         }
 
         public void ForceChoice()
@@ -255,58 +301,86 @@ namespace ChickenScratch
             List<string> caseTypesToAdd = currentDay.caseTypesToAddToPool;
             GameManager.Instance.playerFlowManager.caseChoiceUnlockPool.AddRange(caseTypesToAdd);
 
-            //Generate the options
-            List<string> pool = new List<string>(GameManager.Instance.playerFlowManager.caseChoiceUnlockPool);
+            //Generate the case type unlock options
+            List<string> caseUnlockPool = new List<string>(GameManager.Instance.playerFlowManager.caseChoiceUnlockPool);
 
-            List<string> choiceAOptions = new List<string>();
-            for(int i = 0; i < currentDay.numberOfCaseTypeUnlocks; i++)
+            //Randomly choose a store unlock option
+            List<StoreChoiceOptionData> storeChoicePool = new List<StoreChoiceOptionData>(SettingsManager.Instance.GetStoreChoiceOptionsForDay());
+            storeChoicePool = storeChoicePool.OrderBy(x => System.Guid.NewGuid()).ToList();
+
+            StoreChoiceOptionData storeChoiceOptionA = storeChoicePool[0];
+            storeChoicePool.RemoveAt(0);
+            for(int i = 0; i < storeChoiceOptionA.numberOfUnlocks; i++)
             {
                 //Randomize the order
-                pool = pool.OrderBy(x => System.Guid.NewGuid()).ToList();
+                caseUnlockPool = caseUnlockPool.OrderBy(x => System.Guid.NewGuid()).ToList();
                 
-                for(int j = pool.Count - 1; j >= 0; j--)
+                for(int j = caseUnlockPool.Count - 1; j >= 0; j--)
                 {
-                    CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(pool[j]);
+                    CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(caseUnlockPool[j]);
                     if (choice != null && choice.numberOfTasks <= numberOfPlayers)
                     {
-                        choiceAOptions.Add(choice.identifier);
-                        pool.RemoveAt(j);
+                        ContractCaseUnlockData unlockData = new ContractCaseUnlockData()
+                        {
+                            identifier = choice.identifier,
+                            minBirdbucks = choice.bonusPoints + choice.pointsPerCorrectWord * 2 + 2,
+                            maxBirdbucks = choice.bonusPoints + choice.pointsPerCorrectWord * 2 + 10
+                        };
+
+                        if(choice.maxNumberOfSeals > 0)
+                        {
+                            unlockData.certificationIdentifier = GameDataManager.Instance.GetRandomCertificationIdentifier(choice.percentageChanceOfGoodCertification, choice.percentageChanceOfBadCertification);
+                        }
+                        storeChoiceOptionA.unlocks.Add(unlockData);
+
+                        caseUnlockPool.RemoveAt(j);
                         break;
                     }
                 }
                 
             }
-
-            List<string> choiceBOptions = new List<string>();
-            for (int i = 0; i < currentDay.numberOfCaseTypeUnlocks; i++)
+            StoreChoiceOptionData storeChoiceOptionB = storeChoicePool[0];
+            storeChoicePool.RemoveAt(0);
+            for (int i = 0; i < storeChoiceOptionB.numberOfUnlocks; i++)
             {
                 //Randomize the order
-                pool = pool.OrderBy(x => System.Guid.NewGuid()).ToList();
-                for (int j = pool.Count - 1; j >= 0; j--)
+                caseUnlockPool = caseUnlockPool.OrderBy(x => System.Guid.NewGuid()).ToList();
+                for (int j = caseUnlockPool.Count - 1; j >= 0; j--)
                 {
-                    CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(pool[j]);
+                    CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(caseUnlockPool[j]);
                     
                     if (choice != null && choice.numberOfTasks <= numberOfPlayers)
                     {
-                        choiceBOptions.Add(choice.identifier);
-                        pool.RemoveAt(j);
+                        ContractCaseUnlockData unlockData = new ContractCaseUnlockData()
+                        {
+                            identifier = choice.identifier,
+                            minBirdbucks = choice.bonusPoints + choice.pointsPerCorrectWord * 2 + 2,
+                            maxBirdbucks = choice.bonusPoints + choice.pointsPerCorrectWord * 2 + 10
+                        };
+
+                        if (choice.maxNumberOfSeals > 0)
+                        {
+                            unlockData.certificationIdentifier = GameDataManager.Instance.GetRandomCertificationIdentifier(choice.percentageChanceOfGoodCertification, choice.percentageChanceOfBadCertification);
+                        }
+                        storeChoiceOptionB.unlocks.Add(unlockData);
+                        caseUnlockPool.RemoveAt(j);
                         break;
                     }
                 }
             }
 
             //Send relevant information to all players
-            GameManager.Instance.gameDataHandler.RpcInitializeStoreUnlock(choiceAOptions, choiceBOptions, unionRep, Random.Range(0, 2) > 0);
+            GameManager.Instance.gameDataHandler.RpcInitializeStoreUnlock(storeChoiceOptionA, storeChoiceOptionB, unionRep, Random.Range(0, 2) > 0);
 
             GameManager.Instance.gameFlowManager.timeRemainingInPhase = unlockTime;
             GameManager.Instance.gameDataHandler.RpcUpdateTimer(unlockTime);
         }
 
-        public void ClientInitializeUnlocks(List<string> optionAChoices, List<string> optionBChoices, BirdName unionRep, bool defaultChoiceA)
+        public void ClientInitializeUnlocks(StoreChoiceOptionData storeChoiceOptionA, StoreChoiceOptionData storeChoiceOptionB, BirdName unionRep, bool defaultChoiceA)
         {
             _currentState = State.unlock;
-            optionA.Initialize(optionAChoices, unionRep);
-            optionB.Initialize(optionBChoices, unionRep);
+            optionA.Initialize(unionRep, storeChoiceOptionA);
+            optionB.Initialize(unionRep, storeChoiceOptionB);
 
             if(SettingsManager.Instance.birdName == unionRep)
             {
@@ -314,7 +388,7 @@ namespace ChickenScratch
             }
             else
             {
-                unlocksInstructionText.text = "Waiting for " + GameManager.Instance.playerFlowManager.playerNameMap[unionRep] + " to choose an option.";
+                unlocksInstructionText.text = "Waiting for " + GameManager.Instance.playerFlowManager.playerNameMap[unionRep] + " to choose a contract.";
             }
             BirdData unlockerBird = GameDataManager.Instance.GetBird(unionRep);
             if(unlockerBird != null)
@@ -379,12 +453,14 @@ namespace ChickenScratch
         {
             _currentMoney += money;
             currentMoneyText.text = _currentMoney.ToString();
+            GameManager.Instance.playerFlowManager.drawingRound.birdbucksText.text = currentMoney.ToString();
         }
 
         public void DecreaseCurrentMoney(int money)
         {
             _currentMoney -= money;
             currentMoneyText.text = _currentMoney.ToString();
+            GameManager.Instance.playerFlowManager.drawingRound.birdbucksText.text = currentMoney.ToString();
         }
 
         public void ShowUnaffordableNotification()
@@ -646,16 +722,73 @@ namespace ChickenScratch
             return true;
         }
 
-        private bool CreateColumnStoreItemData(int index)
+        public void RestockColumnItem(int index)
         {
-            if(Random.Range(0,3) == 0)
+            foreach(StoreItem storeItem in storeItems)
             {
-                return CreateUpgradeStoreItemData(index);
+                if(storeItem.index == index && storeItem.currentState == StoreItem.State.out_of_stock)
+                {
+                    CreateColumnStoreItemData(index);
+                }
             }
-            else
+        }
+
+        public bool CreateColumnStoreItemData(int index)
+        {
+            bool successfullyCreated = false;
+            int randomChoice = Random.Range(0, 3);
+           
+            if (randomChoice == 0)
             {
-                return CreateFrequencyStoreItemData(index);
+
+                successfullyCreated = CreateFrequencyStoreItemData(index); 
+                if(successfullyCreated)
+                {
+                    return true;
+                }
             }
+            if(randomChoice == 1)
+            {
+                successfullyCreated = CreateCertificationStoreItemData(index);
+                if(successfullyCreated)
+                {
+                    return true;
+                }
+            }
+
+            return CreateUpgradeStoreItemData(index);
+            
+        }
+
+        private bool CreateCertificationStoreItemData(int index)
+        {
+            CaseCertificationStoreItemData storeItemData = GameDataManager.Instance.GetCertificationStoreItem();
+            if (storeItemData == null)
+            {
+                //.LogError("No upgrade store items could be generated.");
+                return false;
+            }
+
+            //Iterate through cases and try to find one that has not been fully certified
+            CaseChoiceData uncertifiedCase = GameDataManager.Instance.GetUncertifiedCaseChoice();
+            if(uncertifiedCase == null)
+            {
+                return false;
+            }
+
+            CertificationData unusedGoodCertification = GameDataManager.Instance.GetUnusedGoodCertification(uncertifiedCase.identifier);
+            if(unusedGoodCertification == null)
+            {
+                return false;
+            }
+            CaseCertificationStoreItemData newStoreItem = new CaseCertificationStoreItemData();
+            newStoreItem.Initialize(storeItemData);
+            newStoreItem.index = index;
+            newStoreItem.caseChoiceIdentifier = uncertifiedCase.identifier;
+            newStoreItem.certificationIdentifier = unusedGoodCertification.identifier;
+            activeStoreItemMap.Add(index, newStoreItem);
+            GameManager.Instance.gameDataHandler.RpcSendCertificationStoreItemWrapper(newStoreItem);
+            return true;
         }
 
         private bool CreateUpgradeStoreItemData(int index)
@@ -740,7 +873,9 @@ namespace ChickenScratch
             }
             else if(oldStoreItemData.itemType == StoreItem.StoreItemType.case_tab || oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_pot ||
                     oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_mug || oldStoreItemData.itemType == StoreItem.StoreItemType.nest_feathering ||
-                    oldStoreItemData.itemType == StoreItem.StoreItemType.advertisement || oldStoreItemData.itemType == StoreItem.StoreItemType.contract)
+                    oldStoreItemData.itemType == StoreItem.StoreItemType.advertisement || oldStoreItemData.itemType == StoreItem.StoreItemType.campaign ||
+                    oldStoreItemData.itemType == StoreItem.StoreItemType.favour || oldStoreItemData.itemType == StoreItem.StoreItemType.sponsorship ||
+                    oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_run || oldStoreItemData.itemType == StoreItem.StoreItemType.corruption)
             {
                 //Broadcast to players to create
                 ValueStoreItemData valueItem = new ValueStoreItemData();
@@ -810,7 +945,8 @@ namespace ChickenScratch
                 Transform spawningParent = storeItemHolderParent;
                 if (storeItemData.itemType == StoreItem.StoreItemType.case_upgrade ||
                     storeItemData.itemType == StoreItem.StoreItemType.case_frequency ||
-                    storeItemData.itemType == StoreItem.StoreItemType.case_unlock)
+                    storeItemData.itemType == StoreItem.StoreItemType.case_unlock ||
+                    storeItemData.itemType == StoreItem.StoreItemType.case_certification)
                 {
                     spawningParent = columnStoreItemHolderParent;
                 }
@@ -840,17 +976,25 @@ namespace ChickenScratch
 
         public void HandleClientRequestItem(BirdName client, int itemIndex)
         {
-            if(activeStoreItemMap.ContainsKey(itemIndex))
+            CaseChoiceData caseChoice;
+            if (activeStoreItemMap.ContainsKey(itemIndex))
             {
                 switch(activeStoreItemMap[itemIndex].itemType)
                 {
                     case StoreItem.StoreItemType.case_unlock:
                         CaseUnlockStoreItemData unlockData = (CaseUnlockStoreItemData)activeStoreItemMap[itemIndex];
-                        GameDataManager.Instance.UnlockCaseChoice(unlockData.caseChoiceIdentifier);
+                        GameDataManager.Instance.UnlockCaseChoice(unlockData.caseChoiceIdentifier, "");
                         break;
                     case StoreItem.StoreItemType.case_upgrade:
                         CaseUpgradeStoreItemData upgradeData = (CaseUpgradeStoreItemData)activeStoreItemMap[itemIndex];
-
+                        if(upgradeData.upgradeRampData.modifierIncrease > 0)
+                        {
+                            GameManager.Instance.gameDataHandler.RpcStoreIncreaseModifierForCase(upgradeData.caseChoiceIdentifier);
+                        }
+                        else
+                        {
+                            GameManager.Instance.gameDataHandler.RpcStoreIncreaseBirdbucksForCase(upgradeData.caseChoiceIdentifier);
+                        }
                         foreach (StoreItemData upgrade in upgradeData.unlocks)
                         {
                             if(upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
@@ -868,10 +1012,11 @@ namespace ChickenScratch
                         break;
                     case StoreItem.StoreItemType.case_frequency:
                         CaseFrequencyStoreItemData frequencyData = (CaseFrequencyStoreItemData)activeStoreItemMap[itemIndex];
-                        CaseChoiceData caseChoice = GameDataManager.Instance.GetCaseChoice(frequencyData.caseChoiceIdentifier);
+                        caseChoice = GameDataManager.Instance.GetCaseChoice(frequencyData.caseChoiceIdentifier);
                         if(caseChoice != null)
                         {
                             caseChoice.selectionFrequency += frequencyData.frequencyIncrease;
+                            GameManager.Instance.gameDataHandler.RpcStoreIncreaseFrequencyForCase(frequencyData.caseChoiceIdentifier);
                             GameManager.Instance.gameDataHandler.RpcIncreaseCaseChoiceFrequency(activeStoreItemMap[itemIndex].itemName);
                             GameDataManager.Instance.RemoveFrequencyItem(frequencyData);
                         }
@@ -888,24 +1033,65 @@ namespace ChickenScratch
                             }
                         }
                         break;
+                    case StoreItem.StoreItemType.case_certification:
+                        CaseCertificationStoreItemData certificationData = (CaseCertificationStoreItemData)activeStoreItemMap[itemIndex];
+                        caseChoice = GameDataManager.Instance.GetCaseChoice(certificationData.caseChoiceIdentifier);
+                        CertificationData certification = GameDataManager.Instance.GetCertification(certificationData.certificationIdentifier);
+                        if(caseChoice != null && certification != null)
+                        {
+                            GameManager.Instance.playerFlowManager.AddCaseCertification(caseChoice.identifier, certification.identifier);
+                            GameManager.Instance.gameDataHandler.RpcAddCaseCertification(caseChoice.identifier, certification.identifier);
+                            certification.Enable(caseChoice);
+                        }
+
+                        break;
                     case StoreItem.StoreItemType.coffee_pot:
                         GameDataManager.Instance.RemoveStoreItemType(StoreItem.StoreItemType.coffee_pot);
                         ValueStoreItemData coffeePotData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
-
-                        GameManager.Instance.playerFlowManager.dailyTimeIncrease += coffeePotData.value;
+                        GameManager.Instance.playerFlowManager.timeIncreaseRatio += coffeePotData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
+                        break;
+                    case StoreItem.StoreItemType.coffee_run:
+                        ValueStoreItemData coffeeRunData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
+                        GameManager.Instance.playerFlowManager.baseTimeIncrease += coffeeRunData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
                         break;
                     case StoreItem.StoreItemType.coffee_mug:
                         ValueStoreItemData coffeeMugData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
-                        GameManager.Instance.playerFlowManager.baseTimeIncrease += coffeeMugData.value;
+                        GameManager.Instance.playerFlowManager.tomorrowOnlyTimeIncrease += coffeeMugData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
                         break;
                     case StoreItem.StoreItemType.advertisement:
-                    case StoreItem.StoreItemType.contract:
                         ValueStoreItemData advertisementData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
-                        GameManager.Instance.playerFlowManager.baseCasesIncrease += (int)advertisementData.value;
+                        GameManager.Instance.playerFlowManager.tomorrowOnlyCasesIncrease += (int)advertisementData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
+                        break;
+                    case StoreItem.StoreItemType.campaign:
+                        ValueStoreItemData campaignData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
+                        GameManager.Instance.playerFlowManager.baseCasesIncrease += (int)campaignData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
+                        break;
+                    case StoreItem.StoreItemType.sponsorship:
+                        GameDataManager.Instance.RemoveStoreItemType(StoreItem.StoreItemType.sponsorship);
+                        ValueStoreItemData sponsorshipData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
+                        GameManager.Instance.playerFlowManager.caseIncreaseRatio += sponsorshipData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
+                        break;
+                    case StoreItem.StoreItemType.favour:
+                        ValueStoreItemData favourData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
+                        GameManager.Instance.playerFlowManager.tomorrowOnlyQuotaDecrease -= (int)favourData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
                         break;
                     case StoreItem.StoreItemType.nest_feathering:
                         ValueStoreItemData nestFeatheringData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
                         GameManager.Instance.playerFlowManager.baseQuotaDecrement -= (int)nestFeatheringData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
+                        break;
+                    case StoreItem.StoreItemType.corruption:
+                        GameDataManager.Instance.RemoveStoreItemType(StoreItem.StoreItemType.corruption);
+                        ValueStoreItemData corruptionData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
+                        GameManager.Instance.playerFlowManager.quotaDecreaseRatio -= corruptionData.value;
+                        GameManager.Instance.playerFlowManager.PropagateDailyValues();
                         break;
                     case StoreItem.StoreItemType.hat:
                         
@@ -928,7 +1114,7 @@ namespace ChickenScratch
                 StoreItem.StoreItemType itemType = activeStoreItemMap[itemIndex].itemType;
                 activeStoreItemMap.Remove(itemIndex);
 
-                if(itemType == StoreItem.StoreItemType.case_upgrade || itemType == StoreItem.StoreItemType.case_frequency)
+                if(itemType == StoreItem.StoreItemType.case_upgrade || itemType == StoreItem.StoreItemType.case_frequency || itemType == StoreItem.StoreItemType.case_certification)
                 {
                     CreateColumnStoreItemData(itemIndex);
                 }
@@ -973,11 +1159,6 @@ namespace ChickenScratch
                 currentMoneyText.text = _currentMoney.ToString();
                 GameManager.Instance.gameDataHandler.CmdRequestRestock();
             }
-        }
-
-        public bool HasChosen()
-        {
-            return optionA.hasChosen || optionB.hasChosen;
         }
 
         public void OnUnlockMiddleRowPress()
@@ -1029,6 +1210,40 @@ namespace ChickenScratch
         {
             bottomRowBGObject.GetComponent<Image>().color = unlockedRowColour;
             bottomRowUnlockButtonObject.SetActive(false);
+        }
+
+        public void SetStoreChoiceOption(StoreChoiceOptionData storeChoiceOption)
+        {
+            storeReviewPanel.AddPreviousChoice(storeChoiceOption.dayName, storeChoiceOption.unlocks, (int)(storeChoiceOption.birdbucksPerPlayer * SettingsManager.Instance.GetPlayerNameCount()), storeChoiceOption.timeRamp);
+        }
+
+        public void IncreaseModifierForCase(string caseChoiceIdentifier)
+        {
+            storeReviewPanel.UpgradeMultiplierForCase(caseChoiceIdentifier);
+        }
+
+        public void IncreaseBirdbucksForCase(string caseChoiceIdentifier)
+        {
+            storeReviewPanel.UpgradeBirdbucksForCase(caseChoiceIdentifier);
+        }
+
+        public void IncreaseFrequencyForCase(string caseChoiceIdentifier)
+        {
+            storeReviewPanel.UpgradeFrequencyForCase(caseChoiceIdentifier);
+        }
+
+        public void UpdateReviewPanelCertification(string identifier, string certificationIdentifier)
+        {
+            storeReviewPanel.UpdateCertificationForCase(identifier, certificationIdentifier);
+        }
+
+        public void ShowExpiryEffectIndicator(string caseIdentifier, int expiryVisualIndex)
+        {
+            CertificationData expiryCertification = GameDataManager.Instance.GetCertification("Expiration");
+            if(expiryCertification != null && expiryVisualIndex >= expiryEffectIndicators.Count)
+            {
+                expiryEffectIndicators[expiryVisualIndex].Show(expiryCertification, caseIdentifier + " has expired.");
+            }
         }
     }
 }

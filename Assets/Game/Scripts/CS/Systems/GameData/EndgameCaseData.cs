@@ -22,6 +22,7 @@ namespace ChickenScratch
         public Color caseTypeColour = Color.white;
         public CaseScoringData scoringData = new CaseScoringData();
         public bool hasBeenShown = false;
+        public string dayName = "";
 
         public EndgameCaseData()
         {
@@ -41,6 +42,7 @@ namespace ChickenScratch
             penalty = inChainData.penalty;
             caseTypeName = inChainData.caseTypeName;
             caseTypeColour = inChainData.caseTypeColour;
+            dayName = SettingsManager.Instance.GetCurrentDayName();
 
             foreach(TaskData gameTask in inChainData.taskQueue)
             {
@@ -90,7 +92,7 @@ namespace ChickenScratch
                 }
                 taskDataMap.Add(taskRound, endgameTaskData);
             }
-            scoringData = new CaseScoringData(this);
+            scoringData = new CaseScoringData(this, inChainData.pointsPerCorrectWord, inChainData.pointsForBonus);
         }
 
         public EndgameCaseData(EndgameCaseNetData netData)
@@ -126,6 +128,7 @@ namespace ChickenScratch
             caseTypeName = netData.caseTypeName;
             caseTypeColour = netData.caseTypeColour;
             scoringData = netData.scoringData;
+            dayName = netData.dayName;
         }
 
         public void IncreaseRating(int round, ColourManager.BirdName target)

@@ -14,19 +14,13 @@ namespace ChickenScratch
             worker_early_win, worker_win, traitor_win, incomplete, worker_early_loss
         }
 
-        public List<ResultVoteRow> allResultVoteRows;
         public Transform emailButtonContainer;
 
-        
-        public WorkersOutcomeContents workerWinWindow, workerWinWindow2;
+
         public SummaryEmailContents gameSummaryWindow;
-        public FileSummaryEmailContents fileSummaryWindow;
-
-
         public GameObject containerObject;
         public EndGameState endgameState = EndGameState.incomplete;
         public Image lastSelectedButtonImage;
-        public HonkManager honkManager;
 
         public Color selectedEmailButtonColour, unselectedEmailButtonColour;
 
@@ -34,31 +28,30 @@ namespace ChickenScratch
         private Transform emailHolderTransform;
 
         [SerializeField]
-        private GameObject caseFileEmailPrefab;
+        private GameObject dailyFileEmailPrefab;
 
-        [SerializeField]
-        private GameObject playerStatRolePrefab;
-
-        [SerializeField]
-        private Transform playerStatRolesHolder;
         [SerializeField]
         private Button lobbyButton;
 
         [SerializeField]
+        private GameObject creditsWindowObject;
+
+        [SerializeField]
         private Text returnToLobbyText;
+
         [SerializeField]
         private GameObject quitPromptObject;
+
         [SerializeField]
         private GameObject hostHasReturnedToLobbyPromptObject;
 
         [SerializeField]
-        private GameObject workerWinButtonPrefab, gameSummaryButtonPrefab, caseFileEmailButtonPrefab;
+        private GameObject emailButtonPrefab;
         
         private GameObject currentOpenEmail;
 
         private void Start()
-        {
-
+        { 
         }
 
 
@@ -73,21 +66,6 @@ namespace ChickenScratch
                 returnToLobbyText.text = "Back";
                 lobbyButton.interactable = true;
             }
-
-            foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
-            {
-                initializeCaseEmailContents(caseData);
-            }
-        }
-
-        public void SetPlayerStatRoles(Dictionary<BirdName, AccoladesStatManager.StatRole> statRoleMap)
-        {
-            foreach (KeyValuePair<BirdName, AccoladesStatManager.StatRole> statRole in statRoleMap)
-            {
-                GameObject statRoleVisualizationObject = Instantiate(playerStatRolePrefab, playerStatRolesHolder);
-                StatRoleCard statRoleCard = statRoleVisualizationObject.GetComponent<StatRoleCard>();
-                statRoleCard.SetValues(statRole.Key, statRole.Value.name);
-            }
         }
 
         public void ShowResults()
@@ -97,9 +75,8 @@ namespace ChickenScratch
             GameObject temp;
             EmailButton tempButton;
 
-            temp = Instantiate(gameSummaryButtonPrefab, emailButtonContainer);
+            temp = Instantiate(emailButtonPrefab, emailButtonContainer);
             tempButton = temp.GetComponent<EmailButton>();
-
 
             if (tempButton)
             {
@@ -108,53 +85,40 @@ namespace ChickenScratch
                 gameSummaryWindow.gameObject.SetActive(true);
                 tempButton.unreadImage.color = selectedEmailButtonColour;
                 lastSelectedButtonImage = tempButton.unreadImage;
+                tempButton.text.text = "WEEKLY REPORT";
             }
-
-            string outcomeTextValue = "";
-            Color outcomeTextColour = Color.black;
-            int totalPoints = 0;
-            ResultData highestResult = null;
-            foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
-            {
-                totalPoints += caseData.scoringData.GetTotalPoints();
-            }
-
-            foreach (ResultData result in SettingsManager.Instance.resultPossibilities)
-            {
-                int requiredPointThreshold = (int)(result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.title));
-                if (highestResult == null && result.getRequiredPointThreshold(SettingsManager.Instance.gameMode.title) == 0)
-                {
-                    highestResult = result;
-                }
-                else if (requiredPointThreshold <= totalPoints)
-                {
-                    highestResult = result;
-                }
-            }
-
-            if (highestResult != null)
-            {
-                outcomeTextValue = highestResult.resultName;
-                outcomeTextColour = highestResult.resultTextColour;
-                gameSummaryWindow.outcomeText.text = outcomeTextValue;
-                gameSummaryWindow.outcomeText.color = outcomeTextColour;
-            }
-
             gameSummaryWindow.setSummaryContents();
-        }
 
-        public GameObject initializeCaseEmailContents(EndgameCaseData caseData)
-        {
-            GameObject caseEmailContentsObject = Instantiate(caseFileEmailPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity, emailHolderTransform);
-            caseEmailContentsObject.transform.localPosition = Vector3.zero;
-            CaseEmail caseEmail = caseEmailContentsObject.GetComponent<CaseEmail>();
+            //Create all of the daily emails
+            List<string> dayNames = new List<string>();
+            foreach(EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
+            {
+                if(!dayNames.Contains(caseData.dayName))
+                {
+                    dayNames.Add(caseData.dayName);
+                }
+            }
+            foreach(string dayName in dayNames)
+            {
+                GameObject dailyEmailContentsObject = Instantiate(dailyFileEmailPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity, emailHolderTransform);
+                DailyEmailContents dailyEmail = dailyEmailContentsObject.GetComponent<DailyEmailContents>();
+                dailyEmailContentsObject.transform.localPosition = Vector3.zero;
+                dailyEmail.Initialize(dayName);
+                GameObject dailyEmailButtonObject = Instantiate(emailButtonPrefab, emailButtonContainer);
+                EmailButton dailyEmailButton = dailyEmailButtonObject.GetComponent<EmailButton>();
+                dailyEmailButton.window = dailyEmailContentsObject;
+                dailyEmailButton.text.text = dayName.ToUpper() + " REPORT";
+            }
 
-            GameObject caseEmailButtonObject = Instantiate(caseFileEmailButtonPrefab, emailButtonContainer);
-            EmailButton caseEmailButton = caseEmailButtonObject.GetComponent<EmailButton>();
-            caseEmailButton.window = caseEmailContentsObject;
-            caseEmailButton.text.text = caseData.correctPrompt;
-            caseEmail.initialize(caseData);
-            return caseEmailContentsObject;
+            //Create button for credits email
+            temp = Instantiate(emailButtonPrefab, emailButtonContainer);
+            tempButton = temp.GetComponent<EmailButton>();
+
+            if (tempButton)
+            {
+                tempButton.window = creditsWindowObject.gameObject;
+                tempButton.text.text = "MEET THE TEAM";
+            }
         }
 
         public void HostHasReturnedToLobby()

@@ -18,7 +18,7 @@ MonoBehaviour:
   pointsPerCorrectWord: 4
   bonusPoints: 4
   cost: 0
-  basePointsPerCorrectWord: 3
+  basePointsPerCorrectWord: 5
   baseBonusPoints: 3
   baseStartingModifier: 1
   baseFrequency: 1
@@ -64,6 +64,9 @@ MonoBehaviour:
     caseWordIdentifiers:
     - easy-prefix
     - noun
+  _percentageChanceOfGoodCertification: 0
+  _percentageChanceOfBadCertification: 0
+  _maxNumberOfSeals: 1
   selectionFrequency: 1
   maxScoreModifier: 1
   taskTimingData:

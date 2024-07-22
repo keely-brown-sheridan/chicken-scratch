@@ -638,7 +638,7 @@ TextureImporter:
         width: 105
         height: 133
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -646,6 +646,132 @@ TextureImporter:
       bones: []
       spriteID: 10ce8c79fd5fe9749b9d0a249be9dc9b
       internalID: 732796750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tool_spritesheet_26
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 574
+        width: 145
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bb4f95a40dde7644b9d11f4a761f2df
+      internalID: 958256884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tool_spritesheet_27
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 415
+        width: 148
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66e3044f775d81340afd7998577eac44
+      internalID: -1615712108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tool_spritesheet_28
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 259
+        width: 147
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6a7747d1c81d8845aed5ca78c6f6def
+      internalID: -1776010690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tool_spritesheet_29
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 485
+        width: 134
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d3ff761144e6ec42acbe3d3eb235113
+      internalID: -556273735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tool_spritesheet_30
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 304
+        width: 161
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39d766fa81b068c4bbbf839df4e73fb4
+      internalID: -2071376521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tool_spritesheet_31
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 152
+        width: 123
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c016206d8dfe95e4ab16b5956103a6ed
+      internalID: -283572384
       vertices: []
       indices: 
       edges: []
@@ -662,6 +788,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       tool_spritesheet_14: -481659573
+      tool_spritesheet_28: -1776010690
       tool_spritesheet_17: -767838121
       tool_spritesheet_16: 476127118
       tool_spritesheet_23: 278697442
@@ -673,17 +800,22 @@ TextureImporter:
       tool_spritesheet_11: 52579598
       tool_spritesheet_4: -661342878
       tool_spritesheet_13: -400362027
+      tool_spritesheet_31: -283572384
       tool_spritesheet_9: -1135533538
       tool_spritesheet_25: 732796750
+      tool_spritesheet_29: -556273735
       tool_spritesheet_3: 1206653818
       tool_spritesheet_1: 87423257
       tool_spritesheet_20: -1059053478
       tool_spritesheet_6: -249751539
       tool_spritesheet_18: -897547993
+      tool_spritesheet_30: -2071376521
       tool_spritesheet_19: -1530945818
+      tool_spritesheet_27: -1615712108
       tool_spritesheet_0: 1685670816
       tool_spritesheet_5: 1905590105
       tool_spritesheet_15: 60674070
+      tool_spritesheet_26: 958256884
       tool_spritesheet_2: -170946566
       tool_spritesheet_22: 1047589752
       tool_spritesheet_12: -511790863

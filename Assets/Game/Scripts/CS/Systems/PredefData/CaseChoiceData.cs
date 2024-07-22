@@ -44,6 +44,18 @@ namespace ChickenScratch
         public Color importantFontColour;
         public List<WordPromptTemplateData> startingWordIdentifiers = new List<WordPromptTemplateData>();
 
+        public int percentageChanceOfGoodCertification => _percentageChanceOfGoodCertification;
+        public int percentageChanceOfBadCertification => _percentageChanceOfBadCertification;
+        [SerializeField]
+        private int _percentageChanceOfGoodCertification, _percentageChanceOfBadCertification;
+
+        public int maxNumberOfSeals => _maxNumberOfSeals;
+        [SerializeField]
+        private int _maxNumberOfSeals;
+
+        public List<string> currentSealIdentifiers => _currentSealIdentifiers;
+        private List<string> _currentSealIdentifiers = new List<string>();
+
         [HideInInspector]
         public int selectionFrequency;
 
@@ -76,6 +88,7 @@ namespace ChickenScratch
             pointsPerCorrectWord = basePointsPerCorrectWord;
             maxScoreModifier = startingScoreModifier;
             selectionFrequency = baseFrequency;
+            _currentSealIdentifiers = new List<string>();
         }
     }
 }

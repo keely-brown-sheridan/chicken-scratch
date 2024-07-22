@@ -34,17 +34,39 @@ namespace ChickenScratch
         [SerializeField]
         private Image caseTabFillImage;
 
+        [SerializeField]
+        private CertificationSlot certificationSlot1, certificationSlot2;
+
+        [SerializeField]
+        private GameObject costObject;
+
+        [SerializeField]
+        private TMPro.TMP_Text costText;
+
+        [SerializeField]
+        private Button chooseButton;
+
+        [SerializeField]
+        private CertificationEffectIndicator demandVisualIndicator, ballparkVisualIndicator, overheadVisualIndicator;
+
         private CaseChoiceData caseChoiceData;
         private int difficulty = 0;
+        public int cost => _cost;
+        private int _cost = 0;
 
-        public void Initialize(CaseChoiceNetData inCaseChoiceData)
+        public int totalDemandReduction => _totalDemandReduction;
+        private int _totalDemandReduction;
+
+        public void Initialize(CaseChoiceNetData inCaseChoiceData, List<CaseChoiceNetData> otherChoices)
         {
+            _cost = 0;
             caseChoiceData = GameDataManager.Instance.GetCaseChoice(inCaseChoiceData.caseChoiceIdentifier);
             if(caseChoiceData == null)
             {
                 Debug.LogError("Could not initialize case choice because identifier["+inCaseChoiceData.caseChoiceIdentifier.ToString()+"] did not exist in the Game Data Manager.");
                 return;
             }
+
             titleText.text = caseChoiceData.identifier;
             descriptionText.text = caseChoiceData.description;
             int totalReward = 0;
@@ -79,11 +101,95 @@ namespace ChickenScratch
             
             nounText.text = "";
             bgImage.color = caseChoiceData.colour;
-            totalReward += caseChoiceData.pointsPerCorrectWord * 2 + caseChoiceData.bonusPoints;
 
-            rewardText.text = totalReward.ToString();
-            modifierText.text = caseChoiceData.startingScoreModifier.ToString("F2");
+            //Check to see if the other choices have Demand
+            _totalDemandReduction = 0;
+            CertificationData demandCertification = GameDataManager.Instance.GetCertification("Demand");
+            foreach (CaseChoiceNetData otherChoice in otherChoices)
+            {
+                if(demandCertification != null)
+                {
+                    if (GameManager.Instance.playerFlowManager.CaseHasCertification(otherChoice.caseChoiceIdentifier, "Demand"))
+                    {
+                        _totalDemandReduction += ((IntCertificationData)demandCertification).value;
+                        inCaseChoiceData.birdbucksPerCorrectWord -= ((IntCertificationData)demandCertification).value;
+                    }
+                }
+            }
+            if(demandCertification != null && _totalDemandReduction > 0)
+            {
+                demandVisualIndicator.Show(demandCertification, "Reward reduced by " + _totalDemandReduction.ToString());
+            }
+            totalReward += (caseChoiceData.pointsPerCorrectWord - _totalDemandReduction) * 2 + caseChoiceData.bonusPoints;
+
+            if (GameManager.Instance.playerFlowManager.CaseHasCertification(inCaseChoiceData.caseChoiceIdentifier, "Ballpark"))
+            {
+                CertificationData ballparkCertification = GameDataManager.Instance.GetCertification("Ballpark");
+                if(ballparkCertification != null)
+                {
+                    ballparkVisualIndicator.Show(ballparkCertification, "Reward and Modifier are hidden");
+                }
+                
+                rewardText.text = "??";
+                modifierText.text = "??";
+            }
+            else
+            {
+                rewardText.text = totalReward.ToString();
+                modifierText.text = caseChoiceData.startingScoreModifier.ToString("F2");
+            }
+            
             caseTabObject.SetActive(false);
+            List<string> caseCertifications = GameManager.Instance.playerFlowManager.GetCaseCertifications(caseChoiceData.identifier);
+            if (caseChoiceData.maxNumberOfSeals > 0)
+            {
+                certificationSlot1.gameObject.SetActive(true);
+                certificationSlot1.Initialize(caseCertifications.Count > 0 ? caseCertifications[0] : "");
+            }
+            else
+            {
+                certificationSlot1.gameObject.SetActive(false);
+            }
+            if(caseChoiceData.maxNumberOfSeals > 1)
+            {
+                certificationSlot2.gameObject.SetActive(true);
+                certificationSlot2.Initialize(caseCertifications.Count > 1 ? caseCertifications[1] : "");
+            }
+            else
+            {
+                certificationSlot2.gameObject.SetActive(false);
+            }
+
+            if(caseCertifications.Contains("Overhead"))
+            {
+                CertificationData overheadData = GameDataManager.Instance.GetCertification("Overhead");
+                if(overheadData != null)
+                {
+                    overheadVisualIndicator.Show(overheadData, "Costs birdbucks upfront to choose");
+                    _cost += ((OverheadCertificationData)overheadData).initialCost;
+                }
+            }
+
+            if(cost > 0)
+            {
+                costText.text = cost.ToString();
+                costObject.SetActive(true);
+                if(GameManager.Instance.playerFlowManager.storeRound.currentMoney < cost)
+                {
+                    chooseButton.interactable = false;
+                }
+                else
+                {
+                    chooseButton.interactable = true;
+                }
+            }
+            else
+            {
+                chooseButton.interactable = true;
+                costObject.SetActive(false);
+            }
+
+            
         }
 
         public void SetCaseTab(float caseTabModifierValue)

@@ -14,9 +14,9 @@ public class BirdImage : MonoBehaviour
     public ColourManager.BirdName currentBird => _currentBird;
     private ColourManager.BirdName _currentBird = ColourManager.BirdName.none;
 
-   // private List<ColourManager.BirdName> testBirds = new List<ColourManager.BirdName>() { ColourManager.BirdName.red, ColourManager.BirdName.blue, ColourManager.BirdName.green,
+    //private List<ColourManager.BirdName> testBirds = new List<ColourManager.BirdName>() { ColourManager.BirdName.red, ColourManager.BirdName.blue, ColourManager.BirdName.green,
     //                                                                                        ColourManager.BirdName.orange, ColourManager.BirdName.purple, ColourManager.BirdName.grey,
-     //                                                                                        ColourManager.BirdName.maroon, ColourManager.BirdName.black, ColourManager.BirdName.brown,
+    //                                                                                         ColourManager.BirdName.maroon, ColourManager.BirdName.black, ColourManager.BirdName.brown,
     //                                                                                             ColourManager.BirdName.pink, ColourManager.BirdName.yellow, ColourManager.BirdName.teal };
     //private List<BirdHatData.HatType> testHats = new List<BirdHatData.HatType>() { BirdHatData.HatType.flower, BirdHatData.HatType.sherlock, BirdHatData.HatType.santa, BirdHatData.HatType.propeller };
     //private int currentTestBirdIndex = 0;
@@ -26,7 +26,7 @@ public class BirdImage : MonoBehaviour
     {
         //_currentBird = testBirds[currentTestBirdIndex];
         //GameManager.Instance.playerFlowManager.SetBirdHatType(_currentBird, testHats[currentTestHatIndex]);
-        if(!GameManager.Instance.playerFlowManager.activeBirdImages.Contains(this))
+        if (!GameManager.Instance.playerFlowManager.activeBirdImages.Contains(this))
         {
             GameManager.Instance.playerFlowManager.activeBirdImages.Add(this);
             if(_currentBird != ColourManager.BirdName.none)
@@ -47,11 +47,11 @@ public class BirdImage : MonoBehaviour
 
     private void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.E))
+        //if (Input.GetKeyDown(KeyCode.E))
         //{
         //    //Increase the hat index
         //    currentTestBirdIndex++;
-        //    if(currentTestBirdIndex >= testBirds.Count)
+        //    if (currentTestBirdIndex >= testBirds.Count)
         //    {
         //        currentTestBirdIndex = 0;
         //    }
@@ -59,11 +59,11 @@ public class BirdImage : MonoBehaviour
         //    _currentBird = testBirds[currentTestBirdIndex];
         //    GameManager.Instance.playerFlowManager.SetBirdHatType(_currentBird, testHats[currentTestHatIndex]);
         //}
-        //if(Input.GetKeyDown(KeyCode.Q))
+        //if (Input.GetKeyDown(KeyCode.Q))
         //{
         //    //Increase the bird index
         //    currentTestHatIndex++;
-        //    if(currentTestHatIndex >= testHats.Count)
+        //    if (currentTestHatIndex >= testHats.Count)
         //    {
         //        currentTestHatIndex = 0;
         //    }

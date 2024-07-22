@@ -182,7 +182,41 @@ namespace ChickenScratch
                 if (caseContainsPlayer)
                 {
                     int birdBucksEarned = endgameCase.taskDataMap.Count != 0 ? endgameCase.scoringData.GetTotalPoints() / endgameCase.taskDataMap.Count : 0;
+                    bool caseHasShareholdersCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(endgameCase.caseTypeName, "Shareholders");
+                    if (caseHasShareholdersCertification)
+                    {
+                        FloatCertificationData shareholderCertification = (FloatCertificationData)GameDataManager.Instance.GetCertification("Shareholders");
+                        if (shareholderCertification != null)
+                        {
+                            birdBucksEarned = (int)(birdBucksEarned * (1-shareholderCertification.value));
+                        }
+                    }
                     GameManager.Instance.playerFlowManager.storeRound.IncreaseCurrentMoney(birdBucksEarned);
+                }
+
+                //Other certification logic
+                bool caseHasGrowthCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(endgameCase.caseTypeName, "Growth");
+                bool caseHasSynergyCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(endgameCase.caseTypeName, "Synergy");
+                if(caseHasGrowthCertification || caseHasSynergyCertification)
+                {
+                    //Check if all words are correctly guessed
+                    if (endgameCase.correctWordIdentifierMap.ContainsKey(1) && endgameCase.correctWordIdentifierMap.ContainsKey(2))
+                    {
+                        CaseWordData correctPrefix = GameDataManager.Instance.GetWord(endgameCase.correctWordIdentifierMap[1]);
+                        CaseWordData correctNoun = GameDataManager.Instance.GetWord(endgameCase.correctWordIdentifierMap[2]);
+                        if(correctPrefix != null && correctNoun != null && correctPrefix.value == endgameCase.guessData.prefix && correctNoun.value == endgameCase.guessData.noun)
+                        {
+                            if(caseHasGrowthCertification)
+                            {
+                                GrowthCertificationData growthCertification = (GrowthCertificationData)GameDataManager.Instance.GetCertification("Growth");
+                                GameDataManager.Instance.IncreaseCaseChoiceModifier(endgameCase.caseTypeName, growthCertification.modifierRamp);
+                            }
+                            if(caseHasSynergyCertification)
+                            {
+                                GameDataManager.Instance.UpgradeRandomCaseChoice();
+                            }
+                        }
+                    }
                 }
             }
             GameManager.Instance.gameDataHandler.RpcSendEndgameCaseCount(gameCaseMap.Count);
@@ -604,7 +638,15 @@ namespace ChickenScratch
                 {
                     currentSlideContents = null;
                     currentSlideCaseIndex--;
-                    _phaseToTransitionTo = GamePhase.store;
+                    if (SettingsManager.Instance.GetSetting("tutorials") && !GameManager.Instance.gameFlowManager.storeTutorialSequence.hasBeenShown)
+                    {
+                        _phaseToTransitionTo = GamePhase.store_tutorial;
+                    }
+                    else
+                    {
+                        _phaseToTransitionTo = GamePhase.store;
+                    }
+                    
                 }
             }
             else

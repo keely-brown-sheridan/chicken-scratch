@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbb8f82ea461b94f89e96d43847ad3b, type: 3}
+  m_Name: CaseCertification
+  m_EditorClassIdentifier: 
+  itemType: 18
+  itemName: Case Certification
+  itemDescription: Apply a certification effect to the specified case.
+  storeBGColour: {r: 0, g: 0, b: 0, a: 0}
+  cost: 15
+  itemImagePrefab: {fileID: 4187783704447939670, guid: b84edfbf9fb026248a47dac27a798556,
+    type: 3}
+  isSinglePurchase: 0
+  index: 0
+  tier: 1
+  caseChoiceIdentifier: 
+  certificationIdentifier: 

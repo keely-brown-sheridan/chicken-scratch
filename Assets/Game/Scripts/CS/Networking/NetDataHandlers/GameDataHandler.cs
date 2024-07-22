@@ -404,6 +404,19 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.storeRound.CreateStoreItem(frequencyData);
     }
 
+    public void RpcSendCertificationStoreItemWrapper(CaseCertificationStoreItemData certificationItemData)
+    {
+        CaseCertificationStoreItemNetData certificationNetData = new CaseCertificationStoreItemNetData(certificationItemData);
+        RpcSendCertificationStoreItem(certificationNetData);
+    }
+
+    [ClientRpc]
+    public void RpcSendCertificationStoreItem(CaseCertificationStoreItemNetData netData)
+    {
+        CaseCertificationStoreItemData certificationData = new CaseCertificationStoreItemData(netData);
+        GameManager.Instance.playerFlowManager.storeRound.CreateStoreItem(certificationData);
+    }
+
     public void RpcSendUnlockStoreItemWrapper(CaseUnlockStoreItemData unlockItemData)
     {
         CaseUnlockStoreItemNetData unlockNetData = new CaseUnlockStoreItemNetData(unlockItemData);
@@ -486,7 +499,6 @@ public class GameDataHandler : NetworkBehaviour
             statRoleMap.Add(statRoleKeys[i], statRoleValues[i]);
         }
         GameManager.Instance.playerFlowManager.accoladesRound.SetPlayerAccoladeCards(statRoleMap);
-        GameManager.Instance.playerFlowManager.resultsRound.SetPlayerStatRoles(statRoleMap);
         GameManager.Instance.gameDataHandler.CmdTransitionCondition("stats_loaded:" + SettingsManager.Instance.birdName.ToString());
     }
 
@@ -693,9 +705,9 @@ public class GameDataHandler : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcInitializeStoreUnlock(List<string> optionAChoices, List<string> optionBChoices, BirdName unionRep, bool defaultChoiceA)
+    public void RpcInitializeStoreUnlock(StoreChoiceOptionData storeOptionChoiceA, StoreChoiceOptionData storeOptionChoiceB, BirdName unionRep, bool defaultChoiceA)
     {
-        GameManager.Instance.playerFlowManager.storeRound.ClientInitializeUnlocks(optionAChoices, optionBChoices, unionRep, defaultChoiceA);
+        GameManager.Instance.playerFlowManager.storeRound.ClientInitializeUnlocks(storeOptionChoiceA, storeOptionChoiceB, unionRep, defaultChoiceA);
     }
 
     [ClientRpc]
@@ -720,6 +732,84 @@ public class GameDataHandler : NetworkBehaviour
     public void RpcUnlockBottomStoreRow()
     {
         GameManager.Instance.playerFlowManager.storeRound.UnlockBottomRow();
+    }
+
+    [ClientRpc]
+    public void RpcSetStoreChoice(StoreChoiceOptionData choiceOption)
+    {
+        GameManager.Instance.playerFlowManager.timeInDay += choiceOption.timeRamp;
+        GameManager.Instance.playerFlowManager.currentGoal = (int)(choiceOption.birdbucksPerPlayer * SettingsManager.Instance.GetPlayerNameCount());
+        GameManager.Instance.playerFlowManager.storeRound.SetStoreChoiceOption(choiceOption);
+    }
+
+    [ClientRpc]
+    public void RpcStoreIncreaseModifierForCase(string caseChoiceIdentifier)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.IncreaseModifierForCase(caseChoiceIdentifier);
+    }
+
+    [ClientRpc]
+    public void RpcStoreIncreaseBirdbucksForCase(string caseChoiceIdentifier)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.IncreaseBirdbucksForCase(caseChoiceIdentifier);
+    }
+
+    [ClientRpc]
+    public void RpcStoreIncreaseFrequencyForCase(string caseChoiceIdentifier)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.IncreaseFrequencyForCase(caseChoiceIdentifier);
+    }
+
+    [ClientRpc]
+    public void RpcAddCaseCertification(string identifier, string certificationIdentifier)
+    {
+        if(SettingsManager.Instance.isHost)
+        {
+            //We handle this on the server-side
+            return;
+        }
+        GameManager.Instance.playerFlowManager.AddCaseCertification(identifier, certificationIdentifier);
+    }
+
+    [ClientRpc]
+    public void RpcShowStoreCaseExpiry(string identifier, int index)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.ShowExpiryEffectIndicator(identifier, index);
+    }
+
+    [ClientRpc]
+    public void RpcProgressTutorial(BirdName player, int slideIndex, string tutorialIdentifier)
+    {
+        switch(tutorialIdentifier)
+        {
+            case "deadline":
+                GameManager.Instance.gameFlowManager.deadlineTutorialSequence.ProgressPlayerIndicator(player, slideIndex);
+                break;
+            case "slides":
+                GameManager.Instance.gameFlowManager.slideTutorialSequence.ProgressPlayerIndicator(player, slideIndex);
+                break;
+            case "store":
+                GameManager.Instance.gameFlowManager.storeTutorialSequence.ProgressPlayerIndicator(player, slideIndex);
+                break;
+        }
+    }
+
+    [ClientRpc]
+    public void RpcPropagateDailyValues(int tomorrowOnlyCasesIncrease, int tomorrowOnlyQuotaDecrease, float tomorrowOnlyTimeIncrease,
+                                                                        int baseCasesIncrease, int baseQuotaDecrement, float baseTimeIncrease,
+                                                                        float caseIncreaseRatio, float quotaDecreaseRatio, float timeIncreaseRatio,
+                                                                        int currentGoal)
+    {
+        GameManager.Instance.playerFlowManager.tomorrowOnlyCasesIncrease = tomorrowOnlyCasesIncrease;
+        GameManager.Instance.playerFlowManager.tomorrowOnlyQuotaDecrease = tomorrowOnlyQuotaDecrease;
+        GameManager.Instance.playerFlowManager.tomorrowOnlyTimeIncrease = tomorrowOnlyTimeIncrease;
+        GameManager.Instance.playerFlowManager.baseCasesIncrease = baseCasesIncrease;
+        GameManager.Instance.playerFlowManager.baseQuotaDecrement = baseQuotaDecrement;
+        GameManager.Instance.playerFlowManager.baseTimeIncrease = baseTimeIncrease;
+        GameManager.Instance.playerFlowManager.caseIncreaseRatio = caseIncreaseRatio;
+        GameManager.Instance.playerFlowManager.quotaDecreaseRatio = quotaDecreaseRatio;
+        GameManager.Instance.playerFlowManager.timeIncreaseRatio = timeIncreaseRatio;
+        GameManager.Instance.playerFlowManager.currentGoal = currentGoal;
     }
 
     public void TargetInitialCabinetPromptContentsWrapper(NetworkConnectionToClient target, int caseID, int round, string correctPrompt, Dictionary<int,string> correctWordIdentifiersMap)
@@ -947,6 +1037,15 @@ public class GameDataHandler : NetworkBehaviour
         if (caseContainsPlayer)
         {
             int birdBucksEarned = endgameCase.taskDataMap.Count != 0 ? endgameCase.scoringData.GetTotalPoints() / endgameCase.taskDataMap.Count : 0;
+            bool caseHasShareholdersCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(endgameCase.caseTypeName, "Shareholders");
+            if (caseHasShareholdersCertification)
+            {
+                FloatCertificationData shareholderCertification = (FloatCertificationData)GameDataManager.Instance.GetCertification("Shareholders");
+                if (shareholderCertification != null)
+                {
+                    birdBucksEarned = (int)(birdBucksEarned * (1-shareholderCertification.value));
+                }
+            }
             GameManager.Instance.playerFlowManager.storeRound.IncreaseCurrentMoney(birdBucksEarned);
         }
         CmdCaseDataReceived(SettingsManager.Instance.birdName, netDataCase.identifier);
@@ -1141,6 +1240,7 @@ public class GameDataHandler : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdPromptGuess(GuessData guessData, int caseID, float timeTaken)
     {
+        
         GameManager.Instance.playerFlowManager.addGuessPrompt(guessData, caseID, timeTaken);
     }
 
@@ -1359,7 +1459,7 @@ public class GameDataHandler : NetworkBehaviour
         }
         TaskData baseTaskData = newCase.taskQueue[0];
 
-        //Start the case immediately instead of queueing it?
+        //Start the case immediately instead of queueing it
         if(!GameManager.Instance.gameFlowManager.playerCabinetMap.ContainsKey(birdName))
         {
             Debug.LogError("ERROR[CmdChooseCase]: Could not find matching cabinet for player["+birdName.ToString()+"]");
@@ -1392,8 +1492,24 @@ public class GameDataHandler : NetworkBehaviour
         {
             playerOrder.Add(newCase.playerOrder[i + 1]);
         }
+
+        if(GameManager.Instance.playerFlowManager.CaseHasCertification(choiceData.caseChoiceIdentifier, "Assembly"))
+        {
+            CaseChoiceData template = GameDataManager.Instance.GetCaseChoice(choiceData.caseChoiceIdentifier);
+            if(template != null)
+            {
+                template.selectionFrequency++;
+            }
+        }
+
         TargetStartChoiceDrawing(SettingsManager.Instance.GetConnection(birdName), birdCabinetIndex, caseID, promptText, baseTaskData, newCase.currentScoreModifier, choiceData.maxScoreModifier, choiceData.scoreModifierDecrement, baseTaskData.modifiers, newCase.caseTypeName, playerOrder);
         
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdSkipCaseChoice()
+    {
+        GameManager.Instance.gameFlowManager.IncreaseNumberOfCompletedCases();
     }
 
     [Command(requiresAuthority =false)]
@@ -1446,6 +1562,18 @@ public class GameDataHandler : NetworkBehaviour
     }
 
     [Command(requiresAuthority =false)]
+    public void CmdIncreaseCaseBirdbucks(int caseID, int increment)
+    {
+        if (!GameManager.Instance.playerFlowManager.drawingRound.caseMap.ContainsKey(caseID))
+        {
+            Debug.LogError("ERROR[CmdIncreaseCaseBirdbucks]: CaseMap does not contain case[" + caseID.ToString() + "]");
+            return;
+        }
+        ChainData transitioningCase = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
+        transitioningCase.pointsPerCorrectWord += increment;
+    }
+
+    [Command(requiresAuthority =false)]
     public void CmdTryToPurchaseStoreItem(BirdName player, int storeItemIndex)
     {
         GameManager.Instance.playerFlowManager.storeRound.HandleClientRequestItem(player, storeItemIndex);
@@ -1485,17 +1613,18 @@ public class GameDataHandler : NetworkBehaviour
     }
 
     [Command(requiresAuthority =false)]
-    public void CmdChooseStoreUnlockOption(List<string> unlockingIdentifiers, bool endRound)
+    public void CmdChooseContract(StoreChoiceOptionData choiceOption, bool endRound)
     {
-        foreach(string unlockingIdentifier in unlockingIdentifiers)
+        GameManager.Instance.playerFlowManager.storeRound.hasChosen = true;
+        foreach (ContractCaseUnlockData unlock in choiceOption.unlocks)
         {
-            GameDataManager.Instance.UnlockCaseChoice(unlockingIdentifier);
+            GameDataManager.Instance.UnlockCaseChoice(unlock.identifier, unlock.certificationIdentifier);
         }
-        if(endRound)
+        if (endRound)
         {
             GameManager.Instance.gameFlowManager.timeRemainingInPhase = 0f;
         }
-        
+        RpcSetStoreChoice(choiceOption);
     }
 
     [Command(requiresAuthority =false)]
@@ -1535,6 +1664,9 @@ public class GameDataHandler : NetworkBehaviour
     [Command(requiresAuthority =false)]
     public void CmdUnlockMiddleStoreRow()
     {
+        GameManager.Instance.playerFlowManager.storeRound.RestockColumnItem(100);
+        //Create a column item
+        GameManager.Instance.playerFlowManager.storeRound.CreateColumnStoreItemData(101);
         GameManager.Instance.playerFlowManager.storeRound.ServerUnlockRow();
         RpcUnlockMiddleStoreRow();
     }
@@ -1542,6 +1674,10 @@ public class GameDataHandler : NetworkBehaviour
     [Command(requiresAuthority =false)]
     public void CmdUnlockBottomStoreRow()
     {
+        GameManager.Instance.playerFlowManager.storeRound.RestockColumnItem(100);
+        GameManager.Instance.playerFlowManager.storeRound.RestockColumnItem(101);
+        //Create a column item
+        GameManager.Instance.playerFlowManager.storeRound.CreateColumnStoreItemData(102);
         GameManager.Instance.playerFlowManager.storeRound.ServerUnlockRow();
         RpcUnlockBottomStoreRow();
     }
@@ -1613,6 +1749,12 @@ public class GameDataHandler : NetworkBehaviour
                 }
             }
         }
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdProgressTutorial(BirdName player, int slideIndex, string tutorialIdentifier)
+    {
+        RpcProgressTutorial(player, slideIndex, tutorialIdentifier);
     }
 
     [ClientRpc]

@@ -61,23 +61,36 @@ namespace ChickenScratch
         private Color baseTimerColour, warningTimerColour, expiringTimerColour;
 
         public float dailyTimeIncrease = 0f;
-        public float baseTimeIncrease = 0f;
-        public int baseCasesIncrease = 0;
-        public int baseQuotaDecrement = 0;
+
         public int numberOfDrawingTools = 2;
         public int casesRemaining;
 
+        public float tomorrowOnlyTimeIncrease = 0f;
+        public int tomorrowOnlyCasesIncrease = 0;
+        public int tomorrowOnlyQuotaDecrease = 0;
+
+        public float baseTimeIncrease = 0f;
+        public int baseCasesIncrease = 0;
+        public int baseQuotaDecrement = 0;
+
+        public float timeIncreaseRatio = 1f;
+        public float caseIncreaseRatio = 1f;
+        public float quotaDecreaseRatio = 1f;
+
+        public float timeInDay = 0f;
+        public int currentGoal = 0;
+
         public List<BirdImage> activeBirdImages = new List<BirdImage>();
         private Dictionary<ColourManager.BirdName, BirdHatData.HatType> birdHatMap = new Dictionary<BirdName, BirdHatData.HatType>();
-
+        private Dictionary<string, List<string>> caseCertificationMap = new Dictionary<string, List<string>>();
         private void Start()
         {
             if (NetworkClient.isConnected)
             {
                 NetworkClient.Ready();
             }
-            //Screen.SetResolution(1280, 720, false);
-            Screen.fullScreen = false;
+            Screen.SetResolution(1920, 1080, false);
+            Screen.fullScreen = true;
 
             if (!isInitialized)
             {
@@ -145,7 +158,8 @@ namespace ChickenScratch
 
             unlockedCaseChoiceIdentifiers = new List<string>(SettingsManager.Instance.gameMode.baseUnlockedChoiceIdentifiers);
             caseChoiceUnlockPool = new List<string>(SettingsManager.Instance.gameMode.baseChoiceIdentifierPool);
-
+            timeInDay = SettingsManager.Instance.gameMode.baseGameTime;
+            currentGoal = SettingsManager.Instance.gameMode.dayOneGoalPerPlayer * SettingsManager.Instance.GetPlayerNameCount();
             isInitialized = true;
         }
 
@@ -292,6 +306,9 @@ namespace ChickenScratch
                     break;
                 case GameFlowManager.GamePhase.slides_tutorial:
                     GameManager.Instance.gameFlowManager.slideTutorialSequence.startSlides();
+                    break;
+                case GameFlowManager.GamePhase.store_tutorial:
+                    GameManager.Instance.gameFlowManager.storeTutorialSequence.startSlides();
                     break;
                 case GameFlowManager.GamePhase.accolades:
                     accoladesRound.StartRound();
@@ -528,8 +545,30 @@ namespace ChickenScratch
 
             if (SettingsManager.Instance.isHost)
             {
+                HandleGuessCaseCertifications(chain);
                 //If guess is received then update the total completed chains value
                 GameManager.Instance.gameFlowManager.IncreaseNumberOfCompletedCases();
+            }
+        }
+
+        private void HandleGuessCaseCertifications(ChainData currentCase)
+        {
+            CaseWordData correctPrefix = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[1]);
+            CaseWordData correctNoun = GameDataManager.Instance.GetWord(currentCase.correctWordIdentifierMap[2]);
+            if (!(currentCase.correctWordIdentifierMap.ContainsKey(1) && currentCase.correctWordIdentifierMap.ContainsKey(2)))
+            {
+                return;
+            }
+            bool hasExtensionCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(currentCase.caseTypeName, "Extension");
+            if (hasExtensionCertification)
+            {
+                bool atLeastOneWordWasCorrect = currentCase.guessData.prefix == correctPrefix.value || currentCase.guessData.noun == correctNoun.value;
+                FloatCertificationData extensionData = (FloatCertificationData)GameDataManager.Instance.GetCertification("Extension");
+                if (atLeastOneWordWasCorrect && extensionData != null)
+                {
+                    GameManager.Instance.gameFlowManager.timeRemainingInPhase += extensionData.value;
+                    GameManager.Instance.gameDataHandler.RpcUpdateTimer(GameManager.Instance.gameFlowManager.timeRemainingInPhase);
+                }
             }
         }
 
@@ -541,23 +580,21 @@ namespace ChickenScratch
 
         }
 
-        public float GetTimeInDay()
-        {
-            float baseTimeInDay = SettingsManager.Instance.gameMode.baseGameTime;
-            int currentDay = GameManager.Instance.playerFlowManager.currentDay;
-            float baseDailyRamp = SettingsManager.Instance.gameMode.dailyGameTimeRamp * currentDay;
-            baseTimeIncrease += dailyTimeIncrease;
-            return baseTimeInDay + baseDailyRamp + baseTimeIncrease;
-        }
-
         public int GetCasesForDay()
         {
-            return (int)(SettingsManager.Instance.GetCaseCountForDay()) + baseCasesIncrease;
+            int requiredCaseCount = SettingsManager.Instance.GetCaseCountForDay() + GameManager.Instance.playerFlowManager.baseCasesIncrease + GameManager.Instance.playerFlowManager.tomorrowOnlyCasesIncrease;
+            requiredCaseCount = (int)(requiredCaseCount * GameManager.Instance.playerFlowManager.caseIncreaseRatio);
+            return requiredCaseCount;
+        }
+
+        public float GetTimeInDay()
+        {
+            return (timeInDay + baseTimeIncrease + tomorrowOnlyTimeIncrease)*timeIncreaseRatio;
         }
 
         public int GetCurrentGoal()
         {
-            return SettingsManager.Instance.GetCurrentGoal() - baseQuotaDecrement;
+            return (int)((currentGoal - baseQuotaDecrement - tomorrowOnlyQuotaDecrease)*quotaDecreaseRatio);
         }
 
         public string MergeSlideImages(int caseIndex)
@@ -630,11 +667,16 @@ namespace ChickenScratch
             if(inStoreItemData.itemType == StoreItem.StoreItemType.case_unlock ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.case_upgrade ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.case_frequency ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.case_certification ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.coffee_pot ||
-                inStoreItemData.itemType == StoreItem.StoreItemType.advertisement ||
-                inStoreItemData.itemType == StoreItem.StoreItemType.nest_feathering ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.coffee_run ||
                 inStoreItemData.itemType == StoreItem.StoreItemType.coffee_mug ||
-                inStoreItemData.itemType == StoreItem.StoreItemType.contract)
+                inStoreItemData.itemType == StoreItem.StoreItemType.advertisement ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.campaign ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.sponsorship ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.nest_feathering ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.favour ||
+                inStoreItemData.itemType == StoreItem.StoreItemType.corruption)
             {
                 //These are handled on the server-side and propagated to everyone in the game
                 return;
@@ -761,6 +803,54 @@ namespace ChickenScratch
                     birdImage.UpdateImage(bird, hat);
                 }
             }
+        }
+
+        public void AddCaseCertification(string identifier, string certificationIdentifier)
+        {
+            if(!caseCertificationMap.ContainsKey(identifier))
+            {
+                caseCertificationMap.Add(identifier, new List<string>());
+            }
+
+            caseCertificationMap[identifier].Add(certificationIdentifier);
+            GameManager.Instance.playerFlowManager.storeRound.UpdateReviewPanelCertification(identifier, certificationIdentifier);
+        }
+
+        public bool CaseHasCertification(string identifier, string certificationIdentifier)
+        {
+            return caseCertificationMap.ContainsKey(identifier) && caseCertificationMap[identifier].Contains(certificationIdentifier);
+        }
+
+        public List<string> GetCaseCertifications(string identifier)
+        {
+            if(caseCertificationMap.ContainsKey(identifier))
+            {
+                return caseCertificationMap[identifier];
+            }
+            return new List<string>();
+        }
+
+        public int GetCaseCertificationCount(string identifier)
+        {
+            if(caseCertificationMap.ContainsKey(identifier))
+            {
+                return caseCertificationMap[identifier].Count;
+            }
+            return 0;
+        }
+
+        public void ResetTomorrowOnlyValues()
+        {
+            tomorrowOnlyCasesIncrease = 0;
+            tomorrowOnlyQuotaDecrease = 0;
+            tomorrowOnlyTimeIncrease = 0f;
+        }
+
+        public void PropagateDailyValues()
+        {
+            GameManager.Instance.gameDataHandler.RpcPropagateDailyValues(tomorrowOnlyCasesIncrease, tomorrowOnlyQuotaDecrease, tomorrowOnlyTimeIncrease,
+                                                                        baseCasesIncrease, baseQuotaDecrement, baseTimeIncrease,
+                                                                        caseIncreaseRatio, quotaDecreaseRatio, timeIncreaseRatio, currentGoal);
         }
     }
 }

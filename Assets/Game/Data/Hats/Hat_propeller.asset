@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47034887394db32409b4f123282bae0c, type: 3}
   m_Name: Hat_propeller
   m_EditorClassIdentifier: 
-  sprite: {fileID: -897547993, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+  sprite: {fileID: 278697442, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
   width: 47
   height: 34.5
   hatType: 12

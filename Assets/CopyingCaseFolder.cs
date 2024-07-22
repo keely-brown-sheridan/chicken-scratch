@@ -37,6 +37,7 @@ namespace ChickenScratch
         {
             casePlayerTabs.Initialize(round, drawingData.caseID);
             SetCaseTypeVisuals(drawingData.caseID);
+            SetCertificationSlots(drawingData.caseID);
             drawingTypeModifier = TaskModifier.invalid;
             drawingBoxModifier = TaskModifier.standard;
             foreach (TaskModifier modifier in taskModifiers)
@@ -53,6 +54,8 @@ namespace ChickenScratch
                     case TaskModifier.top_right:
                     case TaskModifier.bottom_left:
                     case TaskModifier.bottom_right:
+                    case TaskModifier.expanding:
+                    case TaskModifier.collapsing:
                         drawingBoxModifier = modifier;
                         break;
                     case TaskModifier.blind:
@@ -81,6 +84,7 @@ namespace ChickenScratch
         public override void Show(Color inFolderColour, float taskTime, float currentModifier, float maxModifierValue, float modifierDecrement)
         {
             base.Show(inFolderColour, taskTime, currentModifier, maxModifierValue, modifierDecrement);
+            drawingBoard.SetTimeInTask(taskTime);
             drawingBoard.SetDrawingBoxType(drawingBoxModifier);
             drawingBoard.SetDrawingType(drawingTypeModifier);
             drawingBoard.gameObject.SetActive(true);

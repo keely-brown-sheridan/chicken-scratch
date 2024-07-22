@@ -52,6 +52,9 @@ MonoBehaviour:
     caseWordIdentifiers:
     - hard-prefix
     - hard-noun
+  _percentageChanceOfGoodCertification: 10
+  _percentageChanceOfBadCertification: 50
+  _maxNumberOfSeals: 0
   selectionFrequency: 1
   maxScoreModifier: 1
   taskTimingData:

@@ -47,6 +47,9 @@ namespace ChickenScratch
         [SerializeField]
         private Transform botcherCoinHolder;
 
+        [SerializeField]
+        private CertificationEffectIndicator sanctionVisualIndicator1, sanctionVisualIndicator2, growthVisualIndicator, synergyVisualIndicator;
+
         private bool hasShownModifier = false;
         private bool hasShownNoun = false;
         private bool hasShownPrefix = false;
@@ -56,7 +59,10 @@ namespace ChickenScratch
         private bool isPrefixCorrect, isNounCorrect;
         private float prefixScoreTarget, nounScoreTarget, modifierScoreTarget;
         private ColourManager.BirdName author;
-        
+        private bool hasSanctions = false, hasGrowth = false, hasSynergy = false;
+        private int sanctionCost = 0;
+        private float growthIncrement = 0f;
+        private CertificationData sanctionsCertification = null, growthCertification = null, synergyCertification = null;
 
         private void Start()
         {
@@ -101,6 +107,31 @@ namespace ChickenScratch
             prefixScoreTarget = caseData.scoringData.prefixBirdbucks + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
             nounScoreTarget = caseData.scoringData.bonusBirdbucks + caseData.scoringData.nounBirdbucks + prefixScoreTarget;
             modifierScoreTarget = caseData.scoringData.GetTotalPoints() + GameManager.Instance.playerFlowManager.slidesRound.currentBirdBuckTotal;
+            hasSanctions = GameManager.Instance.playerFlowManager.CaseHasCertification(caseData.caseTypeName, "Sanctions");
+            if(hasSanctions)
+            {
+                sanctionsCertification = GameDataManager.Instance.GetCertification("Sanctions");
+                if(sanctionsCertification != null)
+                {
+                    sanctionCost = ((IntCertificationData)sanctionsCertification).value;
+                }
+            }
+
+            hasGrowth = GameManager.Instance.playerFlowManager.CaseHasCertification(caseData.caseTypeName, "Growth");
+            if(hasGrowth)
+            {
+                growthCertification = GameDataManager.Instance.GetCertification("Growth");
+                if(growthCertification != null)
+                {
+                    growthIncrement = ((GrowthCertificationData)growthCertification).modifierRamp;
+                }
+            }
+
+            hasSynergy = GameManager.Instance.playerFlowManager.CaseHasCertification(caseData.caseTypeName, "Synergy");
+            if(hasSynergy)
+            {
+                synergyCertification = GameDataManager.Instance.GetCertification("Synergy");
+            }
         }
 
         public override void Show()
@@ -134,6 +165,10 @@ namespace ChickenScratch
                     }
                     else
                     {
+                        if (hasSanctions && sanctionsCertification != null)
+                        {
+                            sanctionVisualIndicator1.Show(sanctionsCertification, "Incorrect word costs " + sanctionCost + " birdbucks");
+                        }
                         failureDescriptorEffect.gameObject.SetActive(true);
                         failureDescriptorEffect.Play();
                         AudioManager.Instance.PlaySound("TimePenalty");
@@ -155,12 +190,29 @@ namespace ChickenScratch
                         successNounEffect.gameObject.SetActive(true);
                         successNounEffect.Play();
                         AudioManager.Instance.PlaySound("TimeBonus");
+
+                        if(isPrefixCorrect)
+                        {
+                            //Check for correct guess certifications
+                            if(hasGrowth && growthCertification != null)
+                            {
+                                growthVisualIndicator.Show(growthCertification, "Increasing the modifier by " + growthIncrement.ToString() + " for future cases");
+                            }
+                            if(hasSynergy && synergyCertification != null)
+                            {
+                                synergyVisualIndicator.Show(synergyCertification, "Upgrading another case");
+                            }
+                        }
                     }
                     else
                     {
                         failureNounEffect.gameObject.SetActive(true);
                         failureNounEffect.Play();
                         AudioManager.Instance.PlaySound("TimePenalty");
+                        if(hasSanctions && sanctionsCertification != null)
+                        {
+                            sanctionVisualIndicator2.Show(sanctionsCertification, "Incorrect word costs " + sanctionCost + " birdbucks");
+                        }
                         if (SettingsManager.Instance.gameMode.hasAccusationRound)
                         {
                             AddBotcherCoin();

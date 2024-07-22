@@ -38,6 +38,7 @@ namespace ChickenScratch
             }
             casePlayerTabs.Initialize(round, drawingData.caseID);
             SetCaseTypeVisuals(drawingData.caseID);
+            SetCertificationSlots(drawingData.caseID);
             promptingContainer.Show(drawingData, drawingScalingFactor, taskModifiers);
             timeCompleteAction = inTimeCompleteAction;
             RegisterToTimer(inTimeCompleteAction);

@@ -55,6 +55,7 @@ namespace ChickenScratch
             casePlayerTabs.Initialize(round, caseID);
             currentCaseIndex = caseID;
             SetCaseTypeVisuals(caseID);
+            SetCertificationSlots(caseID);
 
             guessingContainer.Show(drawingData, drawingScalingFactor, taskModifiers);
             morphedContainer.Show(morphedDrawingData, drawingScalingFactor, taskModifiers);

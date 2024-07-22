@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c5960dbc4aa1044a0794ad46fea8e9, type: 3}
+  m_Name: Ch_Expanding One-Off
+  m_EditorClassIdentifier: 
+  identifier: Expanding One-Off
+  caseFormat: 0
+  numberOfTasks: 2
+  pointsPerCorrectWord: 3
+  bonusPoints: 2
+  cost: 0
+  basePointsPerCorrectWord: 3
+  baseBonusPoints: 3
+  baseStartingModifier: 1
+  baseFrequency: 1
+  taskTemplates:
+  - roundIndex: 1
+    taskType: 0
+    duration: 60
+    taskModifiers: 12000000
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 2
+    taskType: 5
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 01000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  difficulty: 1
+  penalty: 0
+  startingScoreModifier: 1
+  modifierDecrement: 0.25
+  taskFalloff: 0
+  colour: {r: 0.6556604, g: 0.84673744, b: 1, a: 1}
+  backgroundFontColour: {r: 0.46666667, g: 0.49411765, b: 0.5176471, a: 1}
+  importantFontColour: {r: 0.18431373, g: 0.29411766, b: 0.3882353, a: 1}
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - noun
+  _percentageChanceOfGoodCertification: 0
+  _percentageChanceOfBadCertification: 0
+  _maxNumberOfSeals: 0
+  selectionFrequency: 1
+  maxScoreModifier: 1
+  taskTimingData:
+  - taskType: 0
+    duration: 60
+  - taskType: 5
+    duration: 60
+  description: The drawing space expands over time.
+  upgrades: []

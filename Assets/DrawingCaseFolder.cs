@@ -25,6 +25,7 @@ namespace ChickenScratch
         {
             casePlayerTabs.Initialize(round, caseID);
             SetCaseTypeVisuals(caseID);
+            SetCertificationSlots(caseID);
             drawingTypeModifier = TaskModifier.invalid;
             drawingBoxModifier = TaskModifier.standard;
             foreach (TaskModifier modifier in taskModifiers)
@@ -41,6 +42,8 @@ namespace ChickenScratch
                     case TaskModifier.top_right:
                     case TaskModifier.bottom_left:
                     case TaskModifier.bottom_right:
+                    case TaskModifier.expanding:
+                    case TaskModifier.collapsing:
                         drawingBoxModifier = modifier;
                         break;
                     case TaskModifier.blind:
@@ -72,6 +75,7 @@ namespace ChickenScratch
                     drawingToolsSticky2.Queue(true);
                 }
             }
+            drawingBoard.SetTimeInTask(taskTime);
             drawingBoard.SetDrawingBoxType(drawingBoxModifier);
             drawingBoard.SetDrawingType(drawingTypeModifier);
             drawingBoard.gameObject.SetActive(true);
