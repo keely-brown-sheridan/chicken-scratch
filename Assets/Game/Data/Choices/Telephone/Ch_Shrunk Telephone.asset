@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Ch_Shrunk Telephone
   m_EditorClassIdentifier: 
   identifier: Shrunk Telephone
+  description: A standard telephone case. You will have less space to draw in.
   caseFormat: 3
+  promptFormat: 0
   numberOfTasks: 4
-  pointsPerCorrectWord: 5
-  bonusPoints: 6
-  cost: 0
-  basePointsPerCorrectWord: 5
-  baseBonusPoints: 6
-  baseStartingModifier: 1
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - easy-prefix
+    - noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -51,32 +51,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 2
-  penalty: 0
+  pointsPerCorrectWord: 5
+  bonusPoints: 6
+  cost: 0
+  basePointsPerCorrectWord: 5
+  baseBonusPoints: 6
+  baseStartingModifier: 1
+  maxScoreModifier: 1
   startingScoreModifier: 1
   modifierDecrement: 0.1
-  taskFalloff: 0
-  colour: {r: 0.6117647, g: 0.7254902, b: 0.69803923, a: 1}
-  backgroundFontColour: {r: 0.39943042, g: 0.4528302, b: 0.44158813, a: 1}
-  importantFontColour: {r: 0.05490196, g: 0.32941177, b: 0.2627451, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - easy-prefix
-    - noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 15
   _percentageChanceOfBadCertification: 15
   _maxNumberOfSeals: 1
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 120
-  - taskType: 4
-    duration: 120
-  - taskType: 1
-    duration: 60
-  - taskType: 5
-    duration: 60
-  description: A standard telephone case. You will have less space to draw in.
+  colour: {r: 0.6117647, g: 0.7254902, b: 0.69803923, a: 1}
+  backgroundFontColour: {r: 0.39943042, g: 0.4528302, b: 0.44158813, a: 1}
+  importantFontColour: {r: 0.05490196, g: 0.32941177, b: 0.2627451, a: 1}
   upgrades: []

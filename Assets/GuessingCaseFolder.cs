@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static ChickenScratch.CaseChoiceData;
 using static ChickenScratch.TaskData;
 
 namespace ChickenScratch
@@ -32,6 +33,7 @@ namespace ChickenScratch
         private Dictionary<int, string> correctWords = new Dictionary<int, string>();
         private Dictionary<int, string> guessWords = new Dictionary<int, string>();
         private int currentCaseIndex = -1;
+        private CaseChoiceData.PromptFormat promptFormat;
 
         private void Start()
         {
@@ -58,6 +60,10 @@ namespace ChickenScratch
             currentCaseIndex = caseID;
             SetCaseTypeVisuals(caseID);
             SetCertificationSlots(caseID);
+
+            ChainData currentCase = GameManager.Instance.playerFlowManager.drawingRound.caseMap[caseID];
+            CaseChoiceData caseChoiceData = GameDataManager.Instance.GetCaseChoice(currentCase.caseTypeName);
+            promptFormat = caseChoiceData.promptFormat;
 
             guessingContainer.Show(drawingData, drawingScalingFactor, taskModifiers);
             PossiblePrompt currentPossibleWord;
@@ -218,9 +224,25 @@ namespace ChickenScratch
 
             //Highlight the button
             possibleWordMap[wordIndex][wordIndexSegments[1]].backgroundImage.color = Color.yellow;
-            string prefixText = guessWords.ContainsKey(1) ? SettingsManager.Instance.CreatePrefixText(guessWords[1]) : "";
-            string nounText = guessWords.ContainsKey(2) ? SettingsManager.Instance.CreateNounText(guessWords[2]) : "";
-            guessText.text = prefixText + " " + nounText;
+            string value1, value2;
+            switch(promptFormat)
+            {
+                case PromptFormat.standard:
+                    value1 = (guessWords.ContainsKey(1) ? SettingsManager.Instance.CreatePrefixText(guessWords[1]) : "");
+                    value2 = (guessWords.ContainsKey(2) ? SettingsManager.Instance.CreateNounText(guessWords[2]) : "");
+                    guessText.text = value1 + " " + value2;
+                    break;
+                case PromptFormat.variant:
+                    value1 = (guessWords.ContainsKey(1) ? SettingsManager.Instance.CreateVariantText(guessWords[1]) : "");
+                    value2 = (guessWords.ContainsKey(2) ? SettingsManager.Instance.CreateNounText(guessWords[2]) : "");
+                    guessText.text = value1 + " " + value2;
+                    break;
+                case PromptFormat.location:
+                    value1 = (guessWords.ContainsKey(1) ? SettingsManager.Instance.CreateNounText(guessWords[1]) : "");
+                    value2 = (guessWords.ContainsKey(2) ? SettingsManager.Instance.CreateLocationText(guessWords[2]) : "");
+                    guessText.text = value1 + " in the " + value2;
+                    break;
+            }
         }
 
         public void ShowCategory(WordCategoryData wordCategoryData)

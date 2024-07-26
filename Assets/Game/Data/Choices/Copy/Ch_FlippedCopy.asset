@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Ch_FlippedCopy
   m_EditorClassIdentifier: 
   identifier: Flipped Copy
+  description: Copy drawings that are flipped upside down.
   caseFormat: 1
+  promptFormat: 0
   numberOfTasks: 3
-  pointsPerCorrectWord: 4
-  bonusPoints: 2
-  cost: 0
-  basePointsPerCorrectWord: 6
-  baseBonusPoints: 3
-  baseStartingModifier: 1.25
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -45,30 +45,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 0
-  penalty: 0
+  pointsPerCorrectWord: 4
+  bonusPoints: 2
+  cost: 0
+  basePointsPerCorrectWord: 6
+  baseBonusPoints: 3
+  baseStartingModifier: 1.25
+  maxScoreModifier: 1
   startingScoreModifier: 1
   modifierDecrement: 0.1
-  taskFalloff: 1
-  colour: {r: 1, g: 0.7747636, b: 0.7294118, a: 1}
-  backgroundFontColour: {r: 0.42352942, g: 0.3647059, b: 0.3529412, a: 1}
-  importantFontColour: {r: 0.48235294, g: 0.1254902, b: 0.050980393, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - prefix
-    - noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 15
   _percentageChanceOfBadCertification: 15
   _maxNumberOfSeals: 1
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 60
-  - taskType: 2
-    duration: 45
-  - taskType: 5
-    duration: 60
-  description: Copy drawings that are flipped upside down.
+  colour: {r: 1, g: 0.7747636, b: 0.7294118, a: 1}
+  backgroundFontColour: {r: 0.42352942, g: 0.3647059, b: 0.3529412, a: 1}
+  importantFontColour: {r: 0.48235294, g: 0.1254902, b: 0.050980393, a: 1}
   upgrades: []

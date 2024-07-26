@@ -74,6 +74,7 @@ namespace ChickenScratch
         {
             caseScoringData = inCaseScoringData;
             sections = inSummarySlideSections;
+
             //Do not steal birdbucks from players if the total goes below 0 - it can affect the total but not the money they've earned to this point
             totalBirdBucksToDistribute = Mathf.Max(0,caseScoringData.GetTotalPoints());
             birdBucksRemaining = totalBirdBucksToDistribute;
@@ -175,6 +176,8 @@ namespace ChickenScratch
                         timeSinceLastDistribution = 0f;
                         foreach (SummarySlideSection section in sections)
                         {
+                            //Skip this section if they aren't meant to receive birdbucks
+
                             GameObject distributedBirdBuckObject = Instantiate(distributedBirdbuckPrefab, spawnPosition, Quaternion.identity, transform);
                             SlideDistributedBirdbuck distributedBirdBuck = distributedBirdBuckObject.GetComponent<SlideDistributedBirdbuck>();
                             distributedBirdBuck.Initialize(section);

@@ -39,7 +39,6 @@ namespace ChickenScratch
             foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
                 Color folderColour = GameDataManager.Instance.GetCaseChoice(caseData.caseTypeName).colour;
-                int birdbucksEarned = caseData.taskDataMap.Count != 0 ? caseData.scoringData.GetTotalPoints() : 0;
                 foreach (EndgameTaskData taskData in caseData.taskDataMap.Values)
                 {
                     if (!birdbucksMap.ContainsKey(taskData.assignedPlayer))
@@ -48,7 +47,7 @@ namespace ChickenScratch
                         starsMap.Add(taskData.assignedPlayer, 0);
                         folderColoursMap.Add(taskData.assignedPlayer, new List<Color>());
                     }
-                    birdbucksMap[taskData.assignedPlayer] += birdbucksEarned / caseData.taskDataMap.Count;
+                    birdbucksMap[taskData.assignedPlayer] += caseData.GetPointsForPlayerOnTask(taskData.assignedPlayer);
                     starsMap[taskData.assignedPlayer] += taskData.ratingData.likeCount;
                     folderColoursMap[taskData.assignedPlayer].Add(folderColour);
                 }
@@ -93,7 +92,7 @@ namespace ChickenScratch
 
         public void OnBirdbucksTabSelected()
         {
-            AudioManager.Instance.PlaySoundVariant("sfx_ui_int_gen_sel");
+            AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
             birdbucksButtonImage.color = selectedTabColour;
             casesButtonImage.color = deselectedTabColour;
             starsButtonImage.color = deselectedTabColour;
@@ -104,7 +103,7 @@ namespace ChickenScratch
 
         public void OnCasesTabSelected()
         {
-            AudioManager.Instance.PlaySoundVariant("sfx_ui_int_gen_sel");
+            AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
             birdbucksButtonImage.color = deselectedTabColour;
             casesButtonImage.color = selectedTabColour;
             starsButtonImage.color = deselectedTabColour;
@@ -115,7 +114,7 @@ namespace ChickenScratch
 
         public void OnStarsTabSelected()
         {
-            AudioManager.Instance.PlaySoundVariant("sfx_ui_int_gen_sel");
+            AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
             birdbucksButtonImage.color = deselectedTabColour;
             casesButtonImage.color = deselectedTabColour;
             starsButtonImage.color = selectedTabColour;

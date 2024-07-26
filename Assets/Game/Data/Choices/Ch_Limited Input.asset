@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Ch_Limited Input
   m_EditorClassIdentifier: 
   identifier: Limited Input
+  description: Multiple players will caption the first drawing, but will have a stricter
+    character limit.
   caseFormat: 0
+  promptFormat: 0
   numberOfTasks: 6
-  pointsPerCorrectWord: 4
-  bonusPoints: 2
-  cost: 0
-  basePointsPerCorrectWord: 6
-  baseBonusPoints: 4
-  baseStartingModifier: 1.5
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -63,31 +64,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 2
-  penalty: 0
+  pointsPerCorrectWord: 4
+  bonusPoints: 2
+  cost: 0
+  basePointsPerCorrectWord: 6
+  baseBonusPoints: 4
+  baseStartingModifier: 1.5
+  maxScoreModifier: 1
   startingScoreModifier: 1.25
   modifierDecrement: 0.1
-  taskFalloff: 0
-  colour: {r: 0.51686543, g: 0.5212451, b: 0.9528302, a: 1}
-  backgroundFontColour: {r: 0.2980153, g: 0.29847515, b: 0.3490566, a: 1}
-  importantFontColour: {r: 0.027901383, g: 0.03045481, b: 0.31132078, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - prefix
-    - noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 10
   _percentageChanceOfBadCertification: 15
   _maxNumberOfSeals: 2
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 30
-  - taskType: 3
-    duration: 30
-  - taskType: 5
-    duration: 60
-  description: Multiple players will caption the first drawing, but will have a stricter
-    character limit.
+  colour: {r: 0.51686543, g: 0.5212451, b: 0.9528302, a: 1}
+  backgroundFontColour: {r: 0.2980153, g: 0.29847515, b: 0.3490566, a: 1}
+  importantFontColour: {r: 0.027901383, g: 0.03045481, b: 0.31132078, a: 1}
   upgrades: []

@@ -28,3 +28,4 @@ MonoBehaviour:
   timeIncrease: 0
   unlocks:
   - {fileID: 11400000, guid: 7b06345551f36af4ab8e7c9513507263, type: 2}
+  - {fileID: 11400000, guid: f33b580a25c75cd4da550471153e762e, type: 2}

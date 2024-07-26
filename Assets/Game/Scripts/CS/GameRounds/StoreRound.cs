@@ -109,6 +109,9 @@ namespace ChickenScratch
         [SerializeField]
         private List<CertificationEffectIndicator> expiryEffectIndicators;
 
+        [SerializeField]
+        private StoreFrequencyChoicePanel storeFrequencyChoicePanel;
+
         public enum State
         {
             unlock, store
@@ -184,6 +187,7 @@ namespace ChickenScratch
                     if (GameManager.Instance.playerFlowManager.CaseHasCertification(activeCaseType, "Expiration"))
                     {
                         GameManager.Instance.gameDataHandler.RpcShowStoreCaseExpiry(activeCaseType, expiryIndex);
+                        GameManager.Instance.gameDataHandler.RpcRemoveFrequencyStoreOption(activeCaseType);
                         GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Remove(activeCaseType);
                         expiryIndex++;
                     }
@@ -681,7 +685,7 @@ namespace ChickenScratch
             int playerCount = SettingsManager.Instance.GetPlayerNameCount();
             if (playerCount == 2)
             {
-                CreateUnlockStoreItemData(103);
+                //CreateUnlockStoreItemData(103);
             }
 
             CreateHatStoreItemData(104);
@@ -735,22 +739,11 @@ namespace ChickenScratch
 
         public bool CreateColumnStoreItemData(int index)
         {
-            bool successfullyCreated = false;
             int randomChoice = Random.Range(0, 3);
            
-            if (randomChoice == 0)
-            {
-
-                successfullyCreated = CreateFrequencyStoreItemData(index); 
-                if(successfullyCreated)
-                {
-                    return true;
-                }
-            }
             if(randomChoice == 1)
             {
-                successfullyCreated = CreateCertificationStoreItemData(index);
-                if(successfullyCreated)
+                if (CreateCertificationStoreItemData(index))
                 {
                     return true;
                 }
@@ -808,22 +801,6 @@ namespace ChickenScratch
             return true;
         }
 
-        private bool CreateFrequencyStoreItemData(int index)
-        {
-            CaseFrequencyStoreItemData storeItemData = GameDataManager.Instance.GetFrequencyStoreItem(currentStoreTier);
-            if(storeItemData == null)
-            {
-                return false;
-            }
-
-            CaseFrequencyStoreItemData newStoreItem = new CaseFrequencyStoreItemData();
-            newStoreItem.Initialize(storeItemData);
-            newStoreItem.index = index;
-            activeStoreItemMap.Add(index, newStoreItem);
-            GameManager.Instance.gameDataHandler.RpcSendFrequencyStoreItemWrapper(newStoreItem);
-            return true;
-        }
-
         private bool CreateHatStoreItemData(int index)
         {
             HatStoreItemData hatItemData = GameDataManager.Instance.GetHatStoreItem();
@@ -875,7 +852,8 @@ namespace ChickenScratch
                     oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_mug || oldStoreItemData.itemType == StoreItem.StoreItemType.nest_feathering ||
                     oldStoreItemData.itemType == StoreItem.StoreItemType.advertisement || oldStoreItemData.itemType == StoreItem.StoreItemType.campaign ||
                     oldStoreItemData.itemType == StoreItem.StoreItemType.favour || oldStoreItemData.itemType == StoreItem.StoreItemType.sponsorship ||
-                    oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_run || oldStoreItemData.itemType == StoreItem.StoreItemType.corruption)
+                    oldStoreItemData.itemType == StoreItem.StoreItemType.coffee_run || oldStoreItemData.itemType == StoreItem.StoreItemType.corruption ||
+                    oldStoreItemData.itemType == StoreItem.StoreItemType.piggy_bank)
             {
                 //Broadcast to players to create
                 ValueStoreItemData valueItem = new ValueStoreItemData();
@@ -944,7 +922,6 @@ namespace ChickenScratch
                 StoreItem storeItem;
                 Transform spawningParent = storeItemHolderParent;
                 if (storeItemData.itemType == StoreItem.StoreItemType.case_upgrade ||
-                    storeItemData.itemType == StoreItem.StoreItemType.case_frequency ||
                     storeItemData.itemType == StoreItem.StoreItemType.case_unlock ||
                     storeItemData.itemType == StoreItem.StoreItemType.case_certification)
                 {
@@ -1001,37 +978,13 @@ namespace ChickenScratch
                             {
                                 GameDataManager.Instance.AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
                             }
-                            else if(upgrade.itemType == StoreItem.StoreItemType.case_frequency)
-                            {
-                                GameDataManager.Instance.AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
-                            }
                         }
                         GameDataManager.Instance.UpgradeCaseChoice(upgradeData);
                         GameManager.Instance.gameDataHandler.RpcUpgradeCaseChoice(activeStoreItemMap[itemIndex].itemName);
                         GameDataManager.Instance.RemoveUpgrade(upgradeData);
                         break;
                     case StoreItem.StoreItemType.case_frequency:
-                        CaseFrequencyStoreItemData frequencyData = (CaseFrequencyStoreItemData)activeStoreItemMap[itemIndex];
-                        caseChoice = GameDataManager.Instance.GetCaseChoice(frequencyData.caseChoiceIdentifier);
-                        if(caseChoice != null)
-                        {
-                            caseChoice.selectionFrequency += frequencyData.frequencyIncrease;
-                            GameManager.Instance.gameDataHandler.RpcStoreIncreaseFrequencyForCase(frequencyData.caseChoiceIdentifier);
-                            GameManager.Instance.gameDataHandler.RpcIncreaseCaseChoiceFrequency(activeStoreItemMap[itemIndex].itemName);
-                            GameDataManager.Instance.RemoveFrequencyItem(frequencyData);
-                        }
-                        
-                        foreach (StoreItemData upgrade in frequencyData.unlocks)
-                        {
-                            if (upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
-                            {
-                                GameDataManager.Instance.AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
-                            }
-                            else if (upgrade.itemType == StoreItem.StoreItemType.case_frequency)
-                            {
-                                GameDataManager.Instance.AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
-                            }
-                        }
+                        GameManager.Instance.gameDataHandler.TargetOpenStoreFrequencyPanel(SettingsManager.Instance.GetConnection(client));
                         break;
                     case StoreItem.StoreItemType.case_certification:
                         CaseCertificationStoreItemData certificationData = (CaseCertificationStoreItemData)activeStoreItemMap[itemIndex];
@@ -1079,12 +1032,12 @@ namespace ChickenScratch
                         break;
                     case StoreItem.StoreItemType.favour:
                         ValueStoreItemData favourData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
-                        GameManager.Instance.playerFlowManager.tomorrowOnlyQuotaDecrease -= (int)favourData.value;
+                        GameManager.Instance.playerFlowManager.tomorrowOnlyQuotaDecrease += (int)favourData.value;
                         GameManager.Instance.playerFlowManager.PropagateDailyValues();
                         break;
                     case StoreItem.StoreItemType.nest_feathering:
                         ValueStoreItemData nestFeatheringData = (ValueStoreItemData)activeStoreItemMap[itemIndex];
-                        GameManager.Instance.playerFlowManager.baseQuotaDecrement -= (int)nestFeatheringData.value;
+                        GameManager.Instance.playerFlowManager.baseQuotaDecrement += (int)nestFeatheringData.value;
                         GameManager.Instance.playerFlowManager.PropagateDailyValues();
                         break;
                     case StoreItem.StoreItemType.corruption:
@@ -1114,13 +1067,9 @@ namespace ChickenScratch
                 StoreItem.StoreItemType itemType = activeStoreItemMap[itemIndex].itemType;
                 activeStoreItemMap.Remove(itemIndex);
 
-                if(itemType == StoreItem.StoreItemType.case_upgrade || itemType == StoreItem.StoreItemType.case_frequency || itemType == StoreItem.StoreItemType.case_certification)
+                if(itemType == StoreItem.StoreItemType.case_upgrade || itemType == StoreItem.StoreItemType.case_certification)
                 {
                     CreateColumnStoreItemData(itemIndex);
-                }
-                else if(itemType == StoreItem.StoreItemType.case_unlock)
-                {
-                    CreateUnlockStoreItemData(itemIndex);
                 }
                 
             }
@@ -1244,6 +1193,26 @@ namespace ChickenScratch
             {
                 expiryEffectIndicators[expiryVisualIndex].Show(expiryCertification, caseIdentifier + " has expired.");
             }
+        }
+
+        public void UpdateCaseFrequency(string caseType, int currentFrequency, int rampIndex)
+        {
+            storeFrequencyChoicePanel.UpdateFrequency(caseType, currentFrequency, rampIndex);
+        }
+
+        public void RemoveCaseFromFrequencyPool(string caseType)
+        {
+            storeFrequencyChoicePanel.RemoveCase(caseType);
+        }
+
+        public void OpenStoreFrequencyPanel()
+        {
+            storeFrequencyChoicePanel.Open();
+        }
+
+        public void CloseStoreFrequencyPanel()
+        {
+            storeFrequencyChoicePanel.Close();
         }
     }
 }

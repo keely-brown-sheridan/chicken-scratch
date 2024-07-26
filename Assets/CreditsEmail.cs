@@ -24,6 +24,7 @@ namespace ChickenScratch
                 memberNameText.text = memberName;
                 memberDescriptionText.text = teamMemberData.description;
                 memberImage.sprite = teamMemberData.sprite;
+                AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
             }
         }
     }

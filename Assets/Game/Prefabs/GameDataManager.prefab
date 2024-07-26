@@ -69,6 +69,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 823e47a50c6921b45a9699d8956561e1, type: 2}
   - {fileID: 11400000, guid: 603b0e7a0531f624a8af2e040af6b178, type: 2}
   - {fileID: 11400000, guid: ad0fcd80bfb2c3c469bc20f63e468295, type: 2}
+  - {fileID: 11400000, guid: debae32b1b0ade64d94b1eb6f949d474, type: 2}
+  - {fileID: 11400000, guid: 38e1a52b1603ad8459ac3a5ac2a3102a, type: 2}
+  - {fileID: 11400000, guid: 6ee858007fbc70344addfbe264cf865d, type: 2}
+  - {fileID: 11400000, guid: 3969d1f34d5fc5d40b3e7cf0fe51c369, type: 2}
   caseWordTemplateDatas:
   - {fileID: 11400000, guid: 5440e0271bbe8284b93c7b0efc5700ff, type: 2}
   - {fileID: 11400000, guid: 4cef8c0cbb6cec945a7f5a5a808f6190, type: 2}
@@ -77,6 +81,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4fca89eb164f8114ca5e4848127d6adc, type: 2}
   - {fileID: 11400000, guid: d554a02fcf094a343bc4521178bb39b4, type: 2}
   - {fileID: 11400000, guid: f6059be02429ac34ba52197428d0faad, type: 2}
+  - {fileID: 11400000, guid: b1667d5a62158604d921f11b1b61c7f0, type: 2}
   wordDataList: {fileID: 11400000, guid: a8c8d53a4059c3947b7646776556688a, type: 2}
   storeItems:
   - {fileID: 11400000, guid: 4993f479251f1164198789de3952601e, type: 2}
@@ -94,24 +99,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 590b95426c89c5949a1139d1d6a1ab2d, type: 2}
   - {fileID: 11400000, guid: 68cf2037a53615d4c8847f3df5453a40, type: 2}
   - {fileID: 11400000, guid: 5985454c5302dfb47acafef8e0078036, type: 2}
+  - {fileID: 11400000, guid: 6ba78a51ec599f24093e376479012882, type: 2}
+  - {fileID: 11400000, guid: e9677acf0e391a649bba6c3f42cce6cb, type: 2}
   hatStoreItem: {fileID: 11400000, guid: b9c0ac844038c73439d857d7e216a83a, type: 2}
   upgradeStoreItems:
-  - {fileID: 11400000, guid: 89f81b88f2aa1e247a6c963456076395, type: 2}
-  - {fileID: 11400000, guid: 6d7ce270f4308f043815d695d83b3c70, type: 2}
-  - {fileID: 11400000, guid: 48e65e481606179409c9aabaaa6ce092, type: 2}
-  - {fileID: 11400000, guid: 284f60a7d82f62a4a9b47d634e7f9201, type: 2}
-  - {fileID: 11400000, guid: 1f8ae42e208340945a3a71b3c81251e8, type: 2}
-  - {fileID: 11400000, guid: cb6b68424ceb84442bdd8590319d0bbc, type: 2}
-  - {fileID: 11400000, guid: d484b781fb7510b408ea1b10b4368369, type: 2}
-  - {fileID: 11400000, guid: 0f92cfbeb3734b94e865ba29c7e8426f, type: 2}
-  - {fileID: 11400000, guid: 6d8ab0507c92bd642b0a118c8ccfae02, type: 2}
-  - {fileID: 11400000, guid: 2aaad5cea5e55904a9346f2d04fb67a5, type: 2}
-  - {fileID: 11400000, guid: ed50d37f23f9e9e4183eac0f2aa093bd, type: 2}
-  - {fileID: 11400000, guid: 2aeafe027330b754b9887b26d457d722, type: 2}
-  - {fileID: 11400000, guid: 4ea1b08cfa6528a4792ae6fa8d0064e6, type: 2}
-  - {fileID: 11400000, guid: 37540adb7f15dc8438eff434d6a106f7, type: 2}
-  - {fileID: 11400000, guid: f3d73f2df9696b4419cedcacd82d8a4f, type: 2}
-  - {fileID: 11400000, guid: 5c3c3a10581aa8548b1468ccdd203283, type: 2}
   - {fileID: 11400000, guid: 66008d1f1cc68fe4ca6630ce0e657b97, type: 2}
   - {fileID: 11400000, guid: 0dc7369e9d29d7844a54b2e51e2d6ad4, type: 2}
   - {fileID: 11400000, guid: 56d776baf3395964db79286fa4e63c80, type: 2}
@@ -129,46 +120,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 710b5e62c8d3f4044902a2dc3ac03856, type: 2}
   - {fileID: 11400000, guid: 1c0081e52f9b71749ba16dd22885f2d4, type: 2}
   - {fileID: 11400000, guid: 341f889ae6189af4787d0a4ef1f7206f, type: 2}
-  - {fileID: 11400000, guid: 1b95d632c22736e40b66adedb649bec6, type: 2}
   - {fileID: 11400000, guid: 84cd93b23d82c434a8bd295681bd8a05, type: 2}
-  - {fileID: 11400000, guid: f6895f3e5a6fe9345b40177eb4a2488c, type: 2}
   - {fileID: 11400000, guid: 779593be9fda9f547b6f13f79966beb1, type: 2}
-  - {fileID: 11400000, guid: f33b580a25c75cd4da550471153e762e, type: 2}
-  - {fileID: 11400000, guid: d9ea5b29c3e8e424e98fd23555bb2723, type: 2}
   - {fileID: 11400000, guid: 65b4458b3d10b2443875c7a894be43b9, type: 2}
-  - {fileID: 11400000, guid: 2854a0485e147404bafbc17c315b8d8d, type: 2}
-  - {fileID: 11400000, guid: 99dbf863399da4f4fac794c8406924b6, type: 2}
-  - {fileID: 11400000, guid: f0bbb9708f553234d8ed62a6615e4c45, type: 2}
-  - {fileID: 11400000, guid: 87d0d52f54cc2a844af1b88a1a2b3a7d, type: 2}
   - {fileID: 11400000, guid: 4f91f36ee802c3248af3d965fca908f4, type: 2}
   - {fileID: 11400000, guid: ddf65a73402652b4ab8502054a8eb179, type: 2}
   - {fileID: 11400000, guid: 5b0ab946fbb89364bb5d1ef8bd0d3003, type: 2}
   - {fileID: 11400000, guid: c7a1769c8265965408e6465b5bd547c7, type: 2}
-  frequencyStoreItems:
-  - {fileID: 11400000, guid: 9ce3a89096a374b45a3a797684aa25ba, type: 2}
-  - {fileID: 11400000, guid: 417ad931608794045bd9e522c1901f9a, type: 2}
-  - {fileID: 11400000, guid: 1a2a3dc5e3a6b5c409f203a2259f5bc2, type: 2}
-  - {fileID: 11400000, guid: 48cc2060ba7662d4984e0d8c319d67db, type: 2}
-  - {fileID: 11400000, guid: a4298188bbb89fd47b7ba8eb39edc616, type: 2}
-  - {fileID: 11400000, guid: ecafc1087b7eab84ab34d743e72ba14e, type: 2}
-  - {fileID: 11400000, guid: c34f55a3487406f4d86dde6c2430a615, type: 2}
-  - {fileID: 11400000, guid: 0ebd328b4ac8a1e4091d3051ba10e030, type: 2}
-  - {fileID: 11400000, guid: add633094618bb640b9127cb7805c9f6, type: 2}
-  - {fileID: 11400000, guid: 39fbcb9ccf8957d42a700e1b8875a996, type: 2}
-  - {fileID: 11400000, guid: 1c08c93f60c67a0428a2a4e2eeb2ffae, type: 2}
-  - {fileID: 11400000, guid: f4bf6a37b7693a04a936bd38d1df9ca5, type: 2}
-  - {fileID: 11400000, guid: 478909b10ffa2a441bedf7418d684f8f, type: 2}
-  - {fileID: 11400000, guid: 38fa687c0a5c4e64c95d1a2540e73038, type: 2}
-  - {fileID: 11400000, guid: dc2415e1d6c90404b82ae79b9dc42330, type: 2}
-  - {fileID: 11400000, guid: 0ad09ba9864d6ef4282fb5459f05521c, type: 2}
-  - {fileID: 11400000, guid: 46b32c222c5933347bce3e2dcce88ebf, type: 2}
-  - {fileID: 11400000, guid: 6da5e6bf2a3104c4fb7e0ec7e9ba2d09, type: 2}
-  - {fileID: 11400000, guid: 00290aaec5b11224da19ce8f29317feb, type: 2}
-  - {fileID: 11400000, guid: 05ff2b1b5085e7241bba900410a4e5e5, type: 2}
-  - {fileID: 11400000, guid: 4f10cbdcc8b5ad94eb1daef23da305cf, type: 2}
-  - {fileID: 11400000, guid: e75be4be9445a9c4f9d8ff947d5e38a7, type: 2}
-  - {fileID: 11400000, guid: a9a30db9316e26046863371d103e08e4, type: 2}
-  - {fileID: 11400000, guid: 3bb98f4c37953c3498ae72beb3f6578b, type: 2}
+  - {fileID: 11400000, guid: 1854a0d835ada93408b37243a25acb5b, type: 2}
+  - {fileID: 11400000, guid: af444883e691a8247ac64d2def31c034, type: 2}
   unlockStoreItems:
   - {fileID: 11400000, guid: 89fe560036fadb84b98637ddcbb0b46e, type: 2}
   - {fileID: 11400000, guid: 10afb77dc788a4a48893279c338a23a1, type: 2}
@@ -205,6 +165,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 42f017c257ad0ac44be5cca6ae21088e, type: 2}
   - {fileID: 11400000, guid: e7c16e81d079f2f4892129d494df202c, type: 2}
   - {fileID: 11400000, guid: c361d1afa9146d443965a23ae62dc8a0, type: 2}
+  - {fileID: 11400000, guid: bbbd08e8da94fce4abf14baed04b4c7b, type: 2}
+  - {fileID: 11400000, guid: 0711a6c5cf34dda4a9452d88c4e4396d, type: 2}
+  - {fileID: 11400000, guid: 586cf5ac91a3ff64180c34cc9923d40d, type: 2}
+  - {fileID: 11400000, guid: 73ed55bcf9fe15545bfb51b0691d9d56, type: 2}
   certificationDatas:
   - {fileID: 11400000, guid: 1b4caaf21f75cd1439ef2dbc56187051, type: 2}
   - {fileID: 11400000, guid: 6e2032c6ede57eb4ab899fa5788bdc92, type: 2}
@@ -227,3 +191,76 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0dece48a91e393d4f82c3bac9c9fb310, type: 2}
   - {fileID: 11400000, guid: 8334a416c6efca040993e0f5b27375e2, type: 2}
   - {fileID: 11400000, guid: 16e376e8475257b4b881f3070d3cd7ec, type: 2}
+  categoryWordFrequencies:
+  - categoryName: location
+    wordType: location
+    frequency: 1
+  - categoryName: variant
+    wordType: variant
+    frequency: 1
+  - categoryName: birds
+    wordType: prefixes
+    frequency: 1
+  - categoryName: negative
+    wordType: prefixes
+    frequency: 3
+  - categoryName: positive
+    wordType: prefixes
+    frequency: 3
+  - categoryName: action
+    wordType: prefixes
+    frequency: 4
+  - categoryName: neutral
+    wordType: prefixes
+    frequency: 3
+  - categoryName: slight-positive
+    wordType: prefixes
+    frequency: 2
+  - categoryName: vehicle
+    wordType: nouns
+    frequency: 1
+  - categoryName: animal
+    wordType: nouns
+    frequency: 4
+  - categoryName: profession
+    wordType: nouns
+    frequency: 2
+  - categoryName: object
+    wordType: nouns
+    frequency: 4
+  - categoryName: location
+    wordType: nouns
+    frequency: 2
+  - categoryName: food
+    wordType: nouns
+    frequency: 3
+  - categoryName: event
+    wordType: nouns
+    frequency: 1
+  - categoryName: creature
+    wordType: nouns
+    frequency: 1
+  - categoryName: body
+    wordType: nouns
+    frequency: 1
+  - categoryName: furniture
+    wordType: nouns
+    frequency: 1
+  - categoryName: clothing
+    wordType: nouns
+    frequency: 1
+  - categoryName: cylinder
+    wordType: nouns
+    frequency: 1
+  - categoryName: mammal
+    wordType: nouns
+    frequency: 3
+  - categoryName: bird
+    wordType: nouns
+    frequency: 2
+  - categoryName: bug
+    wordType: nouns
+    frequency: 2
+  - categoryName: style
+    wordType: prefixes
+    frequency: 1

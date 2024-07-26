@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Ch_ShortAdd
   m_EditorClassIdentifier: 
   identifier: Short Add
+  description: A player will add to your drawing.
   caseFormat: 2
+  promptFormat: 0
   numberOfTasks: 3
-  pointsPerCorrectWord: 3
-  bonusPoints: 3
-  cost: 0
-  basePointsPerCorrectWord: 3
-  baseBonusPoints: 3
-  baseStartingModifier: 1
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -47,30 +47,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 1
-  penalty: 0
+  pointsPerCorrectWord: 3
+  bonusPoints: 3
+  cost: 0
+  basePointsPerCorrectWord: 3
+  baseBonusPoints: 3
+  baseStartingModifier: 1
+  maxScoreModifier: 1
   startingScoreModifier: 1
   modifierDecrement: 0.1
-  taskFalloff: 0
-  colour: {r: 0.73147297, g: 1, b: 0.7311321, a: 1}
-  backgroundFontColour: {r: 0.33333334, g: 0.3882353, b: 0.33333334, a: 1}
-  importantFontColour: {r: 0.047058824, g: 0.34901962, b: 0.039215688, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - prefix
-    - noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 10
   _percentageChanceOfBadCertification: 25
   _maxNumberOfSeals: 1
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 45
-  - taskType: 3
-    duration: 45
-  - taskType: 5
-    duration: 60
-  description: A player will add to your drawing.
+  colour: {r: 0.73147297, g: 1, b: 0.7311321, a: 1}
+  backgroundFontColour: {r: 0.33333334, g: 0.3882353, b: 0.33333334, a: 1}
+  importantFontColour: {r: 0.047058824, g: 0.34901962, b: 0.039215688, a: 1}
   upgrades: []

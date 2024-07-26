@@ -76,6 +76,9 @@ public class EditorUtils : MonoBehaviour
                 case "variant":
                     wordType = WordGroupData.WordType.variant;
                     break;
+                case "location":
+                    wordType = WordGroupData.WordType.location;
+                    break;
                 default:
                     continue;
             }

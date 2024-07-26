@@ -8,7 +8,7 @@ namespace ChickenScratch
     {
         public enum HatType
         {
-            crown, baseball_cap, jester_hat, top_hat, fez, chefs_hat, wizards, beret, straw_hat, santa, sherlock, flower, propeller, none
+            crown, baseball_cap, jester_hat, top_hat, fez, chefs_hat, wizards, beret, straw_hat, santa, sherlock, flower, propeller, cloche, fedora, party, grad, none
         }
         public HatType hatType;
         public string hatName;

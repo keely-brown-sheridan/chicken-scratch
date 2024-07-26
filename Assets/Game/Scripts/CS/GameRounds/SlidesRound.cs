@@ -1,4 +1,5 @@
 
+using Steamworks;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -100,12 +101,21 @@ namespace ChickenScratch
         public int startingCaseIndex = 0;
         private bool hasUpdatedCasesInSlideRound = false;
         public int expectedCaseCount;
+
+        private Dictionary<int, BirdName> competitionCaseChoicesMap = new Dictionary<int, BirdName>();
         public override void StartRound()
         {
             hasUpdatedCasesInSlideRound = false;
             currentBirdBuckTotal = 0;
             hasStartedShowingDayResult = false;
             inProgress = true;
+
+            if(GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.piggy_bank))
+            {
+                float piggyBankValue = GameManager.Instance.playerFlowManager.GetStoreItemValue(StoreItem.StoreItemType.piggy_bank);
+                GameManager.Instance.playerFlowManager.storeRound.IncreaseCurrentMoney((int)(piggyBankValue * GameManager.Instance.playerFlowManager.storeRound.currentMoney)+1);
+                AudioManager.Instance.PlaySound("TimeBonus");
+            }
 
             if (SettingsManager.Instance.isHost)
             {
@@ -181,7 +191,7 @@ namespace ChickenScratch
                 bool caseContainsPlayer = endgameCase.ContainsBird(SettingsManager.Instance.birdName);
                 if (caseContainsPlayer)
                 {
-                    int birdBucksEarned = endgameCase.taskDataMap.Count != 0 ? endgameCase.scoringData.GetTotalPoints() / endgameCase.taskDataMap.Count : 0;
+                    int birdBucksEarned = endgameCase.GetPointsForPlayerOnTask(SettingsManager.Instance.birdName);
                     bool caseHasShareholdersCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(endgameCase.caseTypeName, "Shareholders");
                     if (caseHasShareholdersCertification)
                     {
@@ -344,6 +354,7 @@ namespace ChickenScratch
                         break;
                     case TaskData.TaskType.morph_guessing:
                     case TaskData.TaskType.base_guessing:
+                    case TaskData.TaskType.competition_guessing:
                         currentSlideType = slideTypeMap[SlideTypeData.SlideType.guess];
                         GameObject guessingSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
                         GuessSlideContents guessingSlide = guessingSlideObject.GetComponent<GuessSlideContents>();
@@ -353,9 +364,9 @@ namespace ChickenScratch
                         break;
                 }
             }
-
+            CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(caseData.caseTypeName);
             caseTypeSlideVisualizer.Initialize(caseData.caseTypeColour, caseData.caseTypeName);
-            originalPromptText.text = SettingsManager.Instance.CreatePromptText(correctPrefix, correctNoun);
+            originalPromptText.text = SettingsManager.Instance.CreatePromptText(correctPrefix, correctNoun, choice.promptFormat);
 
             summarySlide.LoadSections();
             queuedSlides.Add(summarySlide);
@@ -666,6 +677,23 @@ namespace ChickenScratch
                 _phaseToTransitionTo = GamePhase.accolades;
             }
             GameManager.Instance.gameFlowManager.resolveTransitionCondition("slides_complete");
+        }
+
+        public void SetCompetitionChoice(int caseID, BirdName player)
+        {
+            if(!competitionCaseChoicesMap.ContainsKey(caseID))
+            {
+                competitionCaseChoicesMap.Add(caseID, player);
+            }
+        }
+
+        public bool IsPlayerCompetitionWinner(int caseIdentifier, BirdName player)
+        {
+            if(competitionCaseChoicesMap.ContainsKey(caseIdentifier))
+            {
+                return competitionCaseChoicesMap[caseIdentifier] == player;
+            }
+            return false;
         }
     }
 }

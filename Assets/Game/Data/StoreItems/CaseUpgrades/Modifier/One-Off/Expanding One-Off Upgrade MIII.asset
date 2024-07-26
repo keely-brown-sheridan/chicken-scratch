@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Expanding One-Off***
   itemDescription: Improves the base multiplier for Expanding One-Off cases.
   storeBGColour: {r: 0.654902, g: 0.84705883, b: 1, a: 1}
-  cost: 45
+  cost: 40
   itemImagePrefab: {fileID: 7135884217427031847, guid: e7ef5ff82d48799459c69046956aec73,
     type: 3}
   isSinglePurchase: 0

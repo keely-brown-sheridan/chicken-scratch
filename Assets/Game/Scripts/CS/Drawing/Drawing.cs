@@ -37,7 +37,8 @@ namespace ChickenScratch
                 newLineRenderer.material.color = line.lineColour;
 
                 int iterator = 0;
-                
+
+                position = new Vector3(position.x, position.y, 0f);
                 foreach(Vector3 linePosition in line.GetPositions())
                 {
                     newLineRenderer.SetPosition(iterator, linePosition + position );
@@ -64,6 +65,7 @@ namespace ChickenScratch
                 currentDrawingLine = drawingObjects[i].GetComponent<DrawingLine>();
                 Vector3 drawingObjectPosition = drawingObjects[i].transform.position;
                 currentDrawingLine.drawingLineData.objectPosition = new Vector3(drawingObjectPosition.x, drawingObjectPosition.y, drawingObjectPosition.z);
+
                 points = new List<Vector3>();
                 LineRenderer currentLineRenderer = drawingObjects[i].GetComponent<LineRenderer>();
                 //currentLineRenderer.Simplify(0.1f);
@@ -72,6 +74,7 @@ namespace ChickenScratch
                     pointToAdd = currentLineRenderer.GetPosition(j);
                     //Subtract the world position so that it isn't based on where the drawing is when it's being drawn
                     points.Add(pointToAdd - transformPosition);
+                    
                 }
                 currentDrawingLine.drawingLineData.SetPositions(points);
                 drawingVisuals.Add(currentDrawingLine.drawingLineData);

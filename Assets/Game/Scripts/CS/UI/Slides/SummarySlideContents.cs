@@ -128,6 +128,7 @@ namespace ChickenScratch
             PromptSummarySlideSection promptSummarySlideSection = promptSummarySlideSectionObject.GetComponent<PromptSummarySlideSection>();
             promptSummarySlideSection.Initialize(promptData, round, caseID, timeModifierDecrement);
             promptSummarySlideSection.positionWhereItShouldBeIfUnityWasntShit = spawnPosition;
+
             summarySections.Add(promptSummarySlideSection);
         }
 
@@ -139,13 +140,30 @@ namespace ChickenScratch
             guessSummarySlideSectionObject.transform.localPosition = spawnPosition;
             guessSummarySlideSection.Initialize(guessData, correctWordIdentifiersMap, round, caseID, timeModifierDecrement);
             guessSummarySlideSection.positionWhereItShouldBeIfUnityWasntShit = spawnPosition;
+            
             summarySections.Add(guessSummarySlideSection);
         }
 
         public void LoadSections()
         {
             EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[currentCaseID];
-            slideBirdbuckDistributor.Initialize(currentCase.scoringData, summarySections);
+
+            List<SummarySlideSection> sectionsToReceiveMoney = new List<SummarySlideSection>();
+            foreach(SummarySlideSection slideSection in summarySections)
+            {
+                if(currentCase.GetPointsForPlayerOnTask(slideSection.author) > 0)
+                {
+                    sectionsToReceiveMoney.Add(slideSection);
+                    CaseChoiceData caseChoiceData = GameDataManager.Instance.GetCaseChoice(currentCase.caseTypeName);
+                    if(caseChoiceData != null && caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.competition && slideSection.author != currentCase.guessData.author)
+                    {
+                        //This player was selected for the competition, a visual should be shown to indicate this
+                        slideSection.ShowCompetitionSelectionVisual();
+                    }
+                }
+            }
+
+            slideBirdbuckDistributor.Initialize(currentCase.scoringData, sectionsToReceiveMoney);
         }
 
         private Vector3 GetSpawnPosition()

@@ -58,15 +58,25 @@ namespace ChickenScratch
                 wordManager.LoadPromptWords();
 
                 //Create prefabs of each of the groups
-                foreach (KeyValuePair<string, WordGroupData> prefixGroup in wordManager.AllPrefixes)
+                foreach (KeyValuePair<string, WordGroupData> prefixGroup in wordManager.wordGroupMap["prefixes"])
                 {
                     wordGroups.Add(prefixGroup.Value);
                     reviewWordGroupContainer.CreateLockedWordGroup(prefixGroup.Key, prefixGroup.Value.wordType, prefixGroup.Value.words, this, isHost);
                 }
-                foreach (KeyValuePair<string, WordGroupData> nounGroup in wordManager.AllNouns)
+                foreach (KeyValuePair<string, WordGroupData> nounGroup in wordManager.wordGroupMap["nouns"])
                 {
                     wordGroups.Add(nounGroup.Value);
                     reviewWordGroupContainer.CreateLockedWordGroup(nounGroup.Key, nounGroup.Value.wordType, nounGroup.Value.words, this, isHost);
+                }
+                foreach (KeyValuePair<string, WordGroupData> variantGroup in wordManager.wordGroupMap["variant"])
+                {
+                    wordGroups.Add(variantGroup.Value);
+                    reviewWordGroupContainer.CreateLockedWordGroup(variantGroup.Key, variantGroup.Value.wordType, variantGroup.Value.words, this, isHost);
+                }
+                foreach (KeyValuePair<string, WordGroupData> locationGroup in wordManager.wordGroupMap["location"])
+                {
+                    wordGroups.Add(locationGroup.Value);
+                    reviewWordGroupContainer.CreateLockedWordGroup(locationGroup.Key, locationGroup.Value.wordType, locationGroup.Value.words, this, isHost);
                 }
 
                 //Load the player created word groups
@@ -322,7 +332,7 @@ namespace ChickenScratch
         public string name = "";
         public enum WordType
         {
-            prefixes, nouns, variant, invalid
+            prefixes, nouns, variant, location, invalid
         }
         public WordType wordType = WordType.invalid;
         public List<WordData> words = new List<WordData>();

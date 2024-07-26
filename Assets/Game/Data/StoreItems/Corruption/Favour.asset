@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Favour
   itemDescription: Decreases the quota tomorrow by 10 birdbucks.
   storeBGColour: {r: 0.990566, g: 0.7242346, b: 0.75206035, a: 1}
-  cost: 8
+  cost: 5
   itemImagePrefab: {fileID: 5734537001128619359, guid: 9fd1f54e43ccfe043871d8891a93936a,
     type: 3}
   isSinglePurchase: 0

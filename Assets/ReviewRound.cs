@@ -106,7 +106,6 @@ namespace ChickenScratch
             playerReviewMap.Clear();
             foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
-                int birdBucksEarned = caseData.scoringData.GetTotalPoints();
                 
                 foreach(KeyValuePair<int,EndgameTaskData> task in caseData.taskDataMap)
                 {
@@ -117,7 +116,7 @@ namespace ChickenScratch
                     currentPlayerData = playerReviewMap[task.Value.assignedPlayer];
                     currentPlayerData.caseIndices.Add(caseData.identifier);
                     currentPlayerData.caseTaskMap.Add(caseData.identifier, task.Key);
-                    currentPlayerData.birdBucksEarned += caseData.taskDataMap.Count != 0 ? birdBucksEarned / caseData.taskDataMap.Count : 0;
+                    currentPlayerData.birdBucksEarned += caseData.GetPointsForPlayerOnTask(task.Value.assignedPlayer);
                     currentPlayerData.numberOfStars += task.Value.ratingData.likeCount;
                     currentPlayerData.numberOfEyes += task.Value.ratingData.dislikeCount;
                 }
@@ -226,6 +225,7 @@ namespace ChickenScratch
                     break;
                 case TaskData.TaskType.morph_guessing:
                 case TaskData.TaskType.base_guessing:
+                case TaskData.TaskType.competition_guessing:
                     GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], parent);
                     GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();
                     guessCaseEmailSection.Initialize(caseData.correctWordIdentifierMap, caseData.guessData, taskData.ratingData);

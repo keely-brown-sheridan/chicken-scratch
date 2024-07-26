@@ -30,6 +30,7 @@ namespace ChickenScratch
         public void OnPress()
         {
             email.PopulateCase(identifier);
+            AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
         }
     }
 }

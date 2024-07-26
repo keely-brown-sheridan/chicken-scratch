@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Ch_Corners
   m_EditorClassIdentifier: 
   identifier: Corners
+  description: Each player draws only in a corner of the drawing area. Each player
+    only gets part of the prompt.
   caseFormat: 6
+  promptFormat: 0
   numberOfTasks: 5
-  pointsPerCorrectWord: 7
-  bonusPoints: 6
-  cost: 0
-  basePointsPerCorrectWord: 7
-  baseBonusPoints: 6
-  baseStartingModifier: 1.25
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - hard-noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -63,31 +64,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 3
-  penalty: 0
+  pointsPerCorrectWord: 7
+  bonusPoints: 6
+  cost: 0
+  basePointsPerCorrectWord: 7
+  baseBonusPoints: 6
+  baseStartingModifier: 1.25
+  maxScoreModifier: 1
   startingScoreModifier: 1.25
   modifierDecrement: 0.1
-  taskFalloff: 0
-  colour: {r: 1, g: 0.96186435, b: 0.6367924, a: 1}
-  backgroundFontColour: {r: 0.4811321, g: 0.47432363, b: 0.40623888, a: 1}
-  importantFontColour: {r: 0.4056604, g: 0.36389276, b: 0.017221425, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - prefix
-    - hard-noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 10
   _percentageChanceOfBadCertification: 10
   _maxNumberOfSeals: 2
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 60
-  - taskType: 3
-    duration: 60
-  - taskType: 5
-    duration: 60
-  description: Each player draws only in a corner of the drawing area. Each player
-    only gets part of the prompt.
+  colour: {r: 1, g: 0.96186435, b: 0.6367924, a: 1}
+  backgroundFontColour: {r: 0.4811321, g: 0.47432363, b: 0.40623888, a: 1}
+  importantFontColour: {r: 0.4056604, g: 0.36389276, b: 0.017221425, a: 1}
   upgrades: []

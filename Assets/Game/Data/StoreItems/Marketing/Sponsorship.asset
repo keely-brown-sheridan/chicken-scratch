@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Sponsorship
   itemDescription: Increases the number of cases available every day by 20%
   storeBGColour: {r: 0.18222678, g: 0.5943396, b: 0.20336072, a: 1}
-  cost: 25
+  cost: 20
   itemImagePrefab: {fileID: 5123578611435497722, guid: bac210e7f935cf840a9235b77292374b,
     type: 3}
   isSinglePurchase: 0

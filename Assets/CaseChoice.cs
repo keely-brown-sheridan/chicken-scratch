@@ -77,7 +77,8 @@ namespace ChickenScratch
                 difficulty = prefixWord.difficulty + nounWord.difficulty;
                 string promptValue = "";
                 if(caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.curveball ||
-                    caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.morph)
+                    caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.morph ||
+                    caseChoiceData.caseFormat == CaseTemplateData.CaseFormat.location)
                 {
                     promptValue = SettingsManager.Instance.CreateNounText(nounWord.value);
                 }
@@ -88,7 +89,7 @@ namespace ChickenScratch
                 }
                 else
                 {
-                    promptValue = SettingsManager.Instance.CreatePromptText(prefixWord.value, nounWord.value);
+                    promptValue = SettingsManager.Instance.CreatePromptText(prefixWord.value, nounWord.value, caseChoiceData.promptFormat);
                 }
                 prefixText.text = promptValue;
                 totalReward += prefixWord.difficulty;

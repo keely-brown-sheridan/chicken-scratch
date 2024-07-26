@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Coffee Run
   itemDescription: Increases the time in every day by 60 seconds.
   storeBGColour: {r: 0.745283, g: 0.40645987, b: 0.32694018, a: 1}
-  cost: 12
+  cost: 8
   itemImagePrefab: {fileID: 4479245871912803953, guid: 018352835db9e0549bc3d426105678af,
     type: 3}
   isSinglePurchase: 1

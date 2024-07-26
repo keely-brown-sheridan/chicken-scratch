@@ -21,7 +21,7 @@ namespace ChickenScratch
         public int bonusBirdbucks;
         public int birdbucksPerCorrectWord;
 
-        public void SetWords(Dictionary<int,List<string>> inPossibleWordsMap, Dictionary<int,string> inCorrectWordsMap, Dictionary<int,List<int>> inCorrectPromptMap)
+        public void SetWords(Dictionary<int,List<string>> inPossibleWordsMap, Dictionary<int,string> inCorrectWordsMap, Dictionary<int,List<int>> inCorrectPromptMap, CaseChoiceData.PromptFormat promptFormat)
         {
             List<List<string>> possibleWords = new List<List<string>>();
             List<string> correctWords = new List<string>();
@@ -62,7 +62,17 @@ namespace ChickenScratch
                 CaseWordData noun = GameDataManager.Instance.GetWord(correctWords[1]);
                 if(prefix != null && noun != null)
                 {
-                    correctPrompt = prefix.value + " " + noun.value;
+                    switch(promptFormat)
+                    {
+                        case CaseChoiceData.PromptFormat.standard:
+                        case CaseChoiceData.PromptFormat.variant:
+                            correctPrompt = prefix.value + " " + noun.value;
+                            break;
+                        case CaseChoiceData.PromptFormat.location:
+                            correctPrompt = prefix.value + " in the " + noun.value;
+                            break;
+                    }
+                    
                 }
                 
             }

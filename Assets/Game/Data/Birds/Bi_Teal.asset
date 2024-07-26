@@ -157,3 +157,35 @@ MonoBehaviour:
     width: 21.3652
     height: 15.6834
     scale: {x: 1, y: 1, z: 1}
+  - hatType: 13
+    hatName: Cloche
+    hatSprite: {fileID: -1322323603, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -9, y: 23.2, z: 0}
+    rotation: {x: 0, y: 0, z: 9.788}
+    width: 46.125
+    height: 33.375
+    scale: {x: 1, y: 1, z: 1}
+  - hatType: 14
+    hatName: Fedora
+    hatSprite: {fileID: -1153811437, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -10.3, y: 27, z: 0}
+    rotation: {x: 0, y: 0, z: 25.03125}
+    width: 34.59375
+    height: 25.03125
+    scale: {x: -1, y: 1, z: 1}
+  - hatType: 15
+    hatName: Party
+    hatSprite: {fileID: -1474779919, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -13.6, y: 31.6, z: 0}
+    rotation: {x: 0, y: 0, z: 31.217}
+    width: 13.5
+    height: 22.875
+    scale: {x: 1, y: 1, z: 1}
+  - hatType: 16
+    hatName: Grad
+    hatSprite: {fileID: 744275987, guid: 42e758ae21d478e4985226fc7e818ae1, type: 3}
+    position: {x: -3.6, y: 19.8, z: 0}
+    rotation: {x: 0, y: 0, z: 20.308}
+    width: 35.0625
+    height: 37.125
+    scale: {x: -1, y: 1, z: 1}

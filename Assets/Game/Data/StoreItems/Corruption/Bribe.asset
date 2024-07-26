@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Bribe
   itemDescription: Decreases the required quota for every day by 10 birdbucks.
   storeBGColour: {r: 1, g: 0.47450984, b: 0.52978456, a: 1}
-  cost: 15
+  cost: 10
   itemImagePrefab: {fileID: 2509249265037313562, guid: a140b0809a19bf846a0dbc7a8539aa4d,
     type: 3}
   isSinglePurchase: 0

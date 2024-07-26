@@ -31,6 +31,14 @@ namespace ChickenScratch
                     wordGroupTextColour = SettingsManager.Instance.nounFontColour;
                     wordGroupBGColour = SettingsManager.Instance.nounBGColour;
                     break;
+                case WordGroupData.WordType.variant:
+                    wordGroupTextColour = SettingsManager.Instance.variantFontColour;
+                    wordGroupBGColour = SettingsManager.Instance.variantBGColour;
+                    break;
+                case WordGroupData.WordType.location:
+                    wordGroupTextColour = SettingsManager.Instance.locationFontColour;
+                    wordGroupBGColour = SettingsManager.Instance.locationBGColour;
+                    break;
             }
             wordGroupName = inWordGroupName;
             wordGroupText.text = wordGroupName;

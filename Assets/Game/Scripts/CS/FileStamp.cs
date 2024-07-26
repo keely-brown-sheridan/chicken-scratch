@@ -99,7 +99,6 @@ namespace ChickenScratch
                     if (Vector3.Distance(transform.position, restingPositionTransform.position) < arrivalThreshold)
                     {
                         transform.position = restingPositionTransform.position;
-                        
                         currentState = State.rest;
                     }
                     break;

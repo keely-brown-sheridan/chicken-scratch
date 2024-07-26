@@ -49,7 +49,7 @@ namespace ChickenScratch
         protected bool isBallparked = false;
         protected int caseID = -1;
 
-        void Update()
+        protected virtual void Update()
         {
             if(isActive && !isStampActive)
             {

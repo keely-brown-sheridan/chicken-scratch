@@ -14,7 +14,7 @@ namespace ChickenScratch
     {
         public enum CaseState
         {
-            prompting, drawing, copy_drawing, add_drawing, waiting, guessing, blender_drawing, morph_guessing, invalid
+            prompting, drawing, copy_drawing, add_drawing, waiting, guessing, blender_drawing, morph_guessing, competition_guessing, invalid
         }
         public CaseState currentState = CaseState.drawing;
 
@@ -61,6 +61,9 @@ namespace ChickenScratch
 
         [SerializeField]
         private MorphingGuessCaseFolder morphGuessCaseFolder;
+
+        [SerializeField]
+        private CompetingCaseFolder competingCaseFolder;
 
         [SerializeField]
         private TMPro.TMP_Text casesRemainingText;
@@ -241,7 +244,9 @@ namespace ChickenScratch
             stampIsActive = false;
             BirdName lastDrawer;
             BirdData lastDrawerBird;
-
+            int firstDrawingRound = -1;
+            int secondDrawingRound = -1;
+            int thirdDrawingRound = -1;
             switch (currentState)
             {
                 case CaseState.prompting:
@@ -494,8 +499,6 @@ namespace ChickenScratch
                     guessingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     break;
                 case CaseState.morph_guessing:
-                    int firstDrawingRound = -1;
-                    int secondDrawingRound = -1;
                     foreach(int requiredTask in chainData.requiredTasks)
                     {
                         if(chainData.drawings.ContainsKey(requiredTask))
@@ -533,6 +536,55 @@ namespace ChickenScratch
                     }
 
                     morphGuessCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
+                    break;
+                case CaseState.competition_guessing:
+                    
+                    foreach (int requiredTask in chainData.requiredTasks)
+                    {
+                        if (chainData.drawings.ContainsKey(requiredTask))
+                        {
+                            if (firstDrawingRound == -1)
+                            {
+                                firstDrawingRound = requiredTask;
+                            }
+                            else if (secondDrawingRound == -1)
+                            {
+                                secondDrawingRound = requiredTask;
+                            }
+                            else if (thirdDrawingRound == -1)
+                            {
+                                thirdDrawingRound = requiredTask;
+                                break;
+                            }
+                        }
+                    }
+                    if (firstDrawingRound == -1 || secondDrawingRound == -1)
+                    {
+                        Debug.LogError("Could not isolate the two required drawing tasks for the competition guess task.");
+                        return;
+                    }
+                    List<DrawingData> drawings = new List<DrawingData>() { chainData.drawings[firstDrawingRound], chainData.drawings[secondDrawingRound] };
+                    if(thirdDrawingRound != -1)
+                    {
+                        drawings.Add(chainData.drawings[thirdDrawingRound]);
+                    }
+                    competingCaseFolder.Initialize(queuedFolderMap[queuedCaseIndex].round, chainData.identifier, chainData.possibleWordsMap, drawings, chainData.currentTaskModifiers, ForceCaseExpirySubmit);
+                    if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
+                    {
+                        competingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
+                    }
+                    lastDrawer = chainData.drawings[lastRoundIndex].author;
+                    lastDrawerBird = GameDataManager.Instance.GetBird(lastDrawer);
+                    if (lastDrawerBird == null)
+                    {
+                        Debug.LogError("Could not update folder colour because last drawer bird[" + lastDrawer.ToString() + "] was not mapped in the Colour Manager.");
+                    }
+                    else
+                    {
+                        inFolderColour = lastDrawerBird.folderColour;
+                    }
+
+                    competingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     break;
             }
 
@@ -658,6 +710,19 @@ namespace ChickenScratch
                     else
                     {
                         if (!morphGuessCaseFolder.ChooseGuess(selectedCase.identifier))
+                        {
+                            return;
+                        }
+                    }
+                    break;
+                case CaseState.competition_guessing:
+                    if (timeHasExpired)
+                    {
+                        competingCaseFolder.ForceGuess(selectedCase.identifier);
+                    }
+                    else
+                    {
+                        if (!competingCaseFolder.ChooseGuess(selectedCase.identifier))
                         {
                             return;
                         }
@@ -904,6 +969,10 @@ namespace ChickenScratch
                     morphGuessCaseFolder.RegisterToStampComplete(OnSubmitted);
                     morphGuessCaseFolder.Submit();
                     break;
+                case CaseState.competition_guessing:
+                    competingCaseFolder.RegisterToStampComplete(OnSubmitted);
+                    competingCaseFolder.Submit();
+                    break;
                 case CaseState.copy_drawing:
                     copyingCaseFolder.RegisterToStampComplete(OnSubmitted);
                     copyingCaseFolder.Submit();
@@ -1008,6 +1077,17 @@ namespace ChickenScratch
                     currentScoreModifier = morphGuessCaseFolder.GetScoreModifier();
                     crossedTimeThreshold = morphGuessCaseFolder.HasCrossedThreshold();
                     break;
+                case CaseState.competition_guessing:
+                    if (force)
+                    {
+                        competingCaseFolder.PullDownStamp();
+                        competingCaseFolder.ForceGuess(cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier);
+                    }
+                    competingCaseFolder.DeregisterToStampComplete(OnSubmitted);
+                    competingCaseFolder.Hide();
+                    currentScoreModifier = competingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = competingCaseFolder.HasCrossedThreshold();
+                    break;
                 case CaseState.copy_drawing:
                     if(force)
                     {
@@ -1056,7 +1136,7 @@ namespace ChickenScratch
             else
             {
                 GameManager.Instance.playerFlowManager.drawingRound.onPlayerSubmitTask.Invoke();
-                if (currentState != CaseState.guessing && currentState != CaseState.morph_guessing)
+                if (currentState != CaseState.guessing && currentState != CaseState.morph_guessing && currentState != CaseState.competition_guessing)
                 {
                     GameManager.Instance.gameDataHandler.CmdTransitionCase(caseID);
                 }
@@ -1394,6 +1474,7 @@ namespace ChickenScratch
                     case CaseState.prompting:
                     case CaseState.guessing:
                     case CaseState.morph_guessing:
+                    case CaseState.competition_guessing:
                         foreach (CabinetDrawer drawer in cabinetDrawerMap.Values)
                         {
                             if (drawer.currentChainData.active)

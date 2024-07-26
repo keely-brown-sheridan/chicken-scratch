@@ -12,7 +12,7 @@ namespace ChickenScratch
         {
             eraser, marker, white_out, reroll, category_preview, score_tracker, highlighter, stopwatch, case_tab, case_unlock, case_upgrade,
             coffee_pot, coffee_mug, advertisement, nest_feathering, hat, case_frequency, campaign, case_certification, sponsorship, coffee_run, 
-            favour, corruption
+            favour, corruption, piggy_bank
         }
         [SerializeField]
         private TMPro.TMP_Text itemNameText;

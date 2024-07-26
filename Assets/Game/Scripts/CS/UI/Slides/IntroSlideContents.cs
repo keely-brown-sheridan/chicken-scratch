@@ -30,7 +30,8 @@ namespace ChickenScratch
         {
             duration = inDuration;
             timeActive = 0f;
-            originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun);
+            
+            
             caseProgressReminderText.text = caseReminder;
             if (!GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.ContainsKey(caseID))
             {
@@ -38,6 +39,8 @@ namespace ChickenScratch
             }
             EndgameCaseData currentCase = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
             caseTypeSlideVisualizer.Initialize(currentCase.caseTypeColour, currentCase.caseTypeName);
+            CaseChoiceData choice = GameDataManager.Instance.GetCaseChoice(currentCase.caseTypeName);
+            originalPromptText.text = SettingsManager.Instance.CreatePromptText(prefix, noun, choice.promptFormat);
         }
 
         public override void Show()

@@ -46,8 +46,6 @@ public class ArgumentPanel : MonoBehaviour
         playerReviewMap.Clear();
         foreach (EndgameCaseData caseData in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
         {
-            int birdBucksEarned = caseData.scoringData.GetTotalPoints();
-
             foreach (KeyValuePair<int, EndgameTaskData> task in caseData.taskDataMap)
             {
                 if(task.Value.assignedPlayer != accusedBird && task.Value.assignedPlayer != accuserBird)
@@ -158,6 +156,7 @@ public class ArgumentPanel : MonoBehaviour
                 break;
             case TaskData.TaskType.morph_guessing:
             case TaskData.TaskType.base_guessing:
+            case TaskData.TaskType.competition_guessing:
                 GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], parent);
                 GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();
                 guessCaseEmailSection.Initialize(caseData.correctWordIdentifierMap, caseData.guessData, taskData.ratingData);

@@ -10,7 +10,7 @@ namespace ChickenScratch
         public string name;
         public enum CaseFormat
         {
-            standard, rush, contribution, shrunk, thirds, top_bottom, corners, curveball, blind, blender, morph
+            standard, rush, contribution, shrunk, thirds, top_bottom, corners, curveball, blind, blender, morph, location, competition
         }
         public CaseFormat format = CaseFormat.standard;
 
@@ -20,10 +20,8 @@ namespace ChickenScratch
         public int baseCost;
         public int basePointsPerCorrectWord;
         public int baseBonusPoints;
-        public int penalty;
         public string caseTypeName;
         public Color caseTypeColour;
-        public float taskFalloff;
 
         public float startingScoreModifier;
 
@@ -39,8 +37,6 @@ namespace ChickenScratch
             baseCost = choice.cost;
             basePointsPerCorrectWord = choice.pointsPerCorrectWord;
             baseBonusPoints = choice.bonusPoints;
-            taskFalloff = choice.taskFalloff;
-            penalty = choice.penalty;
             startingScoreModifier = choice.startingScoreModifier;
             caseTypeName = choice.identifier;
             caseTypeColour = choice.colour;

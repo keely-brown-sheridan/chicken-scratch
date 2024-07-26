@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Ch_Collapsing Telephone
   m_EditorClassIdentifier: 
   identifier: Collapsing Telephone
+  description: A telephone case where the drawing space collapses over time. Your
+    drawing will be captioned by another player.
   caseFormat: 0
+  promptFormat: 0
   numberOfTasks: 4
-  pointsPerCorrectWord: 4
-  bonusPoints: 4
-  cost: 0
-  basePointsPerCorrectWord: 6
-  baseBonusPoints: 4
-  baseStartingModifier: 1.25
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - easy-prefix
+    - noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -51,33 +52,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 1
-  penalty: 0
+  pointsPerCorrectWord: 4
+  bonusPoints: 4
+  cost: 0
+  basePointsPerCorrectWord: 6
+  baseBonusPoints: 4
+  baseStartingModifier: 1.25
+  maxScoreModifier: 1
   startingScoreModifier: 1
   modifierDecrement: 0.1
-  taskFalloff: 0
-  colour: {r: 0.7980598, g: 0.9245283, b: 0.8940014, a: 1}
-  backgroundFontColour: {r: 0.4, g: 0.4509804, b: 0.44313726, a: 1}
-  importantFontColour: {r: 0.054512277, g: 0.3301887, b: 0.2612696, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - easy-prefix
-    - noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 0
   _percentageChanceOfBadCertification: 0
   _maxNumberOfSeals: 1
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 120
-  - taskType: 4
-    duration: 120
-  - taskType: 1
-    duration: 60
-  - taskType: 5
-    duration: 60
-  description: A telephone case where the drawing space collapses over time. Your
-    drawing will be captioned by another player.
+  colour: {r: 0.7980598, g: 0.9245283, b: 0.8940014, a: 1}
+  backgroundFontColour: {r: 0.4, g: 0.4509804, b: 0.44313726, a: 1}
+  importantFontColour: {r: 0.054512277, g: 0.3301887, b: 0.2612696, a: 1}
   upgrades: []

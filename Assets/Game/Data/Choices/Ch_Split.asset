@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Ch_Split
   m_EditorClassIdentifier: 
   identifier: Split
+  description: Your canvas will only be the top half. Another player will add to
+    it.
   caseFormat: 5
+  promptFormat: 0
   numberOfTasks: 3
-  pointsPerCorrectWord: 3
-  bonusPoints: 3
-  cost: 0
-  basePointsPerCorrectWord: 3
-  baseBonusPoints: 3
-  baseStartingModifier: 1
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - prefix
+    - noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -47,31 +48,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 2
-  penalty: 0
+  pointsPerCorrectWord: 3
+  bonusPoints: 3
+  cost: 0
+  basePointsPerCorrectWord: 3
+  baseBonusPoints: 3
+  baseStartingModifier: 1
+  maxScoreModifier: 1
   startingScoreModifier: 1
   modifierDecrement: 0.1
-  taskFalloff: 0
-  colour: {r: 0.83214664, g: 0.9433962, b: 0.9127623, a: 1}
-  backgroundFontColour: {r: 0.3302332, g: 0.38679248, b: 0.3710816, a: 1}
-  importantFontColour: {r: 0.26548594, g: 0.3584906, b: 0.33312568, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - prefix
-    - noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 10
   _percentageChanceOfBadCertification: 25
   _maxNumberOfSeals: 1
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 45
-  - taskType: 3
-    duration: 45
-  - taskType: 5
-    duration: 60
-  description: Your canvas will only be the top half. Another player will add to
-    it.
+  colour: {r: 0.83214664, g: 0.9433962, b: 0.9127623, a: 1}
+  backgroundFontColour: {r: 0.3302332, g: 0.38679248, b: 0.3710816, a: 1}
+  importantFontColour: {r: 0.26548594, g: 0.3584906, b: 0.33312568, a: 1}
   upgrades: []

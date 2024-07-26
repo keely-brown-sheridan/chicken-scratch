@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c5960dbc4aa1044a0794ad46fea8e9, type: 3}
+  m_Name: Ch_Competition
+  m_EditorClassIdentifier: 
+  identifier: Competition
+  description: Multiple players will draw the prompt. The guesser will choose a player
+    to split the reward with.
+  caseFormat: 12
+  promptFormat: 0
+  numberOfTasks: 4
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - hard-prefix
+    - hard-noun
+  taskTemplates:
+  - roundIndex: 1
+    taskType: 0
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 2
+    taskType: 0
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 3
+    taskType: 0
+    duration: 60
+    taskModifiers: 
+    requiredRoundTasks: 00000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  - roundIndex: 4
+    taskType: 9
+    duration: 75
+    taskModifiers: 
+    requiredRoundTasks: 00000000010000000200000003000000
+    caseWordIndices:
+    - promptIndex: 1
+      wordIndex: 0100000002000000
+  pointsPerCorrectWord: 0
+  bonusPoints: 0
+  cost: 0
+  basePointsPerCorrectWord: 8
+  baseBonusPoints: 4
+  baseStartingModifier: 1
+  maxScoreModifier: 0
+  startingScoreModifier: 1
+  modifierDecrement: 0.1
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 0
+  currentFrequencyRampIndex: 0
+  _percentageChanceOfGoodCertification: 15
+  _percentageChanceOfBadCertification: 25
+  _maxNumberOfSeals: 1
+  colour: {r: 1, g: 0.95494807, b: 0.4481132, a: 1}
+  backgroundFontColour: {r: 0.3490566, g: 0.34173495, b: 0.2552065, a: 1}
+  importantFontColour: {r: 0.5283019, g: 0.49350238, b: 0.08223568, a: 1}
+  upgrades: []

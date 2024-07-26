@@ -30,6 +30,9 @@ namespace ChickenScratch
         [SerializeField]
         private TMPro.TMP_Text birdBucksEarnedText;
 
+        [SerializeField]
+        private GameObject competitionSelectionVisual;
+
         private int birdBucksEarned = 0;
         public Vector3 positionWhereItShouldBeIfUnityWasntShit;
 
@@ -48,6 +51,11 @@ namespace ChickenScratch
         public virtual void Show()
         {
             //transform.position = positionWhereItShouldBeIfUnityWasntShit;
+        }
+
+        public void ShowCompetitionSelectionVisual()
+        {
+            competitionSelectionVisual.SetActive(true);
         }
     }
 }

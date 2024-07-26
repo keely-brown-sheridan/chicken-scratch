@@ -89,8 +89,8 @@ namespace ChickenScratch
             {
                 NetworkClient.Ready();
             }
-            Screen.SetResolution(1920, 1080, false);
-            Screen.fullScreen = true;
+            Screen.SetResolution(1280, 720, false);
+            Screen.fullScreen = false;
 
             if (!isInitialized)
             {
@@ -160,6 +160,11 @@ namespace ChickenScratch
             caseChoiceUnlockPool = new List<string>(SettingsManager.Instance.gameMode.baseChoiceIdentifierPool);
             timeInDay = SettingsManager.Instance.gameMode.baseGameTime;
             currentGoal = SettingsManager.Instance.gameMode.dayOneGoalPerPlayer * SettingsManager.Instance.GetPlayerNameCount();
+
+            if(SettingsManager.Instance.isHost)
+            {
+                GameDataManager.Instance.SendInitialCaseFrequencies();
+            }
             isInitialized = true;
         }
 

@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Coffee Mug
   itemDescription: Increases the time tomorrow by 60 seconds.
   storeBGColour: {r: 0.9245283, g: 0.58725667, b: 0.51023495, a: 1}
-  cost: 4
+  cost: 3
   itemImagePrefab: {fileID: 6114168219710276963, guid: 6586626352bffef4f89d36d5bf0be5b3,
     type: 3}
   isSinglePurchase: 0

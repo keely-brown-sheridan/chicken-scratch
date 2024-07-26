@@ -4988,3 +4988,1578 @@ MonoBehaviour:
     difficulty: 1
     category: IMPROVEMENT
     wordType: 2
+  - identifier: location-LOCATION-PRAIRIES
+    value: PRAIRIES
+    difficulty: 5
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-VALLEY
+    value: VALLEY
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-RAVINE
+    value: RAVINE
+    difficulty: 4
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-WOODS
+    value: WOODS
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-CITY
+    value: CITY
+    difficulty: 1
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-TOWN
+    value: TOWN
+    difficulty: 1
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-VILLAGE
+    value: VILLAGE
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-OCEAN
+    value: OCEAN
+    difficulty: 1
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-PAST
+    value: PAST
+    difficulty: 4
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-PRESENT
+    value: PRESENT
+    difficulty: 5
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-FUTURE
+    value: FUTURE
+    difficulty: 4
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-BUILDING
+    value: BUILDING
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-INTERNET
+    value: INTERNET
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-KITCHEN
+    value: KITCHEN
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-BEDROOM
+    value: BEDROOM
+    difficulty: 1
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-BATHROOM
+    value: BATHROOM
+    difficulty: 1
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-BAKERY
+    value: BAKERY
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-UNKNOWN
+    value: UNKNOWN
+    difficulty: 4
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-VOID
+    value: VOID
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-SUBURBS
+    value: SUBURBS
+    difficulty: 4
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-RUINS
+    value: RUINS
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-CAVE
+    value: CAVE
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-JUNGLE
+    value: JUNGLE
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-APARTMENT
+    value: APARTMENT
+    difficulty: 4
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-MANSION
+    value: MANSION
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-TENT
+    value: TENT
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-CAGE
+    value: CAGE
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-JAIL
+    value: JAIL
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-ESCALATOR
+    value: ESCALATOR
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-BARN
+    value: BARN
+    difficulty: 2
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-NOOK
+    value: NOOK
+    difficulty: 5
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-SAFARI
+    value: SAFARI
+    difficulty: 3
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-BOX
+    value: BOX
+    difficulty: 1
+    category: LOCATION
+    wordType: 3
+  - identifier: location-LOCATION-DYSTOPIA
+    value: DYSTOPIA
+    difficulty: 5
+    category: LOCATION
+    wordType: 3
+  - identifier: nouns-FURNITURE-CHAIR
+    value: CHAIR
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-SOFA
+    value: SOFA
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-BED
+    value: BED
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-TABLE
+    value: TABLE
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-STOOL
+    value: STOOL
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-TOILET
+    value: TOILET
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-SINK
+    value: SINK
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-BATHTUB
+    value: BATHTUB
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-CABINET
+    value: CABINET
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-DRESSER
+    value: DRESSER
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-CRIB
+    value: CRIB
+    difficulty: 4
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-BOOKSHELF
+    value: BOOKSHELF
+    difficulty: 5
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-CURTAINS
+    value: CURTAINS
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-WINDOW
+    value: WINDOW
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-DESK
+    value: DESK
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-FIREPLACE
+    value: FIREPLACE
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-SHUTTERS
+    value: SHUTTERS
+    difficulty: 5
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-LAMP
+    value: LAMP
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-POT
+    value: POT
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-TELEVISION
+    value: TELEVISION
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-OTTOMAN
+    value: OTTOMAN
+    difficulty: 5
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-RUG
+    value: RUG
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-RADIO
+    value: RADIO
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-MATTRESS
+    value: MATTRESS
+    difficulty: 4
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-BENCH
+    value: BENCH
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-CARPET
+    value: CARPET
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-FLOOR
+    value: FLOOR
+    difficulty: 1
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-CEILING
+    value: CEILING
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-TEASET
+    value: TEASET
+    difficulty: 4
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-VASE
+    value: VASE
+    difficulty: 3
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-BEANBAG
+    value: BEANBAG
+    difficulty: 4
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-FURNITURE-HAMMOCK
+    value: HAMMOCK
+    difficulty: 2
+    category: FURNITURE
+    wordType: 1
+  - identifier: nouns-CLOTHING-SUIT
+    value: SUIT
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SHIRT
+    value: SHIRT
+    difficulty: 1
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-JACKET
+    value: JACKET
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SWEATER
+    value: SWEATER
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SKIRT
+    value: SKIRT
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SCARF
+    value: SCARF
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SOCKS
+    value: SOCKS
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-GLOVES
+    value: GLOVES
+    difficulty: 4
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-HAT
+    value: HAT
+    difficulty: 1
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-TIE
+    value: TIE
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-HOODIE
+    value: HOODIE
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-POLO
+    value: POLO
+    difficulty: 5
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-ROBE
+    value: ROBE
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-CLOAK
+    value: CLOAK
+    difficulty: 4
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SWIMSUIT
+    value: SWIMSUIT
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-PYJAMAS
+    value: PYJAMAS
+    difficulty: 4
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SHORTS
+    value: SHORTS
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-JEANS
+    value: JEANS
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-APRON
+    value: APRON
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-UNIFORM
+    value: UNIFORM
+    difficulty: 5
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-VEST
+    value: VEST
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-BLAZER
+    value: BLAZER
+    difficulty: 4
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-CARDIGAN
+    value: CARDIGAN
+    difficulty: 5
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SLEEVE
+    value: SLEEVE
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-POCKET
+    value: POCKET
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-JERSEY
+    value: JERSEY
+    difficulty: 4
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-TUNIC
+    value: TUNIC
+    difficulty: 5
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-TROUSERS
+    value: TROUSERS
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-OVERALLS
+    value: OVERALLS
+    difficulty: 1
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-BLOUSE
+    value: BLOUSE
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-BELT
+    value: BELT
+    difficulty: 1
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-NECKLACE
+    value: NECKLACE
+    difficulty: 1
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-STOCKINGS
+    value: STOCKINGS
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-MITTENS
+    value: MITTENS
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SANDALS
+    value: SANDALS
+    difficulty: 4
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-SNEAKERS
+    value: SNEAKERS
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-MASK
+    value: MASK
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-EARMUFFS
+    value: EARMUFFS
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-CAPE
+    value: CAPE
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-ARMOUR
+    value: ARMOUR
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-CHAINMAIL
+    value: CHAINMAIL
+    difficulty: 2
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CLOTHING-LEGGINGS
+    value: LEGGINGS
+    difficulty: 3
+    category: CLOTHING
+    wordType: 1
+  - identifier: nouns-CYLINDER-CANE
+    value: CANE
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-PENCIL
+    value: PENCIL
+    difficulty: 1
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BAMBOO
+    value: BAMBOO
+    difficulty: 4
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-STICK
+    value: STICK
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BRANCH
+    value: BRANCH
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-POLE
+    value: POLE
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-TUBE
+    value: TUBE
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-WAND
+    value: WAND
+    difficulty: 1
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-PIPE
+    value: PIPE
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-TRUNK
+    value: TRUNK
+    difficulty: 1
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-TWIG
+    value: TWIG
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BEAM
+    value: BEAM
+    difficulty: 4
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-PLUNGER
+    value: PLUNGER
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-PADDLE
+    value: PADDLE
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-STAFF
+    value: STAFF
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-CAN
+    value: CAN
+    difficulty: 1
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BUCKET
+    value: BUCKET
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BATTERY
+    value: BATTERY
+    difficulty: 1
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-FLASK
+    value: FLASK
+    difficulty: 4
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-CRAYON
+    value: CRAYON
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-WELL
+    value: WELL
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-EXTINGUISHER
+    value: EXTINGUISHER
+    difficulty: 4
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BASKET
+    value: BASKET
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-ROLL
+    value: ROLL
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BARREL
+    value: BARREL
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-CABLE
+    value: CABLE
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-CANDLE
+    value: CANDLE
+    difficulty: 1
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-LOG
+    value: LOG
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-BOTTLE
+    value: BOTTLE
+    difficulty: 3
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-CHIMNEY
+    value: CHIMNEY
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-PILLAR
+    value: PILLAR
+    difficulty: 4
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-JAR
+    value: JAR
+    difficulty: 2
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-TOWER
+    value: TOWER
+    difficulty: 1
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-CYLINDER-TUNNEL
+    value: TUNNEL
+    difficulty: 5
+    category: CYLINDER
+    wordType: 1
+  - identifier: nouns-MAMMAL-ZEBRA
+    value: ZEBRA
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-LION
+    value: LION
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-GIRAFFE
+    value: GIRAFFE
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-ELK
+    value: ELK
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-HORSE
+    value: HORSE
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-CAT
+    value: CAT
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-DOG
+    value: DOG
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-WOLF
+    value: WOLF
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-BUFFALO
+    value: BUFFALO
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-ELEPHANT
+    value: ELEPHANT
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-RHINO
+    value: RHINO
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-CHEETAH
+    value: CHEETAH
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-LEOPARD
+    value: LEOPARD
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-DONKEY
+    value: DONKEY
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-PUPPY
+    value: PUPPY
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-KITTEN
+    value: KITTEN
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-CAPYBARA
+    value: CAPYBARA
+    difficulty: 5
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-SQUIRREL
+    value: SQUIRREL
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-CHIPMUNK
+    value: CHIPMUNK
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-HEDGEHOG
+    value: HEDGEHOG
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-LEMMING
+    value: LEMMING
+    difficulty: 5
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-MOUSE
+    value: MOUSE
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-RAT
+    value: RAT
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-WOLVERINE
+    value: WOLVERINE
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-BADGER
+    value: BADGER
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-BOAR
+    value: BOAR
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-PIG
+    value: PIG
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-COW
+    value: COW
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-BULL
+    value: BULL
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-DEER
+    value: DEER
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-MOOSE
+    value: MOOSE
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-MONKEY
+    value: MONKEY
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-GORILLA
+    value: GORILLA
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-TIGER
+    value: TIGER
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-GOAT
+    value: GOAT
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-FOX
+    value: FOX
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-BEAR
+    value: BEAR
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-CAMEL
+    value: CAMEL
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-FERRET
+    value: FERRET
+    difficulty: 5
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-OTTER
+    value: OTTER
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-BEAVER
+    value: BEAVER
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-GAZELLE
+    value: GAZELLE
+    difficulty: 5
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-RABBIT
+    value: RABBIT
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-KANGAROO
+    value: KANGAROO
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-LEMUR
+    value: LEMUR
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-MEERKAT
+    value: MEERKAT
+    difficulty: 5
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-OX
+    value: OX
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-PANDA
+    value: PANDA
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-WEASEL
+    value: WEASEL
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-ANTEATER
+    value: ANTEATER
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-HAMSTER
+    value: HAMSTER
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-HYENA
+    value: HYENA
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-LLAMA
+    value: LLAMA
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-POSSUM
+    value: POSSUM
+    difficulty: 3
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-RACCOON
+    value: RACCOON
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-SHEEP
+    value: SHEEP
+    difficulty: 1
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-SLOTH
+    value: SLOTH
+    difficulty: 4
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-SKUNK
+    value: SKUNK
+    difficulty: 2
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-MAMMAL-YAK
+    value: YAK
+    difficulty: 5
+    category: MAMMAL
+    wordType: 1
+  - identifier: nouns-BIRD-PIGEON
+    value: PIGEON
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-DOVE
+    value: DOVE
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-WOODPECKER
+    value: WOODPECKER
+    difficulty: 2
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-PENGUIN
+    value: PENGUIN
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-EAGLE
+    value: EAGLE
+    difficulty: 2
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-HAWK
+    value: HAWK
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-GOOSE
+    value: GOOSE
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-SWAN
+    value: SWAN
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-DUCK
+    value: DUCK
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-PARROT
+    value: PARROT
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-ROBIN
+    value: ROBIN
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-CHICKADEE
+    value: CHICKADEE
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-OWL
+    value: OWL
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-CROW
+    value: CROW
+    difficulty: 2
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-GRACKLE
+    value: GRACKLE
+    difficulty: 5
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-FINCH
+    value: FINCH
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-FALCON
+    value: FALCON
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-FLAMINGO
+    value: FLAMINGO
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-PEACOCK
+    value: PEACOCK
+    difficulty: 2
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-SPARROW
+    value: SPARROW
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-STORK
+    value: STORK
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-PELICAN
+    value: PELICAN
+    difficulty: 2
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-TURKEY
+    value: TURKEY
+    difficulty: 2
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-CHICKEN
+    value: CHICKEN
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-ROOSTER
+    value: ROOSTER
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-PARTRIDGE
+    value: PARTRIDGE
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-HERON
+    value: HERON
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-SEAGULL
+    value: SEAGULL
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-CUCKOO
+    value: CUCKOO
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-CANARY
+    value: CANARY
+    difficulty: 5
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-ALBATROSS
+    value: ALBATROSS
+    difficulty: 5
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-KIWI
+    value: KIWI
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-OSTRICH
+    value: OSTRICH
+    difficulty: 1
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-LOON
+    value: LOON
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-DODO
+    value: DODO
+    difficulty: 5
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-TOUCAN
+    value: TOUCAN
+    difficulty: 2
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-MAGPIE
+    value: MAGPIE
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-QUAIL
+    value: QUAIL
+    difficulty: 5
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-CARDINAL
+    value: CARDINAL
+    difficulty: 3
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BIRD-EMU
+    value: EMU
+    difficulty: 4
+    category: BIRD
+    wordType: 1
+  - identifier: nouns-BUG-SPIDER
+    value: SPIDER
+    difficulty: 1
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-CENTIPEDE
+    value: CENTIPEDE
+    difficulty: 1
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-PILLBUG
+    value: PILLBUG
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-LADYBUG
+    value: LADYBUG
+    difficulty: 2
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-BUTTERFLY
+    value: BUTTERFLY
+    difficulty: 1
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-COCCOON
+    value: COCCOON
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-CATTERPILLAR
+    value: CATTERPILLAR
+    difficulty: 2
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-MOTH
+    value: MOTH
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-WORM
+    value: WORM
+    difficulty: 1
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-ANT
+    value: ANT
+    difficulty: 1
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-SLUG
+    value: SLUG
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-SNAIL
+    value: SNAIL
+    difficulty: 2
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-BEE
+    value: BEE
+    difficulty: 1
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-WASP
+    value: WASP
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-CRICKET
+    value: CRICKET
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-FLEA
+    value: FLEA
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-FLY
+    value: FLY
+    difficulty: 1
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-GRASSHOPPER
+    value: GRASSHOPPER
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-MOSQUITO
+    value: MOSQUITO
+    difficulty: 2
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-LOCUST
+    value: LOCUST
+    difficulty: 5
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-MANTIS
+    value: MANTIS
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-TERMITE
+    value: TERMITE
+    difficulty: 5
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-BEETLE
+    value: BEETLE
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-SCARAB
+    value: SCARAB
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-CICADA
+    value: CICADA
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-DRAGONFLY
+    value: DRAGONFLY
+    difficulty: 2
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-APHID
+    value: APHID
+    difficulty: 5
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-EARWIG
+    value: EARWIG
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-SCORPION
+    value: SCORPION
+    difficulty: 2
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-ROACH
+    value: ROACH
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-FIREFLY
+    value: FIREFLY
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-SILKWORM
+    value: SILKWORM
+    difficulty: 5
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-TARANTULA
+    value: TARANTULA
+    difficulty: 3
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-TICK
+    value: TICK
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-LICE
+    value: LICE
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-STRIDER
+    value: STRIDER
+    difficulty: 5
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-MAYFLY
+    value: MAYFLY
+    difficulty: 5
+    category: BUG
+    wordType: 1
+  - identifier: nouns-BUG-GNAT
+    value: GNAT
+    difficulty: 4
+    category: BUG
+    wordType: 1
+  - identifier: prefixes-STYLE-PUNK
+    value: PUNK
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-VINTAGE
+    value: VINTAGE
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-CHIC
+    value: CHIC
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-GRUNGE
+    value: GRUNGE
+    difficulty: 3
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-HIPSTER
+    value: HIPSTER
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-FORMAL
+    value: FORMAL
+    difficulty: 1
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-CLASSY
+    value: CLASSY
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-CASUAL
+    value: CASUAL
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-ARTSY
+    value: ARTSY
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-RETRO
+    value: RETRO
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-VIBRANT
+    value: VIBRANT
+    difficulty: 3
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-PREPPY
+    value: PREPPY
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-GOTH
+    value: GOTH
+    difficulty: 1
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-GLAMOROUS
+    value: GLAMOROUS
+    difficulty: 5
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-EMO
+    value: EMO
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-BIKER
+    value: BIKER
+    difficulty: 3
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-ANDROGYNOUS
+    value: ANDROGYNOUS
+    difficulty: 5
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-THRIFTY
+    value: THRIFTY
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-BASIC
+    value: BASIC
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-BUSINESS
+    value: BUSINESS
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-COMFY
+    value: COMFY
+    difficulty: 3
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-COUNTRY
+    value: COUNTRY
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-COSPLAY
+    value: COSPLAY
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-EDGY
+    value: EDGY
+    difficulty: 3
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-FLAMBOYANT
+    value: FLAMBOYANT
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-GLITZY
+    value: GLITZY
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-FEMININE
+    value: FEMININE
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-MASCULINE
+    value: MASCULINE
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-HIPHOP
+    value: HIPHOP
+    difficulty: 3
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-KAWAII
+    value: KAWAII
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-MODERN
+    value: MODERN
+    difficulty: 4
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-MINIMALIST
+    value: MINIMALIST
+    difficulty: 5
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-MILITARY
+    value: MILITARY
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-NERDY
+    value: NERDY
+    difficulty: 2
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-SKATER
+    value: SKATER
+    difficulty: 3
+    category: STYLE
+    wordType: 0
+  - identifier: prefixes-STYLE-SPORTY
+    value: SPORTY
+    difficulty: 1
+    category: STYLE
+    wordType: 0

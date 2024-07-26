@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Case Certification
   itemDescription: Apply a certification effect to the specified case.
   storeBGColour: {r: 0, g: 0, b: 0, a: 0}
-  cost: 15
+  cost: 10
   itemImagePrefab: {fileID: 4187783704447939670, guid: b84edfbf9fb026248a47dac27a798556,
     type: 3}
   isSinglePurchase: 0

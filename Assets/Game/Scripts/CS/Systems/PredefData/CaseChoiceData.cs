@@ -7,15 +7,23 @@ namespace ChickenScratch
     [CreateAssetMenu(fileName = "Case Choice", menuName = "GameData/Create Case Choice")]
     public class CaseChoiceData : ScriptableObject
     {
-        public enum DifficultyDescriptor
-        {
-            Easy, Mild, Average, Tricky, Distressing
-        }
         public string identifier;
+        public string description;
         public CaseTemplateData.CaseFormat caseFormat;
 
-        public int numberOfTasks;
+        public enum PromptFormat
+        {
+            standard, location, variant
+        }
+        public PromptFormat promptFormat;
 
+        public int numberOfTasks;
+        public List<WordPromptTemplateData> startingWordIdentifiers = new List<WordPromptTemplateData>();
+        public List<TemplateTaskData> taskTemplates = new List<TemplateTaskData>();
+
+        //***********************************************************************//
+        //STATS STUFF
+        //***********************************************************************//
         [HideInInspector]
         public int pointsPerCorrectWord;
         [HideInInspector]
@@ -29,21 +37,24 @@ namespace ChickenScratch
         private int baseBonusPoints;
         [SerializeField]
         private float baseStartingModifier;
-        [SerializeField]
-        private int baseFrequency;
-
-        public List<TemplateTaskData> taskTemplates = new List<TemplateTaskData>();
-
-        public DifficultyDescriptor difficulty;
-        public int penalty;
+        [HideInInspector]
+        public float maxScoreModifier;
         public float startingScoreModifier;
         public float modifierDecrement;
-        public float taskFalloff;
-        public Color colour;
-        public Color backgroundFontColour;
-        public Color importantFontColour;
-        public List<WordPromptTemplateData> startingWordIdentifiers = new List<WordPromptTemplateData>();
 
+        [SerializeField]
+        private int baseFrequency;
+        [SerializeField]
+        private CaseFrequencyRampData frequencyRampData;
+        [HideInInspector]
+        public int selectionFrequency;
+        [HideInInspector]
+        public int currentFrequencyRampIndex;
+        //***********************************************************************//
+       
+        //***********************************************************************//
+        //CERTIFICATION STUFF
+        //***********************************************************************//
         public int percentageChanceOfGoodCertification => _percentageChanceOfGoodCertification;
         public int percentageChanceOfBadCertification => _percentageChanceOfBadCertification;
         [SerializeField]
@@ -53,33 +64,49 @@ namespace ChickenScratch
         [SerializeField]
         private int _maxNumberOfSeals;
 
-        public List<string> currentSealIdentifiers => _currentSealIdentifiers;
-        private List<string> _currentSealIdentifiers = new List<string>();
+        //***********************************************************************//
 
-        [HideInInspector]
-        public int selectionFrequency;
-
-        [HideInInspector]
-        public float maxScoreModifier;
-
-        [SerializeField]
-        private List<TaskTimingData> taskTimingData = new List<TaskTimingData>();
-        public string description;
-
+        public Color colour;
+        public Color backgroundFontColour;
+        public Color importantFontColour;
         public List<CaseUpgradeStoreItemData> upgrades = new List<CaseUpgradeStoreItemData>();
 
-        public float GetTaskTiming(TaskData.TaskType taskType)
+        public void SendFrequencyToClients()
         {
-            foreach(TaskTimingData taskTiming in taskTimingData)
-            {
-                if(taskTiming.taskType == taskType)
-                {
-                    return taskTiming.duration;
-                }
-            }
-
-            return 0f;
+            GameManager.Instance.gameDataHandler.RpcUpdateFrequencyStoreOption(identifier, selectionFrequency, currentFrequencyRampIndex);
         }
+
+        public void ApplyFrequencyRamp()
+        {
+            if (frequencyRampData.incrementValues.Count <= currentFrequencyRampIndex)
+            {
+                //Cannot increase frequency any more using the ramp, remove it from the store options
+                GameManager.Instance.gameDataHandler.RpcRemoveFrequencyStoreOption(identifier);
+                return;
+            }
+            selectionFrequency += frequencyRampData.incrementValues[currentFrequencyRampIndex];
+            
+            currentFrequencyRampIndex++;
+
+            //Broadcast the updated selection frequency
+            SendFrequencyToClients();
+        }
+
+        public void IncrementFrequency()
+        {
+            selectionFrequency++;
+            SendFrequencyToClients();
+        }
+
+        public int GetFrequencyIncreaseValue(int rampIndex)
+        {
+            if (frequencyRampData.incrementValues.Count <= currentFrequencyRampIndex)
+            {
+                return 0;
+            }
+            return frequencyRampData.incrementValues[currentFrequencyRampIndex];
+        }
+
 
         public void Reset()
         {
@@ -88,7 +115,7 @@ namespace ChickenScratch
             pointsPerCorrectWord = basePointsPerCorrectWord;
             maxScoreModifier = startingScoreModifier;
             selectionFrequency = baseFrequency;
-            _currentSealIdentifiers = new List<string>();
+            currentFrequencyRampIndex = 0;
         }
     }
 }

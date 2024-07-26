@@ -83,7 +83,8 @@ namespace ChickenScratch
                         break;
                     case TaskData.TaskType.morph_guessing:
                     case TaskData.TaskType.base_guessing:
-                        if(inChainData.guessData == null || !inChainData.IsComplete())
+                    case TaskData.TaskType.competition_guessing:
+                        if (inChainData.guessData == null || !inChainData.IsComplete())
                         {
                             endgameTaskData.isComplete = false;
                             continue;
@@ -170,7 +171,7 @@ namespace ChickenScratch
         {
             foreach(EndgameTaskData taskData in taskDataMap.Values)
             {
-                if(taskData.taskType == TaskData.TaskType.base_guessing || taskData.taskType == TaskType.morph_guessing)
+                if(taskData.taskType == TaskData.TaskType.base_guessing || taskData.taskType == TaskType.morph_guessing || taskData.taskType == TaskType.competition_guessing)
                 {
                     return taskData.assignedPlayer;
                 }
@@ -189,6 +190,29 @@ namespace ChickenScratch
                 }
             }
             return false;
+        }
+
+        public int GetPointsForPlayerOnTask(ColourManager.BirdName assignedPlayer)
+        {
+            int split = 1;
+            CaseChoiceData caseChoice = GameDataManager.Instance.GetCaseChoice(caseTypeName);
+            if(caseChoice == null)
+            {
+                return 0;
+            }
+            if(caseChoice.caseFormat == CaseTemplateData.CaseFormat.competition)
+            {
+                split = 2;
+            }
+            else if(taskDataMap.Count != 0)
+            {
+                split = taskDataMap.Count;
+            }
+            else
+            {
+                return 0;
+            }
+            return (int)((float)scoringData.GetTotalPointsForPlayer(assignedPlayer) / (float)split);
         }
     }
 }

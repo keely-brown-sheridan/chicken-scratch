@@ -174,7 +174,6 @@ namespace ChickenScratch
                 //Shake the cabinet to indicate that it's not ready
                 totalTimeShaking = Time.deltaTime;
 
-                //Play a sound effect for it too
                 AudioManager.Instance.PlaySound("sfx_game_int_cabinet_shake", true);
             }
         }

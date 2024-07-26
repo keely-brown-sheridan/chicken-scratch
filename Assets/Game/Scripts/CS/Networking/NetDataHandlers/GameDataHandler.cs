@@ -391,19 +391,6 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.storeRound.CreateStoreItem(upgradeData);
     }
 
-    public void RpcSendFrequencyStoreItemWrapper(CaseFrequencyStoreItemData frequencyItemData)
-    {
-        CaseFrequencyStoreItemNetData frequencyNetData = new CaseFrequencyStoreItemNetData(frequencyItemData);
-        RpcSendFrequencyStoreItem(frequencyNetData);
-    }
-
-    [ClientRpc]
-    public void RpcSendFrequencyStoreItem(CaseFrequencyStoreItemNetData netData)
-    {
-        CaseFrequencyStoreItemData frequencyData = new CaseFrequencyStoreItemData(netData);
-        GameManager.Instance.playerFlowManager.storeRound.CreateStoreItem(frequencyData);
-    }
-
     public void RpcSendCertificationStoreItemWrapper(CaseCertificationStoreItemData certificationItemData)
     {
         CaseCertificationStoreItemNetData certificationNetData = new CaseCertificationStoreItemNetData(certificationItemData);
@@ -588,37 +575,21 @@ public class GameDataHandler : NetworkBehaviour
                 {
                     GameDataManager.Instance.AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
                 }
-                else if(upgrade.itemType == StoreItem.StoreItemType.case_frequency)
-                {
-                    GameDataManager.Instance.AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
-                }
             }
             GameDataManager.Instance.UpgradeCaseChoice(upgradeData);
         }
     }
 
     [ClientRpc]
-    public void RpcIncreaseCaseChoiceFrequency(string itemName)
+    public void RpcUpdateFrequencyStoreOption(string identifier, int selectionFrequency, int currentFrequencyRampIndex)
     {
-        if (SettingsManager.Instance.isHost)
-        {
-            return;
-        }
-        CaseFrequencyStoreItemData frequencyData = GameDataManager.Instance.GetMatchingCaseFrequencyStoreItem(itemName);
-        if (frequencyData != null)
-        {
-            foreach (StoreItemData upgrade in frequencyData.unlocks)
-            {
-                if (upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
-                {
-                    GameDataManager.Instance.AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
-                }
-                else if (upgrade.itemType == StoreItem.StoreItemType.case_frequency)
-                {
-                    GameDataManager.Instance.AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
-                }
-            }
-        }
+        GameManager.Instance.playerFlowManager.storeRound.UpdateCaseFrequency(identifier, selectionFrequency, currentFrequencyRampIndex);
+    }
+
+    [ClientRpc]
+    public void RpcRemoveFrequencyStoreOption(string identifier)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.RemoveCaseFromFrequencyPool(identifier);
     }
 
     [ClientRpc]
@@ -810,6 +781,12 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.quotaDecreaseRatio = quotaDecreaseRatio;
         GameManager.Instance.playerFlowManager.timeIncreaseRatio = timeIncreaseRatio;
         GameManager.Instance.playerFlowManager.currentGoal = currentGoal;
+    }
+
+    [ClientRpc]
+    public void RpcSetCompetitionChoice(int caseID, BirdName player)
+    {
+        GameManager.Instance.playerFlowManager.slidesRound.SetCompetitionChoice(caseID, player);
     }
 
     public void TargetInitialCabinetPromptContentsWrapper(NetworkConnectionToClient target, int caseID, int round, string correctPrompt, Dictionary<int,string> correctWordIdentifiersMap)
@@ -1036,7 +1013,7 @@ public class GameDataHandler : NetworkBehaviour
         bool caseContainsPlayer = endgameCase.ContainsBird(SettingsManager.Instance.birdName);
         if (caseContainsPlayer)
         {
-            int birdBucksEarned = endgameCase.taskDataMap.Count != 0 ? endgameCase.scoringData.GetTotalPoints() / endgameCase.taskDataMap.Count : 0;
+            int birdBucksEarned = endgameCase.GetPointsForPlayerOnTask(SettingsManager.Instance.birdName);
             bool caseHasShareholdersCertification = GameManager.Instance.playerFlowManager.CaseHasCertification(endgameCase.caseTypeName, "Shareholders");
             if (caseHasShareholdersCertification)
             {
@@ -1174,6 +1151,7 @@ public class GameDataHandler : NetworkBehaviour
                         break;
                     case TaskData.TaskType.morph_guessing:
                     case TaskType.base_guessing:
+                    case TaskData.TaskType.competition_guessing:
                         //not sure what to do in this situation?
                         //Currently shouldn't be happening
                         break;
@@ -1192,6 +1170,12 @@ public class GameDataHandler : NetworkBehaviour
             //Let the server know that the task is ready
             GameManager.Instance.gameDataHandler.CmdTaskIsReady(SettingsManager.Instance.birdName, folderData.caseID, folderData.roundNumber);
         }
+    }
+
+    [TargetRpc]
+    public void TargetOpenStoreFrequencyPanel(NetworkConnectionToClient target)
+    {
+        GameManager.Instance.playerFlowManager.storeRound.OpenStoreFrequencyPanel();
     }
 
     //Command - transition_condition
@@ -1498,7 +1482,7 @@ public class GameDataHandler : NetworkBehaviour
             CaseChoiceData template = GameDataManager.Instance.GetCaseChoice(choiceData.caseChoiceIdentifier);
             if(template != null)
             {
-                template.selectionFrequency++;
+                template.IncrementFrequency();
             }
         }
 
@@ -1743,6 +1727,7 @@ public class GameDataHandler : NetworkBehaviour
                             break;
                         case TaskData.TaskType.morph_guessing:
                         case TaskType.base_guessing:
+                        case TaskData.TaskType.competition_guessing:
                             //Unclear what should be done in this situation
                             break;
                     }
@@ -1755,6 +1740,22 @@ public class GameDataHandler : NetworkBehaviour
     public void CmdProgressTutorial(BirdName player, int slideIndex, string tutorialIdentifier)
     {
         RpcProgressTutorial(player, slideIndex, tutorialIdentifier);
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdIncreaseCaseFrequency(string caseChoiceIdentifier)
+    {
+        CaseChoiceData caseChoice = GameDataManager.Instance.GetCaseChoice(caseChoiceIdentifier);
+        if(caseChoice != null)
+        {
+            caseChoice.ApplyFrequencyRamp();
+        }
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdSetCompetitionChoice(int caseID, BirdName player)
+    {
+        RpcSetCompetitionChoice(caseID, player);
     }
 
     [ClientRpc]

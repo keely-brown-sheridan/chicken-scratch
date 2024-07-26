@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Coffee Pot
   itemDescription: Increases the total time by 20%.
   storeBGColour: {r: 0.6313726, g: 0.24705882, b: 0.15686275, a: 1}
-  cost: 25
+  cost: 15
   itemImagePrefab: {fileID: 4574789376099117889, guid: a028933c68292314880d983c83d54f6c,
     type: 3}
   isSinglePurchase: 1

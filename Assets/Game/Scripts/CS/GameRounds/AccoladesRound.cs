@@ -232,7 +232,6 @@ namespace ChickenScratch
             }
             foreach (EndgameCaseData currentCase in GameManager.Instance.playerFlowManager.slidesRound.caseDataMap.Values)
             {
-                int birdBucksEarnedPerPlayer = currentCase.taskDataMap.Count != 0 ? currentCase.scoringData.GetTotalPoints() / currentCase.taskDataMap.Count : 0;
                 foreach(EndgameTaskData currentTask in currentCase.taskDataMap.Values)
                 {
                     PlayerRatingData rating = currentTask.ratingData;
@@ -242,7 +241,7 @@ namespace ChickenScratch
                     }
                     if(playerBirdbuckMap.ContainsKey(currentTask.assignedPlayer))
                     {
-                        playerBirdbuckMap[currentTask.assignedPlayer] += birdBucksEarnedPerPlayer;
+                        playerBirdbuckMap[currentTask.assignedPlayer] += currentCase.GetPointsForPlayerOnTask(currentTask.assignedPlayer);
                     }
                 }
             }

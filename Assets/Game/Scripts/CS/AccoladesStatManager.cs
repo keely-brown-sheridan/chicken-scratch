@@ -118,7 +118,7 @@ namespace ChickenScratch
                     {
                         pointsCountMap.Add(currentTask.assignedPlayer, 0);
                     }
-                    pointsCountMap[currentTask.assignedPlayer] += currentCase.taskDataMap.Count != 0 ? currentCase.scoringData.GetTotalPoints() / currentCase.taskDataMap.Count : 0;
+                    pointsCountMap[currentTask.assignedPlayer] += currentCase.GetPointsForPlayerOnTask( currentTask.assignedPlayer);
                     switch (currentTask.taskType)
                     {
                         case TaskData.TaskType.prompt_drawing:
@@ -202,6 +202,7 @@ namespace ChickenScratch
                             break;
                         case TaskData.TaskType.morph_guessing:
                         case TaskData.TaskType.base_guessing:
+                        case TaskData.TaskType.competition_guessing:
                             if (currentCase.WasCorrect())
                             {
                                 int caseDifficulty = currentCase.GetDifficulty();

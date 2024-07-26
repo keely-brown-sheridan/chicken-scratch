@@ -71,6 +71,9 @@ MonoBehaviour:
     - Limited Input
     - Collapsing One-Off
     - Collapsing Telephone
+    - Location One-Off
+    - Location Telephone
+    - Competition
     unlocksToAddToPool: []
     storeChoiceOptions:
     - dayName: Tuesday
@@ -192,14 +195,11 @@ MonoBehaviour:
     baseCost: 0
     basePointsPerCorrectWord: 0
     baseBonusPoints: 0
-    penalty: 0
     caseTypeName: 
     caseTypeColour: {r: 0, g: 0, b: 0, a: 0}
-    taskFalloff: 0
     startingScoreModifier: 0
   baseUnlockedChoiceIdentifiers:
-  - Telephone
-  - One-Off
+  - Duel
   baseChoiceIdentifierPool: []
   casesRemaining: 3
   contributionTaskRatio: 0.5
@@ -208,6 +208,9 @@ MonoBehaviour:
   dayOneGoalPerPlayer: 5
   baseRestockCost: 3
   hasAccusationRound: 0
-  rolesToDistribute: []
+  rolesToDistribute:
+  - {fileID: 11400000, guid: 63f2622a48d2611468c8b14359361c42, type: 2}
+  - {fileID: 11400000, guid: 63f2622a48d2611468c8b14359361c42, type: 2}
+  - {fileID: 11400000, guid: 63f2622a48d2611468c8b14359361c42, type: 2}
   middleStoreRowUnlockCost: 10
   bottomStoreRowUnlockCost: 25

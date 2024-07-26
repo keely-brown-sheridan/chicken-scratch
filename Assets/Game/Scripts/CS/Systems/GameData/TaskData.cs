@@ -11,14 +11,14 @@ namespace ChickenScratch
     {
         public enum TaskType
         {
-            base_drawing, prompting, copy_drawing, add_drawing, prompt_drawing, base_guessing, compile_drawing, blender_drawing, morph_guessing
+            base_drawing, prompting, copy_drawing, add_drawing, prompt_drawing, base_guessing, compile_drawing, blender_drawing, morph_guessing, competition_guessing
             //evaluation_guessing
             //collage_guessing
         }
         public enum TaskModifier
         {
             standard, shrunk, thirds_first, thirds_second, thirds_third, top, bottom, top_left, top_right, bottom_left, bottom_right, hidden_prefix,
-            blind, hidden_noun, capped_prompt, flipped, morphed, collapsing, expanding, revealing, invalid
+            blind, hidden_noun, capped_prompt, flipped, morphed, collapsing, expanding, revealing, location, invalid
         }
 
         public TaskType taskType;
@@ -44,6 +44,8 @@ namespace ChickenScratch
                     return DrawingRound.CaseState.guessing;
                 case TaskType.morph_guessing:
                     return DrawingRound.CaseState.morph_guessing;
+                case TaskType.competition_guessing:
+                    return DrawingRound.CaseState.competition_guessing;
                 case TaskType.prompting:
                     return DrawingRound.CaseState.prompting;
 

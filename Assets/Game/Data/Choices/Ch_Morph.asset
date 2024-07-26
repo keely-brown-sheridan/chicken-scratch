@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Ch_Morph
   m_EditorClassIdentifier: 
   identifier: Morph
+  description: A drawing will have to be morphed into a variation on the original
+    drawing.
   caseFormat: 10
+  promptFormat: 2
   numberOfTasks: 3
-  pointsPerCorrectWord: 4
-  bonusPoints: 2
-  cost: 0
-  basePointsPerCorrectWord: 4
-  baseBonusPoints: 2
-  baseStartingModifier: 1.25
-  baseFrequency: 1
+  startingWordIdentifiers:
+  - identifier: 1
+    caseWordIdentifiers:
+    - variant
+    - noun
   taskTemplates:
   - roundIndex: 1
     taskType: 0
@@ -47,31 +48,23 @@ MonoBehaviour:
     caseWordIndices:
     - promptIndex: 1
       wordIndex: 0100000002000000
-  difficulty: 2
-  penalty: 0
+  pointsPerCorrectWord: 4
+  bonusPoints: 2
+  cost: 0
+  basePointsPerCorrectWord: 4
+  baseBonusPoints: 2
+  baseStartingModifier: 1.25
+  maxScoreModifier: 1
   startingScoreModifier: 1.25
   modifierDecrement: 0.1
-  taskFalloff: 0
-  colour: {r: 0.31185475, g: 0.9056604, b: 0.7363987, a: 1}
-  backgroundFontColour: {r: 0.28915986, g: 0.3584906, b: 0.33874738, a: 1}
-  importantFontColour: {r: 0, g: 0.33962262, b: 0.24290885, a: 1}
-  startingWordIdentifiers:
-  - identifier: 1
-    caseWordIdentifiers:
-    - variant
-    - noun
+  baseFrequency: 1
+  frequencyRampData: {fileID: 11400000, guid: 8e160e32035c8c649a049f311cd08276, type: 2}
+  selectionFrequency: 1
+  currentFrequencyRampIndex: 0
   _percentageChanceOfGoodCertification: 10
   _percentageChanceOfBadCertification: 15
   _maxNumberOfSeals: 1
-  selectionFrequency: 1
-  maxScoreModifier: 1
-  taskTimingData:
-  - taskType: 0
-    duration: 30
-  - taskType: 3
-    duration: 30
-  - taskType: 5
-    duration: 60
-  description: A drawing will have to be morphed into a variation on the original
-    drawing.
+  colour: {r: 0.31185475, g: 0.9056604, b: 0.7363987, a: 1}
+  backgroundFontColour: {r: 0.28915986, g: 0.3584906, b: 0.33874738, a: 1}
+  importantFontColour: {r: 0, g: 0.33962262, b: 0.24290885, a: 1}
   upgrades: []

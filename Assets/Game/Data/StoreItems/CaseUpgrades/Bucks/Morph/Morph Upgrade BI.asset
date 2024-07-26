@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Morph$
   itemDescription: Improves the base birdbucks for Morph cases.
   storeBGColour: {r: 0.654902, g: 0.84705883, b: 1, a: 1}
-  cost: 10
+  cost: 5
   itemImagePrefab: {fileID: 7135884217427031847, guid: e7ef5ff82d48799459c69046956aec73,
     type: 3}
   isSinglePurchase: 0
@@ -28,3 +28,4 @@ MonoBehaviour:
   timeIncrease: 0
   unlocks:
   - {fileID: 11400000, guid: 62960c2b647bf484d84412fd33826d00, type: 2}
+  - {fileID: 11400000, guid: d9ea5b29c3e8e424e98fd23555bb2723, type: 2}

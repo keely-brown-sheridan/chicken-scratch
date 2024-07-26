@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Short Add$
   itemDescription: Improves the base birdbucks for Short Add cases.
   storeBGColour: {r: 0.654902, g: 0.84705883, b: 1, a: 1}
-  cost: 5
+  cost: 3
   itemImagePrefab: {fileID: 7135884217427031847, guid: e7ef5ff82d48799459c69046956aec73,
     type: 3}
   isSinglePurchase: 0
@@ -28,3 +28,4 @@ MonoBehaviour:
   timeIncrease: 0
   unlocks:
   - {fileID: 11400000, guid: 512b91d6bee01e447828c76c88b96def, type: 2}
+  - {fileID: 11400000, guid: 2aaad5cea5e55904a9346f2d04fb67a5, type: 2}

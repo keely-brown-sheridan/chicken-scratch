@@ -52,6 +52,21 @@ namespace ChickenScratch
             scoreModifier = currentModifier;
         }
 
+        public int GetTotalPointsForPlayer(ColourManager.BirdName bird)
+        {
+            EndgameCaseData caseData = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];
+            CaseChoiceData caseChoice = GameDataManager.Instance.GetCaseChoice(caseData.caseTypeName);
+            if(caseChoice != null && caseChoice.caseFormat == CaseTemplateData.CaseFormat.competition)
+            {
+                //You make no money if you aren't the winner or the guesser (it should be split in half otherwise)
+                if (caseData.guessData.author != bird && !GameManager.Instance.playerFlowManager.slidesRound.IsPlayerCompetitionWinner(caseData.identifier, bird))
+                {
+                    return 0;
+                }
+            }
+
+            return GetTotalPoints();
+        }
         public int GetTotalPoints()
         {
             EndgameCaseData caseData = GameManager.Instance.playerFlowManager.slidesRound.caseDataMap[caseID];

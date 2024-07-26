@@ -155,6 +155,8 @@ namespace ChickenScratch
                     return CaseState.guessing;
                 case TaskData.TaskType.morph_guessing:
                     return CaseState.morph_guessing;
+                case TaskData.TaskType.competition_guessing:
+                    return CaseState.competition_guessing;
             }
             return CaseState.invalid;
         }

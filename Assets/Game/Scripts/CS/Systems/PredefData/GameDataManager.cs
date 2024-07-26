@@ -34,12 +34,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
     [SerializeField]
     private List<CaseUpgradeStoreItemData> upgradeStoreItems = new List<CaseUpgradeStoreItemData>();
-
     private List<CaseUpgradeStoreItemData> activeUpgradeStoreItems = new List<CaseUpgradeStoreItemData>();
-
-    [SerializeField]
-    private List<CaseFrequencyStoreItemData> frequencyStoreItems = new List<CaseFrequencyStoreItemData>();
-    private List<CaseFrequencyStoreItemData> activeFrequencyStoreItems = new List<CaseFrequencyStoreItemData>();
 
     [SerializeField]
     private List<CaseUnlockStoreItemData> unlockStoreItems = new List<CaseUnlockStoreItemData>();
@@ -69,6 +64,10 @@ public class GameDataManager : Singleton<GameDataManager>
     [SerializeField]
     private List<TeamMemberData> teamMembers;
     private Dictionary<string, TeamMemberData> teamMemberMap = new Dictionary<string, TeamMemberData>();
+
+    [SerializeField]
+    private List<WordCategoryFrequencyData> categoryWordFrequencies = new List<WordCategoryFrequencyData>();
+    private Dictionary<string, Dictionary<string,int>> categoryWordFrequencyMap = new Dictionary<string, Dictionary<string,int>>();
 
     private List<string> currentShowingItems = new List<string>();
 
@@ -124,6 +123,16 @@ public class GameDataManager : Singleton<GameDataManager>
         {
             teamMemberMap.Add(teamMember.name, teamMember);
         }
+
+        categoryWordFrequencyMap.Clear();
+        foreach(WordCategoryFrequencyData frequencyData in categoryWordFrequencies)
+        {
+            if(!categoryWordFrequencyMap.ContainsKey(frequencyData.wordType))
+            {
+                categoryWordFrequencyMap.Add(frequencyData.wordType, new Dictionary<string, int>());
+            }
+            categoryWordFrequencyMap[frequencyData.wordType].Add(frequencyData.categoryName.ToUpper(), frequencyData.frequency);
+        }
         //RefreshWords(new List<CaseWordData>());
     }
 
@@ -131,7 +140,6 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         activeUpgradeStoreItems = new List<CaseUpgradeStoreItemData>(upgradeStoreItems);
         activeUnlockStoreItems = new List<CaseUnlockStoreItemData>(unlockStoreItems);
-        activeFrequencyStoreItems = new List<CaseFrequencyStoreItemData>(frequencyStoreItems);
         foreach (CaseChoiceData choice in caseChoices)
         {
             choice.Reset();
@@ -282,18 +290,6 @@ public class GameDataManager : Singleton<GameDataManager>
         }
     }
 
-    public void AddFrequencyOption(CaseFrequencyStoreItemData frequency)
-    {
-        if(!activeFrequencyStoreItems.Contains(frequency))
-        {
-            activeFrequencyStoreItems.Add(frequency);
-        }
-        else
-        {
-            Debug.LogError("Failed to add frequency item because it already exists in the active frequency store items.");
-        }
-    }
-
     public CaseUpgradeStoreItemData GetUpgradeStoreItem(int storeTier)
     {
         List<CaseUpgradeStoreItemData> randomizedUpgrades = activeUpgradeStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
@@ -330,47 +326,6 @@ public class GameDataManager : Singleton<GameDataManager>
             else
             {
                 Debug.LogError("Could not find matching case["+upgradeStoreItem.caseChoiceIdentifier+"] for upgrade["+upgradeStoreItem.itemName+"]");
-            }
-        }
-        return null;
-    }
-
-    public CaseFrequencyStoreItemData GetFrequencyStoreItem(int storeTier)
-    {
-        List<CaseFrequencyStoreItemData> randomizedFrequencies = activeFrequencyStoreItems.OrderBy(cp => Guid.NewGuid()).ToList();
-        foreach (CaseFrequencyStoreItemData frequencyStoreItem in randomizedFrequencies)
-        {
-            //Skip if the upgrade's choice hasn't been unlocked
-            if (!GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Contains(frequencyStoreItem.caseChoiceIdentifier) ||
-                frequencyStoreItem.tier > storeTier)
-            {
-                continue;
-            }
-
-            //Skip if this frequency item is already showing in the shop
-            if(currentShowingItems.Contains(frequencyStoreItem.itemName))
-            {
-                continue;
-            }
-
-            //Skip if this case is trademarked and can't be improved
-            if (GameManager.Instance.playerFlowManager.CaseHasCertification(frequencyStoreItem.caseChoiceIdentifier, "Trademark"))
-            {
-                continue;
-            }
-            CaseChoiceData caseChoice = GetCaseChoice(frequencyStoreItem.caseChoiceIdentifier);
-            if (caseChoice != null)
-            {
-                int numberOfPlayers = GameManager.Instance.gameFlowManager.GetNumberOfConnectedPlayers();
-                if (caseChoice.numberOfTasks <= numberOfPlayers)
-                {
-                    currentShowingItems.Add(frequencyStoreItem.itemName);
-                    return frequencyStoreItem;
-                }
-            }
-            else
-            {
-                Debug.LogError("Could not find matching case[" + frequencyStoreItem.caseChoiceIdentifier + "] for frequency item[" + frequencyStoreItem.itemName + "]");
             }
         }
         return null;
@@ -444,18 +399,6 @@ public class GameDataManager : Singleton<GameDataManager>
         return null;
     }
 
-    public CaseFrequencyStoreItemData GetMatchingCaseFrequencyStoreItem(string itemName)
-    {
-        foreach(CaseFrequencyStoreItemData caseFrequencyItem in activeFrequencyStoreItems)
-        {
-            if(caseFrequencyItem.itemName == itemName)
-            {
-                return caseFrequencyItem;
-            }
-        }
-        return null;
-    }
-
     public BirdData GetBird(BirdName birdName)
     {
         if (birdDataMap.ContainsKey(birdName))
@@ -482,6 +425,10 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         CaseChoiceData caseChoice = GetCaseChoice(identifier);
+        if (caseChoice != null && caseChoice.numberOfTasks <= SettingsManager.Instance.GetPlayerNameCount())
+        {
+            caseChoice.SendFrequencyToClients();
+        }
         activeUpgradeStoreItems.AddRange(caseChoice.upgrades);
 
         //Universally set the certification for the case
@@ -535,17 +482,6 @@ public class GameDataManager : Singleton<GameDataManager>
             if (activeUpgradeStoreItems[i].itemName == upgradeData.itemName)
             {
                 activeUpgradeStoreItems.RemoveAt(i);
-            }
-        }
-    }
-
-    public void RemoveFrequencyItem(CaseFrequencyStoreItemData frequencyData)
-    {
-        for (int i = activeFrequencyStoreItems.Count - 1; i >= 0; i--)
-        {
-            if (activeFrequencyStoreItems[i].itemName == frequencyData.itemName)
-            {
-                activeFrequencyStoreItems.RemoveAt(i);
             }
         }
     }
@@ -662,10 +598,6 @@ public class GameDataManager : Singleton<GameDataManager>
                 {
                     AddUpgradeOption((CaseUpgradeStoreItemData)upgrade);
                 }
-                else if (upgrade.itemType == StoreItem.StoreItemType.case_frequency)
-                {
-                    AddFrequencyOption((CaseFrequencyStoreItemData)upgrade);
-                }
             }
             UpgradeCaseChoice(upgradeData);
             GameManager.Instance.gameDataHandler.RpcUpgradeCaseChoice(upgradeData.itemName);
@@ -722,5 +654,26 @@ public class GameDataManager : Singleton<GameDataManager>
             return teamMemberMap[teamMemberName];
         }
         return null;
+    }
+
+    public int GetCategoryFrequency(string wordType, string category)
+    {
+        if (categoryWordFrequencyMap.ContainsKey(wordType) && categoryWordFrequencyMap[wordType].ContainsKey(category))
+        {
+            return categoryWordFrequencyMap[wordType][category];
+        }
+        return 0;
+    }
+
+    public void SendInitialCaseFrequencies()
+    {
+        foreach(string unlockedChoice in GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers)
+        {
+            CaseChoiceData caseChoice = GetCaseChoice(unlockedChoice);
+            if(caseChoice != null && caseChoice.numberOfTasks <= SettingsManager.Instance.GetPlayerNameCount())
+            {
+                caseChoice.SendFrequencyToClients();
+            }
+        }
     }
 }

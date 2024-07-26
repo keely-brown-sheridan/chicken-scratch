@@ -37,17 +37,21 @@ namespace ChickenScratch
 
         public void initialize(EndgameCaseData caseData)
         {
-            if (isInitialized) return;
-            foreach(GameObject taskEmailSectionPrefab in taskEmailSectionPrefabs)
+            if (!isInitialized)
             {
-                CaseEmailSection caseEmailSection = taskEmailSectionPrefab.GetComponent<CaseEmailSection>();
-                taskEmailSectionPrefabMap.Add(caseEmailSection.taskType, taskEmailSectionPrefab);
+                foreach (GameObject taskEmailSectionPrefab in taskEmailSectionPrefabs)
+                {
+                    CaseEmailSection caseEmailSection = taskEmailSectionPrefab.GetComponent<CaseEmailSection>();
+                    taskEmailSectionPrefabMap.Add(caseEmailSection.taskType, taskEmailSectionPrefab);
+                }
+                isInitialized = true;
             }
+
             guessData = caseData.guessData;
             correctWordIdentifiersMap = caseData.correctWordIdentifierMap;
             caseTasks = caseData.taskDataMap.Values.ToList();
             UpdateCaseEmailSections();
-            isInitialized = true;
+            
         }
 
         private void UpdateCaseEmailSections()
@@ -125,6 +129,7 @@ namespace ChickenScratch
                     return promptCaseEmailSectionObject;
                 case TaskData.TaskType.morph_guessing:
                 case TaskData.TaskType.base_guessing:
+                case TaskData.TaskType.competition_guessing:
                     GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], emailSectionParent);
                     GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();
                     guessCaseEmailSection.Initialize(correctWordIdentifiersMap, guessData, taskData.ratingData);
@@ -136,6 +141,7 @@ namespace ChickenScratch
 
         public void ShiftTasksLeft()
         {
+            AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
             currentTaskIndex--;
             
             if (currentTaskIndex < -1)
@@ -153,6 +159,7 @@ namespace ChickenScratch
 
         public void ShiftTasksRight()
         {
+            AudioManager.Instance.PlaySoundVariant("sfx_vote_int_gen_click_owl");
             currentTaskIndex++;
             
             if(currentTaskIndex >= caseTasks.Count)

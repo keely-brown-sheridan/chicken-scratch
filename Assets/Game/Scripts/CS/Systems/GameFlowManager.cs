@@ -180,8 +180,6 @@ namespace ChickenScratch
             }
             GameManager.Instance.gameDataHandler.RPCUpdatePlayerNameMapWrapper(playerFlowManager.playerNameMap);
 
-            
-
             //Assign cabinets to each player
             iterator = 1;
             foreach(KeyValuePair<BirdName,PlayerData> player in gamePlayers)
@@ -349,7 +347,6 @@ namespace ChickenScratch
             }
             updateQueuedFolderVisuals(birdName);
         }
-
 
         public void reorderCasesOnDisconnect(BirdName disconnectingPlayer)
         {

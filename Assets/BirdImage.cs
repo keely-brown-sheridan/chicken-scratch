@@ -18,7 +18,8 @@ public class BirdImage : MonoBehaviour
     //                                                                                        ColourManager.BirdName.orange, ColourManager.BirdName.purple, ColourManager.BirdName.grey,
     //                                                                                         ColourManager.BirdName.maroon, ColourManager.BirdName.black, ColourManager.BirdName.brown,
     //                                                                                             ColourManager.BirdName.pink, ColourManager.BirdName.yellow, ColourManager.BirdName.teal };
-    //private List<BirdHatData.HatType> testHats = new List<BirdHatData.HatType>() { BirdHatData.HatType.flower, BirdHatData.HatType.sherlock, BirdHatData.HatType.santa, BirdHatData.HatType.propeller };
+    //private List<BirdHatData.HatType> testHats = new List<BirdHatData.HatType>() { BirdHatData.HatType.flower, BirdHatData.HatType.sherlock, BirdHatData.HatType.santa, BirdHatData.HatType.propeller,
+    //                                                                                BirdHatData.HatType.cloche, BirdHatData.HatType.fedora, BirdHatData.HatType.party, BirdHatData.HatType.grad};
     //private int currentTestBirdIndex = 0;
     //private int currentTestHatIndex = 0;
 
@@ -69,6 +70,10 @@ public class BirdImage : MonoBehaviour
         //    }
 
         //    _currentBird = testBirds[currentTestBirdIndex];
+        //    GameManager.Instance.playerFlowManager.SetBirdHatType(_currentBird, testHats[currentTestHatIndex]);
+        //}
+        //if(Input.GetKeyDown(KeyCode.W))
+        //{
         //    GameManager.Instance.playerFlowManager.SetBirdHatType(_currentBird, testHats[currentTestHatIndex]);
         //}
     }

@@ -55,6 +55,8 @@ namespace ChickenScratch
 
         public Color prefixBGColour, prefixFontColour;
         public Color nounBGColour, nounFontColour;
+        public Color variantBGColour, variantFontColour;
+        public Color locationBGColour, locationFontColour;
         public Gradient scoreModifierGradient;
 
         private Dictionary<ColourManager.BirdName, string> playerNameMap = new Dictionary<ColourManager.BirdName, string>();
@@ -480,13 +482,27 @@ namespace ChickenScratch
             lobbyConnectionUsernameMap.Clear();
         }
 
-        public string CreatePromptText(string prefixText, string nounText)
+        public string CreatePromptText(string prefixText, string nounText, CaseChoiceData.PromptFormat promptFormat)
         {
+            string promptText = "";
             string prefixHexcode = ColorUtility.ToHtmlStringRGB(prefixFontColour);
             string nounHexcode = ColorUtility.ToHtmlStringRGB(nounFontColour);
-            string fullPrefixValue = "<color=#"+ prefixHexcode + ">" + prefixText + "</color>";
-            string fullNounValue = "<color=#"+nounHexcode+">" + nounText + "</color>";
-            return fullPrefixValue + " " + fullNounValue;
+            switch(promptFormat)
+            {
+                case CaseChoiceData.PromptFormat.standard:
+                    promptText = "<color=#" + prefixHexcode + ">" + prefixText + "</color>" + " " + "<color=#" + nounHexcode + ">" + nounText + "</color>";
+                    break;
+                case CaseChoiceData.PromptFormat.location:
+                    string locationHexcode = ColorUtility.ToHtmlStringRGB(locationFontColour);
+                    promptText = "<color=#" + nounHexcode + ">" + prefixText + "</color>" + " in the " + "<color=#" + locationHexcode + ">" + nounText + "</color>";
+                    break;
+                case CaseChoiceData.PromptFormat.variant:
+                    string variantHexcode = ColorUtility.ToHtmlStringRGB(variantFontColour);
+                    promptText = "<color=#" + variantHexcode + ">" + prefixText + "</color>" + " " + "<color=#" + nounHexcode + ">" + nounText + "</color>";
+                    break;
+            }
+
+            return promptText;
         }
 
         public string CreatePrefixText(string prefixText)
@@ -499,6 +515,18 @@ namespace ChickenScratch
         {
             string hexcode = ColorUtility.ToHtmlStringRGB(nounFontColour);
             return "<color=#" + hexcode + ">" + nounText + "</color>";
+        }
+
+        public string CreateVariantText(string variantText)
+        {
+            string hexcode = ColorUtility.ToHtmlStringRGB(variantFontColour);
+            return "<color=#" + hexcode + ">" + variantText + "</color>";
+        }
+
+        public string CreateLocationText(string locationText)
+        {
+            string hexcode = ColorUtility.ToHtmlStringRGB(locationFontColour);
+            return "<color=#" + hexcode + ">" + locationText + "</color>";
         }
 
         public Color GetModifierColour(float ratio)

@@ -33,7 +33,7 @@ public class PreviousChoiceCaseUnlockVisual : MonoBehaviour
             birdBucksText.text = (caseUnlock.minBirdbucks).ToString() + "-" + caseUnlock.maxBirdbucks.ToString();
             multiplierText.text = caseChoice.startingScoreModifier.ToString();
             caseNameText.text = caseChoice.identifier;
-            tooltipBGImage.color = caseChoice.backgroundFontColour;
+            //tooltipBGImage.color = caseChoice.backgroundFontColour;
 
             if(caseChoice.maxNumberOfSeals > 0)
             {
