@@ -1,0 +1,2125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3624330295933492716
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1220630289876564094}
+  - component: {fileID: 6744968536014185799}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1220630289876564094
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3624330295933492716}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1410.0001, y: 145.99998, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6744968536014185799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3624330295933492716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95104d83b156094468ebb609cd30e0dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultMasterVolume: 70
+  _defaultMusicVolume: 40
+  _defaultEffectsVolume: 65
+  Sounds:
+  - name: GameMusic
+    clip: {fileID: 8300000, guid: 2d8802c71a45b084e91b4fd91165489f, type: 3}
+    volume: 0.12
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: LobbyMusic
+    clip: {fileID: 8300000, guid: 5b884479ce2c9a149a6b5c75495a1e82, type: 3}
+    volume: 0.32
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: OpeningMusic
+    clip: {fileID: 8300000, guid: aa42b71498fd00042b883ba4af2d6471, type: 3}
+    volume: 0.73
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: AccuseMusic
+    clip: {fileID: 8300000, guid: ba50d7a62963ecc429d22a2e548b8460, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: EndMusic
+    clip: {fileID: 8300000, guid: 20a58748ff2b48c459027a9d071a8e05, type: 3}
+    volume: 0.19
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: RevealMusic
+    clip: {fileID: 8300000, guid: 31d3af3be1e571e4d94a2c76da57b538, type: 3}
+    volume: 0.142
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 1
+  - name: AccoladesMusic
+    clip: {fileID: 8300000, guid: 1d640b28a00e2c5489154314028e08b7, type: 3}
+    volume: 0.142
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: SplashMusic
+    clip: {fileID: 8300000, guid: f425b1809162e7843b6968d4fbd45b41, type: 3}
+    volume: 0.32
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: Ambience
+    clip: {fileID: 8300000, guid: 4e27f1d70f91ccb43975a00b5f212872, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 0
+  - name: DrawerClose
+    clip: {fileID: 8300000, guid: 5a9d0d5dd587dcf40bdf0a22a7a4fbc8, type: 3}
+    volume: 0.13
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawerOpen
+    clip: {fileID: 8300000, guid: 1775151628e551e43b16e980be2cb818, type: 3}
+    volume: 0.13
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Reveal
+    clip: {fileID: 8300000, guid: a50751804eb5b004dbe396760a5eca53, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: ButtonClick
+    clip: {fileID: 8300000, guid: 8d15c82685abec642973adffd09eaaf7, type: 3}
+    volume: 0.15
+    pitch: 1.22
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: FolderOpen
+    clip: {fileID: 8300000, guid: 35a9fa7e14c2876439d3e5b443df5b6b, type: 3}
+    volume: 0.243
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: ButtonPress
+    clip: {fileID: 8300000, guid: 2747b5de4e104264dbefafdda47a8aaf, type: 3}
+    volume: 0.41
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Scribble
+    clip: {fileID: 8300000, guid: 601950d6187be4b45bd4537ca90cf742, type: 3}
+    volume: 0.41
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: CabinetReady
+    clip: {fileID: 8300000, guid: 5a1c9d3b63e368641a04cc2af700cf06, type: 3}
+    volume: 0.41
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: TimesUp
+    clip: {fileID: 8300000, guid: 9a59c2109b4e41b478c8d11bf0c82673, type: 3}
+    volume: 0.41
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: TimeTick
+    clip: {fileID: 8300000, guid: 2154e2a17698a1f4fb237adc52e80c94, type: 3}
+    volume: 0.41
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: ResponsesReady
+    clip: {fileID: 8300000, guid: a1e391b483fc828498233d4531b4c1f0, type: 3}
+    volume: 0.41
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: SlidesClick
+    clip: {fileID: 8300000, guid: 602c28ef942e7894eb2a7f7c64ff21ff, type: 3}
+    volume: 0.089
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: SlidesAmbience
+    clip: {fileID: 8300000, guid: 3a5df4d7a1e22cd48a9c3943e649c8e7, type: 3}
+    volume: 0.41
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 0
+  - name: SlidesMusic
+    clip: {fileID: 8300000, guid: 91a8367cdf84b4044bd61f945ea583ae, type: 3}
+    volume: 0.217
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: StickyPlace
+    clip: {fileID: 8300000, guid: ba71b9f1defe8ff4d8086578ba82b205, type: 3}
+    volume: 0.217
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: StickyPeel
+    clip: {fileID: 8300000, guid: 7b7b1518863109c45b84bb995a4cf015, type: 3}
+    volume: 0.43
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: ChatPop
+    clip: {fileID: 8300000, guid: bf087ba3f55bf97409b3df8a244cca25, type: 3}
+    volume: 0.217
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: red_squawk
+    clip: {fileID: 8300000, guid: 69fecbd2ddf26024aa7aadd8f4876be6, type: 3}
+    volume: 0.7
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: blue_squawk
+    clip: {fileID: 8300000, guid: 6fab6d7bfa9208f4daa058efe5274471, type: 3}
+    volume: 0.5
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: purple_squawk
+    clip: {fileID: 8300000, guid: a8809a222218fce4a83f1f2c6db1bac7, type: 3}
+    volume: 0.6
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: green_squawk
+    clip: {fileID: 8300000, guid: 9f4bc69f3edfca641bf5f3a5edc3cd2e, type: 3}
+    volume: 0.373
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: brown_squawk
+    clip: {fileID: 8300000, guid: aedfc7b06874bd749a47da4fcb11d849, type: 3}
+    volume: 0.373
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: grey_squawk
+    clip: {fileID: 8300000, guid: 61bb07caa905cba4b82dff29a145bc85, type: 3}
+    volume: 0.6
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: black_squawk
+    clip: {fileID: 8300000, guid: fd59d2cfc32973d46a109ac71be3b12e, type: 3}
+    volume: 0.7
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: orange_squawk
+    clip: {fileID: 8300000, guid: 2fa5930d4df556248843a6df6a64eb6d, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: SpeedUp
+    clip: {fileID: 8300000, guid: 06bd10fe3146392428f427110692c4f5, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EraseLine
+    clip: {fileID: 8300000, guid: 7cf032fe492259843a07883759441fae, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Like
+    clip: {fileID: 8300000, guid: 3e9008b8ce0dd444287b5b0c61f410cd, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Dislike
+    clip: {fileID: 8300000, guid: 77be933065cc241408303a33ff287880, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Sus1
+    clip: {fileID: 8300000, guid: f2df52b7b686a144c984a43ef05e2ffa, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Sus2
+    clip: {fileID: 8300000, guid: 863faa28d2038454793242a00fc1ba18, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Sus3
+    clip: {fileID: 8300000, guid: 78bec9012108b4c4ebd1f0bc58b15105, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Sus4
+    clip: {fileID: 8300000, guid: 694380c8a191c494e9b36fd582ec7a27, type: 3}
+    volume: 0.469
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: BotcherReveal
+    clip: {fileID: 8300000, guid: 79bf60d6b3f650141b4736c46e7089d9, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: WorkerReveal
+    clip: {fileID: 8300000, guid: 9bb5099613acd114c981adcc8c5bf8ed, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: GrabFolder
+    clip: {fileID: 8300000, guid: a937f5ff7bd0a0640974a21f5f439f1f, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: GraphRise
+    clip: {fileID: 8300000, guid: 69ef4923d035a3a4492dc0bfb65c0bf6, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: GraphRiseFast
+    clip: {fileID: 8300000, guid: c8a1eff7d164b8a4a8b4872125fe0d5a, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: GraphStagnate
+    clip: {fileID: 8300000, guid: 9f7a6297784146148b696022446a275c, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: GraphRiseFaster
+    clip: {fileID: 8300000, guid: 663f6428059c480469b77c4d5d57c269, type: 3}
+    volume: 0.2
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial
+    clip: {fileID: 8300000, guid: 819806f24405aa44e96e0c6dabedfe46, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial1
+    clip: {fileID: 8300000, guid: 40a3ef051e51cfc4da18fcdb376c8856, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial2
+    clip: {fileID: 8300000, guid: 81073bd628e611647b233bff96956c56, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial3
+    clip: {fileID: 8300000, guid: 9873c8a4725b0b147a53d842e515248f, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial4
+    clip: {fileID: 8300000, guid: e5436f39602e6ee40897179b82e31c88, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial5
+    clip: {fileID: 8300000, guid: 6e6958dd261ee6e428f90886ff83ca56, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial6
+    clip: {fileID: 8300000, guid: ad69eb643e592c746834c9f01ad32d14, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial7
+    clip: {fileID: 8300000, guid: 97009e849cc221d40bc1d869e85e07e8, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial8
+    clip: {fileID: 8300000, guid: f985ff1884988f34982cea8f1151d234, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial9
+    clip: {fileID: 8300000, guid: 1b76eeb98f17c3f4697162cf0592e217, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial10
+    clip: {fileID: 8300000, guid: a78a0ac5d4a2b594a944826cd64ca7d9, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DrawingTutorial11
+    clip: {fileID: 8300000, guid: 9ef8e8d08ae8c0141a8bf682a2f3c4eb, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Tutorial
+    clip: {fileID: 8300000, guid: 7e5f96fca07c17f49840f5b12aba6c71, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 1
+  - name: DrawingTutorial3b
+    clip: {fileID: 8300000, guid: 5394eff422762744d9ddf83053e2d5fc, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: drawing-button-click
+    clip: {fileID: 8300000, guid: addc25359a785e840a5a37f646167660, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: CharacterSwitch
+    clip: {fileID: 8300000, guid: 4f40648017cdafb4b87a3d6121d0f08c, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Celebration
+    clip: {fileID: 8300000, guid: 3d3ca82627fb89f448133fbf04f6cf4c, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: ConfettiCannon
+    clip: {fileID: 8300000, guid: 461cd0fc056a73546b2c5fd5459db50d, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Defeat
+    clip: {fileID: 8300000, guid: e18419946e55e5b46b8ecad85ea8dbc3, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: TimeBonus
+    clip: {fileID: 8300000, guid: 2d02631fcbd1c7c49baf762b9c1767a7, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: TimePenalty
+    clip: {fileID: 8300000, guid: dec74f1929cf76341803032abf09d430, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Marker
+    clip: {fileID: 8300000, guid: b0fe3ec2dfe001a43aa88998ef8b2a2d, type: 3}
+    volume: 0.161
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Eraser
+    clip: {fileID: 8300000, guid: d896450ce89d0524980b919b3dbc1f99, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: Stamp
+    clip: {fileID: 8300000, guid: 1be3b1b7c41d04d47a4f40c06148b8b8, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: TrashLid
+    clip: {fileID: 8300000, guid: 730aff85c7cea164c80d7bed9094c225, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: TrashConfirm
+    clip: {fileID: 8300000, guid: e9c344593c149a04993f775bbe7e6724, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EraseUse
+    clip: {fileID: 8300000, guid: b87bb6f663cd94a44b214818e70f271b, type: 3}
+    volume: 0.3
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: PencilUse
+    clip: {fileID: 8300000, guid: 78a7af7df5d3721469b5c916094bd172, type: 3}
+    volume: 0.557
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: StampUse
+    clip: {fileID: 8300000, guid: e5926229b5114874c9737f3e399a58cc, type: 3}
+    volume: 0.372
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EmojiPop1
+    clip: {fileID: 8300000, guid: bfea1f624c77d7d4691538e0ef8fef7f, type: 3}
+    volume: 0.372
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EmojiPop2
+    clip: {fileID: 8300000, guid: e38db1c4af72ac84aafc353d26b7853f, type: 3}
+    volume: 0.372
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EmojiPop3
+    clip: {fileID: 8300000, guid: e38db1c4af72ac84aafc353d26b7853f, type: 3}
+    volume: 0.372
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EmojiPop4
+    clip: {fileID: 8300000, guid: c4aaed0826df145458f9bccf2d75b3aa, type: 3}
+    volume: 0.372
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EmojiPop5
+    clip: {fileID: 8300000, guid: aef4d09f7faca3a4aa7a450e9e90e77e, type: 3}
+    volume: 0.372
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial1
+    clip: {fileID: 8300000, guid: 99dc66d5860deec4da245dfc442bc848, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial2
+    clip: {fileID: 8300000, guid: 1fff47f38dfc15c4f8d3f17368b0ca3c, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial3
+    clip: {fileID: 8300000, guid: 842794ca0286a9b4487c40bfac32cde1, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial4
+    clip: {fileID: 8300000, guid: 56a830215abda6842b57ced917732c95, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial5
+    clip: {fileID: 8300000, guid: 25031aaaf1cd41d47955cba8cbac0611, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial6
+    clip: {fileID: 8300000, guid: 4b023380ad37b164a8b192fffd918a7a, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial7
+    clip: {fileID: 8300000, guid: c715dee2685955942bceb921b2823ca5, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: EndlessTutorial8
+    clip: {fileID: 8300000, guid: dd86e4fdf732b914aa0215bb728d1de2, type: 3}
+    volume: 0.55
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_game_env_worker_card_start
+    clip: {fileID: 8300000, guid: 71971f03c7070584ab8d4b9f621eab83, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_game_env_timer_start
+    clip: {fileID: 8300000, guid: 3a63531b031fa65479532a89cfe1d6cf, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_game_env_timer_end
+    clip: {fileID: 8300000, guid: 2c158696eb44b6a4ab19779a7d0f61d9, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_vote_int_quit
+    clip: {fileID: 8300000, guid: 09da5e2e653a6fe45ad9c63d05238902, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_vote_int_skip_forward
+    clip: {fileID: 8300000, guid: e6b55fb3e85a55844bf0ed818a50c1ba, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_ui_int_back
+    clip: {fileID: 8300000, guid: d787dba3a64db634fb15d2243c147d87, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_vote_amb_office
+    clip: {fileID: 8300000, guid: 3d0c6970a0c99c5448bde0296ca5e246, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_vote_amb_theatre
+    clip: {fileID: 8300000, guid: dab34f2c287151f4594ecb846176ae96, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_vote_env_vote_start
+    clip: {fileID: 8300000, guid: 8922772540881c24f93d3ad1ec7494b6, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_ui_int_gen_sel
+    clip: {fileID: 8300000, guid: 070cc597742b2ed45ba71bd27bb27ba6, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_game_env_boss_lower
+    clip: {fileID: 8300000, guid: 9ab2c072d81a92a4385340d87fb5ba15, type: 3}
+    volume: 0.8
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_game_env_boss_rise
+    clip: {fileID: 8300000, guid: 32e84bb358e1b0849bf879744015b56b, type: 3}
+    volume: 0.8
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_game_env_boss_sticky_place
+    clip: {fileID: 8300000, guid: 0dcc0e8e14fca0040b064928b8ba9eca, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_vote_env_employee_react
+    clip: {fileID: 8300000, guid: 92fd929bcbe30054db7901bbee5b23c2, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_chicken
+    clip: {fileID: 8300000, guid: 44dd920c3d92c5848a66229f7d3a3a3e, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_crow
+    clip: {fileID: 8300000, guid: aa5a94adfd83535489e35baabc9d8dc4, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_duck
+    clip: {fileID: 8300000, guid: a8620af00aac77f4fab7d0ca019f299f, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_ostrich
+    clip: {fileID: 8300000, guid: 54918f27e4bab73469cfbc0fef992ad7, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_parrot
+    clip: {fileID: 8300000, guid: e5c1c7e4103ba6544937c52aac2b8966, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_penguin
+    clip: {fileID: 8300000, guid: 3e8214a325cbd7c4db46c47713eded91, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_pidgeon
+    clip: {fileID: 8300000, guid: de3c2bfaeb4a5bd4dbbfaa3b4a7ce291, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_game_int_cabinet_shake
+    clip: {fileID: 8300000, guid: 8eb4b8a8c2ac97443980ec6b57000d6b, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: increase-score
+    clip: {fileID: 8300000, guid: a4cc70242e8926449b9320a79fd8c9b7, type: 3}
+    volume: 0.75
+    pitch: 0.85
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: calculator
+    clip: {fileID: 8300000, guid: a687934e2e233384289829c400c15ef6, type: 3}
+    volume: 0.75
+    pitch: 0.85
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: cellphone
+    clip: {fileID: 8300000, guid: 1a88e0f66efa66f4cb15a01cec1dd8d9, type: 3}
+    volume: 0.75
+    pitch: 0.85
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: cantafford
+    clip: {fileID: 8300000, guid: a063b807b9c081e43b1247d379317f43, type: 3}
+    volume: 0.75
+    pitch: 0.85
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: birdbuck
+    clip: {fileID: 8300000, guid: 653a791cf1e0c824fad5545ac38c02bb, type: 3}
+    volume: 0.5
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sale
+    clip: {fileID: 8300000, guid: f9abed2f17d7697419f9569669daa4d0, type: 3}
+    volume: 0.75
+    pitch: 0.85
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: stopwatch
+    clip: {fileID: 8300000, guid: f2bc037430b299947b69a9515cf7c3f8, type: 3}
+    volume: 0.75
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_owl
+    clip: {fileID: 8300000, guid: cc6d828f84f9c654ebe607e2a81e180d, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_flamingo
+    clip: {fileID: 8300000, guid: fb7cbb130fc401f46bc503a6e4639be9, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_toucan
+    clip: {fileID: 8300000, guid: f4f761a3822e83147a094870b7ec03f7, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_peacock
+    clip: {fileID: 8300000, guid: 35467d6f512803749bba239cacd69593, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_gull
+    clip: {fileID: 8300000, guid: 5bef6b2995dc3e040ad03ac7b54f127d, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_pidgeon
+    clip: {fileID: 8300000, guid: de3c2bfaeb4a5bd4dbbfaa3b4a7ce291, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_penguin
+    clip: {fileID: 8300000, guid: 3e8214a325cbd7c4db46c47713eded91, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_parrot
+    clip: {fileID: 8300000, guid: e5c1c7e4103ba6544937c52aac2b8966, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_ostrich
+    clip: {fileID: 8300000, guid: 54918f27e4bab73469cfbc0fef992ad7, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_duck
+    clip: {fileID: 8300000, guid: a8620af00aac77f4fab7d0ca019f299f, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_crow
+    clip: {fileID: 8300000, guid: aa5a94adfd83535489e35baabc9d8dc4, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_card_chicken
+    clip: {fileID: 8300000, guid: 44dd920c3d92c5848a66229f7d3a3a3e, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_int_computer_press
+    clip: {fileID: 8300000, guid: 7c99acc9050bc58429190d933ddb02ee, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_int_computer_reach
+    clip: {fileID: 8300000, guid: d1c626f953c985e41afc2c3ce0616fb0, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_int_computer_boot
+    clip: {fileID: 8300000, guid: d917059e35e6f0b4c877fadbe4a8eab8, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_amb_outdoor
+    clip: {fileID: 8300000, guid: 5ba486b1007db8e4fb87f55526817613, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 1
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_ui_int_gen_sel
+    clip: {fileID: 8300000, guid: 070cc597742b2ed45ba71bd27bb27ba6, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_ui_int_discord_sel
+    clip: {fileID: 8300000, guid: fb61596450f18a14894bdea69941a40e, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_ui_int_back
+    clip: {fileID: 8300000, guid: d787dba3a64db634fb15d2243c147d87, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_start
+    clip: {fileID: 8300000, guid: ae2d6041eb1056948a9fc087aa875593, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_scan_int_leave
+    clip: {fileID: 8300000, guid: adf6b4982f8fcf544a1effc117a4bcc4, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_int_skip_sticky
+    clip: {fileID: 8300000, guid: 840972058a06b88438094b7475b13d24, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_int_exit_sign
+    clip: {fileID: 8300000, guid: e3db3f6261df28f4990a0fad7bafe618, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_int_enter_sign
+    clip: {fileID: 8300000, guid: 1ba1e935cef6e0c4cb1f240c3568a3ea, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: sfx_lobby_int_computer_on
+    clip: {fileID: 8300000, guid: 3bb1c7dda2d7b504eb6cd47d1d22d17d, type: 3}
+    volume: 1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: DoorOpen
+    clip: {fileID: 8300000, guid: c0adeb7a8fcee784398837f18e629332, type: 3}
+    volume: 0.19
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop8
+    clip: {fileID: 8300000, guid: d91fac89a0e3d1b45b8104507da80a73, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop7
+    clip: {fileID: 8300000, guid: 5f9c3b2caf14a9840b5fd155c18b48d9, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop6
+    clip: {fileID: 8300000, guid: 015adf2b3896b7e498e69d4f63ca485d, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop5
+    clip: {fileID: 8300000, guid: e17ad6893c577144fae746d0fc65b1f8, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop4
+    clip: {fileID: 8300000, guid: 8bf2a7c71fb8a6a4bb40ce40fe87dd87, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop3
+    clip: {fileID: 8300000, guid: fa7d330231a24eb4498f32160c40bd33, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop2
+    clip: {fileID: 8300000, guid: 534c2070f87169847b5aa3a076f5b70a, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: random-boop1
+    clip: {fileID: 8300000, guid: 7bda4f282313e3949aef12de88519661, type: 3}
+    volume: 0.1
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: pc-boot
+    clip: {fileID: 8300000, guid: d7fbfcf65f2aa174e9feb8c6d7c2a1a5, type: 3}
+    volume: 0.51
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: button-press
+    clip: {fileID: 8300000, guid: 2747b5de4e104264dbefafdda47a8aaf, type: 3}
+    volume: 0.51
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: folder-open
+    clip: {fileID: 8300000, guid: 35a9fa7e14c2876439d3e5b443df5b6b, type: 3}
+    volume: 0.51
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  - name: scan-beep
+    clip: {fileID: 8300000, guid: a1a995453570bd048b7f4c03dbc2c9c1, type: 3}
+    volume: 0.222
+    pitch: 1
+    looping: 0
+    source: {fileID: 0}
+    type: 0
+  SoundVariants:
+  - name: sfx_vote_int_emoji
+    variants:
+    - name: sfx_vote_int_emoji1
+      clip: {fileID: 8300000, guid: 1210b0d6657865f479d3e9e2b69934d3, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_emoji2
+      clip: {fileID: 8300000, guid: d7b77b35f3324dc4eb0f3eb1767a9e8a, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_emoji3
+      clip: {fileID: 8300000, guid: 41230785dca14fd46be1d283c4a2833c, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_emoji4
+      clip: {fileID: 8300000, guid: a5c5aa9f3ae2e1040ba0e4df798bf340, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_emoji5
+      clip: {fileID: 8300000, guid: 13b9cfb6b6b247f4688cc28ac96af00d, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_vote_int_gen_click_owl
+    variants:
+    - name: sfx_vote_int_gen_click_owl1
+      clip: {fileID: 8300000, guid: 763bb8c0a1e24a74285abcbd09f4c466, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_gen_click_owl2
+      clip: {fileID: 8300000, guid: a743fea0584bc364e9fb1de79e4b6c45, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_gen_click_owl3
+      clip: {fileID: 8300000, guid: 192657ab45f84204eb84818816f32b84, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_gen_click_owl4
+      clip: {fileID: 8300000, guid: a547856fa11c7e04ab5382f9ee552a45, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_gen_click_owl5
+      clip: {fileID: 8300000, guid: 292b27a64e1a4ad4b9a1f0ef1cdd9ed6, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_gen_click_owl6
+      clip: {fileID: 8300000, guid: 096786e16fe12114389dbc890cbf873b, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_vote_int_star_assign
+    variants:
+    - name: sfx_vote_int_star_assign1
+      clip: {fileID: 8300000, guid: d38f1f950fad5a341a204e7a76575987, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_star_assign2
+      clip: {fileID: 8300000, guid: 5fc3093709627374b8367fcaf3b4d50c, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_star_assign3
+      clip: {fileID: 8300000, guid: c88fe16165e76c9438bed305b8a36c42, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_star_assign4
+      clip: {fileID: 8300000, guid: 9eaf709495ac9b949b64ad6d6d26b03a, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_vote_int_star_select
+    variants:
+    - name: sfx_vote_int_star_select1
+      clip: {fileID: 8300000, guid: 10942ae8674172f41801290a89ac0b16, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_star_select2
+      clip: {fileID: 8300000, guid: ff9304e7dcd3bb24fa844676f8fd9c17, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_vote_int_star_select3
+      clip: {fileID: 8300000, guid: 90180b6700c922543a33c3e845a028eb, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_env_drawer_open
+    variants:
+    - name: sfx_game_env_drawer_open1
+      clip: {fileID: 8300000, guid: 1f4d568a8af6e464e8c36fce5acc2cfa, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_env_drawer_open2
+      clip: {fileID: 8300000, guid: 3986450d9a47d314c99bad72002671fa, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_env_drawer_open3
+      clip: {fileID: 8300000, guid: 55d2b23154d4f6b469b7fe1855348bd2, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_env_drawer_open4
+      clip: {fileID: 8300000, guid: 6f19a4eac2e2a2144b4574d6bcc2168c, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_answer_select
+    variants:
+    - name: sfx_game_int_answer_select1
+      clip: {fileID: 8300000, guid: 9f2a16055f19ff344a2391f223ac48ea, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_answer_select2
+      clip: {fileID: 8300000, guid: 9571088c76df49f4ebc3e2f33135545f, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_answer_select3
+      clip: {fileID: 8300000, guid: 1308bc3b8a16335409b28d2bfe96c002, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_answer_select4
+      clip: {fileID: 8300000, guid: fa0e266ff5d3638449a8b930fc11c892, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_answer_select5
+      clip: {fileID: 8300000, guid: 2e0289dba9368d541aef469367c17568, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_eraser
+    variants:
+    - name: sfx_game_int_eraser1
+      clip: {fileID: 8300000, guid: 4a13f829eadb18546a590a4eacced50b, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_eraser2
+      clip: {fileID: 8300000, guid: 2cf0e1934c7f26f4e8dab7297966e24d, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_eraser3
+      clip: {fileID: 8300000, guid: ac82e4b4f563c9d44808e9d1a4cb0f60, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_folder_hover
+    variants:
+    - name: sfx_game_int_folder_hover1
+      clip: {fileID: 8300000, guid: 69e5288b543994644a35f2bd33223397, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_hover2
+      clip: {fileID: 8300000, guid: 2865d152fd11d5541bda801f3d2bae17, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_hover3
+      clip: {fileID: 8300000, guid: 682c496e07c41ad438799b46872b6ee3, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_hover4
+      clip: {fileID: 8300000, guid: c88472b4b553b1647b471fd9ff7fc483, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_folder_select
+    variants:
+    - name: sfx_game_int_folder_select1
+      clip: {fileID: 8300000, guid: 322e9187e1c96974bab980e02c8d3598, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_select2
+      clip: {fileID: 8300000, guid: c3e8ad9a1db628744bf3e91ff451dcab, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_select3
+      clip: {fileID: 8300000, guid: c66a2799f04c4f24d94085c66013a2e0, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_select4
+      clip: {fileID: 8300000, guid: 2aeb21339888a4e4c9538a547c2ea9e9, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_folder_submit
+    variants:
+    - name: sfx_game_int_folder_submit1
+      clip: {fileID: 8300000, guid: 3bd7f079236864d4a95bc1afa0d9cdb4, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_submit2
+      clip: {fileID: 8300000, guid: c764525b316dc014ebb4f8c1cd63daea, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_submit3
+      clip: {fileID: 8300000, guid: c166c97901c9d4d46b1edd8d332a8219, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_folder_submit4
+      clip: {fileID: 8300000, guid: f7a968333aecc8a4fb01789ebe6c8961, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_garbage_cancel
+    variants:
+    - name: sfx_game_int_garbage_cancel1
+      clip: {fileID: 8300000, guid: 6e2111b4cf2fc6c4cbe01b88d2331f67, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_cancel2
+      clip: {fileID: 8300000, guid: 2bb267929760a9f4b97c343af8b26728, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_cancel3
+      clip: {fileID: 8300000, guid: 6d4f0c9519c28e843814495fab76b109, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_cancel4
+      clip: {fileID: 8300000, guid: 046a72f911e03a84fa1e13ae65d93c07, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_garbage_confirm
+    variants:
+    - name: sfx_game_int_garbage_confirm1
+      clip: {fileID: 8300000, guid: 06f437fd95a00274fa70eae8fbc8a814, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_confirm2
+      clip: {fileID: 8300000, guid: facc43c1c5b0d7a448959d35d3ee1ebd, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_confirm3
+      clip: {fileID: 8300000, guid: e5e64cf3fba9f3846b6ffa991df0647e, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_confirm4
+      clip: {fileID: 8300000, guid: 2cff2deb738e90a49ac8f6c49e0d0067, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_garbage_select
+    variants:
+    - name: sfx_game_int_garbage_select1
+      clip: {fileID: 8300000, guid: f884fbd1ba465de48af861e6e75bd987, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_select2
+      clip: {fileID: 8300000, guid: 18bee4952e29f794da155743bf0aae0d, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_select3
+      clip: {fileID: 8300000, guid: 8fcf7f9581144b24f9ee85bf29591860, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_garbage_select4
+      clip: {fileID: 8300000, guid: 2c7b57c8fb0b0d74eb883824c0a6ba78, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_marker_stroke
+    variants:
+    - name: sfx_game_int_marker_stroke1
+      clip: {fileID: 8300000, guid: ae2ff4abedbd15b44a1fea30a4ba622f, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_marker_stroke2
+      clip: {fileID: 8300000, guid: 69a51ee96162d1d4d9af6f3cbdec4554, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_marker_stroke3
+      clip: {fileID: 8300000, guid: 09ef0161154f4234a930a3a082580e72, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_marker_stroke4
+      clip: {fileID: 8300000, guid: c2861193333c5ca4a8d62c7bc7828d74, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_marker_stroke5
+      clip: {fileID: 8300000, guid: d4b2b163308024c4eb3dbec99b1b0d42, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_marker_select
+    variants:
+    - name: sfx_game_int_marker_select1
+      clip: {fileID: 8300000, guid: 823b869f5e798de4d97e33ea304b6f50, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_marker_select2
+      clip: {fileID: 8300000, guid: 0e70d47846796bc4398ff8bf1a163277, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_marker_select3
+      clip: {fileID: 8300000, guid: 247fd6f2824714b47b3699f4ccb66476, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_marker_select4
+      clip: {fileID: 8300000, guid: 7ca447da29b44464e977c3e4a1f3d55f, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_pencil
+    variants:
+    - name: sfx_game_int_pencil1
+      clip: {fileID: 8300000, guid: 4d64d9a0afdbe084ea13bd5ed83e0094, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_pencil2
+      clip: {fileID: 8300000, guid: 8d752d4287bf07349814107b4f694cd0, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_pencil3
+      clip: {fileID: 8300000, guid: 546856cbeb5d3744c8a184306bc4084c, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_sticky_select
+    variants:
+    - name: sfx_game_int_sticky_select1
+      clip: {fileID: 8300000, guid: 32d80ed54e76bf44dadc75d15ac691a1, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_sticky_select2
+      clip: {fileID: 8300000, guid: ca9dd75b4a948f64abf7b43fab97f065, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_sticky_select3
+      clip: {fileID: 8300000, guid: 10a9586292dce82468a351148b090f87, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_sticky_select4
+      clip: {fileID: 8300000, guid: ae204a25a92612849a4102abcef7df8c, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_int_white_out
+    variants:
+    - name: sfx_game_int_white_out1
+      clip: {fileID: 8300000, guid: a21007a474f3a7f48a2f427b6280c35b, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_white_out2
+      clip: {fileID: 8300000, guid: 5f10a4151e3a6404fb340f4de6b838ec, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_white_out3
+      clip: {fileID: 8300000, guid: 286d363fbb69d814496cb9dd3ad8efd7, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_int_white_out4
+      clip: {fileID: 8300000, guid: 37030ce946b55f14ea5fb26d9df3cbe3, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_lobby_int_click_gen
+    variants:
+    - name: sfx_lobby_int_click_gen1
+      clip: {fileID: 8300000, guid: 25774c92c39dafa4384a9403342687ec, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen2
+      clip: {fileID: 8300000, guid: 2f39710f15f3eab40a20cb972b668dca, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen3
+      clip: {fileID: 8300000, guid: 9c34af30e7126344483444739517fe2d, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen4
+      clip: {fileID: 8300000, guid: 9bc39295a15f63e478e97045bdb1bde8, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen5
+      clip: {fileID: 8300000, guid: 55d71c3f08ae6b84bad7f001a57394a5, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen6
+      clip: {fileID: 8300000, guid: c1f82d9be4698624b8c9b3a085ff4dbe, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_lobby_int_click_ok
+    variants:
+    - name: sfx_lobby_int_click_ok1
+      clip: {fileID: 8300000, guid: ac7de377c8ed5874aaa84715f097ed53, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok2
+      clip: {fileID: 8300000, guid: 9c7bb770de0d6cc4e97312ee2136096f, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok3
+      clip: {fileID: 8300000, guid: 828095c28d092ab4e95b7a551498a7c0, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok4
+      clip: {fileID: 8300000, guid: b20664cd9cfde6342bce0fd41f689ea8, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok5
+      clip: {fileID: 8300000, guid: 0b180f12c55834c4eaf951e45ac3055d, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_lobby_int_click_cancel_back
+    variants:
+    - name: sfx_lobby_int_click_cancel_back1
+      clip: {fileID: 8300000, guid: 71904d0012e872d45b83123cb7f4bbac, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back2
+      clip: {fileID: 8300000, guid: 5316a02e4b927904489536bfac450df2, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back3
+      clip: {fileID: 8300000, guid: feca339bdbe9b9441b2ec7a6ff5cccf8, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back4
+      clip: {fileID: 8300000, guid: 5a0c661a637032245bbc5d109a572cf7, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back5
+      clip: {fileID: 8300000, guid: a1a612509285e3f429c08c60d78c3a39, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_game_env_loading
+    variants:
+    - name: sfx_game_env_loading1
+      clip: {fileID: 8300000, guid: fa70a904e2c747d478aac90190c988f9, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_env_loading2
+      clip: {fileID: 8300000, guid: 785fff975885cc2418226501fad9f711, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_env_loading3
+      clip: {fileID: 8300000, guid: fa4fed625651123479c004130721e838, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_game_env_loading4
+      clip: {fileID: 8300000, guid: 1d5d52982ca999b4284e0c37141dd41b, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_lobby_int_click_cancel_back
+    variants:
+    - name: sfx_lobby_int_click_cancel_back1
+      clip: {fileID: 8300000, guid: 71904d0012e872d45b83123cb7f4bbac, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back2
+      clip: {fileID: 8300000, guid: 5316a02e4b927904489536bfac450df2, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back3
+      clip: {fileID: 8300000, guid: feca339bdbe9b9441b2ec7a6ff5cccf8, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back4
+      clip: {fileID: 8300000, guid: 5a0c661a637032245bbc5d109a572cf7, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_cancel_back5
+      clip: {fileID: 8300000, guid: a1a612509285e3f429c08c60d78c3a39, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_lobby_int_click_gen
+    variants:
+    - name: sfx_lobby_int_click_gen1
+      clip: {fileID: 8300000, guid: 25774c92c39dafa4384a9403342687ec, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen2
+      clip: {fileID: 8300000, guid: 2f39710f15f3eab40a20cb972b668dca, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen3
+      clip: {fileID: 8300000, guid: 9c34af30e7126344483444739517fe2d, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen4
+      clip: {fileID: 8300000, guid: 9bc39295a15f63e478e97045bdb1bde8, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen5
+      clip: {fileID: 8300000, guid: 55d71c3f08ae6b84bad7f001a57394a5, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_gen6
+      clip: {fileID: 8300000, guid: c1f82d9be4698624b8c9b3a085ff4dbe, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_lobby_int_click_ok
+    variants:
+    - name: sfx_lobby_int_click_ok1
+      clip: {fileID: 8300000, guid: ac7de377c8ed5874aaa84715f097ed53, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok2
+      clip: {fileID: 8300000, guid: 9c7bb770de0d6cc4e97312ee2136096f, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok3
+      clip: {fileID: 8300000, guid: 828095c28d092ab4e95b7a551498a7c0, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok4
+      clip: {fileID: 8300000, guid: b20664cd9cfde6342bce0fd41f689ea8, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_lobby_int_click_ok5
+      clip: {fileID: 8300000, guid: 0b180f12c55834c4eaf951e45ac3055d, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_scan_int_card_hover
+    variants:
+    - name: sfx_scan_int_card_hover1
+      clip: {fileID: 8300000, guid: 5f4d25af6d5f1ab4fb1348852164a3b7, type: 3}
+      volume: 0.5
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_card_hover2
+      clip: {fileID: 8300000, guid: 6589cc511433f0a48904b2820854ec57, type: 3}
+      volume: 0.5
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_card_hover3
+      clip: {fileID: 8300000, guid: b5c967b7e0ca60347b8406f64c33d574, type: 3}
+      volume: 0.5
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_card_hover4
+      clip: {fileID: 8300000, guid: dfa9236f1bcaa1f408e22302130a525b, type: 3}
+      volume: 0.5
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_card_hover5
+      clip: {fileID: 8300000, guid: d2def4d1ed831bc488caf89e97a7c173, type: 3}
+      volume: 0.5
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_card_hover6
+      clip: {fileID: 8300000, guid: 69fb217e18daef842a3b34e3eca10109, type: 3}
+      volume: 0.5
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_scan_int_click_gen
+    variants:
+    - name: sfx_scan_int_click_gen1
+      clip: {fileID: 8300000, guid: c1f59dc1214067d45b466ccea4f583af, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_click_gen2
+      clip: {fileID: 8300000, guid: 154dd370720d69c40b8e2c86415ef629, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_click_gen3
+      clip: {fileID: 8300000, guid: bd5ec9ce4be934e41b00d231c2fac7d4, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_click_gen4
+      clip: {fileID: 8300000, guid: 8d15347437bbadd4e80b83c73ff1260e, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_scan_int_conveyer_select
+    variants:
+    - name: sfx_scan_int_conveyer_select1
+      clip: {fileID: 8300000, guid: 52e604d187ef60544a24518d275dd65c, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_conveyer_select2
+      clip: {fileID: 8300000, guid: 843cf2f041b7fc940a80ef51e1dc8bfa, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_conveyer_select3
+      clip: {fileID: 8300000, guid: eb0f5948b42ea7c469b557dff77a45a5, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_conveyer_select4
+      clip: {fileID: 8300000, guid: 5b388336d4db2ab49ad46ed2279087a0, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+  - name: sfx_scan_int_gamemode_select
+    variants:
+    - name: sfx_scan_int_gamemode_select1
+      clip: {fileID: 8300000, guid: c4299332c4a05384285ec15040b6ee8c, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_gamemode_select2
+      clip: {fileID: 8300000, guid: 93f2d0d121589dc49b44eabfa81d65aa, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_gamemode_select3
+      clip: {fileID: 8300000, guid: 702dc8ff6a64c4743944bab2fab38e76, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_gamemode_select4
+      clip: {fileID: 8300000, guid: 269f8fd8a8f96ce47a6cddd71d9bfe60, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_gamemode_select5
+      clip: {fileID: 8300000, guid: 8b48d76f29978af419355a0250049200, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0
+    - name: sfx_scan_int_gamemode_select6
+      clip: {fileID: 8300000, guid: 9174e4980a5c60348ba142683089fe5a, type: 3}
+      volume: 1
+      pitch: 1
+      looping: 0
+      source: {fileID: 0}
+      type: 0

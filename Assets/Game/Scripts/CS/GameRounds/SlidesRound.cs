@@ -103,6 +103,7 @@ namespace ChickenScratch
         public int expectedCaseCount;
 
         private Dictionary<int, BirdName> competitionCaseChoicesMap = new Dictionary<int, BirdName>();
+        private Dictionary<int, bool> binaryCaseStatusMap = new Dictionary<int, bool>();
         public override void StartRound()
         {
             hasUpdatedCasesInSlideRound = false;
@@ -355,6 +356,7 @@ namespace ChickenScratch
                     case TaskData.TaskType.morph_guessing:
                     case TaskData.TaskType.base_guessing:
                     case TaskData.TaskType.competition_guessing:
+                    case TaskData.TaskType.binary_guessing:
                         currentSlideType = slideTypeMap[SlideTypeData.SlideType.guess];
                         GameObject guessingSlideObject = Instantiate(currentSlideType.prefab, slidesParent);
                         GuessSlideContents guessingSlide = guessingSlideObject.GetComponent<GuessSlideContents>();
@@ -692,6 +694,27 @@ namespace ChickenScratch
             if(competitionCaseChoicesMap.ContainsKey(caseIdentifier))
             {
                 return competitionCaseChoicesMap[caseIdentifier] == player;
+            }
+            return false;
+        }
+
+        public void SetBinaryCaseState(int caseIdentifier, bool value)
+        {
+            if(!binaryCaseStatusMap.ContainsKey(caseIdentifier))
+            {
+                binaryCaseStatusMap.Add(caseIdentifier, value);
+            }
+            else
+            {
+                binaryCaseStatusMap[caseIdentifier] = value;
+            }
+        }
+
+        public bool GetBinaryCaseState(int caseIdentifier)
+        {
+            if(binaryCaseStatusMap.ContainsKey(caseIdentifier))
+            {
+                return binaryCaseStatusMap[caseIdentifier];
             }
             return false;
         }

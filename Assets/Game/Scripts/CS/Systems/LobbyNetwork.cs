@@ -18,13 +18,10 @@ namespace ChickenScratch
         private LobbyNotReadyManager lobbyNotReadyManager;
         private List<CSteamID> roomIDs = new List<CSteamID>();
         
-
-        private string sceneName;
         protected Callback<LobbyCreated_t> m_LobbyCreated;
         protected Callback<LobbyEnter_t> m_LobbyEntered;
         protected Callback<LobbyMatchList_t> m_LobbyListReceived;
         protected Callback<LobbyDataUpdate_t> m_LobbyDataUpdated;
-        private bool inLobby = false;
 
         [SerializeField]
         private GameObject networkManagerPrefab;
@@ -59,7 +56,6 @@ namespace ChickenScratch
             {
                 Debug.Log("Not connected to Steam.");
             }
-            sceneName = SceneManager.GetActiveScene().name;
         }
 
         #region Create/Join/Connect Callbacks
@@ -69,7 +65,6 @@ namespace ChickenScratch
             //Close the room
             MenuLobbyButtons.Instance.PlayerPrompt.Activate("You have been disconnected.");
             MenuLobbyButtons.Instance.LobbyPageObject.SetActive(false);
-            inLobby = false;
         }
 
         public void OnCreatedSteamRoom(LobbyCreated_t pCallback)
@@ -86,8 +81,6 @@ namespace ChickenScratch
             NetworkManager.singleton.networkAddress = hostID.ToString();
             CSNetworkManager.singleton.StartHost();
             SteamMatchmaking.SetLobbyData(new CSteamID(pCallback.m_ulSteamIDLobby), "HostAddress", SteamUser.GetSteamID().ToString());
-            
-            inLobby = true;
 
         }
 
@@ -176,7 +169,6 @@ namespace ChickenScratch
                 }
             }
 
-            inLobby = true;
         }
 
         #endregion
@@ -250,11 +242,5 @@ namespace ChickenScratch
 
         #endregion
 
-
-        public void LoadLevel(string levelName)
-        {
-            
-            SceneManager.LoadScene(levelName, LoadSceneMode.Single);
-        }
     }
 }

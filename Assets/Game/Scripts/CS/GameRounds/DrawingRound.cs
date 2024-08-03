@@ -14,7 +14,7 @@ namespace ChickenScratch
     {
         public enum CaseState
         {
-            prompting, drawing, copy_drawing, add_drawing, waiting, guessing, blender_drawing, morph_guessing, competition_guessing, invalid
+            prompting, drawing, copy_drawing, add_drawing, waiting, guessing, blender_drawing, morph_guessing, competition_guessing, binary_guessing, invalid
         }
         public CaseState currentState = CaseState.drawing;
 
@@ -58,6 +58,9 @@ namespace ChickenScratch
 
         [SerializeField]
         private GuessingCaseFolder guessingCaseFolder;
+
+        [SerializeField]
+        private BinaryCaseFolder binaryGuessingCaseFolder;
 
         [SerializeField]
         private MorphingGuessCaseFolder morphGuessCaseFolder;
@@ -140,6 +143,11 @@ namespace ChickenScratch
             if (!isInitialized)
             {
                 Initialize();
+            }
+
+            foreach(CabinetDrawer cabinet in cabinetDrawerMap.Values)
+            {
+                cabinet.ResetCabinetTask();
             }
 
             queuedCaseFolderIdentifiers.Clear();
@@ -247,6 +255,7 @@ namespace ChickenScratch
             int firstDrawingRound = -1;
             int secondDrawingRound = -1;
             int thirdDrawingRound = -1;
+            GameManager.Instance.gameDataHandler.CmdSetPlayerCabinetTask(SettingsManager.Instance.birdName, currentState);
             switch (currentState)
             {
                 case CaseState.prompting:
@@ -498,6 +507,69 @@ namespace ChickenScratch
 
                     guessingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
                     break;
+                case CaseState.binary_guessing:
+                    bool caseState = GameManager.Instance.playerFlowManager.slidesRound.GetBinaryCaseState(chainData.identifier);
+                    string possiblePrefix = "";
+                    string possibleNoun = "";
+                    CaseWordData correctPrefixWord = GameDataManager.Instance.GetWord(chainData.correctWordIdentifierMap[1]);
+                    CaseWordData correctNounWord = GameDataManager.Instance.GetWord(chainData.correctWordIdentifierMap[2]);
+                    if (caseState)
+                    {
+                        //use the correct prompt
+                        if (correctPrefixWord != null)
+                        {
+                            possiblePrefix = correctPrefixWord.value;
+                        }
+
+                        if (correctNounWord != null)
+                        {
+                            possibleNoun = correctNounWord.value;
+                        }
+                    }
+                    else
+                    {
+                        //use the fake prompt
+                        if (correctPrefixWord != null)
+                        {
+                            foreach (string prefix in chainData.possibleWordsMap[1])
+                            {
+                                if (prefix != correctPrefixWord.value)
+                                {
+                                    possiblePrefix = prefix;
+                                    break;
+                                }
+                            }
+                        }
+                        if (correctNounWord != null)
+                        {
+                            foreach (string noun in chainData.possibleWordsMap[2])
+                            {
+                                if (noun != correctNounWord.value)
+                                {
+                                    possibleNoun = noun;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    binaryGuessingCaseFolder.Initialize(queuedFolderMap[queuedCaseIndex].round, chainData.identifier, possiblePrefix, possibleNoun, chainData.drawings[lastRoundIndex], chainData.currentTaskModifiers, ForceCaseExpirySubmit);
+                    if (GameManager.Instance.playerFlowManager.HasStoreItem(StoreItem.StoreItemType.category_preview))
+                    {
+                        binaryGuessingCaseFolder.ShowCategory(queuedFolderMap[queuedCaseIndex].wordCategory);
+                    }
+                    lastDrawer = chainData.drawings[lastRoundIndex].author;
+                    lastDrawerBird = GameDataManager.Instance.GetBird(lastDrawer);
+                    if (lastDrawerBird == null)
+                    {
+                        Debug.LogError("Could not update folder colour because last drawer bird[" + lastDrawer.ToString() + "] was not mapped in the Colour Manager.");
+                    }
+                    else
+                    {
+                        inFolderColour = lastDrawerBird.folderColour;
+                    }
+
+                    binaryGuessingCaseFolder.Show(inFolderColour, currentTaskTime, chainData.currentScoreModifier, chainData.maxScoreModifier, scoreDecrement);
+                    break;
                 case CaseState.morph_guessing:
                     foreach(int requiredTask in chainData.requiredTasks)
                     {
@@ -625,6 +697,7 @@ namespace ChickenScratch
             {
                 Debug.LogError("ERROR[ReleaseDeskFolder]: Could not isolate currentRoundIndex for case["+selectedCase.identifier.ToString()+"].");
             }
+            GameManager.Instance.gameDataHandler.CmdSetPlayerCabinetIdle(SettingsManager.Instance.birdName);
             //AudioManager.Instance.PlaySoundVariant("sfx_game_int_folder_submit");
             switch (currentState)
             {
@@ -701,6 +774,20 @@ namespace ChickenScratch
                         }
                     }
                     
+                    break;
+                case CaseState.binary_guessing:
+                    if (timeHasExpired)
+                    {
+                        binaryGuessingCaseFolder.ForceGuess(selectedCase.identifier);
+                    }
+                    else
+                    {
+                        if (!binaryGuessingCaseFolder.ChooseGuess(selectedCase.identifier))
+                        {
+                            return;
+                        }
+                    }
+
                     break;
                 case CaseState.morph_guessing:
                     if (timeHasExpired)
@@ -965,6 +1052,10 @@ namespace ChickenScratch
                     guessingCaseFolder.RegisterToStampComplete(OnSubmitted);
                     guessingCaseFolder.Submit();
                     break;
+                case CaseState.binary_guessing:
+                    binaryGuessingCaseFolder.RegisterToStampComplete(OnSubmitted);
+                    binaryGuessingCaseFolder.Submit();
+                    break;
                 case CaseState.morph_guessing:
                     morphGuessCaseFolder.RegisterToStampComplete(OnSubmitted);
                     morphGuessCaseFolder.Submit();
@@ -1066,6 +1157,18 @@ namespace ChickenScratch
                     currentScoreModifier = guessingCaseFolder.GetScoreModifier();
                     crossedTimeThreshold = guessingCaseFolder.HasCrossedThreshold();
                     break;
+                case CaseState.binary_guessing:
+                    if (force)
+                    {
+                        binaryGuessingCaseFolder.PullDownStamp();
+                        binaryGuessingCaseFolder.ForceGuess(cabinetDrawerMap[playerCabinetIndex].currentChainData.identifier);
+                    }
+
+                    binaryGuessingCaseFolder.DeregisterToStampComplete(OnSubmitted);
+                    binaryGuessingCaseFolder.Hide();
+                    currentScoreModifier = binaryGuessingCaseFolder.GetScoreModifier();
+                    crossedTimeThreshold = binaryGuessingCaseFolder.HasCrossedThreshold();
+                    break;
                 case CaseState.morph_guessing:
                     if (force)
                     {
@@ -1136,7 +1239,7 @@ namespace ChickenScratch
             else
             {
                 GameManager.Instance.playerFlowManager.drawingRound.onPlayerSubmitTask.Invoke();
-                if (currentState != CaseState.guessing && currentState != CaseState.morph_guessing && currentState != CaseState.competition_guessing)
+                if (currentState != CaseState.guessing && currentState != CaseState.morph_guessing && currentState != CaseState.competition_guessing && currentState != CaseState.binary_guessing)
                 {
                     GameManager.Instance.gameDataHandler.CmdTransitionCase(caseID);
                 }
@@ -1276,7 +1379,7 @@ namespace ChickenScratch
         public void StartChoiceCaseDrawing(int cabinetIndex, int caseID, string prompt, float taskTime, float currentModifierValue, float maxModifierValue, float modifierDecrement, List<TaskModifier> taskModifiers, string caseTypeName, List<BirdName> playerOrder)
         {
             currentState = CaseState.drawing;
-
+            GameManager.Instance.gameDataHandler.CmdSetPlayerCabinetTask(SettingsManager.Instance.birdName, currentState);
             ChainData newChain;
             if (!caseMap.ContainsKey(caseID))
             {
@@ -1381,7 +1484,8 @@ namespace ChickenScratch
 
         public void ShowCaseChoices(List<CaseChoiceNetData> choices)
         {
-            if(choices.Count < 3)
+            GameManager.Instance.gameDataHandler.CmdSetPlayerCabinetChoosing(SettingsManager.Instance.birdName);
+            if (choices.Count < 3)
             {
                 Debug.LogError("ERROR[ShowCaseChoices]: Not enough choices["+choices.Count.ToString()+"] were provided.");
                 return;
@@ -1475,6 +1579,7 @@ namespace ChickenScratch
                     case CaseState.guessing:
                     case CaseState.morph_guessing:
                     case CaseState.competition_guessing:
+                    case CaseState.binary_guessing:
                         foreach (CabinetDrawer drawer in cabinetDrawerMap.Values)
                         {
                             if (drawer.currentChainData.active)

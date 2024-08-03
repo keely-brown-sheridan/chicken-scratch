@@ -203,6 +203,7 @@ namespace ChickenScratch
                         case TaskData.TaskType.morph_guessing:
                         case TaskData.TaskType.base_guessing:
                         case TaskData.TaskType.competition_guessing:
+                        case TaskData.TaskType.binary_guessing:
                             if (currentCase.WasCorrect())
                             {
                                 int caseDifficulty = currentCase.GetDifficulty();

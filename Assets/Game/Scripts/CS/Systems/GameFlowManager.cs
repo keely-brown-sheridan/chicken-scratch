@@ -82,6 +82,7 @@ namespace ChickenScratch
         private bool hasRequestedBirdClaim = false;
         private bool triedToInitialize = false;
 
+
         // Start is called before the first frame update
         void Start()
         {
@@ -669,18 +670,18 @@ namespace ChickenScratch
         public void clearPlayerTransitionConditions(BirdName disconnectingPlayer)
         {
             List<string> playerTransitionConditionTags = new List<string>()
-        {
-            "force_submit",
-            "drawing_submitted",
-            "empty_drawing_receipt",
-            "drawing_receipt",
-            "prompt_submitted",
-            "guess_submitted",
-            "ratings_loaded",
-            "tutorial_finished",
-            "cabinet_prompt_receipt",
-            "stats_loaded"
-        };
+            {
+                "force_submit",
+                "drawing_submitted",
+                "empty_drawing_receipt",
+                "drawing_receipt",
+                "prompt_submitted",
+                "guess_submitted",
+                "ratings_loaded",
+                "tutorial_finished",
+                "cabinet_prompt_receipt",
+                "stats_loaded"
+            };
             foreach (string playerTransitionConditionTag in playerTransitionConditionTags)
             {
                 string potentialPlayerTransitionCondition = playerTransitionConditionTag + ":" + disconnectingPlayer.ToString();

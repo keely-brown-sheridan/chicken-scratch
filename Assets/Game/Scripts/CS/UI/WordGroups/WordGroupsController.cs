@@ -277,8 +277,6 @@ namespace ChickenScratch
                 //Send message to players about what word groups there are and are active
                 LobbyNetwork.Instance.lobbyDataHandler.RpcUpdateWordGroups(wordGroups);
             }
-            
-            
         }
 
         public void DeleteWordGroup(string groupName)

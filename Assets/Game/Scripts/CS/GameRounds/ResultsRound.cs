@@ -61,11 +61,8 @@ namespace ChickenScratch
             base.StartRound();
             ShowResults();
 
-            if (SettingsManager.Instance.isHost)
-            {
-                returnToLobbyText.text = "Back";
-                lobbyButton.interactable = true;
-            }
+            returnToLobbyText.text = "BACK";
+            lobbyButton.interactable = true;
         }
 
         public void ShowResults()

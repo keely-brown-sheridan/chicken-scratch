@@ -1,4 +1,5 @@
 using ChickenScratch;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,68 +7,53 @@ using UnityEngine;
 public class StoreReviewPanel : MonoBehaviour
 {
     [SerializeField]
-    private Transform caseUpgradeVisualHolder;
+    private Transform caseTypeVisualHolder;
 
     [SerializeField]
-    private Transform previousChoiceVisualHolder;
+    private GameObject caseTypeVisualPrefab;
+
+    private Dictionary<string, CaseTypeReviewVisual> caseTypes = new Dictionary<string, CaseTypeReviewVisual>();
 
     [SerializeField]
-    private GameObject caseUpgradeVisualPrefab;
-
-    [SerializeField]
-    private GameObject previousChoicePrefab;
-
-    private Dictionary<string, CaseUpgradeReviewVisual> caseUpgrades = new Dictionary<string, CaseUpgradeReviewVisual>();
+    private TMPro.TMP_Text goalText, deadlineText, queueText;
 
     public void Initialize(List<CaseChoiceData> initialCaseChoices)
     {
         foreach (CaseChoiceData caseChoice in initialCaseChoices)
         {
-            GameObject caseUpgradeVisualObject = Instantiate(caseUpgradeVisualPrefab, caseUpgradeVisualHolder);
-            CaseUpgradeReviewVisual caseUpgradeVisual = caseUpgradeVisualObject.GetComponent<CaseUpgradeReviewVisual>();
-            caseUpgradeVisual.Initialize(caseChoice);
-            caseUpgrades.Add(caseChoice.identifier, caseUpgradeVisual);
+            GameObject caseTypeVisualObject = Instantiate(caseTypeVisualPrefab, caseTypeVisualHolder);
+            CaseTypeReviewVisual caseTypeVisual = caseTypeVisualObject.GetComponent<CaseTypeReviewVisual>();
+            caseTypeVisual.Initialize(caseChoice);
+            caseTypes.Add(caseChoice.identifier, caseTypeVisual);
         }
     }
 
-    public void AddPreviousChoice(string dayName, List<ContractCaseUnlockData> caseChoicesUnlocked, int birdbuckGoal, float timeInRound)
+    public void UpdateUnlocks(List<ContractCaseUnlockData> unlocks)
     {
-        GameObject previousChoiceObject = Instantiate(previousChoicePrefab, previousChoiceVisualHolder);
-        PreviousChoiceRow previousChoice = previousChoiceObject.GetComponent<PreviousChoiceRow>();
-        previousChoice.Initialize(dayName, caseChoicesUnlocked, birdbuckGoal, timeInRound);
-
-        foreach(ContractCaseUnlockData caseUnlock in caseChoicesUnlocked)
+        foreach(ContractCaseUnlockData unlock in unlocks)
         {
-            GameObject caseUpgradeVisualObject = Instantiate(caseUpgradeVisualPrefab, caseUpgradeVisualHolder);
-            CaseUpgradeReviewVisual caseUpgradeVisual = caseUpgradeVisualObject.GetComponent<CaseUpgradeReviewVisual>();
-            caseUpgradeVisual.Initialize(caseUnlock);
-            caseUpgrades.Add(caseUnlock.identifier, caseUpgradeVisual);
+            CaseChoiceData caseChoice = GameDataManager.Instance.GetCaseChoice(unlock.identifier);
+            if(caseChoice != null)
+            {
+                GameObject caseTypeVisualObject = Instantiate(caseTypeVisualPrefab, caseTypeVisualHolder);
+                CaseTypeReviewVisual caseTypeVisual = caseTypeVisualObject.GetComponent<CaseTypeReviewVisual>();
+                caseTypeVisual.Initialize(caseChoice);
+                caseTypes.Add(caseChoice.identifier, caseTypeVisual);
+            }
         }
     }
 
-    public void UpgradeBirdbucksForCase(string caseIdentifier)
+    public void UpdateValues()
     {
-        if(caseUpgrades.ContainsKey(caseIdentifier))
-        {
-            caseUpgrades[caseIdentifier].IncreaseBirdbucksUpgrade();
-        }
+        int birdbucks = GameManager.Instance.playerFlowManager.GetCurrentGoal();
+        float deadline = GameManager.Instance.playerFlowManager.GetTimeInDay();
+        int queue = GameManager.Instance.playerFlowManager.GetCasesForDay();
+        goalText.text = birdbucks.ToString();
+        var ts = TimeSpan.FromSeconds(deadline);
+        deadlineText.text = string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
+        queueText.text = queue.ToString() + " CASES";
     }
 
-    public void UpgradeMultiplierForCase(string caseIdentifier)
-    {
-        if (caseUpgrades.ContainsKey(caseIdentifier))
-        {
-            caseUpgrades[caseIdentifier].IncreaseModifierUpgrade();
-        }
-    }
-
-    public void UpgradeFrequencyForCase(string caseIdentifier)
-    {
-        if (caseUpgrades.ContainsKey(caseIdentifier))
-        {
-            caseUpgrades[caseIdentifier].IncreaseFrequencyUpgrade();
-        }
-    }
 
     public void TogglePanel()
     {
@@ -76,9 +62,9 @@ public class StoreReviewPanel : MonoBehaviour
 
     public void UpdateCertificationForCase(string identifier, string certificationIdentifier)
     {
-        if(caseUpgrades.ContainsKey(identifier))
+        if (caseTypes.ContainsKey(identifier))
         {
-            caseUpgrades[identifier].AddCertificate(certificationIdentifier);
+            caseTypes[identifier].AddCertification(certificationIdentifier);
         }
     }
 }

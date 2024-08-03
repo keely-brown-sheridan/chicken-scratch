@@ -242,6 +242,7 @@ public class AccusationRound : PlayerRound
             case TaskData.TaskType.morph_guessing:
             case TaskData.TaskType.base_guessing:
             case TaskData.TaskType.competition_guessing:
+            case TaskData.TaskType.binary_guessing:
                 GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], evidenceHolder);
                 GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();
                 guessCaseEmailSection.Initialize(caseData.correctWordIdentifierMap, caseData.guessData, taskData.ratingData);

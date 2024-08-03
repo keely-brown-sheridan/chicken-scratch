@@ -34,6 +34,12 @@ namespace ChickenScratch
                 CSNetworkManager.singleton.StartHost();
                 serverButtonHolder.SetActive(false);
                 birdButtonHolder.SetActive(true);
+                if (GameManager.Instance.gameDataHandler == null)
+                {
+                    GameManager.Instance.gameDataHandler = FindObjectOfType<GameDataHandler>(true);
+
+                }
+                GameManager.Instance.drawingTestManager = this;
             }
         }
 
@@ -45,6 +51,11 @@ namespace ChickenScratch
                 CSNetworkManager.singleton.StartClient();
                 serverButtonHolder.SetActive(false);
                 birdButtonHolder.SetActive(true);
+                if(GameManager.Instance.gameDataHandler == null)
+                {
+                    GameManager.Instance.gameDataHandler = FindObjectOfType<GameDataHandler>(true);
+                }
+                GameManager.Instance.drawingTestManager = this;
             }
         }
 

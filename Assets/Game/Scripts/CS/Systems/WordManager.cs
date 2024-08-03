@@ -23,7 +23,8 @@ namespace ChickenScratch
         {
             _wordGroupMap.Clear();
             queueMap.Clear();
-
+            categoriesMap.Clear();
+            usedWordsMap.Clear();
             //Load in the potential prompts
             List<WordGroupData> nounWordGroups = GameDataManager.Instance.GetWordGroups(WordGroupData.WordType.nouns);
             List<WordGroupData> prefixWordGroups = GameDataManager.Instance.GetWordGroups(WordGroupData.WordType.prefixes);
@@ -200,6 +201,7 @@ namespace ChickenScratch
             WordGroupData groupData;
             WordData currentWord;
             List<string> possibleCategories = new List<string>();
+
             foreach(string possibleCategory in categoriesMap[wordType])
             {
                 int categoryFrequency = GameDataManager.Instance.GetCategoryFrequency(wordType, possibleCategory);

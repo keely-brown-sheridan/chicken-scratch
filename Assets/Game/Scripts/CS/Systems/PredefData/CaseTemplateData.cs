@@ -10,7 +10,7 @@ namespace ChickenScratch
         public string name;
         public enum CaseFormat
         {
-            standard, rush, contribution, shrunk, thirds, top_bottom, corners, curveball, blind, blender, morph, location, competition
+            standard, rush, contribution, shrunk, thirds, top_bottom, corners, curveball, blind, blender, morph, location, competition, binary
         }
         public CaseFormat format = CaseFormat.standard;
 

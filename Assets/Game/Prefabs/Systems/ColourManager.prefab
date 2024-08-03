@@ -1,0 +1,527 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3679450792963773359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2215220503903631130}
+  - component: {fileID: 8159746654237193274}
+  m_Layer: 0
+  m_Name: ColourManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2215220503903631130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3679450792963773359}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1410.0001, y: 145.99998, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8159746654237193274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3679450792963773359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e179f6f7ebab3354dbdeddd6af83e208, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allBirds:
+  - faceSprite: {fileID: -650818852, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: -29743974, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: -668155341, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 9aa3e1b9f0693f84fad8062082902739, type: 3}
+    colour: {r: 1, g: 0, b: 0, a: 1}
+    bgColour: {r: 1, g: 0.64777124, b: 0.6462264, a: 1}
+    folderColour: {r: 0.6981132, g: 0.29966182, b: 0.29966182, a: 1}
+    name: 0
+    material: {fileID: 2100000, guid: 492e523e5b7ec67499c68795bc03e5d9, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: ed18bc96301fa0b42ad9c089c1cba5ab, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 7c16d3215733ac447b29a6d44554be63, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 580f037a27dc6b54db1fa98a088b62e7, type: 2}
+    cursor: {fileID: 2800000, guid: 38c81857faafb90418aac603fdcbf735, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: f3ab27c09cf1103479135bfc542ffe9a, type: 3}
+    accusationBodySprite: {fileID: 1645916957418907915, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: -4954522270497013706, guid: a3c7d32df16fff94987b7f19864a90c3,
+      type: 3}
+    accusationHandSprite: {fileID: 6461176225410538469, guid: a3c7d32df16fff94987b7f19864a90c3,
+      type: 3}
+    peanutGallerySprite: {fileID: -460776018, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 0.94, z: 1}
+    birdHandRotationAdjustment: 0.222
+    slidesBirdPrefab: {fileID: 3891269986871613819, guid: 1f2a699556bc9e3438202c8ae196150d,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 9189656422227858867, guid: 9b284b648b5155d4fa67ee80cc201812,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 8664590097686082621, guid: 423c97dbb4c4fbe49a450df7a836e0c2,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_chicken
+  - faceSprite: {fileID: 1237365961, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: 1226416986, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: 1610083405, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: ba41aeef58d0c5540b6be58dc9b8a6c1, type: 3}
+    colour: {r: 0.14509805, g: 0.3254902, b: 0.7254902, a: 1}
+    bgColour: {r: 0.64907444, g: 0.7464171, b: 0.9622642, a: 1}
+    folderColour: {r: 0.2795924, g: 0.37155482, b: 0.5754717, a: 1}
+    name: 1
+    material: {fileID: 2100000, guid: 113a14930de453247a91ea34a9bae5ae, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: dddd5002eaca8fc47bee3dbe073328f7, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 99e7294d572b91d4899faf720b95af28, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: a38b3743f0fb0dc45a46e89d5a717296, type: 2}
+    cursor: {fileID: 2800000, guid: 7b75047bd9e0dec4b80b31df43076245, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 0e3052ec63963484891917200a829994, type: 3}
+    accusationBodySprite: {fileID: -7456448292687326949, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: -6213014542577944090, guid: bf175eee75fcb3d45a87fa10bdda9e99,
+      type: 3}
+    accusationHandSprite: {fileID: 4594492340338766856, guid: bf175eee75fcb3d45a87fa10bdda9e99,
+      type: 3}
+    peanutGallerySprite: {fileID: -77458871, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 1, z: 1}
+    birdHandRotationAdjustment: -0.904
+    slidesBirdPrefab: {fileID: 7262393767951614159, guid: 798f38eae5a9aa44cb405bfd22a6bcf3,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 3462955726964644009, guid: 311467d9b89373c4c8391a741adcb625,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 268149655258217477, guid: b12cb58e2474d3148b4506f6f6bbdbb5,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_parrot
+  - faceSprite: {fileID: -389167202, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: 1686622929, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: 2008617455, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: d91ab86c0a47ab9468847bd9c1714994, type: 3}
+    colour: {r: 0.27902505, g: 0.4811321, b: 0.097588114, a: 1}
+    bgColour: {r: 0.7072293, g: 0.8396226, b: 0.59011215, a: 1}
+    folderColour: {r: 0.31764707, g: 0.5568628, b: 0.30588236, a: 1}
+    name: 2
+    material: {fileID: 2100000, guid: 614a3f81a887c41459ab6530c4955471, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: c90c35e827f058f459d56ba9b0dcbb39, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 23c1702392c097f46b9f4ba9404bd6e4, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 05a3495a0029f5f42b5c2bfe63886185, type: 2}
+    cursor: {fileID: 2800000, guid: 86d36adb8ef0da542ab9e870afe95b92, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 460a4885641ffb24183fbf534f39d434, type: 3}
+    accusationBodySprite: {fileID: -2004607900828995391, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: 4275602349609215271, guid: 53b7460e98e237f4485f1d6aef7ee2ba,
+      type: 3}
+    accusationHandSprite: {fileID: 5526399485770361229, guid: 53b7460e98e237f4485f1d6aef7ee2ba,
+      type: 3}
+    peanutGallerySprite: {fileID: 11621323, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 1, z: 1}
+    birdHandRotationAdjustment: -3.689
+    slidesBirdPrefab: {fileID: 1095087060612767724, guid: b5b4a4afc58d7eb4b8bd8ad2e6762cc9,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 5950475233227330038, guid: 536f6d5a88d55054084cb4a32bb2b512,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 9004244157623558852, guid: 3e43ee33b213c6d42a9a83d8be391ce2,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_duck
+  - faceSprite: {fileID: 1262329449, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: 687974023, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: -339165870, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 24706b0b8c69f9948bb08efc27a39070, type: 3}
+    colour: {r: 0.51773834, g: 0.030037368, b: 0.7075472, a: 1}
+    bgColour: {r: 0.68572533, g: 0.56817377, b: 0.9056604, a: 1}
+    folderColour: {r: 0.46624216, g: 0.28155035, b: 0.5377358, a: 1}
+    name: 5
+    material: {fileID: 2100000, guid: 51b71a1ac8e24e74c80f702eeda8a6c6, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: 78e299909d856f84789dc7751a1ccf17, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 27c69aa5c352912418c3eb06a2c843dd, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 0b426c9daea52c3419b2044e1f953dce, type: 2}
+    cursor: {fileID: 2800000, guid: d9f8c0516c7ea8f4eb9b3da01b11d47e, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 82fcc58f91b0ee440b8d3e6095a0eb50, type: 3}
+    accusationBodySprite: {fileID: -116160886813616597, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: 5864277404711907623, guid: 36ec334116e8b57489fdaa6103be05fb,
+      type: 3}
+    accusationHandSprite: {fileID: 8412831476658955358, guid: 36ec334116e8b57489fdaa6103be05fb,
+      type: 3}
+    peanutGallerySprite: {fileID: 1467008972, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 0.85, z: 1}
+    birdHandRotationAdjustment: 0
+    slidesBirdPrefab: {fileID: 8359332835391276572, guid: 8fcfc086bd206a74ab1cae7816ed7306,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 1397208909160948621, guid: 0dc5d0d885f9ad24282422a3cf260959,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 1388423872403047545, guid: 1a6536871e95a6643bedf628bb065821,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_penguin
+  - faceSprite: {fileID: -1442714756, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: 1828918912, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: -2127140881, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: e035f2d752403f64e990875958411be4, type: 3}
+    colour: {r: 0.4716981, g: 0.10012461, b: 0.24354336, a: 1}
+    bgColour: {r: 0.6415094, g: 0.44482023, b: 0.5201479, a: 1}
+    folderColour: {r: 0.3584906, g: 0.16740833, b: 0.24058871, a: 1}
+    name: 11
+    material: {fileID: 2100000, guid: f0f985e45f482904f9bfd3cade6e19bf, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: af5d19f456c5f724185b5b3e33531f1e, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 502ac3366b35c1a47b0acd09ba4bc96f, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: ec3d7a291aeff3b47a501e17334606a3, type: 2}
+    cursor: {fileID: 2800000, guid: d2f64ceda29655b46af939057dddc746, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 0182429c641867c418a1ebf2cc9614f9, type: 3}
+    accusationBodySprite: {fileID: -6356699318009124283, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: -3186619596451342868, guid: 8abc475c4901db84f92d293fa182f2d9,
+      type: 3}
+    accusationHandSprite: {fileID: -8691752600372123728, guid: 8abc475c4901db84f92d293fa182f2d9,
+      type: 3}
+    peanutGallerySprite: {fileID: -965991246, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 1.13, z: 1}
+    birdHandRotationAdjustment: -5.079
+    slidesBirdPrefab: {fileID: 4131651996023773378, guid: d5dafe1f1a11bb84ab537c0abe8552b9,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 4842512301207223144, guid: 0c68278e239c7c043aa4fb9fe4511026,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 5958324451300683637, guid: 3cdf32b99bb62a046912478a43636cb3,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_ostrich
+  - faceSprite: {fileID: -1612670322, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: 179313459, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: 1330290010, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 7589ffe6f0477d34d8cf05a2837f2d06, type: 3}
+    colour: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+    bgColour: {r: 0.8773585, g: 0.864943, b: 0.864943, a: 1}
+    folderColour: {r: 0.49056602, g: 0.48362404, b: 0.48362404, a: 1}
+    name: 3
+    material: {fileID: 2100000, guid: 57c082da3d5eeb54d84cb4bf54a3ddef, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: 994b5281a0e08414fa1fd1631b9039c3, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: a8491708e894c2942a502e700fa5801b, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: d8f59618d96c40f4d87ec376be7a574e, type: 2}
+    cursor: {fileID: 2800000, guid: f1e33945ddf0e404c8bfa92f728477b1, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: ee8ff55a1dbfd78459c6f46d710f1423, type: 3}
+    accusationBodySprite: {fileID: 1420672615396535598, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: 8688623329195533764, guid: ad09c94604517a9498b3bcdb6ee9764c,
+      type: 3}
+    accusationHandSprite: {fileID: 3457822549898411768, guid: ad09c94604517a9498b3bcdb6ee9764c,
+      type: 3}
+    peanutGallerySprite: {fileID: 1431410948, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 0.85, z: 1}
+    birdHandRotationAdjustment: -0.326
+    slidesBirdPrefab: {fileID: 2636244915810297921, guid: a966f4699c138044c8fbc3027f3a95cb,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 4333836678885813911, guid: 8698d30751bb9354886620b703712e42,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 4125164671448232888, guid: 20676ae70ed23274e81cd945e92dc591,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_pidgeon
+  - faceSprite: {fileID: -1140162078, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: 677516833, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: -642740649, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 4acaba563f862a8448ed0438f9865682, type: 3}
+    colour: {r: 1, g: 0.49885452, b: 0.051886797, a: 1}
+    bgColour: {r: 0.9339623, g: 0.7634847, b: 0.621173, a: 1}
+    folderColour: {r: 0.8207547, g: 0.56478876, b: 0.33681917, a: 1}
+    name: 7
+    material: {fileID: 2100000, guid: 8dc3f66a6b501264fa2e7b5105849986, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: 56eca371d143f0f4180f96a27fbb1097, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 23a12c9ebad86854293b71c190d6a22c, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 49dd9bc2f06897841a80c3e511f53e4c, type: 2}
+    cursor: {fileID: 2800000, guid: b39f08955b7e5664aa6479fd720b984e, type: 3}
+    featherCursor: {fileID: 2800000, guid: 2d7d90f71f08d954c896378ad72aebe4, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 53f67bf960d7e5d4180aa5eb7a9a92a9, type: 3}
+    accusationBodySprite: {fileID: 2070142108310052499, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: -4301253243296580338, guid: 3710221af0e562543ad2544d9980a60d,
+      type: 3}
+    accusationHandSprite: {fileID: -7737585053903357529, guid: 3710221af0e562543ad2544d9980a60d,
+      type: 3}
+    peanutGallerySprite: {fileID: -872045672, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 0.85, z: 1}
+    birdHandRotationAdjustment: -0.326
+    slidesBirdPrefab: {fileID: 2804895074084062872, guid: e3174a0621d247e4eb95bd22bc17e502,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 1876132358658196949, guid: 587a7d900a949104090bbd378e498187,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 4871279617969366404, guid: 14ba80556dc0b41499f96e9f49669147,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_toucan
+  - faceSprite: {fileID: -917857869, guid: 95a5c829a276c3544ba45fa8869adbc8, type: 3}
+    borderedFaceSprite: {fileID: -232050294, guid: 7d9e9c052c77709478502bcf1eae6e3a,
+      type: 3}
+    cabinetFaceSprite: {fileID: 2117395509, guid: 9ad8bb6dbbb0fc54d905c6cf7ef07183,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 6766ac451935b9042817a938c27ebc59, type: 3}
+    colour: {r: 0.25984326, g: 0.20518868, b: 0.2735849, a: 1}
+    bgColour: {r: 0.64464414, g: 0.49052152, b: 0.6886792, a: 1}
+    folderColour: {r: 0.2577825, g: 0.23549303, b: 0.26415092, a: 1}
+    name: 8
+    material: {fileID: 2100000, guid: 482f1fef82b6c654086bfbf832bd24c8, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: 33b4bcf5f4713d94481070a451a0346a, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 6a51d316855aec84e973ef8278ba7746, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 2679c9c0165db65448b154d8d46ed055, type: 2}
+    cursor: {fileID: 2800000, guid: 513980d64bd5cf94998b3743dcbdcb43, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 1b896cd3e49f17141ae29381279b4686, type: 3}
+    accusationBodySprite: {fileID: 1883719474505725102, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: -6424830940596016739, guid: 014dbe8d1f81c534da7614d930af66aa,
+      type: 3}
+    accusationHandSprite: {fileID: -9186441825140988513, guid: 014dbe8d1f81c534da7614d930af66aa,
+      type: 3}
+    peanutGallerySprite: {fileID: 1878046635, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 1, z: 1}
+    birdHandRotationAdjustment: -3.689
+    slidesBirdPrefab: {fileID: 7738735205297863371, guid: f656029ffaa09354a92bb7fe4e3027d4,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 6641471740759849901, guid: 15725043b2aef0141952193632185fca,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 1625763288774337392, guid: 2a19463e96958124eb9e25a8a8139a3d,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_crow
+  - faceSprite: {fileID: -1119269020, guid: 4fb1e33840ffdad43aa6e9fb94c63129, type: 3}
+    borderedFaceSprite: {fileID: -652817700, guid: 0de40ddce255c1849b91a3b9a96c6983,
+      type: 3}
+    cabinetFaceSprite: {fileID: -1563237726, guid: 50b9a2a1d23b7444c8119d9166fe3ed8,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 2e563de03690388439134f749565e726, type: 3}
+    colour: {r: 0.16078432, g: 0.78431374, b: 0.83137256, a: 1}
+    bgColour: {r: 0.6901961, g: 0.9176471, b: 0.9333334, a: 1}
+    folderColour: {r: 0.6901961, g: 0.91764706, b: 0.93333334, a: 1}
+    name: 12
+    material: {fileID: 2100000, guid: 81e78e6e77eaea0459421bc6e943b246, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: 586373889e957d041b4a7a0cc5588c3e, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 6a51d316855aec84e973ef8278ba7746, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 2679c9c0165db65448b154d8d46ed055, type: 2}
+    cursor: {fileID: 2800000, guid: 516fc334a7af49947b83b064ced61986, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 1b896cd3e49f17141ae29381279b4686, type: 3}
+    accusationBodySprite: {fileID: 1883719474505725102, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: -1591633935, guid: 77ec6274e8e749c4d969b52422d8c3ff,
+      type: 3}
+    accusationHandSprite: {fileID: 379305069, guid: 77ec6274e8e749c4d969b52422d8c3ff,
+      type: 3}
+    peanutGallerySprite: {fileID: -165879785, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 0.94, z: 1}
+    birdHandRotationAdjustment: 0.222
+    slidesBirdPrefab: {fileID: 5535333587388405877, guid: aa3e596ede8eaef47ac6079bc5dfaf30,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 6073143161308985248, guid: 5388f4a105c9c7f45a710db145138340,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 8822920804507749976, guid: 4d1141666b72442439c443b9a52071cd,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_peacock
+  - faceSprite: {fileID: 26889720, guid: 4fb1e33840ffdad43aa6e9fb94c63129, type: 3}
+    borderedFaceSprite: {fileID: 654402173, guid: 0de40ddce255c1849b91a3b9a96c6983,
+      type: 3}
+    cabinetFaceSprite: {fileID: 235414556, guid: 50b9a2a1d23b7444c8119d9166fe3ed8,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 3ffecc8a625ceb54b8c41b2a878bd70b, type: 3}
+    colour: {r: 1, g: 0.44705886, b: 0.6117647, a: 1}
+    bgColour: {r: 1, g: 0.77647066, b: 0.8431373, a: 1}
+    folderColour: {r: 1, g: 0.77647066, b: 0.8431373, a: 1}
+    name: 9
+    material: {fileID: 2100000, guid: 547024d869e3a5940a42295e9909da6a, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: ff6096fb32c33d04d930a6681a9c99f3, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 6a51d316855aec84e973ef8278ba7746, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 2679c9c0165db65448b154d8d46ed055, type: 2}
+    cursor: {fileID: 2800000, guid: c495594f9125a5442b4a862c6c9296fa, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 1b896cd3e49f17141ae29381279b4686, type: 3}
+    accusationBodySprite: {fileID: 1883719474505725102, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: 694023135, guid: 0c6b0ebe825677b4685d6f07888ea739,
+      type: 3}
+    accusationHandSprite: {fileID: -1769078789, guid: 0c6b0ebe825677b4685d6f07888ea739,
+      type: 3}
+    peanutGallerySprite: {fileID: -1810609516, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 1, z: 1}
+    birdHandRotationAdjustment: -3.689
+    slidesBirdPrefab: {fileID: 3769704699711855340, guid: 3ade7bbcc810b554496105bc19989d43,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 6810546133748858195, guid: aad50c1db88a95b47931119c45077c50,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 7588114742910814828, guid: 886a09844a2679a41a3776ae586546a8,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_flamingo
+  - faceSprite: {fileID: 945045803, guid: 4fb1e33840ffdad43aa6e9fb94c63129, type: 3}
+    borderedFaceSprite: {fileID: 1747063656, guid: 0de40ddce255c1849b91a3b9a96c6983,
+      type: 3}
+    cabinetFaceSprite: {fileID: 19710452, guid: 50b9a2a1d23b7444c8119d9166fe3ed8,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: 19537b72e1bb0c64aae3367a84abafd7, type: 3}
+    colour: {r: 0.59607846, g: 0.27450982, b: 0.10980393, a: 1}
+    bgColour: {r: 0.79215693, g: 0.6156863, b: 0.45882356, a: 1}
+    folderColour: {r: 0.79215693, g: 0.6156863, b: 0.45882356, a: 1}
+    name: 4
+    material: {fileID: 2100000, guid: 2088209e50a4040439ab1362d41937ce, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: e6857528b97874745879ad0692674997, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 6a51d316855aec84e973ef8278ba7746, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 2679c9c0165db65448b154d8d46ed055, type: 2}
+    cursor: {fileID: 2800000, guid: 6427b529e2310924f888cab44b4102d6, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 1b896cd3e49f17141ae29381279b4686, type: 3}
+    accusationBodySprite: {fileID: 1883719474505725102, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: 1413584263, guid: 09a83182d2b79cd4f912b8a122cb55ee,
+      type: 3}
+    accusationHandSprite: {fileID: 1552647970, guid: 09a83182d2b79cd4f912b8a122cb55ee,
+      type: 3}
+    peanutGallerySprite: {fileID: 1890061421, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 1, z: 1}
+    birdHandRotationAdjustment: -0.904
+    slidesBirdPrefab: {fileID: 4618382277949372570, guid: f7db8eb0fe3bbdd48923e80bf8eaa7cf,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 2369830708023189276, guid: 11aee29354930b243af0f1c9d32d9224,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 5425242703946146281, guid: 3481612ca51093d4fa8489075bbffee3,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_owl
+  - faceSprite: {fileID: 1175861642, guid: 4fb1e33840ffdad43aa6e9fb94c63129, type: 3}
+    borderedFaceSprite: {fileID: 1305024336, guid: 0de40ddce255c1849b91a3b9a96c6983,
+      type: 3}
+    cabinetFaceSprite: {fileID: -152303747, guid: 50b9a2a1d23b7444c8119d9166fe3ed8,
+      type: 3}
+    scannerFaceSprite: {fileID: 0}
+    armSprite: {fileID: 21300000, guid: b5fcd43619a93594282bd053cc7fd2a6, type: 3}
+    colour: {r: 0.95294124, g: 0.92549026, b: 0.2901961, a: 1}
+    bgColour: {r: 0.8862746, g: 0.87843144, b: 0.69803923, a: 1}
+    folderColour: {r: 0.8862746, g: 0.87843144, b: 0.69803923, a: 1}
+    name: 10
+    material: {fileID: 2100000, guid: 9245bb1fadb2c30498b48087d9fe349e, type: 2}
+    bgLineMaterial: {fileID: 2100000, guid: 69dee61d26d5f4a44bf4b62df9cedad6, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 6a51d316855aec84e973ef8278ba7746, type: 2}
+    ghostBGMaterial: {fileID: 2100000, guid: 2679c9c0165db65448b154d8d46ed055, type: 2}
+    cursor: {fileID: 2800000, guid: 25ac10f8e2f77af4086eb073d594ecd9, type: 3}
+    featherCursor: {fileID: 2800000, guid: d03b91824f38df944836aaba9979753e, type: 3}
+    handCursor: {fileID: 2800000, guid: 56f3f7acfeed327469ed55df0679bd37, type: 3}
+    armOutlineSprite: {fileID: 21300000, guid: 1b896cd3e49f17141ae29381279b4686, type: 3}
+    accusationBodySprite: {fileID: 1883719474505725102, guid: 44e3fe4171459724b97af2c4478b1dcb,
+      type: 3}
+    accusationArmSprite: {fileID: -1612182568, guid: cc22cc74ed29d5d40a8f1c966df8b8ce,
+      type: 3}
+    accusationHandSprite: {fileID: -1070236302, guid: cc22cc74ed29d5d40a8f1c966df8b8ce,
+      type: 3}
+    peanutGallerySprite: {fileID: -366219441, guid: 5c458994689b5724eb310690d025265d,
+      type: 3}
+    birdHandWidthScaling: {x: 1, y: 1, z: 1}
+    birdHandRotationAdjustment: -3.689
+    slidesBirdPrefab: {fileID: 954486366807694372, guid: 846aab6f04f019640b3d9020432afe4a,
+      type: 3}
+    storePlayerBirdArmPrefab: {fileID: 2143430301766871569, guid: 47cda9b990906d8449b77379fb3e2024,
+      type: 3}
+    storeBirdArmPrefab: {fileID: 4457692686580029597, guid: f1ccd55ffbdb5594793b69ad49f15146,
+      type: 3}
+    birdSoundName: sfx_scan_int_card_gull
+  allDrawingSizeData:
+  - _identifier: Big
+    _size: 0.4
+    _dotsize: 15
+  - _identifier: Medium
+    _size: 0.15
+    _dotsize: 10
+  - _identifier: Small
+    _size: 0.05
+    _dotsize: 5
+  allDrawingColourData:
+  - _identifier: Base
+    _drawColour: {r: 0, g: 0, b: 0, a: 1}
+    _drawMaterial: {fileID: 2100000, guid: 2a8f119cd0d184549af8bc98b6251187, type: 2}
+    _linePrefab: {fileID: 3381105885087195580, guid: 9c8414a4d226c6b4f9a15c2fea031b68,
+      type: 3}
+  - _identifier: Erase
+    _drawColour: {r: 1, g: 1, b: 1, a: 1}
+    _drawMaterial: {fileID: 2100000, guid: 779637540ce4ec04991f05b35748e0ce, type: 2}
+    _linePrefab: {fileID: 3381105885087195580, guid: 9c8414a4d226c6b4f9a15c2fea031b68,
+      type: 3}
+  - _identifier: Black
+    _drawColour: {r: 0, g: 0, b: 0, a: 1}
+    _drawMaterial: {fileID: 2100000, guid: 2a8f119cd0d184549af8bc98b6251187, type: 2}
+    _linePrefab: {fileID: 3381105885087195580, guid: 9c8414a4d226c6b4f9a15c2fea031b68,
+      type: 3}
+  - _identifier: Dark
+    _drawColour: {r: 1, g: 1, b: 1, a: 1}
+    _drawMaterial: {fileID: 2100000, guid: 2a8f119cd0d184549af8bc98b6251187, type: 2}
+    _linePrefab: {fileID: 3381105885087195580, guid: 9c8414a4d226c6b4f9a15c2fea031b68,
+      type: 3}
+  allDrawingShapeData:
+  - _identifier: Square
+    _shapePrefab: {fileID: 240543342727755721, guid: 52fd0dd05c0744b4e917225d7f66c789,
+      type: 3}
+  - _identifier: Circle
+    _shapePrefab: {fileID: 2647129718543435379, guid: 169dfb7088d2a8b4384d41ae210ae570,
+      type: 3}
+  - _identifier: Line
+    _shapePrefab: {fileID: 0}
+  linePrefab: {fileID: 3381105885087195580, guid: 9c8414a4d226c6b4f9a15c2fea031b68,
+    type: 3}
+  eraseLineMaterial: {fileID: 2100000, guid: 779637540ce4ec04991f05b35748e0ce, type: 2}
+  clearLineMaterial: {fileID: 2100000, guid: 972e9470d3161e245b75a315e6610824, type: 2}
+  baseLineMaterial: {fileID: 2100000, guid: 2a8f119cd0d184549af8bc98b6251187, type: 2}
+  stampBorderGhostMaterial: {fileID: 2100000, guid: 83a92ab8bfd1d4a49b72da3673430da5,
+    type: 2}
+  eraseGhostMaterial: {fileID: 2100000, guid: aeb0bc3969aee914c8bf6a3ebeeeb6d3, type: 2}

@@ -25,12 +25,22 @@ MonoBehaviour:
     - Blender
     - Morph
     - Expanding Telephone
-    - Expanding One-Off
+    - Expanding Duet
     unlocksToAddToPool: []
     storeChoiceOptions:
     - dayName: Monday
+      birdbucksPerPlayer: 7.5
+      timeRamp: 30
+      numberOfUnlocks: 1
+      unlocks: []
+    - dayName: Monday
+      birdbucksPerPlayer: 5
+      timeRamp: 15
+      numberOfUnlocks: 1
+      unlocks: []
+    - dayName: Monday
       birdbucksPerPlayer: 10
-      timeRamp: 60
+      timeRamp: 45
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Monday
@@ -39,23 +49,13 @@ MonoBehaviour:
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Monday
-      birdbucksPerPlayer: 12.5
-      timeRamp: 75
-      numberOfUnlocks: 1
-      unlocks: []
-    - dayName: Monday
       birdbucksPerPlayer: 10
-      timeRamp: 75
+      timeRamp: 30
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Monday
       birdbucksPerPlayer: 12.5
-      timeRamp: 60
-      numberOfUnlocks: 1
-      unlocks: []
-    - dayName: Monday
-      birdbucksPerPlayer: 15
-      timeRamp: 75
+      timeRamp: 45
       numberOfUnlocks: 2
       unlocks: []
   - dayName: Tuesday
@@ -63,42 +63,40 @@ MonoBehaviour:
     winResult: {fileID: 11400000, guid: ef990e2c1bbb114449760b118b1f7266, type: 2}
     loseResult: {fileID: 11400000, guid: 961dc0b86e73c8a4590192ac0af3ced3, type: 2}
     caseTypesToAddToPool:
-    - Thirds
     - Curveball
     - Quick Copy
     - Quick Add
     - Long Copy
-    - Limited Input
-    - Collapsing One-Off
+    - Funnel
+    - Collapsing Duet
     - Collapsing Telephone
-    - Location One-Off
-    - Location Telephone
+    - Landscape
     - Competition
     unlocksToAddToPool: []
     storeChoiceOptions:
     - dayName: Tuesday
       birdbucksPerPlayer: 20
-      timeRamp: 60
+      timeRamp: 30
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Tuesday
       birdbucksPerPlayer: 25
-      timeRamp: 60
+      timeRamp: 30
       numberOfUnlocks: 2
       unlocks: []
     - dayName: Tuesday
       birdbucksPerPlayer: 17.5
-      timeRamp: 60
+      timeRamp: 30
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Tuesday
       birdbucksPerPlayer: 17.5
-      timeRamp: 45
+      timeRamp: 15
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Tuesday
       birdbucksPerPlayer: 25
-      timeRamp: 75
+      timeRamp: 45
       numberOfUnlocks: 1
       unlocks: []
   - dayName: Wednesday
@@ -107,37 +105,37 @@ MonoBehaviour:
     loseResult: {fileID: 11400000, guid: f1126f6783963cf4087a235ce41cc13e, type: 2}
     caseTypesToAddToPool:
     - Corners
-    - Faded One-Off
+    - Faded Duet
     - Faded Telephone
-    - Hard One-Off
-    - Shrunk One-Off
+    - Hard Duet
+    - Shrunk Duet
     - Shrunk Telephone
     - Flipped Copy
     unlocksToAddToPool: []
     storeChoiceOptions:
     - dayName: Wednesday
       birdbucksPerPlayer: 40
-      timeRamp: 60
+      timeRamp: 30
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Wednesday
       birdbucksPerPlayer: 35
-      timeRamp: 45
+      timeRamp: 15
+      numberOfUnlocks: 1
+      unlocks: []
+    - dayName: Wednesday
+      birdbucksPerPlayer: 50
+      timeRamp: 15
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Wednesday
       birdbucksPerPlayer: 50
       timeRamp: 45
-      numberOfUnlocks: 1
-      unlocks: []
-    - dayName: Wednesday
-      birdbucksPerPlayer: 50
-      timeRamp: 75
       numberOfUnlocks: 2
       unlocks: []
     - dayName: Wednesday
       birdbucksPerPlayer: 30
-      timeRamp: 30
+      timeRamp: 0
       numberOfUnlocks: 1
       unlocks: []
   - dayName: Thursday
@@ -149,32 +147,32 @@ MonoBehaviour:
     storeChoiceOptions:
     - dayName: Thursday
       birdbucksPerPlayer: 90
-      timeRamp: 60
+      timeRamp: 30
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Thursday
       birdbucksPerPlayer: 100
-      timeRamp: 60
+      timeRamp: 30
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Thursday
       birdbucksPerPlayer: 125
-      timeRamp: 75
+      timeRamp: 45
       numberOfUnlocks: 2
       unlocks: []
     - dayName: Thursday
       birdbucksPerPlayer: 90
-      timeRamp: 30
+      timeRamp: 0
       numberOfUnlocks: 2
       unlocks: []
     - dayName: Thursday
       birdbucksPerPlayer: 110
-      timeRamp: 60
+      timeRamp: 30
       numberOfUnlocks: 1
       unlocks: []
     - dayName: Thursday
       birdbucksPerPlayer: 100
-      timeRamp: 45
+      timeRamp: 15
       numberOfUnlocks: 2
       unlocks: []
   - dayName: Friday
@@ -184,7 +182,7 @@ MonoBehaviour:
     caseTypesToAddToPool: []
     unlocksToAddToPool: []
     storeChoiceOptions: []
-  minimumNumberOfPlayers: 2
+  minimumNumberOfPlayers: 1
   wordDistributionMode: 0
   caseDeliveryMode: 1
   baseTemplateData:
@@ -199,13 +197,15 @@ MonoBehaviour:
     caseTypeColour: {r: 0, g: 0, b: 0, a: 0}
     startingScoreModifier: 0
   baseUnlockedChoiceIdentifiers:
-  - Duel
+  - Binary
+  - Duet
+  - Telephone
   baseChoiceIdentifierPool: []
   casesRemaining: 3
   contributionTaskRatio: 0.5
   description: 
   baseGameTime: 180
-  dayOneGoalPerPlayer: 5
+  dayOneGoalPerPlayer: 3
   baseRestockCost: 3
   hasAccusationRound: 0
   rolesToDistribute:

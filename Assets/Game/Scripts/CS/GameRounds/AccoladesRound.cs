@@ -335,6 +335,10 @@ namespace ChickenScratch
             AccoladeBirdAward award;
             for (int i = 0; i < awardsToSpawn.Count; i++)
             {
+                if(orderedBirds.Count <= i)
+                {
+                    continue;
+                }
                 spawnedAwardObject = Instantiate(awardsToSpawn[i], new Vector3(targetX + awardsParent.position.x, awardsParent.position.y, 0f), Quaternion.identity, awardsParent);
 
                 award = spawnedAwardObject.GetComponent<AccoladeBirdAward>();

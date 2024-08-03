@@ -8,6 +8,28 @@ using static ChickenScratch.ColourManager;
 
 public class LobbyDataHandler : NetworkBehaviour
 {
+    [SerializeField]
+    private GameObject gamePrefab;
+
+    [SerializeField]
+    private Transform gameHolder;
+    [SerializeField]
+    private GameObject lobbyHolderObject;
+
+    public void CloseGame()
+    {
+        List<Transform> games = new List<Transform>();
+        foreach(Transform child in gameHolder)
+        {
+            games.Add(child);
+        }
+        for(int i = games.Count - 1; i >= 0; i--)
+        {
+            Destroy(games[i].gameObject);
+        }
+        lobbyHolderObject.SetActive(true);
+    }
+
     [ClientRpc]
     public void RpcSetPlayerListings(string hostID, List<PlayerListingNetData> playerListingData)
     {
@@ -49,6 +71,12 @@ public class LobbyDataHandler : NetworkBehaviour
         SettingsManager.Instance.SetConnectionSteamName(steamID, sender);
     }
 
+    [Command(requiresAuthority =false)]
+    public void CmdSetConnectionAsReadyForGame(ColourManager.BirdName bird)
+    {
+        GameManager.Instance.gameFlowManager.connectedPlayers.Add(SettingsManager.Instance.GetLobbyBirdConnection(bird));
+    }
+
     [ClientRpc]
     public void RpcSelectPlayerBird(string playerName, ColourManager.BirdName selectedBird)
     {
@@ -66,6 +94,24 @@ public class LobbyDataHandler : NetworkBehaviour
     public void RpcDeselectBirdBird(ColourManager.BirdName birdName)
     {
         MenuLobbyButtons.Instance.DeselectPlayerBird(birdName);
+    }
+
+    [ClientRpc]
+    public void RpcCreateGame()
+    {
+        //Remove existing game if necessary
+        List<Transform> gameTransforms = new List<Transform>();
+        foreach(Transform child in gameHolder)
+        {
+            gameTransforms.Add(child);
+        }
+        for(int i = gameTransforms.Count - 1; i >= 0; i--)
+        {
+            Destroy(gameTransforms[i].gameObject);
+        }
+        lobbyHolderObject.SetActive(false);
+        Instantiate(gamePrefab, gameHolder);
+        CmdSetConnectionAsReadyForGame(SettingsManager.Instance.birdName);
     }
 
     [TargetRpc]

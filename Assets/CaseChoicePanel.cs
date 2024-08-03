@@ -221,6 +221,7 @@ public class CaseChoicePanel : MonoBehaviour
         StatTracker.Instance.timeChoosing += timeChoosing;
         StatTracker.Instance.alwaysChoseHighestDifficulty = false;
         StatTracker.Instance.alwaysChoseLowestDifficulty = false;
+        GameManager.Instance.gameDataHandler.CmdSetPlayerCabinetIdle(SettingsManager.Instance.birdName);
         timeChoosing = 0f;
         if (SettingsManager.Instance.GetSetting("stickies"))
         {

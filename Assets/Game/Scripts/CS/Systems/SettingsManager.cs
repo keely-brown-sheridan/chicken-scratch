@@ -370,6 +370,7 @@ namespace ChickenScratch
                 SteamMatchmaking.LeaveLobby(currentRoomID);
                 currentRoomID = CSteamID.Nil;
             }
+            birdConnectionMap.Clear();
             lobbyConnectionBirdMap.Clear();
             lobbyConnectionUsernameMap.Clear();
             playerNameMap.Clear();
@@ -414,6 +415,18 @@ namespace ChickenScratch
             }
         }
 
+        public NetworkConnectionToClient GetLobbyBirdConnection(ColourManager.BirdName bird)
+        {
+            foreach(KeyValuePair<NetworkConnectionToClient, ColourManager.BirdName> connection in lobbyConnectionBirdMap)
+            {
+                if(connection.Value == bird)
+                {
+                    return connection.Key;
+                }
+            }
+            return null;
+        }
+
         public void SetConnectionSteamName(string steamName, NetworkConnectionToClient connection)
         {
             if (lobbyConnectionUsernameMap.ContainsKey(connection))
@@ -432,6 +445,19 @@ namespace ChickenScratch
             if (lobbyConnectionUsernameMap.ContainsKey(connection))
             {
                 lobbyConnectionUsernameMap.Remove(connection);
+            }
+            ColourManager.BirdName birdToRemove = ColourManager.BirdName.none;
+            foreach(KeyValuePair<ColourManager.BirdName,NetworkConnectionToClient> birdConnection in birdConnectionMap)
+            {
+                if(birdConnection.Value == connection)
+                {
+                    birdToRemove = birdConnection.Key;
+                    break;
+                }
+            }
+            if(birdToRemove != ColourManager.BirdName.none)
+            {
+                birdConnectionMap.Remove(birdToRemove);
             }
         }
 
@@ -480,6 +506,7 @@ namespace ChickenScratch
             ClearPlayerNameMap();
             lobbyConnectionBirdMap.Clear();
             lobbyConnectionUsernameMap.Clear();
+            birdConnectionMap.Clear();
         }
 
         public string CreatePromptText(string prefixText, string nounText, CaseChoiceData.PromptFormat promptFormat)

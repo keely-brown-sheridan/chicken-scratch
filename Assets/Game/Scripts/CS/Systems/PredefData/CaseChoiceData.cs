@@ -21,6 +21,11 @@ namespace ChickenScratch
         public List<WordPromptTemplateData> startingWordIdentifiers = new List<WordPromptTemplateData>();
         public List<TemplateTaskData> taskTemplates = new List<TemplateTaskData>();
 
+        public List<string> initialCertifications => _initialCertifications;
+
+        [SerializeField]
+        private List<string> _initialCertifications;
+
         //***********************************************************************//
         //STATS STUFF
         //***********************************************************************//
@@ -105,6 +110,14 @@ namespace ChickenScratch
                 return 0;
             }
             return frequencyRampData.incrementValues[currentFrequencyRampIndex];
+        }
+
+        public string GetEarningsDescription()
+        {
+            int minBirdbucks = bonusPoints + pointsPerCorrectWord * 2 + 2;
+            int maxBirdbucks = bonusPoints + pointsPerCorrectWord * 2 + 10;
+
+            return minBirdbucks.ToString() + "-" + maxBirdbucks.ToString();
         }
 
 

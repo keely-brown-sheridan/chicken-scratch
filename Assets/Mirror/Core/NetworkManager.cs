@@ -648,7 +648,6 @@ namespace Mirror
         /// <summary>Stops and disconnects the client.</summary>
         public void StopClient()
         {
-            Debug.LogError("Stopping the client.");
             if (mode == NetworkManagerMode.Offline)
                 return;
 

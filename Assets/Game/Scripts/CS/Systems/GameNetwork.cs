@@ -43,18 +43,26 @@ namespace ChickenScratch
 
         public void Disconnected_ReturnToLobby()
         {
+            AudioManager.Instance.StopSound("EndMusic");
+            AudioManager.Instance.StopSound("GameMusic");
+            AudioManager.Instance.StopSound("SlidesMusic");
+            AudioManager.Instance.StopSound("AccoladesMusic");
+            Cursor.visible = true;
+            LobbyNetwork.Instance.lobbyDataHandler.CloseGame();
             if (SettingsManager.Instance.isHost)
             {
                 SettingsManager.Instance.waitingForPlayers = true;
                 SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_lobby_room;
                 Steamworks.SteamMatchmaking.SetLobbyJoinable(SettingsManager.Instance.currentRoomID, true);
-                NetworkManager.singleton.ServerChangeScene("MainMenu");
+                
+                //NetworkManager.singleton.ServerChangeScene("MainMenu");
             }
         }
 
         public void Disconnected_ReturnToRooms()
         {
-            if(NetworkServer.active || NetworkClient.isConnected)
+            SettingsManager.Instance.disconnected = true;
+            if (NetworkServer.active || NetworkClient.isConnected)
             {
                 if (SettingsManager.Instance.isHost)
                 {
@@ -65,13 +73,18 @@ namespace ChickenScratch
                     NetworkManager.singleton.StopClient();
                 }
             }
+            AudioManager.Instance.StopSound("EndMusic");
+            AudioManager.Instance.StopSound("GameMusic");
+            AudioManager.Instance.StopSound("SlidesMusic");
+            AudioManager.Instance.StopSound("AccoladesMusic");
+
             SettingsManager.Instance.ClearAllPlayers();
             SettingsManager.Instance.birdName = BirdName.none;
             SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.return_to_room_listings;
-            SettingsManager.Instance.disconnected = true;
-            Cursor.visible = true;
-            SceneManager.LoadScene(0);
+            LobbyNetwork.Instance.lobbyDataHandler.CloseGame();
+            MenuLobbyButtons.Instance.CloseLobbyPageFromDisconnect();
             
+            Cursor.visible = true;
         }
     }
 }

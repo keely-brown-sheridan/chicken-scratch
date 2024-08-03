@@ -416,7 +416,8 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Add(identifier);
-        for(int i = activeUnlockStoreItems.Count - 1; i >= 0; i--)
+
+        for (int i = activeUnlockStoreItems.Count - 1; i >= 0; i--)
         {
             if (activeUnlockStoreItems[i].caseChoiceIdentifier == identifier)
             {
@@ -425,6 +426,12 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         CaseChoiceData caseChoice = GetCaseChoice(identifier);
+        foreach (string certification in caseChoice.initialCertifications)
+        {
+            GameManager.Instance.playerFlowManager.AddCaseCertification(caseChoice.identifier, certification);
+            GameManager.Instance.gameDataHandler.RpcAddCaseCertification(caseChoice.identifier, certification);
+        }
+
         if (caseChoice != null && caseChoice.numberOfTasks <= SettingsManager.Instance.GetPlayerNameCount())
         {
             caseChoice.SendFrequencyToClients();
@@ -584,14 +591,6 @@ public class GameDataManager : Singleton<GameDataManager>
                 continue;
             }
 
-            if (upgradeData.upgradeRampData.modifierIncrease > 0)
-            {
-                GameManager.Instance.gameDataHandler.RpcStoreIncreaseModifierForCase(upgradeData.caseChoiceIdentifier);
-            }
-            else
-            {
-                GameManager.Instance.gameDataHandler.RpcStoreIncreaseBirdbucksForCase(upgradeData.caseChoiceIdentifier);
-            }
             foreach (StoreItemData upgrade in upgradeData.unlocks)
             {
                 if (upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
@@ -638,7 +637,9 @@ public class GameDataManager : Singleton<GameDataManager>
         List<CertificationData> randomizedCertifications = certificationDatas.OrderBy(x => System.Guid.NewGuid()).ToList();
         foreach (CertificationData certification in randomizedCertifications)
         {
-            if (certification.quality != CertificationData.CertificationQuality.good || GameManager.Instance.playerFlowManager.CaseHasCertification(caseIdentifier, certification.identifier))
+            if (certification.quality != CertificationData.CertificationQuality.good || 
+                GameManager.Instance.playerFlowManager.CaseHasCertification(caseIdentifier, certification.identifier) ||
+                certification.type == CertificationData.CertificationType.supply)
             {
                 continue;
             }

@@ -107,8 +107,6 @@ namespace ChickenScratch
         public Toggle exportTasksToggle;
         [SerializeField]
         private GameObject exportTasksContainerObject;
-
-
         private Dictionary<BirdName, Animator> splashArmAnimatorMap = new Dictionary<BirdName, Animator>();
 
         private List<RoomListing> activeRoomListings = new List<RoomListing>();
@@ -425,6 +423,7 @@ namespace ChickenScratch
             splashScreenPauseMenu.canBeOpened = true;
             PlayerListingMap.Clear();
             SettingsManager.Instance.ClearPlayerNameMap();
+           
             SplashPageObject.SetActive(true);
         }
 
@@ -446,6 +445,19 @@ namespace ChickenScratch
                 RoomsPageObject.SetActive(true);
             }
 
+        }
+
+        public void CloseLobbyPageFromDisconnect()
+        {
+            currentMenuState = MenuState.rooms;
+            AudioManager.Instance.PlaySound("LobbyMusic");
+            SkipIntro();
+            RoomsPageObject.SetActive(true);
+            roomListingsObject.SetActive(true);
+            RoomListingsPlayerNameText.text = "User: \n" + SettingsManager.Instance.playerName;
+            SettingsManager.Instance.UpdateSetting("user_name", SettingsManager.Instance.playerName);
+            LobbyPageObject.SetActive(false);
+            SettingsManager.Instance.currentSceneTransitionState = SettingsManager.SceneTransitionState.invalid;
         }
 
         private List<CSteamID> previousRoomIDs = new List<CSteamID>();
@@ -697,8 +709,10 @@ namespace ChickenScratch
 
             if (playerNameCount >= SettingsManager.Instance.gameMode.minimumNumberOfPlayers)
             {
+                AudioManager.Instance.StopSound("LobbyMusic");
                 Steamworks.SteamMatchmaking.SetLobbyJoinable(SettingsManager.Instance.currentRoomID, false);
-                NetworkManager.singleton.ServerChangeScene(loadingLevel);
+                //NetworkManager.singleton.ServerChangeScene(loadingLevel);
+                LobbyNetwork.Instance.lobbyDataHandler.RpcCreateGame();
             }
         }
 
@@ -708,6 +722,7 @@ namespace ChickenScratch
             {
 
             }
+            
             CSNetworkManager.intentionalDisconnection = true;
             AudioManager.Instance.PlaySound("sfx_scan_int_leave");
             SelectedID = null;
@@ -798,7 +813,11 @@ namespace ChickenScratch
         public void UpdatePlayerCount()
         {
             Debug.Log("Number of players required[" + SettingsManager.Instance.gameMode.minimumNumberOfPlayers.ToString() + "], current connections[" + NetworkServer.connections.Count.ToString() + "]");
-            lobbyNotReadyManager.gameModeHasEnoughPlayers = SettingsManager.Instance.gameMode.minimumNumberOfPlayers <= NetworkServer.connections.Count;
+            if(lobbyNotReadyManager)
+            {
+                lobbyNotReadyManager.gameModeHasEnoughPlayers = SettingsManager.Instance.gameMode.minimumNumberOfPlayers <= NetworkServer.connections.Count;
+            }
+            
 
         }
 

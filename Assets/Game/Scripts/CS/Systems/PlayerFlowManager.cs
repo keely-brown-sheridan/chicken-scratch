@@ -87,10 +87,10 @@ namespace ChickenScratch
         {
             if (NetworkClient.isConnected)
             {
-                NetworkClient.Ready();
+                //NetworkClient.Ready();
             }
-            Screen.SetResolution(1280, 720, false);
-            Screen.fullScreen = false;
+            Screen.SetResolution(1920, 1080, false);
+            Screen.fullScreen = true;
 
             if (!isInitialized)
             {
@@ -164,6 +164,20 @@ namespace ChickenScratch
             if(SettingsManager.Instance.isHost)
             {
                 GameDataManager.Instance.SendInitialCaseFrequencies();
+                foreach(string caseChoiceIdentifier in unlockedCaseChoiceIdentifiers)
+                {
+                    CaseChoiceData initialCaseChoice = GameDataManager.Instance.GetCaseChoice(caseChoiceIdentifier);
+                    if(initialCaseChoice != null)
+                    {
+                        foreach (string certification in initialCaseChoice.initialCertifications)
+                        {
+                            GameManager.Instance.playerFlowManager.AddCaseCertification(initialCaseChoice.identifier, certification);
+                            GameManager.Instance.gameDataHandler.RpcAddCaseCertification(initialCaseChoice.identifier, certification);
+                        }
+                    }
+                    
+                }
+                
             }
             isInitialized = true;
         }
@@ -547,12 +561,50 @@ namespace ChickenScratch
             }
             ChainData chain = drawingRound.caseMap[caseID];
             chain.guessData = inGuessData;
+            
 
             if (SettingsManager.Instance.isHost)
             {
+                CaseChoiceData caseChoice = GameDataManager.Instance.GetCaseChoice(chain.caseTypeName);
+                if(caseChoice && caseChoice.caseFormat == CaseTemplateData.CaseFormat.binary)
+                {
+                    if(chain.guessData.prefix == "no" && chain.guessData.noun == "no")
+                    {
+                        //If words have been set to no, check to see what the status of the case is
+                        bool isCorrect = GameManager.Instance.playerFlowManager.slidesRound.GetBinaryCaseState(caseID);
+                        if (!isCorrect)
+                        {
+                            //Substitute in the correct prompt values
+                            CaseWordData prefixWord = GameDataManager.Instance.GetWord(chain.correctWordIdentifierMap[1]);
+                            if (prefixWord != null)
+                            {
+                                chain.guessData.prefix = prefixWord.value;
+                            }
+                            CaseWordData nounWord = GameDataManager.Instance.GetWord(chain.correctWordIdentifierMap[2]);
+                            if (nounWord != null)
+                            {
+                                chain.guessData.noun = nounWord.value;
+                            }
+                        }
+                        else
+                        {
+                            //Remove the no-values
+                            chain.guessData.prefix = "";
+                            chain.guessData.noun = "";
+                        }
+                    }
+
+                }
+
                 HandleGuessCaseCertifications(chain);
-                //If guess is received then update the total completed chains value
-                GameManager.Instance.gameFlowManager.IncreaseNumberOfCompletedCases();
+
+
+                if(!GameManager.Instance.playerFlowManager.CaseHasCertification(caseChoice.identifier, "Supply"))
+                {
+                    //If guess is received then update the total completed chains value
+                    GameManager.Instance.gameFlowManager.IncreaseNumberOfCompletedCases();
+                }
+                
             }
         }
 

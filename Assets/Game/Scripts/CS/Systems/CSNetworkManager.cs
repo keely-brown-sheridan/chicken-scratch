@@ -27,28 +27,36 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnStartHost()
     {
-        if (SceneManager.GetActiveScene().name == "Game")
+        if(currentState == NetworkState.disconnected)
         {
-            currentState = NetworkState.ingame;
+            if (SceneManager.GetActiveScene().name == "Game")
+            {
+                currentState = NetworkState.ingame;
+            }
+            else
+            {
+                currentState = NetworkState.lobby;
+            }
         }
-        else
-        {
-            currentState = NetworkState.lobby;
-        }
+
         
         base.OnStartHost();
     }
 
     public override void OnStartClient()
     {
-        if (SceneManager.GetActiveScene().name == "Game")
+        if(currentState == NetworkState.disconnected)
         {
-            currentState = NetworkState.ingame;
+            if (SceneManager.GetActiveScene().name == "Game")
+            {
+                currentState = NetworkState.ingame;
+            }
+            else
+            {
+                currentState = NetworkState.lobby;
+            }
         }
-        else
-        {
-            currentState = NetworkState.lobby;
-        }
+
         intentionalDisconnection = false;
         base.OnStartClient();
     }
@@ -136,9 +144,17 @@ public class CSNetworkManager : NetworkManager
                 SettingsManager.Instance.AddConnection(conn);
                 if(conn.connectionId == NetworkConnection.LocalConnectionId)
                 {
-                    SettingsManager.Instance.SetConnectionSteamName(Steamworks.SteamFriends.GetPersonaName(), conn);
+                    if(SteamManager.Initialized)
+                    {
+                        SettingsManager.Instance.SetConnectionSteamName(Steamworks.SteamFriends.GetPersonaName(), conn);
+                    }
+                    
                 }
-                MenuLobbyButtons.Instance.UpdatePlayerCount();
+                if(MenuLobbyButtons.Instance)
+                {
+                    MenuLobbyButtons.Instance.UpdatePlayerCount();
+                }
+                
                 break;
         }
         

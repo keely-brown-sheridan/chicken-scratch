@@ -7,7 +7,7 @@ namespace ChickenScratch
     {
         public enum CertificationType
         {
-            growth, extension, synergy, trademark, sanctions, demand, shareholders, ballpark, assembly, collaboration, overhead, expiration
+            growth, extension, synergy, trademark, sanctions, demand, shareholders, ballpark, assembly, collaboration, overhead, expiration, supply
         }
 
         public enum CertificationQuality

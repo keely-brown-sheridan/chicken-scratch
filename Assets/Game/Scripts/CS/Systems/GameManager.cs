@@ -31,6 +31,11 @@ namespace ChickenScratch
 
         public PauseModTools pauseModTools;
 
+        private void Awake()
+        {
+            gameDataHandler = FindObjectOfType<GameDataHandler>(true);
+        }
+
         // Start is called before the first frame update
         void Start()
         {

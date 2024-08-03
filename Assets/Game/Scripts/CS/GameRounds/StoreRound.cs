@@ -191,6 +191,18 @@ namespace ChickenScratch
                         GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Remove(activeCaseType);
                         expiryIndex++;
                     }
+                    else if(GameManager.Instance.playerFlowManager.CaseHasCertification(activeCaseType, "Supply"))
+                    {
+                        //Check to see if the day of expiry has been reached
+                        SupplyCertificationData supplyData = (SupplyCertificationData)GameDataManager.Instance.GetCertification("Supply");
+                        if(supplyData.dayIndex == GameManager.Instance.playerFlowManager.currentDay)
+                        {
+                            GameManager.Instance.gameDataHandler.RpcShowStoreCaseExpiry(activeCaseType, expiryIndex);
+                            GameManager.Instance.gameDataHandler.RpcRemoveFrequencyStoreOption(activeCaseType);
+                            GameManager.Instance.playerFlowManager.unlockedCaseChoiceIdentifiers.Remove(activeCaseType);
+                            expiryIndex++;
+                        }
+                    }
                 }
 
             }
@@ -379,6 +391,8 @@ namespace ChickenScratch
             GameManager.Instance.gameFlowManager.timeRemainingInPhase = unlockTime;
             GameManager.Instance.gameDataHandler.RpcUpdateTimer(unlockTime);
         }
+
+        
 
         public void ClientInitializeUnlocks(StoreChoiceOptionData storeChoiceOptionA, StoreChoiceOptionData storeChoiceOptionB, BirdName unionRep, bool defaultChoiceA)
         {
@@ -964,14 +978,7 @@ namespace ChickenScratch
                         break;
                     case StoreItem.StoreItemType.case_upgrade:
                         CaseUpgradeStoreItemData upgradeData = (CaseUpgradeStoreItemData)activeStoreItemMap[itemIndex];
-                        if(upgradeData.upgradeRampData.modifierIncrease > 0)
-                        {
-                            GameManager.Instance.gameDataHandler.RpcStoreIncreaseModifierForCase(upgradeData.caseChoiceIdentifier);
-                        }
-                        else
-                        {
-                            GameManager.Instance.gameDataHandler.RpcStoreIncreaseBirdbucksForCase(upgradeData.caseChoiceIdentifier);
-                        }
+
                         foreach (StoreItemData upgrade in upgradeData.unlocks)
                         {
                             if(upgrade.itemType == StoreItem.StoreItemType.case_upgrade)
@@ -1161,26 +1168,6 @@ namespace ChickenScratch
             bottomRowUnlockButtonObject.SetActive(false);
         }
 
-        public void SetStoreChoiceOption(StoreChoiceOptionData storeChoiceOption)
-        {
-            storeReviewPanel.AddPreviousChoice(storeChoiceOption.dayName, storeChoiceOption.unlocks, (int)(storeChoiceOption.birdbucksPerPlayer * SettingsManager.Instance.GetPlayerNameCount()), storeChoiceOption.timeRamp);
-        }
-
-        public void IncreaseModifierForCase(string caseChoiceIdentifier)
-        {
-            storeReviewPanel.UpgradeMultiplierForCase(caseChoiceIdentifier);
-        }
-
-        public void IncreaseBirdbucksForCase(string caseChoiceIdentifier)
-        {
-            storeReviewPanel.UpgradeBirdbucksForCase(caseChoiceIdentifier);
-        }
-
-        public void IncreaseFrequencyForCase(string caseChoiceIdentifier)
-        {
-            storeReviewPanel.UpgradeFrequencyForCase(caseChoiceIdentifier);
-        }
-
         public void UpdateReviewPanelCertification(string identifier, string certificationIdentifier)
         {
             storeReviewPanel.UpdateCertificationForCase(identifier, certificationIdentifier);
@@ -1213,6 +1200,17 @@ namespace ChickenScratch
         public void CloseStoreFrequencyPanel()
         {
             storeFrequencyChoicePanel.Close();
+        }
+
+        public void UpdateReviewPanel(StoreChoiceOptionData choiceOption)
+        {
+            UpdateReviewPanelValues();
+            storeReviewPanel.UpdateUnlocks(choiceOption.unlocks);
+        }
+
+        public void UpdateReviewPanelValues()
+        {
+            storeReviewPanel.UpdateValues();
         }
     }
 }

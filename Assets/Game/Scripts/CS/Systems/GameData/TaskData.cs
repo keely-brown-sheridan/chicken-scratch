@@ -11,7 +11,8 @@ namespace ChickenScratch
     {
         public enum TaskType
         {
-            base_drawing, prompting, copy_drawing, add_drawing, prompt_drawing, base_guessing, compile_drawing, blender_drawing, morph_guessing, competition_guessing
+            base_drawing, prompting, copy_drawing, add_drawing, prompt_drawing, base_guessing, compile_drawing, blender_drawing, 
+            morph_guessing, competition_guessing, binary_guessing
             //evaluation_guessing
             //collage_guessing
         }
@@ -48,6 +49,8 @@ namespace ChickenScratch
                     return DrawingRound.CaseState.competition_guessing;
                 case TaskType.prompting:
                     return DrawingRound.CaseState.prompting;
+                case TaskType.binary_guessing:
+                    return DrawingRound.CaseState.binary_guessing;
 
             }
             return DrawingRound.CaseState.invalid;

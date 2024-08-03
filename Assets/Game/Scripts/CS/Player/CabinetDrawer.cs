@@ -44,6 +44,9 @@ namespace ChickenScratch
         private float totalTimeShaking = 0.0f;
         private Vector3 originalDoorPosition;
 
+        [SerializeField]
+        private Animator workingVisualsAnimator;
+
         // Start is called before the first frame update
         void Awake()
         {
@@ -313,6 +316,38 @@ namespace ChickenScratch
                 glowObject.SetActive(false);
                 totalTimeFlashing = 0.0f;
             }
+        }
+
+        public void SetCurrentCabinetTask(DrawingRound.CaseState caseState)
+        {
+            switch (caseState)
+            {
+                case DrawingRound.CaseState.copy_drawing:
+                case DrawingRound.CaseState.blender_drawing:
+                case DrawingRound.CaseState.add_drawing:
+                case DrawingRound.CaseState.drawing:
+                    workingVisualsAnimator.SetTrigger("Drawing");
+                    break;
+                case DrawingRound.CaseState.prompting:
+                    workingVisualsAnimator.SetTrigger("Prompting");
+                    break;
+                case DrawingRound.CaseState.competition_guessing:
+                case DrawingRound.CaseState.morph_guessing:
+                case DrawingRound.CaseState.guessing:
+                case DrawingRound.CaseState.binary_guessing:
+                    workingVisualsAnimator.SetTrigger("Guessing");
+                    break;
+            }
+        }
+
+        public void SetTaskToChoosing()
+        {
+            workingVisualsAnimator.SetTrigger("Choosing");
+        }
+
+        public void ResetCabinetTask()
+        {
+            workingVisualsAnimator.SetTrigger("Idle");
         }
 
         public void close()

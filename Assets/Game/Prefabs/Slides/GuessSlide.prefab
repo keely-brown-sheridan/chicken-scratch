@@ -20846,8 +20846,8 @@ MonoBehaviour:
   prefixText: {fileID: 4482841989998484148}
   nounText: {fileID: 5482180125090257554}
   prefixWaitDuration: 1
-  nounWaitDuration: 3
-  modifierWaitDuration: 5
+  nounWaitDuration: 2.75
+  modifierWaitDuration: 4
   successDescriptorEffect: {fileID: 4833407588688974509}
   successNounEffect: {fileID: 4833407586921303968}
   failureDescriptorEffect: {fileID: 4833407588698317155}
@@ -20856,9 +20856,9 @@ MonoBehaviour:
   incorrectColour: {r: 0.7529412, g: 0.27450982, b: 0.20392157, a: 1}
   slideTimeModifierDecrementVisual: {fileID: 6212634747343688971}
   slideCaseScoreVisualization: {fileID: 1916086833}
-  timeToUpdatePrefixScore: 1.5
-  timeToUpdateNounScore: 1.5
-  timeToUpdateModifierScore: 1.5
+  timeToUpdatePrefixScore: 1.25
+  timeToUpdateNounScore: 1.25
+  timeToUpdateModifierScore: 1.25
   botcherCoinPrefab: {fileID: 6242116442471301189, guid: 4a3d314e4590c6945aca98f0fd03a52b,
     type: 3}
   botcherCoinHolder: {fileID: 1531853990}

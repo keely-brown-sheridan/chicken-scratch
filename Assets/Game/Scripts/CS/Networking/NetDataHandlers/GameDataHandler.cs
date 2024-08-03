@@ -710,25 +710,7 @@ public class GameDataHandler : NetworkBehaviour
     {
         GameManager.Instance.playerFlowManager.timeInDay += choiceOption.timeRamp;
         GameManager.Instance.playerFlowManager.currentGoal = (int)(choiceOption.birdbucksPerPlayer * SettingsManager.Instance.GetPlayerNameCount());
-        GameManager.Instance.playerFlowManager.storeRound.SetStoreChoiceOption(choiceOption);
-    }
-
-    [ClientRpc]
-    public void RpcStoreIncreaseModifierForCase(string caseChoiceIdentifier)
-    {
-        GameManager.Instance.playerFlowManager.storeRound.IncreaseModifierForCase(caseChoiceIdentifier);
-    }
-
-    [ClientRpc]
-    public void RpcStoreIncreaseBirdbucksForCase(string caseChoiceIdentifier)
-    {
-        GameManager.Instance.playerFlowManager.storeRound.IncreaseBirdbucksForCase(caseChoiceIdentifier);
-    }
-
-    [ClientRpc]
-    public void RpcStoreIncreaseFrequencyForCase(string caseChoiceIdentifier)
-    {
-        GameManager.Instance.playerFlowManager.storeRound.IncreaseFrequencyForCase(caseChoiceIdentifier);
+        GameManager.Instance.playerFlowManager.storeRound.UpdateReviewPanel(choiceOption);
     }
 
     [ClientRpc]
@@ -781,12 +763,55 @@ public class GameDataHandler : NetworkBehaviour
         GameManager.Instance.playerFlowManager.quotaDecreaseRatio = quotaDecreaseRatio;
         GameManager.Instance.playerFlowManager.timeIncreaseRatio = timeIncreaseRatio;
         GameManager.Instance.playerFlowManager.currentGoal = currentGoal;
+        GameManager.Instance.playerFlowManager.storeRound.UpdateReviewPanelValues();
     }
 
     [ClientRpc]
     public void RpcSetCompetitionChoice(int caseID, BirdName player)
     {
         GameManager.Instance.playerFlowManager.slidesRound.SetCompetitionChoice(caseID, player);
+    }
+
+    [ClientRpc]
+    public void RpcSetPlayerCabinetChoosing(int playerCabinetIndex)
+    {
+        if(!GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap.ContainsKey(playerCabinetIndex))
+        {
+            Debug.LogError("Could not set player cabinet visuals to choosing because cabinet["+playerCabinetIndex.ToString()+"] did not exist in the map.");
+            return;
+        }
+        CabinetDrawer playerCabinet = GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[playerCabinetIndex];
+        playerCabinet.SetTaskToChoosing();
+    }
+
+    [ClientRpc]
+    public void RpcSetPlayerCabinetTask(int playerCabinetIndex, DrawingRound.CaseState caseState)
+    {
+        if (!GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap.ContainsKey(playerCabinetIndex))
+        {
+            Debug.LogError("Could not set player cabinet visuals to task because cabinet[" + playerCabinetIndex.ToString() + "] did not exist in the map.");
+            return;
+        }
+        CabinetDrawer playerCabinet = GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[playerCabinetIndex];
+        playerCabinet.SetCurrentCabinetTask(caseState);
+    }
+
+    [ClientRpc]
+    public void RpcSetPlayerCabinetIdle(int playerCabinetIndex)
+    {
+        if (!GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap.ContainsKey(playerCabinetIndex))
+        {
+            Debug.LogError("Could not set player cabinet visuals to idle because cabinet[" + playerCabinetIndex.ToString() + "] did not exist in the map.");
+            return;
+        }
+        CabinetDrawer playerCabinet = GameManager.Instance.playerFlowManager.drawingRound.cabinetDrawerMap[playerCabinetIndex];
+        playerCabinet.ResetCabinetTask();
+    }
+
+    [ClientRpc]
+    public void RpcSetBinaryCaseValue(int caseID, bool isCorrect)
+    {
+        GameManager.Instance.playerFlowManager.slidesRound.SetBinaryCaseState(caseID, isCorrect);
     }
 
     public void TargetInitialCabinetPromptContentsWrapper(NetworkConnectionToClient target, int caseID, int round, string correctPrompt, Dictionary<int,string> correctWordIdentifiersMap)
@@ -1152,6 +1177,7 @@ public class GameDataHandler : NetworkBehaviour
                     case TaskData.TaskType.morph_guessing:
                     case TaskType.base_guessing:
                     case TaskData.TaskType.competition_guessing:
+                    case TaskType.binary_guessing:
                         //not sure what to do in this situation?
                         //Currently shouldn't be happening
                         break;
@@ -1224,7 +1250,6 @@ public class GameDataHandler : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdPromptGuess(GuessData guessData, int caseID, float timeTaken)
     {
-        
         GameManager.Instance.playerFlowManager.addGuessPrompt(guessData, caseID, timeTaken);
     }
 
@@ -1477,13 +1502,26 @@ public class GameDataHandler : NetworkBehaviour
             playerOrder.Add(newCase.playerOrder[i + 1]);
         }
 
-        if(GameManager.Instance.playerFlowManager.CaseHasCertification(choiceData.caseChoiceIdentifier, "Assembly"))
+        CaseChoiceData template = GameDataManager.Instance.GetCaseChoice(choiceData.caseChoiceIdentifier);
+        if (GameManager.Instance.playerFlowManager.CaseHasCertification(choiceData.caseChoiceIdentifier, "Assembly"))
         {
-            CaseChoiceData template = GameDataManager.Instance.GetCaseChoice(choiceData.caseChoiceIdentifier);
+            
             if(template != null)
             {
                 template.IncrementFrequency();
             }
+        }
+        if(GameManager.Instance.playerFlowManager.CaseHasCertification(choiceData.caseChoiceIdentifier,"Supply"))
+        {
+            //Refund a case into the queue
+            GameManager.Instance.playerFlowManager.casesRemaining++;
+            RpcUpdateNumberOfCases(GameManager.Instance.playerFlowManager.casesRemaining);
+        }
+        if(template != null && template.caseFormat == CaseTemplateData.CaseFormat.binary)
+        {
+            //randomly choose if it's going to be correct or not
+            bool isCorrect = UnityEngine.Random.Range(0, 2) == 0;
+            RpcSetBinaryCaseValue(caseID, isCorrect);
         }
 
         TargetStartChoiceDrawing(SettingsManager.Instance.GetConnection(birdName), birdCabinetIndex, caseID, promptText, baseTaskData, newCase.currentScoreModifier, choiceData.maxScoreModifier, choiceData.scoreModifierDecrement, baseTaskData.modifiers, newCase.caseTypeName, playerOrder);
@@ -1728,6 +1766,7 @@ public class GameDataHandler : NetworkBehaviour
                         case TaskData.TaskType.morph_guessing:
                         case TaskType.base_guessing:
                         case TaskData.TaskType.competition_guessing:
+                        case TaskType.binary_guessing:
                             //Unclear what should be done in this situation
                             break;
                     }
@@ -1756,6 +1795,42 @@ public class GameDataHandler : NetworkBehaviour
     public void CmdSetCompetitionChoice(int caseID, BirdName player)
     {
         RpcSetCompetitionChoice(caseID, player);
+    }
+
+    [Command(requiresAuthority =false)]
+    public void CmdSetPlayerCabinetChoosing(ColourManager.BirdName player)
+    {
+        if(!GameManager.Instance.gameFlowManager.playerCabinetMap.ContainsKey(player))
+        {
+            Debug.LogError("Could not set player cabinet visuals to choosing because cabinet map did not contain player["+player.ToString()+"]");
+            return;
+        }
+        int playerCabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[player];
+        RpcSetPlayerCabinetChoosing(playerCabinetIndex);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdSetPlayerCabinetTask(ColourManager.BirdName player, DrawingRound.CaseState currentCaseState)
+    {
+        if (!GameManager.Instance.gameFlowManager.playerCabinetMap.ContainsKey(player))
+        {
+            Debug.LogError("Could not set player cabinet visuals to task because cabinet map did not contain player[" + player.ToString() + "]");
+            return;
+        }
+        int playerCabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[player];
+        RpcSetPlayerCabinetTask(playerCabinetIndex, currentCaseState);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdSetPlayerCabinetIdle(ColourManager.BirdName player)
+    {
+        if (!GameManager.Instance.gameFlowManager.playerCabinetMap.ContainsKey(player))
+        {
+            Debug.LogError("Could not set player cabinet visuals to idle because cabinet map did not contain player[" + player.ToString() + "]");
+            return;
+        }
+        int playerCabinetIndex = GameManager.Instance.gameFlowManager.playerCabinetMap[player];
+        RpcSetPlayerCabinetIdle(playerCabinetIndex);
     }
 
     [ClientRpc]

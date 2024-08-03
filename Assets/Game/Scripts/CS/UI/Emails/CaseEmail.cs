@@ -130,6 +130,7 @@ namespace ChickenScratch
                 case TaskData.TaskType.morph_guessing:
                 case TaskData.TaskType.base_guessing:
                 case TaskData.TaskType.competition_guessing:
+                case TaskData.TaskType.binary_guessing:
                     GameObject guessCaseEmailSectionObject = Instantiate(taskEmailSectionPrefabMap[CaseEmailTaskType.guess], emailSectionParent);
                     GuessCaseEmailSection guessCaseEmailSection = guessCaseEmailSectionObject.GetComponent<GuessCaseEmailSection>();
                     guessCaseEmailSection.Initialize(correctWordIdentifiersMap, guessData, taskData.ratingData);

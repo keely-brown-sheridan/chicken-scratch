@@ -84,6 +84,7 @@ namespace ChickenScratch
                     case TaskData.TaskType.morph_guessing:
                     case TaskData.TaskType.base_guessing:
                     case TaskData.TaskType.competition_guessing:
+                    case TaskType.binary_guessing:
                         if (inChainData.guessData == null || !inChainData.IsComplete())
                         {
                             endgameTaskData.isComplete = false;
@@ -171,7 +172,7 @@ namespace ChickenScratch
         {
             foreach(EndgameTaskData taskData in taskDataMap.Values)
             {
-                if(taskData.taskType == TaskData.TaskType.base_guessing || taskData.taskType == TaskType.morph_guessing || taskData.taskType == TaskType.competition_guessing)
+                if(taskData.taskType == TaskData.TaskType.base_guessing || taskData.taskType == TaskType.morph_guessing || taskData.taskType == TaskType.competition_guessing || taskData.taskType == TaskType.binary_guessing)
                 {
                     return taskData.assignedPlayer;
                 }
